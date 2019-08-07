@@ -40,5 +40,12 @@ public class EntityMultipartPart extends PartEntity {
     @Override
     public void onUpdate() {
         super.onUpdate();
+        if (this.parent == null || shouldNotExist()) {
+            this.world.removeEntityDangerously(this);
+        }
+    }
+
+    public boolean shouldNotExist(){
+        return !this.parent.isEntityAlive();
     }
 }

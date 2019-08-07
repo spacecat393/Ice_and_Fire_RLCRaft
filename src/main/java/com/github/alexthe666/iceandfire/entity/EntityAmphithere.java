@@ -222,6 +222,9 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
         if (!this.isTamed() && this.isFlying() && !onGround && source.isProjectile() && !world.isRemote) {
             this.isFallen = true;
         }
+        if(source.getTrueSource() instanceof EntityLivingBase && this.isTamed() && this.isOwner((EntityLivingBase) source.getTrueSource())){
+            return false;
+        }
         return super.attackEntityFrom(source, damage);
     }
 
@@ -324,7 +327,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
         } else {
             this.ticksStill = 0;
         }
-        if (!this.isFlying() && !this.isChild() && this.onGround && this.rand.nextInt(200) == 0 && flightCooldown == 0 && this.getPassengers().isEmpty() && !this.isAIDisabled() && canMove()) {
+        if (!this.isFlying() && !this.isChild() && ((this.onGround && this.rand.nextInt(200) == 0 && flightCooldown == 0 && this.getPassengers().isEmpty() && !this.isAIDisabled() && canMove()) || this.posY < -1)) {
             this.motionY += 0.5F;
             this.setFlying(true);
         }

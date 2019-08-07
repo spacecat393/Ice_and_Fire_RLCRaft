@@ -431,7 +431,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
             switchNavigator(true);
         }
         renderYawOffset = rotationYaw;
-        rotationPitch = (float) motionY * 20F;
+        rotationPitch = MathHelper.clamp((float) motionY * 20F, -90, 90);
         if (world.isRemote) {
             pitch_buffer.calculateChainWaveBuffer(90, 10, 10F, 0.5F, this);
 
@@ -514,6 +514,11 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
             this.hurtMob(this.getAttackTarget());
         }
         breakBlock();
+        if(!world.isRemote && this.isRiding() && this.getLowestRidingEntity() instanceof EntityBoat){
+            EntityBoat boat = (EntityBoat) this.getLowestRidingEntity();
+            this.dismountRidingEntity();
+            boat.setDead();
+        }
     }
 
     private void doSplashDamage() {
@@ -821,7 +826,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
                 if (this.ticksExisted % 40 == 0) {
                     this.playSound(ModSounds.SEA_SERPENT_BREATH, 4, 1);
                 }
-                if (this.ticksExisted % 3 == 0) {
+                if (this.ticksExisted % 5 == 0) {
                     rotationYaw = renderYawOffset;
                     float f1 = 0;
                     float f2 = 0;

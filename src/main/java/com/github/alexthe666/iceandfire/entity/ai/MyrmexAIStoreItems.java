@@ -57,7 +57,7 @@ public class MyrmexAIStoreItems extends EntityAIBase {
 
     @Override
     public void updateTask() {
-        if (nextCocoon != null && this.myrmex.getDistanceSq(nextCocoon) < 4 && !this.myrmex.getHeldItem(EnumHand.MAIN_HAND).isEmpty() && isUseableCocoon(nextCocoon)) {
+        if (nextCocoon != null && this.myrmex.getDistanceSq(nextCocoon) < 5.5D && !this.myrmex.getHeldItem(EnumHand.MAIN_HAND).isEmpty() && isUseableCocoon(nextCocoon)) {
             TileEntityMyrmexCocoon cocoon = (TileEntityMyrmexCocoon) this.myrmex.world.getTileEntity(nextCocoon);
             ItemStack itemstack = this.myrmex.getHeldItem(EnumHand.MAIN_HAND);
             if(!itemstack.isEmpty()) {
@@ -77,7 +77,6 @@ public class MyrmexAIStoreItems extends EntityAIBase {
                             if (k > 0) {
                                 itemstack1.grow(k);
                                 itemstack.shrink(k);
-
                                 if (itemstack.isEmpty()) {
                                     cocoon.markDirty();
                                 }

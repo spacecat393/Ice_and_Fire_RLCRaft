@@ -48,7 +48,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class EntitySiren extends EntityMob implements IAnimatedEntity {
+public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillagerFear {
 
     private int animationTick;
     private Animation currentAnimation;
@@ -574,5 +574,10 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
                 this.siren.setAIMoveSpeed(0.0F);
             }
         }
+    }
+	
+    @Override
+    public boolean shouldFear(){
+        return isAgressive();
     }
 }

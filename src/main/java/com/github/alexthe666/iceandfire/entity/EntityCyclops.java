@@ -85,6 +85,7 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
     }
 
     protected void initEntityAI() {
+        this.tasks.addTask(1, new EntityAISwimming(this));
         this.tasks.addTask(2, new EntityAIRestrictSun(this));
         this.tasks.addTask(3, new EntityAIFleeSun(this, 1.0D));
         this.tasks.addTask(3, new CyclopsAIAttackMelee(this, 1.0D, false));
@@ -120,6 +121,7 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
         }else if(attackDescision == 1){
             if(!entityIn.isPassenger(this) && entityIn.width < 1.95F && !(entityIn instanceof EntityDragonBase)){
                 this.setAnimation(ANIMATION_EATPLAYER);
+                entityIn.dismountRidingEntity();
                 entityIn.startRiding(this, true);
             }else{
                 this.setAnimation(ANIMATION_STOMP);

@@ -363,24 +363,22 @@ public class EventLiving {
 
 	@SubscribeEvent
 	public void onEntityInteract(PlayerInteractEvent.EntityInteractSpecific event) {
-		EntityLivingBase entity = event.getEntityLiving();
-		if (entity instanceof EntityLiving) {
-			IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(entity);
+        if (event.getTarget() instanceof EntityLiving) {
+			IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(event.getTarget());
 			if (capability != null && capability.isStoned()) {
 				event.setCanceled(true);
 			}
-		}
+        }
 	}
 
 	@SubscribeEvent
 	public void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
-		EntityLivingBase entity = event.getEntityLiving();
-		if (entity instanceof EntityLiving) {
-			IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(entity);
+        if (event.getTarget() instanceof EntityLiving) {
+			IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(event.getTarget());
 			if (capability != null && capability.isStoned()) {
 				event.setCanceled(true);
 			}
-		}
+        }
 	}
 
 	@SubscribeEvent
@@ -404,7 +402,6 @@ public class EventLiving {
 		}
 	}
 
-
 	@SubscribeEvent
 	public void onBreakBlock(BlockEvent.BreakEvent event) {
 		if (event.getPlayer() != null && (event.getState().getBlock() == ModBlocks.goldPile || event.getState().getBlock() == ModBlocks.silverPile)) {
@@ -425,7 +422,6 @@ public class EventLiving {
 			}
 		}
 	}
-
 
 	@SubscribeEvent
 	public void onChestGenerated(LootTableLoadEvent event) {
@@ -459,7 +455,7 @@ public class EventLiving {
 		}
 		if (event.getEntity() != null && DragonUtils.isVillager(event.getEntity()) && event.getEntity() instanceof EntityCreature && IceAndFireConfig.DRAGON_SETTINGS.villagersFearDragons) {
 			EntityCreature villager = (EntityCreature) event.getEntity();
-			villager.tasks.addTask(1, new VillagerAIFearUntamed(villager, EntityLivingBase.class, (entity) -> entity instanceof IVillagerFear, 12.0F, 0.8D, 0.8D));
+			villager.tasks.addTask(1, new VillagerAIFearUntamed(villager, EntityLivingBase.class, (entity) -> entity instanceof IVillagerFear, 8.0F, 0.8D, 0.8D));
 		}
 		if (event.getEntity() != null && DragonUtils.isLivestock(event.getEntity()) && event.getEntity() instanceof EntityCreature && IceAndFireConfig.DRAGON_SETTINGS.animalsFearDragons) {
 			EntityCreature animal = (EntityCreature) event.getEntity();

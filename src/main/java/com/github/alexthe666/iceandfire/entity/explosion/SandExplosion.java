@@ -153,7 +153,6 @@ public class SandExplosion extends Explosion {
         List<MessageParticleVanillaFX.Particle> particles = new ArrayList<>();
         for (BlockPos blockpos : this.affectedBlockPositions) {
             IBlockState state = this.worldObj.getBlockState(blockpos);
-
             if (spawnParticles && !worldObj.isAirBlock(blockpos)) {
                 double d0 = blockpos.getX() + this.worldObj.rand.nextFloat();
                 double d1 = blockpos.getY() + this.worldObj.rand.nextFloat();

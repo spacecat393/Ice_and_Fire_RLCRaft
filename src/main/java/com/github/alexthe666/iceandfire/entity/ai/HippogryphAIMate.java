@@ -90,13 +90,14 @@ public class HippogryphAIMate extends EntityAIBase {
 		if (entityplayer != null) {
 			entityplayer.addStat(StatList.ANIMALS_BRED);
 		}
-
 		this.hippo.setGrowingAge(6000);
 		this.targetMate.setGrowingAge(6000);
 		this.hippo.resetInLove();
 		this.targetMate.resetInLove();
 		egg.setLocationAndAngles(this.hippo.posX, this.hippo.posY, this.hippo.posZ, 0.0F, 0.0F);
-		this.world.spawnEntity(egg);
+		if(!world.isRemote){
+			this.world.spawnEntity(egg);
+		}
 		Random random = this.hippo.getRNG();
 
 		for (int i = 0; i < 7; ++i) {
