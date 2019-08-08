@@ -400,7 +400,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
         renderYawOffset = rotationYaw;
         if (world.isRemote) {
             if (!onGround) {
-                roll_buffer.calculateChainFlapBuffer(this.isBeingRidden() ? 55 : 90, 3, 10F, 0.5F, this);
+                roll_buffer.calculateChainFlapBuffer(this.isBeingRidden() ? 55 : 90, 1, 10F, 0.5F, this);
                 pitch_buffer.calculateChainPitchBuffer(90, 10, 10F, 0.5F, this);
             }
             tail_buffer.calculateChainSwingBuffer(70, 20, 5F, this);
@@ -615,7 +615,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
                 this.setFlying(true);
             }
         }
-        if (this.onGround && this.getControllingPassenger() != null) {
+        if (this.onGround && !world.isRemote && ticksFlying > 50) {
             this.setFlying(false);
         }
         if (this.dismount()) {
@@ -1022,7 +1022,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
         BlockPos target;
 
         public AIFlyCircle() {
-            this.setMutexBits(1);
+            this.setMutexBits(0);
         }
 
         @Override
@@ -1039,19 +1039,28 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
             }
         }
 
-        protected boolean isDirectPathBetweenPoints(BlockPos posVec31, BlockPos posVec32) {
-            RayTraceResult raytraceresult = EntityAmphithere.this.world.rayTraceBlocks(new Vec3d(posVec31.getX() + 0.5D, posVec31.getY() + 0.5D, posVec31.getZ() + 0.5D), new Vec3d(posVec32.getX() + 0.5D, posVec32.getY() + (double) EntityAmphithere.this.height * 0.5D, posVec32.getZ() + 0.5D), false, true, false);
-            return raytraceresult == null || raytraceresult.typeOfHit == RayTraceResult.Type.MISS;
+        protected boolean isDirectPathBetweenPoints() {
+            RayTraceResult rayTrace = world.rayTraceBlocks(EntityAmphithere.this.getPositionVector(), new Vec3d(target).add(0.5, 0.5, 0.5), false);
+            if (rayTrace != null && rayTrace.hitVec != null) {
+                BlockPos sidePos = rayTrace.getBlockPos();
+                BlockPos pos = new BlockPos(rayTrace.hitVec);
+                if (world.isAirBlock(pos) || world.isAirBlock(sidePos) || world.getBlockState(pos).getMaterial() == Material.LEAVES || world.getBlockState(sidePos).getMaterial() == Material.LEAVES) {
+                    return true;
+                }else{
+                    return rayTrace.typeOfHit != RayTraceResult.Type.MISS;
+                }
+            }
+            return true;
         }
 
         @Override
         public boolean shouldContinueExecuting() {
-            return EntityAmphithere.this.getAttackTarget() == null && EntityAmphithere.this.flightBehavior == FlightBehavior.CIRCLE;
+            return false;
         }
 
         @Override
         public void updateTask() {
-            if (EntityAmphithere.this.getDistance(target.getX(), target.getY(), target.getZ()) < 5) {
+            if (!isDirectPathBetweenPoints()) {
                 target = EntityAmphithere.getPositionInOrbit(EntityAmphithere.this, world, EntityAmphithere.this.orbitPos, EntityAmphithere.this.rand);
             }
             if (EntityAmphithere.this.world.isAirBlock(target)) {
@@ -1098,6 +1107,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
                 this.posZ = target.getZ();
             }
             if (this.action == EntityMoveHelper.Action.MOVE_TO) {
+
                 double d0 = this.posX - EntityAmphithere.this.posX;
                 double d1 = this.posY - EntityAmphithere.this.posY;
                 double d2 = this.posZ - EntityAmphithere.this.posZ;
