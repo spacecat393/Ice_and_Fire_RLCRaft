@@ -2,10 +2,7 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.passive.EntityTameable;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.util.DamageSource;
@@ -26,7 +23,7 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
 
 	public EntityDragonIceCharge(World worldIn, double posX, double posY, double posZ, double accelX, double accelY, double accelZ) {
 		super(worldIn, posX, posY, posZ, accelX, accelY, accelZ);
-		double d0 = (double) MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
+		double d0 = MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
 		this.accelerationX = accelX / d0 * 0.07D;
 		this.accelerationY = accelY / d0 * 0.07D;
 		this.accelerationZ = accelZ / d0 * 0.07D;
@@ -34,7 +31,7 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
 
 	public EntityDragonIceCharge(World worldIn, EntityDragonBase shooter, double accelX, double accelY, double accelZ) {
 		super(worldIn, shooter, accelX, accelY, accelZ);
-		double d0 = (double) MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
+		double d0 = MathHelper.sqrt(accelX * accelX + accelY * accelY + accelZ * accelZ);
 		this.accelerationX = accelX / d0 * 0.07D;
 		this.accelerationY = accelY / d0 * 0.07D;
 		this.accelerationZ = accelZ / d0 * 0.07D;
@@ -54,7 +51,7 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
 	}
 
 	public void onUpdate() {
-		for (int i = 0; i < 14; ++i) {
+		for (int i = 0; i < 10; ++i) {
 			IceAndFire.PROXY.spawnParticle("snowflake", world, this.posX + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), this.posY + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), this.posZ + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), 0.0D, 0.0D, 0.0D);
 		}
 		if (this.world.isRemote || (this.shootingEntity == null || !this.shootingEntity.isDead) && this.world.isBlockLoaded(new BlockPos(this))) {
@@ -89,9 +86,9 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
 			this.motionX += this.accelerationX;
 			this.motionY += this.accelerationY;
 			this.motionZ += this.accelerationZ;
-			this.motionX *= (double) f;
-			this.motionY *= (double) f;
-			this.motionZ *= (double) f;
+			this.motionX *= f;
+			this.motionY *= f;
+			this.motionZ *= f;
 			this.world.spawnParticle(this.getParticleType(), this.posX, this.posY + 0.5D, this.posZ, 0.0D, 0.0D, 0.0D, new int[0]);
 			this.setPosition(this.posX, this.posY, this.posZ);
 		} else {
@@ -104,16 +101,14 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
 		boolean flag = this.world.getGameRules().getBoolean("mobGriefing");
 
 		if (!this.world.isRemote) {
-			if (movingObject.entityHit != null && movingObject.entityHit instanceof IDragonProjectile) {
+			if (movingObject.entityHit instanceof IDragonProjectile) {
 				return;
 			}
-			if (movingObject.entityHit != null && this.shootingEntity != null && this.shootingEntity instanceof  EntityDragonBase && ((EntityDragonBase) this.shootingEntity).isTamed() && movingObject.entityHit instanceof EntityPlayer && ((EntityDragonBase) this.shootingEntity).isOwner((EntityPlayer)movingObject.entityHit)) {
+			if (DragonUtils.isOwner(movingObject.entityHit, shootingEntity) || DragonUtils.hasSameOwner(movingObject.entityHit, shootingEntity)) {
+				this.setDead();
 				return;
 			}
-			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof IDragonProjectile) && movingObject.entityHit != shootingEntity || movingObject.entityHit == null) {
-				if (this.shootingEntity != null && (movingObject.entityHit == this.shootingEntity || (this.shootingEntity instanceof EntityDragonBase & movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase) shootingEntity).isOwner(((EntityDragonBase) shootingEntity).getOwner())))) {
-					return;
-				}
+			if (movingObject.entityHit == null || !(movingObject.entityHit instanceof IDragonProjectile) && movingObject.entityHit != shootingEntity) {
 				if (this.shootingEntity != null && IceAndFire.CONFIG.dragonGriefing != 2) {
 					int explodeSize = 2;
 					if(this.shootingEntity instanceof EntityDragonBase){
@@ -122,30 +117,25 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
 					IceExplosion explosion = new IceExplosion(world, shootingEntity, this.posX, this.posY, this.posZ, explodeSize, flag);
 					explosion.doExplosionA();
 					explosion.doExplosionB(true);
-					FireChargeExplosion explosion2 = new FireChargeExplosion(world, shootingEntity, this.posX, this.posY, this.posZ, 2 + ((EntityDragonBase) this.shootingEntity).getDragonStage(), false, flag);
+					FireChargeExplosion explosion2 = new FireChargeExplosion(world, shootingEntity, this.posX, this.posY, this.posZ, 2 + ((EntityDragonBase) this.shootingEntity).getDragonStage(), flag);
 					explosion2.doExplosionA();
 					explosion2.doExplosionB(true);
 				}
 				this.setDead();
+				return;
 			}
-			if (movingObject.entityHit != null && !(movingObject.entityHit instanceof IDragonProjectile) && !movingObject.entityHit.isEntityEqual(shootingEntity)) {
-				if (this.shootingEntity != null && (!movingObject.entityHit.isEntityEqual(shootingEntity) || (this.shootingEntity instanceof EntityDragonBase & movingObject.entityHit instanceof EntityTameable && ((EntityDragonBase) shootingEntity).getOwner() == ((EntityTameable) movingObject.entityHit).getOwner()))) {
-					return;
-				}
+			if (!(movingObject.entityHit instanceof IDragonProjectile) && !movingObject.entityHit.isEntityEqual(shootingEntity)) {
 				if (this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase && !movingObject.entityHit.isEntityEqual(shootingEntity)) {
-					movingObject.entityHit.attackEntityFrom(IceAndFire.dragonFire, 10.0F);
+					movingObject.entityHit.attackEntityFrom(IceAndFire.dragonIce, 10.0F);
 					if (movingObject.entityHit instanceof EntityLivingBase) {
-						FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(movingObject.entityHit, FrozenEntityProperties.class);
-						if(frozenProps != null) {
-							frozenProps.setFrozenFor(200);
+						EntityEffectProperties effectProperties = EntityPropertiesHandler.INSTANCE.getProperties(movingObject.entityHit, EntityEffectProperties.class);
+						if (effectProperties != null) {
+							effectProperties.setFrozenFor(200);
 						}
 					}
 					if (movingObject.entityHit instanceof EntityLivingBase && ((EntityLivingBase) movingObject.entityHit).getHealth() == 0) {
 						((EntityDragonBase) this.shootingEntity).attackDecision = true;
 					}
-				}
-				if (movingObject.entityHit.isDead && movingObject.entityHit instanceof EntityPlayer) {
-					//((EntityPlayer) movingObject.entityHit).addStat(ModAchievements.dragonKill, 1);
 				}
 				this.applyEnchantments(this.shootingEntity, movingObject.entityHit);
 				IceExplosion explosion = new IceExplosion(world, null, this.posX, this.posY, this.posZ, 2, flag);
@@ -155,44 +145,9 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
 				explosion.doExplosionA();
 				explosion.doExplosionB(true);
 				this.world.createExplosion(this, this.posX, this.posY, this.posZ, 4, true);
-				this.setDead();
 			}
 		}
 		this.setDead();
-	}
-
-	public void setAim(Entity fireball, Entity entity, float yaw, float pitch, float a, float b, float c) {
-		float f = -MathHelper.sin(pitch * 0.017453292F) * MathHelper.cos(yaw * 0.017453292F);
-		float f1 = -MathHelper.sin(yaw * 0.017453292F);
-		float f2 = MathHelper.cos(pitch * 0.017453292F) * MathHelper.cos(yaw * 0.017453292F);
-		this.setThrowableHeading(fireball, (double) f, (double) f1, (double) f2, b, c);
-		fireball.motionX += entity.motionX;
-		fireball.motionZ += entity.motionZ;
-
-		if (!entity.onGround) {
-			fireball.motionY += entity.motionY;
-		}
-	}
-
-	public void setThrowableHeading(Entity fireball, double x, double y, double z, float velocity, float inaccuracy) {
-		float f = MathHelper.sqrt(x * x + y * y + z * z);
-		x = x / (double) f;
-		y = y / (double) f;
-		z = z / (double) f;
-		x = x + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
-		y = y + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
-		z = z + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
-		x = x * (double) velocity;
-		y = y * (double) velocity;
-		z = z * (double) velocity;
-		fireball.motionX = x;
-		fireball.motionY = y;
-		fireball.motionZ = z;
-		float f1 = MathHelper.sqrt(x * x + z * z);
-		fireball.rotationYaw = (float) (MathHelper.atan2(x, z) * (180D / Math.PI));
-		fireball.rotationPitch = (float) (MathHelper.atan2(y, (double) f1) * (180D / Math.PI));
-		fireball.prevRotationYaw = fireball.rotationYaw;
-		fireball.prevRotationPitch = fireball.rotationPitch;
 	}
 
 	@Override
@@ -203,5 +158,4 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
 	public float getCollisionBorderSize() {
 		return 0F;
 	}
-
 }

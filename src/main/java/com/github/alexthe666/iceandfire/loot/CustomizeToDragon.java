@@ -45,18 +45,18 @@ public class CustomizeToDragon extends LootFunction {
             }
             if(stack.getItem() instanceof ItemDragonFlesh){
                 stack.setCount(1 + random.nextInt(1 + (dragon.getAgeInDays() / 25)));
-                return new ItemStack(dragon.isFire ? ModItems.fire_dragon_flesh : ModItems.ice_dragon_flesh, stack.getCount(), stack.getMetadata());
+                return new ItemStack(dragon.getFlesh(), stack.getCount(), stack.getMetadata());
             }
             if(stack.getItem() instanceof ItemDragonSkull){
-                ItemStack stack1 = new ItemStack(dragon.isFire ? ModItems.dragon_skull : ModItems.dragon_skull, stack.getCount(), stack.getMetadata());
+                ItemStack stack1 = new ItemStack(ModItems.dragon_skull, stack.getCount(), stack.getMetadata());
                 stack1.setTagCompound(stack.getTagCompound());
                 return stack1;
             }
-            if(stack.getItem() == ModItems.fire_dragon_blood || stack.getItem() == ModItems.ice_dragon_blood){
-                return new ItemStack(dragon.isFire ? ModItems.fire_dragon_blood : ModItems.ice_dragon_blood, stack.getCount(), stack.getMetadata());
+            if(stack.getItem() == ModItems.fire_dragon_blood || stack.getItem() == ModItems.ice_dragon_blood || stack.getItem() == ModItems.lightning_dragon_blood){
+                return new ItemStack(dragon.getBlood(), stack.getCount(), stack.getMetadata());
             }
-            if(stack.getItem() == ModItems.fire_dragon_heart || stack.getItem() == ModItems.ice_dragon_heart){
-                return new ItemStack(dragon.isFire ? ModItems.fire_dragon_heart : ModItems.ice_dragon_heart, stack.getCount(), stack.getMetadata());
+            if(stack.getItem() == ModItems.fire_dragon_heart || stack.getItem() == ModItems.ice_dragon_heart || stack.getItem() == ModItems.lightning_dragon_heart){
+                return new ItemStack(dragon.getHeart(), stack.getCount(), stack.getMetadata());
             }
         }
         return stack;

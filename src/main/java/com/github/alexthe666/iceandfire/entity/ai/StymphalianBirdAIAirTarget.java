@@ -1,8 +1,8 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.DragonUtils;
+import com.github.alexthe666.iceandfire.entity.EntityEffectProperties;
 import com.github.alexthe666.iceandfire.entity.EntityStymphalianBird;
-import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -50,15 +50,15 @@ public class StymphalianBirdAIAirTarget extends EntityAIBase {
         return false;
     }
 
-    public boolean continueExecuting() {
-        StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(bird, StoneEntityProperties.class);
+    public boolean shouldContinueExecuting() {
+        EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(bird, EntityEffectProperties.class);
         if (!bird.isFlying()) {
             return false;
         }
         if (bird.isChild()) {
             return false;
         }
-        if (properties != null && properties.isStone) {
+        if (properties != null && properties.isStone()) {
             return false;
         }
         return bird.airTarget != null;

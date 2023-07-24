@@ -127,9 +127,9 @@ public class ThaumcraftCompat {
         for(EnumTroll.Weapon weapon : EnumTroll.Weapon.values()){
             evt.register.registerObjectTag(new ItemStack(weapon.item), new AspectList().add(Aspect.BEAST, 10).add(ThaumcraftCompat.MYTHICAL, 10).add(Aspect.DEATH, 5).add(Aspect.PROTECT, 15).add(Aspect.CRAFT, 2).add(Aspect.MAGIC, 5).add(Aspect.ENTROPY, 5));
         }
-        evt.register.registerObjectTag(new ItemStack(EnumTroll.MOUNTAIN.leather), new AspectList().add(Aspect.BEAST, 10).add(ThaumcraftCompat.MYTHICAL, 10).add(Aspect.PROTECT, 5).add(Aspect.DESIRE, 2).add(Aspect.MAGIC, 5).add(Aspect.ENTROPY, 5).add(Aspect.EARTH, 7));
-        evt.register.registerObjectTag(new ItemStack(EnumTroll.FROST.leather), new AspectList().add(Aspect.BEAST, 10).add(ThaumcraftCompat.MYTHICAL, 10).add(Aspect.PROTECT, 5).add(Aspect.DESIRE, 2).add(Aspect.MAGIC, 5).add(Aspect.ENTROPY, 5).add(Aspect.COLD, 7));
-        evt.register.registerObjectTag(new ItemStack(EnumTroll.FOREST.leather), new AspectList().add(Aspect.BEAST, 10).add(ThaumcraftCompat.MYTHICAL, 10).add(Aspect.PROTECT, 5).add(Aspect.DESIRE, 2).add(Aspect.MAGIC, 5).add(Aspect.ENTROPY, 5).add(Aspect.PLANT, 7));
+        evt.register.registerObjectTag(new ItemStack(ModItems.troll_leather_mountain), new AspectList().add(Aspect.BEAST, 10).add(ThaumcraftCompat.MYTHICAL, 10).add(Aspect.PROTECT, 5).add(Aspect.DESIRE, 2).add(Aspect.MAGIC, 5).add(Aspect.ENTROPY, 5).add(Aspect.EARTH, 7));
+        evt.register.registerObjectTag(new ItemStack(ModItems.troll_leather_frost), new AspectList().add(Aspect.BEAST, 10).add(ThaumcraftCompat.MYTHICAL, 10).add(Aspect.PROTECT, 5).add(Aspect.DESIRE, 2).add(Aspect.MAGIC, 5).add(Aspect.ENTROPY, 5).add(Aspect.COLD, 7));
+        evt.register.registerObjectTag(new ItemStack(ModItems.troll_leather_forest), new AspectList().add(Aspect.BEAST, 10).add(ThaumcraftCompat.MYTHICAL, 10).add(Aspect.PROTECT, 5).add(Aspect.DESIRE, 2).add(Aspect.MAGIC, 5).add(Aspect.ENTROPY, 5).add(Aspect.PLANT, 7));
         evt.register.registerObjectTag(new ItemStack(ModBlocks.lectern), new AspectList().add(Aspect.PLANT, 8).add(ThaumcraftCompat.MYTHICAL, 10).add(Aspect.SENSES, 10).add(Aspect.MIND, 12));
         evt.register.registerObjectTag(new ItemStack(ModBlocks.podium, 1, 0), new AspectList().add(Aspect.PLANT, 7).add(ThaumcraftCompat.MYTHICAL, 3).add(Aspect.SENSES, 4).add(Aspect.DESIRE, 20));
         evt.register.registerObjectTag(new ItemStack(ModBlocks.podium, 1, 1), new AspectList().add(Aspect.PLANT, 7).add(ThaumcraftCompat.MYTHICAL, 3).add(Aspect.SENSES, 4).add(Aspect.DESIRE, 20));

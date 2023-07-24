@@ -45,7 +45,7 @@ public class BlockDragonOre extends Block {
     public int getExpDrop(IBlockState state, net.minecraft.world.IBlockAccess world, BlockPos pos, int fortune) {
         Random rand = world instanceof World ? ((World) world).rand : new Random();
         if (this.getItemDropped(state, rand, fortune) != Item.getItemFromBlock(this)) {
-            if (this == ModBlocks.sapphireOre) {
+            if (this == ModBlocks.sapphireOre || this == ModBlocks.amethystOre) {
                 return MathHelper.getInt(rand, 3, 7);
             }
         }
@@ -54,6 +54,11 @@ public class BlockDragonOre extends Block {
 
     @Override
     public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-        return this == ModBlocks.sapphireOre ? ModItems.sapphireGem : Item.getItemFromBlock(ModBlocks.silverOre);
+        if (this == ModBlocks.sapphireOre) {
+            return ModItems.sapphireGem;
+        } else if (this == ModBlocks.amethystOre) {
+            return ModItems.amethystGem;
+        }
+        return Item.getItemFromBlock(this);
     }
 }

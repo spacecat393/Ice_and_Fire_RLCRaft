@@ -37,6 +37,14 @@ public class ItemModShovel extends ItemSpade {
 				}
 			}
 		}
+		if(this.toolMaterial == ModItems.copperTools){
+			NonNullList<ItemStack> copperItems = OreDictionary.getOres("ingotCopper");
+			for(ItemStack ingot : copperItems){
+				if(OreDictionary.itemMatches(repair, ingot, false)){
+					return true;
+				}
+			}
+		}
 		if (!mat.isEmpty() && net.minecraftforge.oredict.OreDictionary.itemMatches(mat, repair, false)) return true;
 		return super.getIsRepairable(toRepair, repair);
 	}

@@ -60,9 +60,9 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
 	}
 
 	public static boolean isStoneMob(EntityLivingBase mob) {
-		if (mob != null && mob instanceof EntityLiving) {
-			StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(mob, StoneEntityProperties.class);
-			return properties != null && properties.isStone;
+		if (mob instanceof EntityLiving) {
+			EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(mob, EntityEffectProperties.class);
+			return properties != null && properties.isStone();
 		}
 		return false;
 	}
@@ -99,8 +99,8 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
 		this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntityLiving.class, 0, true, false, new Predicate<Entity>() {
 			@Override
 			public boolean apply(@Nullable Entity entity) {
-				StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
-				return entity instanceof EntityLiving && DragonUtils.isAlive((EntityLiving)entity) && !(entity instanceof PartEntity) && (properties == null || properties != null && !properties.isStone) || (entity instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) entity).canBeTurnedToStone());
+				EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, EntityEffectProperties.class);
+				return entity instanceof EntityLiving && DragonUtils.isAlive((EntityLiving)entity) && !(entity instanceof PartEntity) && (properties == null || properties != null && !properties.isStone()) || (entity instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) entity).canBeTurnedToStone());
 			}
 		}));
 		this.tasks.removeTask(aiMelee);
@@ -144,7 +144,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
 	}
 
 	protected int getExperiencePoints(EntityPlayer player) {
-		return 20 + this.world.rand.nextInt(15);
+		return 30;
 	}
 
 	protected void onDeathUpdate() {
@@ -212,10 +212,10 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
 							this.getAttackTarget().attackEntityFrom(IceAndFire.gorgon, Integer.MAX_VALUE);
 						} else {
 							if (this.getAttackTarget() instanceof EntityLiving && !(this.getAttackTarget() instanceof IBlacklistedFromStatues) || this.getAttackTarget() instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) this.getAttackTarget()).canBeTurnedToStone()) {
-								StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this.getAttackTarget(), StoneEntityProperties.class);
+								EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this.getAttackTarget(), EntityEffectProperties.class);
 								EntityLiving attackTarget = (EntityLiving) this.getAttackTarget();
-								if (properties != null || !properties.isStone) {
-									properties.isStone = true;
+								if (properties != null && !properties.isStone()) {
+									properties.turnToStone();
 									if (world.isRemote) {
 										IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageStoneStatue(attackTarget.getEntityId(), true));
 									} else {

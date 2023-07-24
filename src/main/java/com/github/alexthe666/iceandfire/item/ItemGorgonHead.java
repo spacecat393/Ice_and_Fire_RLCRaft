@@ -64,7 +64,7 @@ public class ItemGorgonHead extends Item implements ICustomRendered {
 		List<Entity> list = worldIn.getEntitiesInAABBexcluding(entity, entity.getEntityBoundingBox().expand(vec3d1.x * dist, vec3d1.y * dist, vec3d1.z * dist).grow(1.0D, 1.0D, 1.0D), Predicates.and(EntitySelectors.NOT_SPECTATING, new Predicate<Entity>() {
 			public boolean apply(@Nullable Entity entity) {
 				boolean blindness = entity instanceof EntityLivingBase && ((EntityLivingBase) entity).isPotionActive(MobEffects.BLINDNESS) || (entity instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) entity).canBeTurnedToStone());
-				return entity != null && entity.canBeCollidedWith() && !blindness && (entity instanceof EntityPlayer || (entity instanceof EntityLiving && EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class) != null && !EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class).isStone));
+				return entity != null && entity.canBeCollidedWith() && !blindness && (entity instanceof EntityPlayer || (entity instanceof EntityLiving && EntityPropertiesHandler.INSTANCE.getProperties(entity, EntityEffectProperties.class) != null && !EntityPropertiesHandler.INSTANCE.getProperties(entity, EntityEffectProperties.class).isStone()));
 			}
 		}));
 		double d2 = d1;
@@ -105,9 +105,9 @@ public class ItemGorgonHead extends Item implements ICustomRendered {
 						worldIn.spawnEntity(statue);
 					}
 				} else {
-					StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(pointedEntity, StoneEntityProperties.class);
+					EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(pointedEntity, EntityEffectProperties.class);
 					if (properties != null) {
-						properties.isStone = true;
+						properties.turnToStone();
 					}
 					IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageStoneStatue(pointedEntity.getEntityId(), true));
 					if (pointedEntity instanceof EntityDragonBase) {
@@ -145,7 +145,6 @@ public class ItemGorgonHead extends Item implements ICustomRendered {
 				}
 				if (deathSound != null) {
 					entity.playSound(deathSound, 1, 1);
-
 				}
 				if (!(entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative())) {
 					stack.shrink(1);

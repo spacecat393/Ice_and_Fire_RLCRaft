@@ -52,6 +52,10 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
         this.setSize(0.9F, 0.6F);
     }
 
+    protected int getExperiencePoints(EntityPlayer player) {
+        return 3;
+    }
+
     public void onLivingUpdate() {
         super.onLivingUpdate();
         if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
@@ -201,12 +205,12 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
     }
 
     public boolean attackEntityFrom(DamageSource source, float amount) {
-        StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
-        if(amount >= 1.0D && !this.world.isRemote && this.getRNG().nextInt(3) == 0 && this.getHeldItem(EnumHand.MAIN_HAND) != ItemStack.EMPTY && !properties.isStone){
+        EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, EntityEffectProperties.class);
+        if (amount >= 1.0D && !this.world.isRemote && this.getRNG().nextInt(3) == 0 && this.getHeldItem(EnumHand.MAIN_HAND) != ItemStack.EMPTY && !properties.isStone()) {
             this.entityDropItem(this.getHeldItem(EnumHand.MAIN_HAND), 0);
             this.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
         }
-        if(amount >= 1.0D && !this.getPassengers().isEmpty()){
+        if (amount >= 1.0D && !this.getPassengers().isEmpty()) {
             for(Entity entity : this.getPassengers()){
                 entity.dismountRidingEntity();
             }

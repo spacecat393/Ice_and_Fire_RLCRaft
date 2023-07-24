@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.client.model;
 
+import com.github.alexthe666.iceandfire.entity.DragonType;
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityEggInIce;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBase;
@@ -60,12 +61,20 @@ public class ModelDragonEgg extends AdvancedModelBase {
 		this.resetToDefaultPose();
 		super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
 		if(entity instanceof EntityDragonEgg) {
-			EntityDragonEgg dragon = (EntityDragonEgg) entity;
-			if (dragon.world.getBlockState(new BlockPos(dragon)).getMaterial() == Material.FIRE && dragon.getType().isFire) {
+			if (isEggHatching((EntityDragonEgg) entity)) {
 				this.walk(Egg1, 0.3F, 0.3F, true, 1, 0, entity.ticksExisted, 1);
 				this.flap(Egg1, 0.3F, 0.3F, false, 0, 0, entity.ticksExisted, 1);
 			}
 		}
+	}
 
+	private boolean isEggHatching(EntityDragonEgg egg) {
+		BlockPos pos = new BlockPos(egg);
+		if (egg.getType().dragonType == DragonType.FIRE) {
+			return egg.world.getBlockState(pos).getMaterial() == Material.FIRE;
+		} else if (egg.getType().dragonType == DragonType.LIGHTNING) {
+			return egg.world.isRainingAt(pos) || egg.world.isRainingAt(pos.add(0, egg.height, 0));
+		}
+		return false;
 	}
 }

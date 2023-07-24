@@ -105,6 +105,8 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
 
     }
 
+
+
     protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
     }
 
@@ -399,7 +401,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
         if (world.isRemote) {
             if (!onGround) {
                 roll_buffer.calculateChainFlapBuffer(this.isBeingRidden() ? 55 : 90, 3, 10F, 0.5F, this);
-                pitch_buffer.calculateChainWaveBuffer(90, 10, 10F, 0.5F, this);
+                pitch_buffer.calculateChainPitchBuffer(90, 10, 10F, 0.5F, this);
             }
             tail_buffer.calculateChainSwingBuffer(70, 20, 5F, this);
         }
@@ -624,10 +626,6 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
             }
         }
         if (this.getUntamedRider() != null && this.getUntamedRider().isSneaking()) {
-            MiscPlayerProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this.getUntamedRider(), MiscPlayerProperties.class);
-            if (properties != null) {
-                properties.hasDismountedDragon = true;
-            }
             this.getUntamedRider().dismountRidingEntity();
         }
         if (this.attack() && this.getControllingPassenger() != null && this.getControllingPassenger() instanceof EntityPlayer) {
@@ -822,7 +820,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
     }
 
     protected int getExperiencePoints(EntityPlayer player) {
-        return 15 + this.world.rand.nextInt(10);
+        return 10;
     }
 
 

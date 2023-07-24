@@ -2,7 +2,6 @@ package com.github.alexthe666.iceandfire.core;
 
 import com.github.alexthe666.iceandfire.entity.EntityMyrmexBase;
 import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
-import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import com.google.common.collect.Maps;
 import net.minecraft.entity.IMerchant;
 import net.minecraft.entity.passive.EntityVillager;
@@ -69,7 +68,7 @@ public class ModVillagers {
 			career.addTrade(3, new ListItemForSapphires(Items.LEATHER_CHESTPLATE, new EntityVillager.PriceInfo(1, 6)));
 			career.addTrade(3, new ListItemForSapphires(Items.LEATHER_LEGGINGS, new EntityVillager.PriceInfo(1, 6)));
 			career.addTrade(3, new ListItemForSapphires(Items.DIAMOND_SHOVEL, new EntityVillager.PriceInfo(1, 7)));
-			career.addTrade(3, new ListItemForSapphires(EnumTroll.FROST.leather, new EntityVillager.PriceInfo(1, 5)));
+			career.addTrade(3, new ListItemForSapphires(ModItems.troll_leather_frost, new EntityVillager.PriceInfo(1, 5)));
 			register(craftsman, 1);
 		}
 		shaman = new VillagerRegistry.VillagerProfession("iceandfire:shaman", "iceandfire:textures/models/snowvillager/shaman.png", "minecraft:textures/entity/zombie_villager/zombie_farmer.png");

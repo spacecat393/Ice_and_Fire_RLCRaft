@@ -19,18 +19,17 @@ import java.util.Random;
 
 
 public enum EnumTroll {
-    FOREST(BiomeDictionary.Type.FOREST, ModItems.troll_forest, Weapon.TRUNK, Weapon.COLUMN_FOREST, Weapon.AXE, Weapon.HAMMER),
-    FROST(BiomeDictionary.Type.SNOWY, ModItems.troll_frost, Weapon.COLUMN_FROST, Weapon.TRUNK_FROST, Weapon.AXE, Weapon.HAMMER),
-    MOUNTAIN(BiomeDictionary.Type.MOUNTAIN, ModItems.troll_mountain, Weapon.COLUMN, Weapon.AXE, Weapon.HAMMER);
+    FOREST(BiomeDictionary.Type.FOREST, ModItems.troll_forest, ModItems.troll_leather_forest, Weapon.TRUNK, Weapon.COLUMN_FOREST, Weapon.AXE, Weapon.HAMMER),
+    FROST(BiomeDictionary.Type.SNOWY, ModItems.troll_frost, ModItems.troll_leather_frost, Weapon.COLUMN_FROST, Weapon.TRUNK_FROST, Weapon.AXE, Weapon.HAMMER),
+    MOUNTAIN(BiomeDictionary.Type.MOUNTAIN, ModItems.troll_mountain, ModItems.troll_leather_mountain, Weapon.COLUMN, Weapon.AXE, Weapon.HAMMER);
 
-    public ResourceLocation TEXTURE;
-    public ResourceLocation TEXTURE_STONE;
-    public ResourceLocation TEXTURE_EYES;
-    public BiomeDictionary.Type spawnBiome;
-    public ItemArmor.ArmorMaterial material;
+    public final ResourceLocation TEXTURE;
+    public final ResourceLocation TEXTURE_STONE;
+    public final ResourceLocation TEXTURE_EYES;
+    public final BiomeDictionary.Type spawnBiome;
+    public final ItemArmor.ArmorMaterial material;
+    public final Item leather;
     private Weapon[] weapons;
-    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":troll_leather")
-    public Item leather;
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":troll_helmet")
     public Item helmet;
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":troll_chestplate")
@@ -40,14 +39,14 @@ public enum EnumTroll {
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":troll_boots")
     public Item boots;
 
-    EnumTroll(BiomeDictionary.Type biome, ItemArmor.ArmorMaterial material, Weapon... weapons){
+    EnumTroll(BiomeDictionary.Type biome, ItemArmor.ArmorMaterial material, Item leather, Weapon... weapons){
         spawnBiome = biome;
         this.weapons = weapons;
         this.material = material;
+        this.leather = leather;
         TEXTURE = new ResourceLocation("iceandfire:textures/models/troll/troll_" + this.name().toLowerCase() + ".png");
         TEXTURE_STONE = new ResourceLocation("iceandfire:textures/models/troll/troll_" + this.name().toLowerCase() + "_stone.png");
         TEXTURE_EYES = new ResourceLocation("iceandfire:textures/models/troll/troll_" + this.name().toLowerCase() + "_eyes.png");
-        leather = new ItemTrollLeather(this);
         helmet = new ItemTrollArmor(this, material, 0, EntityEquipmentSlot.HEAD);
         chestplate = new ItemTrollArmor(this, material, 1, EntityEquipmentSlot.CHEST);
         leggings = new ItemTrollArmor(this, material, 2, EntityEquipmentSlot.LEGS);

@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.block;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import net.minecraft.block.BlockBush;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -16,19 +17,22 @@ import thaumcraft.api.crafting.IInfusionStabiliser;
 public class BlockElementalFlower extends BlockBush implements IInfusionStabiliser {
 	public Item itemBlock;
 
-	public BlockElementalFlower(boolean isFire) {
+	public BlockElementalFlower(int type) {
 		this.setTickRandomly(true);
 		this.setCreativeTab(IceAndFire.TAB);
-		this.setTranslationKey(isFire ? "iceandfire.fire_lily" : "iceandfire.frost_lily");
-		setRegistryName(IceAndFire.MODID, isFire ? "fire_lily" : "frost_lily");
+		this.setTranslationKey(type == 0 ? "iceandfire.fire_lily" : type == 1 ? "iceandfire.frost_lily": "iceandfire.lightning_lily");
+		setRegistryName(IceAndFire.MODID, type == 0 ? "fire_lily" : type == 1? "frost_lily" : "lightning_lily");
+		this.setSoundType(SoundType.PLANT);
 	}
 
 	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
 		IBlockState soil = worldIn.getBlockState(pos.down());
 		if (this == ModBlocks.fire_lily) {
 			return worldIn.getBlockState(pos).getBlock().isReplaceable(worldIn, pos) && (soil.getMaterial() == Material.SAND || soil.getBlock() == Blocks.NETHERRACK);
-		} else {
+		} else if (this == ModBlocks.frost_lily) {
 			return worldIn.getBlockState(pos).getBlock().isReplaceable(worldIn, pos) && (soil.getMaterial() == Material.PACKED_ICE || soil.getMaterial() == Material.ICE);
+		} else {
+			return worldIn.getBlockState(pos).getBlock().isReplaceable(worldIn, pos) && (soil.getMaterial() == Material.GROUND || soil.getMaterial() == Material.GRASS);
 		}
 	}
 

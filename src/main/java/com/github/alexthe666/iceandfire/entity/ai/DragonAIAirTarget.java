@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
+import com.github.alexthe666.iceandfire.entity.EntityEffectProperties;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -12,11 +12,9 @@ import net.minecraft.world.World;
 
 public class DragonAIAirTarget extends EntityAIBase {
 	private EntityDragonBase dragon;
-	private World theWorld;
 
 	public DragonAIAirTarget(EntityDragonBase dragon) {
 		this.dragon = dragon;
-		this.theWorld = dragon.world;
 	}
 
 	public boolean shouldExecute() {
@@ -54,7 +52,7 @@ public class DragonAIAirTarget extends EntityAIBase {
 	}
 
 	public boolean continueExecuting() {
-		StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(dragon, StoneEntityProperties.class);
+		EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(dragon, EntityEffectProperties.class);
 		if (!dragon.isFlying() && !dragon.isHovering()) {
 			return false;
 		}
@@ -64,7 +62,7 @@ public class DragonAIAirTarget extends EntityAIBase {
 		if (dragon.isChild()) {
 			return false;
 		}
-		if (properties != null && properties.isStone) {
+		if (properties != null && properties.isStone()) {
 			return false;
 		}
 		return dragon.airTarget != null;
@@ -85,6 +83,4 @@ public class DragonAIAirTarget extends EntityAIBase {
 		}
 		return dragon.getPosition();
 	}
-
-
 }

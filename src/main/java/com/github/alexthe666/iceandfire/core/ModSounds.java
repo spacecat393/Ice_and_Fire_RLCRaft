@@ -91,6 +91,44 @@ public final class ModSounds {
 	@GameRegistry.ObjectHolder("icedragon_adult_hurt")
 	public static final SoundEvent ICEDRAGON_ADULT_HURT = createSoundEvent("icedragon_adult_hurt");
 
+	@GameRegistry.ObjectHolder("lightningdragon_breath")
+	public static final SoundEvent LIGHTNINGDRAGON_BREATH = createSoundEvent("lightningdragon_breath");
+
+	@GameRegistry.ObjectHolder("lightningdragon_child_idle")
+	public static final SoundEvent LIGHTNINGDRAGON_CHILD_IDLE = createSoundEvent("lightningdragon_child_idle");
+
+	@GameRegistry.ObjectHolder("lightningdragon_child_hurt")
+	public static final SoundEvent LIGHTNINGDRAGON_CHILD_HURT = createSoundEvent("lightningdragon_child_hurt");
+
+	@GameRegistry.ObjectHolder("lightningdragon_child_death")
+	public static final SoundEvent LIGHTNINGDRAGON_CHILD_DEATH = createSoundEvent("lightningdragon_child_death");
+
+	@GameRegistry.ObjectHolder("lightningdragon_child_roar")
+	public static final SoundEvent LIGHTNINGDRAGON_CHILD_ROAR = createSoundEvent("lightningdragon_child_roar");
+
+	@GameRegistry.ObjectHolder("lightningdragon_teen_roar")
+	public static final SoundEvent LIGHTNINGDRAGON_TEEN_ROAR = createSoundEvent("lightningdragon_teen_roar");
+
+	@GameRegistry.ObjectHolder("lightningdragon_teen_idle")
+	public static final SoundEvent LIGHTNINGDRAGON_TEEN_IDLE = createSoundEvent("lightningdragon_teen_idle");
+
+	@GameRegistry.ObjectHolder("lightningdragon_teen_death")
+	public static final SoundEvent LIGHTNINGDRAGON_TEEN_DEATH = createSoundEvent("lightningdragon_teen_death");
+
+	@GameRegistry.ObjectHolder("lightningdragon_teen_hurt")
+	public static final SoundEvent LIGHTNINGDRAGON_TEEN_HURT = createSoundEvent("lightningdragon_teen_hurt");
+
+	@GameRegistry.ObjectHolder("lightningdragon_adult_roar")
+	public static final SoundEvent LIGHTNINGDRAGON_ADULT_ROAR = createSoundEvent("lightningdragon_adult_roar");
+
+	@GameRegistry.ObjectHolder("lightningdragon_adult_idle")
+	public static final SoundEvent LIGHTNINGDRAGON_ADULT_IDLE = createSoundEvent("lightningdragon_adult_idle");
+
+	@GameRegistry.ObjectHolder("lightningdragon_adult_death")
+	public static final SoundEvent LIGHTNINGDRAGON_ADULT_DEATH = createSoundEvent("lightningdragon_adult_death");
+
+	@GameRegistry.ObjectHolder("lightningdragon_adult_hurt")
+	public static final SoundEvent LIGHTNINGDRAGON_ADULT_HURT = createSoundEvent("lightningdragon_adult_hurt");
 	@GameRegistry.ObjectHolder("dragonflute")
 	public static final SoundEvent DRAGONFLUTE = createSoundEvent("dragonflute");
 
@@ -304,6 +342,8 @@ public final class ModSounds {
 	@GameRegistry.ObjectHolder("sea_serpent_splash")
 	public static final SoundEvent SEA_SERPENT_SPLASH = createSoundEvent("sea_serpent_splash");
 
+	@GameRegistry.ObjectHolder("lightning_strike")
+	public static final SoundEvent LIGHTNING_STRIKE = createSoundEvent("lightning_strike");
 
 	private static SoundEvent createSoundEvent(final String soundName) {
 		final ResourceLocation soundID = new ResourceLocation(MODID, soundName);

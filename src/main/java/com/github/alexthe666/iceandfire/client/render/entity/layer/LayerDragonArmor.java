@@ -1,44 +1,63 @@
 package com.github.alexthe666.iceandfire.client.render.entity.layer;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.client.texture.ArrayLayeredTexture;
+import com.github.alexthe666.iceandfire.entity.DragonType;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import com.github.alexthe666.iceandfire.enums.EnumDragonTextures;
+import com.google.common.collect.Maps;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.util.ResourceLocation;
 
-@SideOnly(Side.CLIENT)
-public class LayerDragonArmor implements LayerRenderer {
-	private final RenderLiving renderer;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
-	private int slot;
+public class LayerDragonArmor implements LayerRenderer<EntityDragonBase> {
+	private final RenderLiving render;
+	private static final Map<String, ResourceLocation> LAYERED_ARMOR_CACHE = Maps.newHashMap();
 
-	public LayerDragonArmor(RenderLiving renderer, int slot) {
-		this.renderer = renderer;
-		this.slot = slot;
+	public LayerDragonArmor(RenderLiving renderIn) {
+		this.render = renderIn;
 	}
 
-	public void doRenderLayer(EntityDragonBase entity, float f, float f1, float i, float f2, float f3, float f4, float f5) {
-		if (entity.getArmorInSlot(slot) != 0) {
-			if(entity instanceof EntityIceDragon){
-				this.renderer.bindTexture(EnumDragonTextures.Armor.getArmorForDragon(entity, slot).ICETEXTURE);
-			}else{
-				this.renderer.bindTexture(EnumDragonTextures.Armor.getArmorForDragon(entity, slot).FIRETEXTURE);
-
+	public void doRenderLayer(EntityDragonBase dragon, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+		int armorHead = dragon.getArmorInSlot(EntityEquipmentSlot.HEAD);
+		int armorNeck = dragon.getArmorInSlot(EntityEquipmentSlot.CHEST);
+		int armorLegs = dragon.getArmorInSlot(EntityEquipmentSlot.LEGS);
+		int armorFeet = dragon.getArmorInSlot(EntityEquipmentSlot.FEET);
+		String armorTexture = dragon.dragonType.getName() + "|" + armorHead + "|" + armorNeck + "|" + armorLegs + "|" + armorFeet;
+		if (!armorTexture.equals(dragon.dragonType.getName() + "|0|0|0|0")) {
+			ResourceLocation resourcelocation = LAYERED_ARMOR_CACHE.get(armorTexture);
+			if(resourcelocation == null){
+				resourcelocation = new ResourceLocation("iceandfire" + "dragonArmor_" + armorTexture);
+				List<String> tex = new ArrayList<>();
+				for (EntityEquipmentSlot slot : EntityDragonBase.ARMOR_SLOTS) {
+					if (dragon.dragonType == DragonType.ICE) {
+						tex.add(EnumDragonTextures.Armor.getArmorForDragon(dragon, slot).ICETEXTURE.toString());
+					} else if (dragon.dragonType == DragonType.LIGHTNING) {
+						tex.add(EnumDragonTextures.Armor.getArmorForDragon(dragon, slot).LIGHTNINGTEXTURE.toString());
+					} else {
+						tex.add(EnumDragonTextures.Armor.getArmorForDragon(dragon, slot).FIRETEXTURE.toString());
+					}
+				}
+				ArrayLayeredTexture layeredBase = new ArrayLayeredTexture(tex);
+				Minecraft.getMinecraft().getTextureManager().loadTexture(resourcelocation, layeredBase);
+				LAYERED_ARMOR_CACHE.put(armorTexture, resourcelocation);
 			}
-			this.renderer.getMainModel().render(entity, f, f1, f2, f3, f4, f5);
+			this.render.bindTexture(resourcelocation);
+			this.render.getMainModel().render(dragon, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 		}
 	}
 
-	@Override
 	public boolean shouldCombineTextures() {
 		return false;
 	}
 
-	@Override
-	public void doRenderLayer(EntityLivingBase entity, float f, float f1, float f2, float f3, float f4, float f5, float f6) {
-		this.doRenderLayer((EntityDragonBase) entity, f, f1, f2, f3, f4, f5, f6);
+	public static void clearCache(String str){
+		LAYERED_ARMOR_CACHE.remove(str);
 	}
 }

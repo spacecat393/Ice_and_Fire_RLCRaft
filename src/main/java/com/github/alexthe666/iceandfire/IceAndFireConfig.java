@@ -7,7 +7,10 @@ public class IceAndFireConfig {
 	public boolean customMainMenu = true;
 	public boolean useVanillaFont = false;
 	public boolean logCascadingWorldGen = false;
+	public boolean generateCopperOre = true;
 	public boolean generateSilverOre = true;
+	public boolean generateAmethystOre = true;
+
 	public boolean generateSapphireOre = true;
 	public boolean generateDragonSkeletons = true;
 	public int generateDragonSkeletonChance = 300;
@@ -119,12 +122,25 @@ public class IceAndFireConfig {
 	public boolean seaSerpentGriefing = true;
 	public double seaSerpentBaseHealth = 20D;
 	public double seaSerpentAttackStrength = 4D;
+	public float chainLightningDamage = 5.0f;
+	public int chainLightningHops = 4;
+	public int chainLightningRange = 8;
+	public boolean chainLightningTransformsMobs = true;
+	public boolean chainLightningParalysis = false;
+	public int chainLightningParalysisChance = 4;
+	public int chainLightningParalysisTicks = 5;
+	public boolean lightningDragonKnockback = false;
+	public boolean lightningDragonParalysis = false;
+	public int lightningDragonParalysisTicks = 100;
+	public boolean silverArmorRedesign = true;
 
     public void init(Configuration config) {
 		this.customMainMenu = config.getBoolean("Custom main menu", "all", true, "Whether to display the dragon on the main menu or not");
 		this.useVanillaFont = config.getBoolean("Use Vanilla Font", "all", false, "Whether to use the vanilla font in the bestiary or not");
+		this.generateCopperOre  = config.getBoolean("Generate Copper Ore", "all", true, "Whether to generate copper ore or not");
 		this.generateSilverOre  = config.getBoolean("Generate Silver Ore", "all", true, "Whether to generate silver ore or not");
 		this.logCascadingWorldGen  = config.getBoolean("Log Cascading World Gen", "all", false, "Whether to log cascading world gen lag. We hope to fix all cascading lag in the future, but the server console spam is over the top.");
+		this.generateAmethystOre = config.getBoolean("Generate Amethyst Ore", "all", true, "Whether to generate amethyst ore or not");
 		this.generateSapphireOre  = config.getBoolean("Generate Sapphire Ore", "all", true, "Whether to generate sapphire ore or not");
 		this.generateDragonSkeletons  = config.getBoolean("Generate Dragon Skeletons", "all", true, "Whether to generate dragon skeletons or not");
 		this.generateDragonSkeletonChance  = config.getInt("Generate Dragon Skeleton Chance", "all", 300, 1, 10000, "1 out of this number chance per chunk for generation");
@@ -250,6 +266,19 @@ public class IceAndFireConfig {
 		this.seaSerpentBaseHealth = (double)config.getFloat("Sea Serpent Base Health", "all", 20, 1, 10000, "Default sea serpent health, this is scaled to the sea serpent's particular size");
 		this.seaSerpentAttackStrength = (double)config.getFloat("Sea Serpent Base Attack Strength", "all", 4, 1, 10000, "Default sea serpent attack strength, this is scaled to the sea serpent's particular size");
 
+		this.chainLightningDamage = config.getFloat("Chain Lightning Base Damage", "all", 5.0f, 1.0f, 1000.0f, "Base damage dealt by chain lightning, decreasing proportionally on each hop");
+		this.chainLightningHops = config.getInt("Chain Lightning Number Of Hops", "all", 5, 1, 10, "Maximum number of targets that will be affected by a given chain lightning attack");
+		this.chainLightningRange = config.getInt("Chain Lightning Range", "all", 8, 5, 20, "Default range for chain lightning, this is the maximum range for a given hop");
+		this.chainLightningTransformsMobs = config.getBoolean("Chain Lightning Transforms Mobs", "all", true, "True if chain lightning should transform mobs");
 
+		this.chainLightningParalysis = config.getBoolean("Chain Lightning Paralysis", "all", false, "True if chain lightning causes paralysis");
+		this.chainLightningParalysisChance = config.getInt("Chain Lightning Paralysis Chance", "all", 4, 1, 100, "The chance of chain lightning causing paralysis. Higher number = lower chance.");
+		this.chainLightningParalysisTicks = config.getInt("Chain Lightning Paralysis Ticks", "all", 20, 1, 100, "The length of the paralysis effect for chain lightning in ticks");
+
+		this.lightningDragonKnockback = config.getBoolean("Lightning Dragon Knockback", "all", true, "True if lightning dragon projectile attacks should knockback their target");
+		this.lightningDragonParalysis = config.getBoolean("Lightning Dragon Paralysis", "all", false, "True if lightning dragons projectile attacks should apply paralysis");
+		this.lightningDragonParalysisTicks = config.getInt("Lightning Dragon Paralysis Ticks", "all", 100, 1, 100, "The length of the paralysis effect for lightning dragons in ticks");
+
+		this.silverArmorRedesign = config.getBoolean("Silver Armor Redesign", "all", true, "True if silver armor should use the updated silver armor model and texture");
 	}
 }

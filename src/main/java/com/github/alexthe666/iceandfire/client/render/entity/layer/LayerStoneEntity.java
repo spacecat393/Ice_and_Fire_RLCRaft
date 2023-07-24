@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.client.render.entity.layer;
 import com.github.alexthe666.iceandfire.client.model.ICustomStatueModel;
 import com.github.alexthe666.iceandfire.client.model.ModelGuardianStatue;
 import com.github.alexthe666.iceandfire.client.model.ModelHorseStatue;
-import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
+import com.github.alexthe666.iceandfire.entity.EntityEffectProperties;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
@@ -21,7 +21,7 @@ public class LayerStoneEntity implements LayerRenderer {
 
 	private static final ModelHorseStatue HORSE_MODEL = new ModelHorseStatue();
 	private static final ModelGuardianStatue GUARDIAN_MODEL = new ModelGuardianStatue();
-	private RenderLivingBase renderer;
+	private final RenderLivingBase renderer;
 
 	public LayerStoneEntity(RenderLivingBase renderer) {
 		this.renderer = renderer;
@@ -30,8 +30,8 @@ public class LayerStoneEntity implements LayerRenderer {
 	@Override
 	public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float f, float f1, float i, float f2, float f3, float f4, float f5) {
 		if (entitylivingbaseIn instanceof EntityLiving) {
-			StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entitylivingbaseIn, StoneEntityProperties.class);
-			if (properties != null && properties.isStone) {
+			EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entitylivingbaseIn, EntityEffectProperties.class);
+			if (properties != null && properties.isStone()) {
 				GlStateManager.depthMask(true);
 				GL11.glEnable(GL11.GL_CULL_FACE);
 				this.renderer.bindTexture(new ResourceLocation(getStoneType(renderer.getMainModel(), 1)));

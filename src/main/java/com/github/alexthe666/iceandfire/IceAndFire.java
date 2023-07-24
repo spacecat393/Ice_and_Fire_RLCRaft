@@ -54,9 +54,9 @@ public class IceAndFire {
     public static final Logger logger = LogManager.getLogger(NAME);
     @Instance(value = MODID)
     public static IceAndFire INSTANCE;
-    @NetworkWrapper({MessageDaytime.class, MessageDragonArmor.class, MessageDragonControl.class, MessageHippogryphArmor.class, MessageStoneStatue.class,
+    @NetworkWrapper({MessageDragonArmor.class, MessageDragonControl.class, MessageHippogryphArmor.class, MessageStoneStatue.class,
             MessageUpdatePixieHouse.class, MessageUpdatePodium.class, MessageUpdatePixieHouseModel.class, MessageUpdatePixieJar.class, MessageSirenSong.class,
-            MessageDeathWormHitbox.class, MessageMultipartInteract.class, MessageGetMyrmexHive.class, MessageSetMyrmexHiveNull.class, MessagePlayerHitMultipart.class})
+            MessageDeathWormHitbox.class, MessageMultipartInteract.class, MessageGetMyrmexHive.class, MessageSetMyrmexHiveNull.class, MessagePlayerHitMultipart.class, MessageChainLightningFX.class})
     public static SimpleNetworkWrapper NETWORK_WRAPPER;
     @SidedProxy(clientSide = "com.github.alexthe666.iceandfire.ClientProxy", serverSide = "com.github.alexthe666.iceandfire.CommonProxy")
     public static CommonProxy PROXY;
@@ -64,6 +64,7 @@ public class IceAndFire {
     public static DamageSource dragon;
     public static DamageSource dragonFire;
     public static DamageSource dragonIce;
+    public static DamageSource dragonLightning;
     public static DamageSource gorgon;
     public static Biome GLACIER;
     public static Potion FROZEN_POTION;
@@ -83,7 +84,6 @@ public class IceAndFire {
         ThaumcraftCompatBridge.loadThaumcraftCompat();
         LootFunctionManager.registerFunction(new CustomizeToDragon.Serializer());
         LootFunctionManager.registerFunction(new CustomizeToSeaSerpent.Serializer());
-        ModRecipes.preInit();
     }
 
 
@@ -108,7 +108,6 @@ public class IceAndFire {
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-
         ModVillagers.INSTANCE.init();
         logger.info("The watcher waits on the northern wall");
         logger.info("A daughter picks up a warrior's sword");
@@ -138,6 +137,14 @@ public class IceAndFire {
             @Override
             public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn) {
                 String s = "death.attack.dragon_ice";
+                String s1 = s + ".player_" + new Random().nextInt(2);
+                return new TextComponentString(entityLivingBaseIn.getDisplayName().getFormattedText() + " ").appendSibling(new TextComponentTranslation(s1, new Object[]{entityLivingBaseIn.getDisplayName()}));
+            }
+        };
+        dragonLightning = new DamageSource("dragon_lightning") {
+            @Override
+            public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn) {
+                String s = "death.attack.dragon_lightning";
                 String s1 = s + ".player_" + new Random().nextInt(2);
                 return new TextComponentString(entityLivingBaseIn.getDisplayName().getFormattedText() + " ").appendSibling(new TextComponentTranslation(s1, new Object[]{entityLivingBaseIn.getDisplayName()}));
             }

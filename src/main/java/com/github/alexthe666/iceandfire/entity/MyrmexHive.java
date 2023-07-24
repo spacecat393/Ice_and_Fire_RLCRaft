@@ -254,6 +254,10 @@ public class MyrmexHive {
         return this.getPlayerReputation(uuid) < 25;
     }
 
+    public boolean isPlayerReputationMaxed(UUID uuid) {
+        return this.getPlayerReputation(uuid) >= 100;
+    }
+
     /**
      * Read this village's data from NBT.
      */

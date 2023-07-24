@@ -105,7 +105,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 	}
 
 	protected int getExperiencePoints(EntityPlayer player) {
-		return 7 + this.world.rand.nextInt(10);
+		return 10;
 	}
 
 	@Override
@@ -563,8 +563,8 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 	}
 
 	public boolean canMove() {
-		StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
-		if(properties != null && properties.isStone){
+		EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, EntityEffectProperties.class);
+		if(properties != null && properties.isStone()){
 			return false;
 		}
 		return !this.isSitting() && this.getControllingPassenger() == null && sitProgress == 0;
@@ -782,8 +782,8 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 			this.hoverTicks = 0;
 			this.flyTicks = 0;
 		}
-		StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
-		if (properties != null && properties.isStone) {
+		EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, EntityEffectProperties.class);
+		if (properties != null && properties.isStone()) {
 			this.setFlying(false);
 			this.setHovering(false);
 		}
@@ -919,7 +919,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 			this.setFlying(false);
 			this.setHovering(false);
 		}
-		if ((properties == null || properties != null && !properties.isStone) && (!world.isRemote && this.getRNG().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSitting() && this.canMove() && this.onGround || this.posY < -1)) {
+		if ((properties == null || !properties.isStone()) && (!world.isRemote && this.getRNG().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSitting() && this.canMove() && this.onGround || this.posY < -1)) {
 			this.setHovering(true);
 			this.hoverTicks = 0;
 			this.flyTicks = 0;
@@ -1146,4 +1146,5 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 			}
 		}
 	}
+
 }

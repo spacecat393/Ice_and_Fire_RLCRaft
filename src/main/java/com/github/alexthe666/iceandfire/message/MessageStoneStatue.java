@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.message;
 
-import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
+import com.github.alexthe666.iceandfire.entity.EntityEffectProperties;
 import io.netty.buffer.ByteBuf;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.ilexiconn.llibrary.server.network.AbstractMessage;
@@ -43,18 +43,26 @@ public class MessageStoneStatue extends AbstractMessage<MessageStoneStatue> {
 	@SideOnly(Side.CLIENT)
 	public void onClientReceived(Minecraft client, MessageStoneStatue message, EntityPlayer player, MessageContext messageContext) {
 		Entity entity = player.world.getEntityByID(message.entityId);
-		if (entity != null && entity instanceof EntityLiving) {
-			StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
-			properties.isStone = message.isStone;
+		if (entity instanceof EntityLiving) {
+			EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, EntityEffectProperties.class);
+			if (message.isStone) {
+				properties.turnToStone();
+			} else if (properties.isStone()) {
+				properties.reset();
+			}
 		}
 	}
 
 	@Override
 	public void onServerReceived(MinecraftServer server, MessageStoneStatue message, EntityPlayer player, MessageContext messageContext) {
 		Entity entity = player.world.getEntityByID(message.entityId);
-		if (entity != null && entity instanceof EntityLiving) {
-			StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
-			properties.isStone = message.isStone;
+		if (entity instanceof EntityLiving) {
+			EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, EntityEffectProperties.class);
+			if (message.isStone) {
+				properties.turnToStone();
+			} else if (properties.isStone()) {
+				properties.reset();
+			}
 		}
 	}
 }

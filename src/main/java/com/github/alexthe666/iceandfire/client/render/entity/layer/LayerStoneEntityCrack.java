@@ -4,7 +4,7 @@ import com.github.alexthe666.iceandfire.client.model.ICustomStatueModel;
 import com.github.alexthe666.iceandfire.client.model.ModelGuardianStatue;
 import com.github.alexthe666.iceandfire.client.model.ModelHorseStatue;
 import com.github.alexthe666.iceandfire.client.model.ModelTroll;
-import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
+import com.github.alexthe666.iceandfire.entity.EntityEffectProperties;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
@@ -30,15 +30,15 @@ public class LayerStoneEntityCrack implements LayerRenderer {
 	@Override
 	public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float f, float f1, float i, float f2, float f3, float f4, float f5) {
 		if (entitylivingbaseIn instanceof EntityLiving) {
-			StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entitylivingbaseIn, StoneEntityProperties.class);
-			if (properties != null && properties.isStone && properties.breakLvl > 0) {
+			EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entitylivingbaseIn, EntityEffectProperties.class);
+			if (properties != null && properties.isStone() && properties.effectData > 0) {
 				GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.DST_COLOR, GlStateManager.DestFactor.SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 				GlStateManager.doPolygonOffset(-3.0F, -3.0F);
 				GlStateManager.enablePolygonOffset();
 				GlStateManager.enableBlend();
 				GlStateManager.enableAlpha();
 				GlStateManager.depthMask(true);
-				this.renderer.bindTexture(DESTROY_STAGES[properties.breakLvl - 1]);
+				this.renderer.bindTexture(DESTROY_STAGES[properties.effectData - 1]);
 				if (this.renderer.getMainModel() instanceof ModelTroll) {
 					this.renderer.getMainModel().render(entitylivingbaseIn, f, 0, 0, f3, f4, f5);
 				} else if (this.renderer.getMainModel() instanceof ICustomStatueModel) {

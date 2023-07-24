@@ -1,8 +1,8 @@
 package com.github.alexthe666.iceandfire.client.render.entity.layer;
 
 import com.github.alexthe666.iceandfire.client.render.entity.RenderGorgon;
+import com.github.alexthe666.iceandfire.entity.EntityEffectProperties;
 import com.github.alexthe666.iceandfire.entity.EntityGorgon;
-import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -21,8 +21,8 @@ public class LayerGorgonEyes implements LayerRenderer<EntityGorgon> {
 	}
 
 	public void doRenderLayer(EntityGorgon gorgon, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-		StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(gorgon, StoneEntityProperties.class);
-		if (properties != null && !properties.isStone || properties == null) {
+		EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(gorgon, EntityEffectProperties.class);
+		if (properties == null || !properties.isStone()) {
 			if (gorgon.getAnimation() == EntityGorgon.ANIMATION_SCARE || gorgon.getAnimation() == EntityGorgon.ANIMATION_HIT) {
 				this.render.bindTexture(TEXTURE);
 				GlStateManager.enableBlend();

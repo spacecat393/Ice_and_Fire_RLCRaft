@@ -30,7 +30,7 @@ public class ItemSeaSerpentArmor extends ItemArmor {
 
 	@SideOnly(Side.CLIENT)
 	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
-		return (ModelBiped) IceAndFire.PROXY.getArmorModel(renderIndex == 2 ? 9 : 8);
+		return (ModelBiped) IceAndFire.PROXY.getArmorModel(renderIndex == 2 ? 15 : 14);
 	}
 
 	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {

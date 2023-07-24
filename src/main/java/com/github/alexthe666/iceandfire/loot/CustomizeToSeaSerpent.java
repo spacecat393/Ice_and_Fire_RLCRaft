@@ -1,7 +1,6 @@
 package com.github.alexthe666.iceandfire.loot;
 
 import com.github.alexthe666.iceandfire.core.ModItems;
-import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntitySeaSerpent;
 import com.github.alexthe666.iceandfire.item.*;
 import com.google.gson.JsonDeserializationContext;

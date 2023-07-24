@@ -37,8 +37,8 @@ public class EntitySnowVillager extends EntityVillager {
 	}
 
 	public boolean processInteract(EntityPlayer player, EnumHand hand) {
-		StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
-		if (properties != null && properties.isStone) {
+		EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, EntityEffectProperties.class);
+		if (properties != null && properties.isStone()) {
 			return false;
 		}
 		return super.processInteract(player, hand);

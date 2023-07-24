@@ -16,10 +16,10 @@ import java.util.List;
 
 public class ItemDragonArmor extends Item implements ICustomRendered{
 
-	public int type;
+	public DragonArmorType type;
 	public String name;
 
-	public ItemDragonArmor(int type, String name) {
+	public ItemDragonArmor(DragonArmorType type, String name) {
 		this.type = type;
 		this.name = name;
 		this.setHasSubtypes(true);
@@ -60,5 +60,13 @@ public class ItemDragonArmor extends Item implements ICustomRendered{
 				break;
 		}
 		tooltip.add(StatCollector.translateToLocal(words));
+	}
+
+	public enum DragonArmorType {
+		IRON,
+		GOLD,
+		DIAMOND,
+		SILVER,
+		COPPER
 	}
 }

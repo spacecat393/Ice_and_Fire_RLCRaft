@@ -1,6 +1,8 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.core.ModBlocks;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.GlStateManager;
@@ -14,11 +16,15 @@ import org.lwjgl.opengl.GL11;
 
 public class RenderDragonFireCharge extends Render {
 
-	public boolean isFire;
+	private final Type type;
 
-	public RenderDragonFireCharge(RenderManager renderManager, boolean isFire) {
+	public enum Type {
+		FIRE, ICE, LIGHTNING
+	}
+
+	public RenderDragonFireCharge(RenderManager renderManager, Type type) {
 		super(renderManager);
-		this.isFire = isFire;
+		this.type = type;
 	}
 
 	@Override
@@ -34,9 +40,17 @@ public class RenderDragonFireCharge extends Render {
 		this.bindEntityTexture(entity);
 		GlStateManager.rotate(entity.ticksExisted * 7, 1.0F, 1.0F, 1.0F);
 		GlStateManager.translate(-0.5F, 0F, 0.5F);
-		blockrendererdispatcher.renderBlockBrightness(isFire ? Blocks.MAGMA.getDefaultState() : ModBlocks.dragon_ice.getDefaultState(), entity.getBrightness());
+		blockrendererdispatcher.renderBlockBrightness(getBlock().getDefaultState(), entity.getBrightness());
 		GlStateManager.translate(-1.0F, 0.0F, 1.0F);
 		GL11.glPopMatrix();
 	}
 
+	private Block getBlock() {
+		if (type == Type.ICE) {
+			return ModBlocks.dragon_ice;
+		} else if (type == Type.LIGHTNING) {
+			return ModBlocks.lightning_stone;
+		}
+		return Blocks.MAGMA;
+	}
 }

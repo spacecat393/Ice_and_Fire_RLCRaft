@@ -31,7 +31,6 @@ import java.util.Random;
 import java.util.Set;
 
 public class FireChargeExplosion extends Explosion {
-	private final boolean isFlaming;
 	private final boolean isSmoking;
 	private final Random explosionRNG;
 	private final World worldObj;
@@ -44,7 +43,7 @@ public class FireChargeExplosion extends Explosion {
 	private final Map<EntityPlayer, Vec3d> playerKnockbackMap;
 	private final Vec3d position;
 
-	public FireChargeExplosion(World worldIn, Entity entityIn, double x, double y, double z, float size, boolean flaming, boolean smoking) {
+	public FireChargeExplosion(World worldIn, Entity entityIn, double x, double y, double z, float size, boolean smoking) {
 		super(worldIn, entityIn, x, y, z, size, true, smoking);
 		this.explosionRNG = new Random();
 		this.affectedBlockPositions = Lists.<BlockPos>newArrayList();
@@ -55,7 +54,6 @@ public class FireChargeExplosion extends Explosion {
 		this.explosionX = x;
 		this.explosionY = y;
 		this.explosionZ = z;
-		this.isFlaming = flaming;
 		this.isSmoking = smoking;
 		this.position = new Vec3d(explosionX, explosionY, explosionZ);
 	}
@@ -118,9 +116,7 @@ public class FireChargeExplosion extends Explosion {
 		net.minecraftforge.event.ForgeEventFactory.onExplosionDetonate(this.worldObj, this, list, f3);
 		Vec3d vec3d = new Vec3d(this.explosionX, this.explosionY, this.explosionZ);
 
-		for (int k2 = 0; k2 < list.size(); ++k2) {
-			Entity entity = (Entity) list.get(k2);
-
+		for (Entity entity : list) {
 			if (!entity.isImmuneToExplosions() && !entity.isEntityEqual(exploder)) {
 				double d12 = entity.getDistance(this.explosionX, this.explosionY, this.explosionZ) / (double) f3;
 
@@ -128,20 +124,20 @@ public class FireChargeExplosion extends Explosion {
 					double d5 = entity.posX - this.explosionX;
 					double d7 = entity.posY + (double) entity.getEyeHeight() - this.explosionY;
 					double d9 = entity.posZ - this.explosionZ;
-					double d13 = (double) MathHelper.sqrt(d5 * d5 + d7 * d7 + d9 * d9);
+					double d13 = MathHelper.sqrt(d5 * d5 + d7 * d7 + d9 * d9);
 
 					if (d13 != 0.0D) {
 						d5 = d5 / d13;
 						d7 = d7 / d13;
 						d9 = d9 / d13;
-						double d14 = (double) this.worldObj.getBlockDensity(vec3d, entity.getEntityBoundingBox());
+						double d14 = this.worldObj.getBlockDensity(vec3d, entity.getEntityBoundingBox());
 						double d10 = (1.0D - d12) * d14;
 
-						if (exploder != null && exploder instanceof EntityDragonBase) {
-							if (entity instanceof EntityDragonBase && ((EntityDragonBase) entity).isOwner(((EntityDragonBase) exploder).getOwner())) {
+						if (exploder instanceof EntityDragonBase) {
+							if (DragonUtils.hasSameOwner(entity, exploder)) {
 								return;
 							}
-							if (entity instanceof EntityLivingBase && ((EntityDragonBase) exploder).isOwner((EntityLivingBase) entity)) {
+							if (DragonUtils.isOwner(entity, exploder)) {
 								entity.attackEntityFrom(DamageSource.causeExplosionDamage(this), ((float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f3 + 1.0D))) / 3);
 							} else {
 								entity.attackEntityFrom(DamageSource.causeExplosionDamage(this), (float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f3 + 1.0D)));
@@ -173,7 +169,7 @@ public class FireChargeExplosion extends Explosion {
 	}
 
 	public void doExplosionB(boolean spawnParticles) {
-		this.worldObj.playSound((EntityPlayer) null, this.explosionX, this.explosionY, this.explosionZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, (1.0F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.2F) * 0.7F);
+		this.worldObj.playSound(null, this.explosionX, this.explosionY, this.explosionZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, (1.0F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.2F) * 0.7F);
 
 		if (this.explosionSize >= 2.0F && this.isSmoking) {
 			this.worldObj.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, this.explosionX, this.explosionY, this.explosionZ, 1.0D, 0.0D, 0.0D, new int[0]);
@@ -187,13 +183,13 @@ public class FireChargeExplosion extends Explosion {
 				Block block = iblockstate.getBlock();
 
 				if (spawnParticles) {
-					double d0 = (double) ((float) blockpos.getX() + this.worldObj.rand.nextFloat());
-					double d1 = (double) ((float) blockpos.getY() + this.worldObj.rand.nextFloat());
-					double d2 = (double) ((float) blockpos.getZ() + this.worldObj.rand.nextFloat());
+					double d0 = (float) blockpos.getX() + this.worldObj.rand.nextFloat();
+					double d1 = (float) blockpos.getY() + this.worldObj.rand.nextFloat();
+					double d2 = (float) blockpos.getZ() + this.worldObj.rand.nextFloat();
 					double d3 = d0 - this.explosionX;
 					double d4 = d1 - this.explosionY;
 					double d5 = d2 - this.explosionZ;
-					double d6 = (double) MathHelper.sqrt(d3 * d3 + d4 * d4 + d5 * d5);
+					double d6 = MathHelper.sqrt(d3 * d3 + d4 * d4 + d5 * d5);
 					d3 = d3 / d6;
 					d4 = d4 / d6;
 					d5 = d5 / d6;
@@ -202,26 +198,14 @@ public class FireChargeExplosion extends Explosion {
 					d3 = d3 * d7;
 					d4 = d4 * d7;
 					d5 = d5 * d7;
-					this.worldObj.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, (d0 + this.explosionX) / 2.0D, (d1 + this.explosionY) / 2.0D, (d2 + this.explosionZ) / 2.0D, d3, d4, d5, new int[0]);
-					this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5, new int[0]);
-				} else {
-					double d0 = (double) ((float) blockpos.getX() + this.worldObj.rand.nextFloat());
-					double d1 = (double) ((float) blockpos.getY() + this.worldObj.rand.nextFloat());
-					double d2 = (double) ((float) blockpos.getZ() + this.worldObj.rand.nextFloat());
-					double d3 = d0 - this.explosionX;
-					double d4 = d1 - this.explosionY;
-					double d5 = d2 - this.explosionZ;
-					double d6 = (double) MathHelper.sqrt(d3 * d3 + d4 * d4 + d5 * d5);
-					d3 = d3 / d6;
-					d4 = d4 / d6;
-					d5 = d5 / d6;
-					double d7 = 0.5D / (d6 / (double) this.explosionSize + 0.1D);
-					d7 = d7 * (double) (this.worldObj.rand.nextFloat() * this.worldObj.rand.nextFloat() + 0.3F);
-					d3 = d3 * d7;
-					d4 = d4 * d7;
-					d5 = d5 * d7;
-					IceAndFire.PROXY.spawnParticle("dragonice", worldObj, (d0 + this.explosionX) / 2.0D, (d1 + this.explosionY) / 2.0D, (d2 + this.explosionZ) / 2.0D, d3, d4, d5);
-					IceAndFire.PROXY.spawnParticle("dragonice", worldObj, d0, d1, d2, d3, d4, d5);
+					if (exploder instanceof EntityFireDragon) {
+						this.worldObj.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, (d0 + this.explosionX) / 2.0D, (d1 + this.explosionY) / 2.0D, (d2 + this.explosionZ) / 2.0D, d3, d4, d5);
+						this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5);
+					} else if (exploder instanceof EntityIceDragon) {
+						IceAndFire.PROXY.spawnParticle("dragonice", worldObj, (d0 + this.explosionX) / 2.0D, (d1 + this.explosionY) / 2.0D, (d2 + this.explosionZ) / 2.0D, d3, d4, d5);
+					} else if (exploder instanceof EntityLightningDragon) {
+						IceAndFire.PROXY.spawnParticle("dragonlightning", worldObj, (d0 + this.explosionX) / 2.0D, (d1 + this.explosionY) / 2.0D, (d2 + this.explosionZ) / 2.0D, d3, d4, d5);
+					}
 				}
 
 				if (iblockstate.getMaterial() != Material.AIR) {
@@ -234,13 +218,13 @@ public class FireChargeExplosion extends Explosion {
 			}
 		}
 
-		if (this.isFlaming) {
+		if (this.exploder instanceof EntityFireDragon) {
 			for (BlockPos blockpos1 : this.affectedBlockPositions) {
 				if (this.worldObj.getBlockState(blockpos1).getMaterial() == Material.AIR && this.worldObj.getBlockState(blockpos1.down()).isFullBlock() && this.explosionRNG.nextInt(3) == 0) {
 					this.worldObj.setBlockState(blockpos1, Blocks.FIRE.getDefaultState());
 				}
 			}
-		} else {
+		} else if (this.exploder instanceof EntityIceDragon) {
 			for (BlockPos blockpos1 : this.affectedBlockPositions) {
 				if (this.worldObj.getBlockState(blockpos1).getMaterial() == Material.AIR && this.worldObj.getBlockState(blockpos1.down()).isFullBlock() && this.explosionRNG.nextInt(3) == 0) {
 					this.worldObj.setBlockState(blockpos1, new Random().nextBoolean() ? Blocks.SNOW_LAYER.getDefaultState() : ModBlocks.dragon_ice_spikes.getDefaultState());

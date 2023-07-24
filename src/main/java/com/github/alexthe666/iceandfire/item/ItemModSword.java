@@ -33,12 +33,20 @@ public class ItemModSword extends ItemSword {
 		this.toolMaterial = toolmaterial;
 	}
 
-	public boolean getIsRepairable(ItemStack toRepair, ItemStack repair){
+	public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
 		ItemStack mat = this.toolMaterial.getRepairItemStack();
-		if(this.toolMaterial == ModItems.silverTools){
+		if (this.toolMaterial == ModItems.silverTools) {
 			NonNullList<ItemStack> silverItems = OreDictionary.getOres("ingotSilver");
-			for(ItemStack ingot : silverItems){
-				if(OreDictionary.itemMatches(repair, ingot, false)){
+			for (ItemStack ingot : silverItems) {
+				if (OreDictionary.itemMatches(repair, ingot, false)) {
+					return true;
+				}
+			}
+		}
+		if(this.toolMaterial == ModItems.copperTools){
+			NonNullList<ItemStack> copperItems = OreDictionary.getOres("ingotCopper");
+			for (ItemStack ingot : copperItems) {
+				if (OreDictionary.itemMatches(repair, ingot, false)){
 					return true;
 				}
 			}

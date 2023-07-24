@@ -1,14 +1,12 @@
 package com.github.alexthe666.iceandfire.event;
 
+import com.github.alexthe666.iceandfire.ClientProxy;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.render.entity.ICustomStoneLayer;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerStoneEntity;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerStoneEntityCrack;
 import com.github.alexthe666.iceandfire.core.ModKeys;
-import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import com.github.alexthe666.iceandfire.entity.EntitySiren;
-import com.github.alexthe666.iceandfire.entity.FrozenEntityProperties;
-import com.github.alexthe666.iceandfire.entity.SirenEntityProperties;
+import com.github.alexthe666.iceandfire.entity.*;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -21,6 +19,7 @@ import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -112,23 +111,21 @@ public class EventClient {
 				int currentView = IceAndFire.PROXY.getDragon3rdPersonView();
 				float scale = ((EntityDragonBase) player.getRidingEntity()).getRenderSize() / 3;
 				if (Minecraft.getMinecraft().gameSettings.thirdPersonView == 1) {
-					if(currentView == 0){
-					}else if(currentView == 1){
+					if (currentView == 1) {
 						GL11.glTranslatef(scale * 0.5F, 0F, -scale * 3F);
-					}else if(currentView == 2){
+					} else if (currentView == 2) {
 						GL11.glTranslatef(0, 0F, -scale * 3F);
-					}else if(currentView == 3){
+					} else if (currentView == 3) {
 						GL11.glTranslatef(scale * 0.5F, 0F, -scale * 0.5F);
 					}
 				}
 				if (Minecraft.getMinecraft().gameSettings.thirdPersonView == 2) {
-					if(currentView == 0){
-					}else if(currentView == 1){
+					if (currentView == 1) {
 						GL11.glTranslatef(-scale  * 1.2F, 0F, 5);
-					}else if(currentView == 2){
+					} else if(currentView == 2) {
 						GL11.glTranslatef(scale  * 1.2F, 0F, 5);
-					}else if(currentView == 3){
-						GL11.glTranslatef(scale * -1.5F, 0F, scale * 1.5F);
+					} else if(currentView == 3) {
+						GL11.glTranslatef(0, 0F, scale * 3F);
 					}
 				}
 			}
@@ -136,12 +133,14 @@ public class EventClient {
 		}
 	}
 
-	private Random rand = new Random();
+	private final Random rand = new Random();
 	private static final ResourceLocation SIREN_SHADER = new ResourceLocation("iceandfire:shaders/post/siren.json");
 	@SubscribeEvent
 	public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
-		if (event.getEntityLiving() instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+		EntityEffectProperties effectProperties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), EntityEffectProperties.class);
+		EntityLivingBase livingBase = event.getEntityLiving();
+		if (livingBase instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer) livingBase;
 			if (player.world.isRemote && ModKeys.dragon_change_view.isPressed()) {
 				int currentView = IceAndFire.PROXY.getDragon3rdPersonView();
 				if(currentView + 1 > 3){
@@ -151,25 +150,21 @@ public class EventClient {
 				}
 				IceAndFire.PROXY.setDragon3rdPersonView(currentView);
 			}
-
-			SirenEntityProperties sirenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), SirenEntityProperties.class);
-			if (player.world.isRemote && sirenProps != null) {
+			if (player.world.isRemote && effectProperties != null) {
 				EntityRenderer renderer = Minecraft.getMinecraft().entityRenderer;
-				EntitySiren siren = sirenProps.getSiren(event.getEntityLiving().world);
-				if(siren == null){
-					sirenProps.isCharmed = false;
-				}
-				if (sirenProps.isCharmed) {
+				EntitySiren siren = effectProperties.getSiren(event.getEntityLiving().world);
+				if (siren == null && effectProperties.isCharmed()) {
+					effectProperties.reset();
+				} else if (effectProperties.isCharmed()) {
 					if (rand.nextInt(40) == 0) {
 						IceAndFire.PROXY.spawnParticle("siren_appearance", player.world, player.posX, player.posY, player.posZ, 0, 0, 0);
 					}
 
-					if (IceAndFire.CONFIG.sirenShader && sirenProps.isCharmed && !renderer.isShaderActive()) {
+					if (IceAndFire.CONFIG.sirenShader && effectProperties.isCharmed() && !renderer.isShaderActive()) {
 						renderer.loadShader(SIREN_SHADER);
 					}
 
-				}
-				if (IceAndFire.CONFIG.sirenShader && !sirenProps.isCharmed && renderer != null && renderer.getShaderGroup() != null && renderer.getShaderGroup().getShaderGroupName() != null && SIREN_SHADER.toString().equals(renderer.getShaderGroup().getShaderGroupName())) {
+				} else if (IceAndFire.CONFIG.sirenShader && !effectProperties.isCharmed() && renderer != null && renderer.getShaderGroup() != null && renderer.getShaderGroup().getShaderGroupName() != null && SIREN_SHADER.toString().equals(renderer.getShaderGroup().getShaderGroupName())) {
 					renderer.stopUseShader();
 				}
 			}
@@ -182,26 +177,34 @@ public class EventClient {
 	private static final ResourceLocation TEXTURE_3 = new ResourceLocation("textures/blocks/frosted_ice_3.png");
 
 	@SubscribeEvent
-	public void onPostRenderLiving(RenderLivingEvent.Post event){
-		FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntity(), FrozenEntityProperties.class);
-		if(frozenProps != null && frozenProps.isFrozen){
+	public void onPreRenderLiving(RenderLivingEvent.Pre event){
+		if (event.getEntity().getRidingEntity() != null && event.getEntity().getRidingEntity() instanceof EntityDragonBase) {
+			if (ClientProxy.currentDragonRiders.contains(event.getEntity().getUniqueID()) || event.getEntity() == Minecraft.getMinecraft().player && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0) {
+				event.setCanceled(true);
+			}
+		}
+	}
+	@SubscribeEvent
+	public void onPostRenderLiving(RenderLivingEvent.Post event) {
+		EntityEffectProperties effectProperties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntity(), EntityEffectProperties.class);
+		if(effectProperties != null && effectProperties.isFrozen()) {
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			GlStateManager.enableNormalize();
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 			float sideExpand = 0.25F;
 			AxisAlignedBB axisalignedbb1 = new AxisAlignedBB(event.getEntity().getRenderBoundingBox().minX - event.getEntity().posX + event.getX() - sideExpand, event.getEntity().getRenderBoundingBox().minY - event.getEntity().posY + event.getY(), event.getEntity().getRenderBoundingBox().minZ - event.getEntity().posZ + event.getZ() - sideExpand, event.getEntity().getRenderBoundingBox().maxX - event.getEntity().posX + event.getX() + sideExpand, event.getEntity().getRenderBoundingBox().maxY - event.getEntity().posY + event.getY() + sideExpand, event.getEntity().getRenderBoundingBox().maxZ - event.getEntity().posZ + event.getZ() + sideExpand);
-			event.getRenderer().bindTexture(getIceTexture(frozenProps.ticksUntilUnfrozen));
+			event.getRenderer().bindTexture(getIceTexture(effectProperties.effectData));
 			renderAABB(axisalignedbb1, 0, 0, 0);
 			GlStateManager.disableBlend();
 			GlStateManager.disableNormalize();
 		}
 	}
 
-	private static ResourceLocation getIceTexture(int ticksFrozen){
-		if(ticksFrozen < 100){
+	private static ResourceLocation getIceTexture(int ticksFrozen) {
+		if (ticksFrozen < 100) {
 			if(ticksFrozen < 50){
-				if(ticksFrozen < 20){
+				if(ticksFrozen < 20) {
 					return TEXTURE_3;
 				}
 				return TEXTURE_2;
@@ -211,7 +214,7 @@ public class EventClient {
 		return TEXTURE_0;
 	}
 
-	public static void renderAABB(AxisAlignedBB boundingBox, double x, double y, double z){
+	public static void renderAABB(AxisAlignedBB boundingBox, double x, double y, double z) {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder vertexbuffer = tessellator.getBuffer();
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);

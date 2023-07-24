@@ -35,7 +35,7 @@ public class DragonAIMate extends EntityAIBase {
 		if (!this.dragon.isInLove()) {
 			return false;
 		} else {
-			this.targetMate = this.getNearbyMate();
+			this.targetMate = getNearbyMate();
 			return this.targetMate != null;
 		}
 	}
@@ -43,7 +43,7 @@ public class DragonAIMate extends EntityAIBase {
 	/**
 	 * Returns whether an in-progress EntityAIBase should continue executing
 	 */
-	public boolean continueExecuting() {
+	public boolean shouldContinueExecuting() {
 		return this.targetMate.isEntityAlive() && this.targetMate.isInLove() && this.spawnBabyDelay < 60;
 	}
 
@@ -60,11 +60,11 @@ public class DragonAIMate extends EntityAIBase {
 	 */
 	public void updateTask() {
 		this.dragon.getLookHelper().setLookPositionWithEntity(this.targetMate, 10.0F, (float) this.dragon.getVerticalFaceSpeed());
-		this.dragon.getNavigator().tryMoveToXYZ(targetMate.posX, targetMate.posY, targetMate.posZ, this.moveSpeed);
+		this.dragon.getNavigator().tryMoveToEntityLiving(targetMate, this.moveSpeed);
 		this.dragon.setFlying(false);
 		this.dragon.setHovering(false);
 		++this.spawnBabyDelay;
-		if (this.spawnBabyDelay >= 60 && this.dragon.getDistance(this.targetMate) < 35) {
+		if (this.spawnBabyDelay >= 60 && this.dragon.getDistanceSq(this.targetMate) < 100.0D) {
 			this.spawnBaby();
 		}
 	}
@@ -74,13 +74,14 @@ public class DragonAIMate extends EntityAIBase {
 	 * valid mate found.
 	 */
 	private EntityDragonBase getNearbyMate() {
-		List<EntityDragonBase> list = this.theWorld.<EntityDragonBase>getEntitiesWithinAABB(this.dragon.getClass(), this.dragon.getEntityBoundingBox().grow(180.0D, 180.0D, 180.0D));
-		double d0 = Double.MAX_VALUE;
+		List<EntityDragonBase> list = this.theWorld.<EntityDragonBase>getEntitiesWithinAABB(this.dragon.getClass(), this.dragon.getEntityBoundingBox().grow(40.0D));
+		double closest = Double.MAX_VALUE;
 		EntityDragonBase mate = null;
 		for (EntityDragonBase partner : list) {
-			if (this.dragon.canMateWith(partner) && this.dragon.getDistanceSq(partner) < d0) {
+			double dist = this.dragon.getDistanceSq(partner);
+			if (this.dragon.canMateWith(partner) && dist < closest) {
 				mate = partner;
-				break;
+				closest = dist;
 			}
 		}
 
@@ -92,7 +93,7 @@ public class DragonAIMate extends EntityAIBase {
 	 */
 	private void spawnBaby() {
 
-		EntityDragonEgg egg = this.dragon.createEgg(this.targetMate);
+		EntityDragonEgg egg = this.dragon.createEgg();
 
 		if (egg != null) {
 			EntityPlayer entityplayer = this.dragon.getLoveCause();
@@ -103,7 +104,6 @@ public class DragonAIMate extends EntityAIBase {
 
 			if (entityplayer != null) {
 				entityplayer.addStat(StatList.ANIMALS_BRED);
-				//entityplayer.addStat(ModAchievements.dragonBreed);
 			}
 
 			this.dragon.setGrowingAge(6000);

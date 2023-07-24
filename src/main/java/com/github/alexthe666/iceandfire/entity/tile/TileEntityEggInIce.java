@@ -93,7 +93,7 @@ public class TileEntityEggInIce extends TileEntity implements ITickable {
 			world.setBlockState(pos, Blocks.WATER.getDefaultState());
 			EntityIceDragon dragon = new EntityIceDragon(world);
 			dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
-			dragon.setVariant(type.ordinal() - 4);
+			dragon.setVariant(type.meta % 4);
 			dragon.setGender(new Random().nextBoolean());
 			dragon.setTamed(true);
 			dragon.setHunger(50);

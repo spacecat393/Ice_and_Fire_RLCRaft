@@ -22,12 +22,13 @@ import java.util.Map;
  */
 @SideOnly(Side.CLIENT)
 public class IceAndFireTabulaModel extends AdvancedModelBase {
+    public ModelAnimator llibAnimator;
     protected Map<String, AdvancedModelRenderer> cubes = new HashMap<>();
     protected List<AdvancedModelRenderer> rootBoxes = new ArrayList<>();
     protected IIceAndFireTabulaModelAnimator tabulaAnimator;
-    public ModelAnimator llibAnimator;
     protected Map<String, AdvancedModelRenderer> identifierMap = new HashMap<>();
     protected double[] scale;
+    protected boolean init = false;
 
     public IceAndFireTabulaModel(TabulaModelContainer container, IIceAndFireTabulaModelAnimator tabulaAnimator) {
         this.textureWidth = container.getTextureWidth();
@@ -86,7 +87,6 @@ public class IceAndFireTabulaModel extends AdvancedModelBase {
 
     @Override
     public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale) {
-        this.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, rotationYaw, rotationPitch, scale, entity);
         GlStateManager.pushMatrix();
         GlStateManager.scale(this.scale[0], this.scale[1], this.scale[2]);
         for (AdvancedModelRenderer box : this.rootBoxes) {
@@ -98,6 +98,10 @@ public class IceAndFireTabulaModel extends AdvancedModelBase {
     @Override
     public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float rotationYaw, float rotationPitch, float scale, Entity entity) {
         if (this.tabulaAnimator != null) {
+            if(!init){
+                tabulaAnimator.init(this);
+                init = true;
+            }
             this.tabulaAnimator.setRotationAngles(this, entity, limbSwing, limbSwingAmount, ageInTicks, rotationYaw, rotationPitch, scale);
         }
     }

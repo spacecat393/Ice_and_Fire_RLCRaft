@@ -1,11 +1,6 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
-import com.github.alexthe666.iceandfire.client.model.ModelAmphithere;
-import com.github.alexthe666.iceandfire.client.model.ModelSeaSerpent;
-import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerGorgonEyes;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerSeaSerpentAncient;
-import com.github.alexthe666.iceandfire.entity.EntityAmphithere;
-import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntitySeaSerpent;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.RenderLiving;

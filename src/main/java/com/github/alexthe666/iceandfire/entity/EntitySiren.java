@@ -106,7 +106,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
     }
 
     protected int getExperiencePoints(EntityPlayer player) {
-        return 10 + this.world.rand.nextInt(10);
+        return 8;
     }
 
     protected boolean canDespawn() {
@@ -317,11 +317,10 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
     public void updateLure() {
         if(this.ticksExisted % 20 == 0){
             List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(50, 12, 50), SIREN_PREY);
-            for(EntityLivingBase entity : entities){
-                SirenEntityProperties sirenProps = EntityPropertiesHandler.INSTANCE.getProperties(entity, SirenEntityProperties.class);
-                if(!isWearingEarplugs(entity) && sirenProps != null && (!sirenProps.isCharmed || sirenProps.getSiren(world) == null)){
-                    sirenProps.isCharmed = true;
-                    sirenProps.sirenID = this.getEntityId();
+            for (EntityLivingBase entity : entities) {
+                EntityEffectProperties effectProperties = EntityPropertiesHandler.INSTANCE.getProperties(entity, EntityEffectProperties.class);
+                if(!isWearingEarplugs(entity) && effectProperties != null && (!effectProperties.isCharmed() || effectProperties.getSiren(world) == null)) {
+                    effectProperties.setCharmed(this.getEntityId());
                 }
             }
         }

@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
+import com.github.alexthe666.iceandfire.entity.EntityLightningDragon;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -135,6 +136,20 @@ public class ItemDragonHornActive extends Item {
 						worldIn.spawnEntity(dragon);
 					}
 				}
+				if (this == ModItems.dragon_horn_lightning) {
+					EntityLightningDragon dragon = new EntityLightningDragon(worldIn);
+					dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
+					if (stack.getTagCompound() != null) {
+						dragon.readEntityFromNBT(stack.getTagCompound());
+					}
+					dragon.setFlying(false);
+					dragon.setHovering(false);
+					dragon.getNavigator().clearPath();
+					stack.getTagCompound().setBoolean("Released", true);
+					if (!worldIn.isRemote) {
+						worldIn.spawnEntity(dragon);
+					}
+				}
 				stack = new ItemStack(ModItems.dragon_horn);
 				entityplayer.addStat(StatList.getObjectUseStats(this));
 			}
@@ -173,7 +188,8 @@ public class ItemDragonHornActive extends Item {
 		if (stack.getTagCompound() != null) {
 			String fire = new TextComponentTranslation("entity.firedragon.name", new Object[0]).getUnformattedText();
 			String ice = new TextComponentTranslation("entity.icedragon.name", new Object[0]).getUnformattedText();
-			tooltip.add("" + (this == ModItems.dragon_horn_fire ? fire : ice));
+			String lightning = new TextComponentTranslation("entity.lightningdragon.name", new Object[0]).getUnformattedText();
+			tooltip.add("" + (this == ModItems.dragon_horn_fire ? fire : this == ModItems.dragon_horn_ice ? ice : lightning));
 			String name = stack.getTagCompound().getString("CustomName").isEmpty() ? StatCollector.translateToLocal("dragon.unnamed") : StatCollector.translateToLocal("dragon.name") + stack.getTagCompound().getString("CustomName");
 			tooltip.add("" + name);
 			String gender = StatCollector.translateToLocal("dragon.gender") + StatCollector.translateToLocal((stack.getTagCompound().getBoolean("Gender") ? "dragon.gender.male" : "dragon.gender.female"));

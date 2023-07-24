@@ -3,12 +3,14 @@ package com.github.alexthe666.iceandfire.item;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.entity.EntityEffectProperties;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
-import com.github.alexthe666.iceandfire.entity.FrozenEntityProperties;
+import com.github.alexthe666.iceandfire.api.ChainLightningUtils;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
+
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
@@ -44,10 +46,17 @@ public class ItemAlchemySword extends ItemSword {
 			if (target instanceof EntityFireDragon) {
 				target.attackEntityFrom(DamageSource.DROWN, 13.5F);
 			}
-			FrozenEntityProperties frozenProps = EntityPropertiesHandler.INSTANCE.getProperties(target, FrozenEntityProperties.class);
-			frozenProps.setFrozenFor(200);
+			EntityEffectProperties effectProperties = EntityPropertiesHandler.INSTANCE.getProperties(target, EntityEffectProperties.class);
+			effectProperties.setFrozenFor(200);
 			target.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, 2));
 			target.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 100, 2));
+			target.knockBack(target, 1F, attacker.posX - target.posX, attacker.posZ - target.posZ);
+		}
+		if (this == ModItems.dragonbone_sword_lightning) {
+			if (target instanceof EntityFireDragon || target instanceof EntityIceDragon) {
+				target.attackEntityFrom(DamageSource.LIGHTNING_BOLT, 6.75F);
+			}
+			ChainLightningUtils.createChainLightningFromTarget(target.world, target, attacker);
 			target.knockBack(target, 1F, attacker.posX - target.posX, attacker.posZ - target.posZ);
 		}
 		return super.hitEntity(stack, target, attacker);
@@ -62,7 +71,10 @@ public class ItemAlchemySword extends ItemSword {
 		if (this == ModItems.dragonbone_sword_ice) {
 			tooltip.add(TextFormatting.GREEN + StatCollector.translateToLocal("dragon_sword_ice.hurt1"));
 			tooltip.add(TextFormatting.AQUA + StatCollector.translateToLocal("dragon_sword_ice.hurt2"));
-
+		}
+		if (this == ModItems.dragonbone_sword_lightning) {
+			tooltip.add(TextFormatting.GREEN + StatCollector.translateToLocal("dragon_sword_lightning.hurt1"));
+			tooltip.add(TextFormatting.AQUA + StatCollector.translateToLocal("dragon_sword_lightning.hurt2"));
 		}
 	}
 

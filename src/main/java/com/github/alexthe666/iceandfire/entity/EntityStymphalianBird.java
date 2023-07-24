@@ -119,7 +119,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
     }
 
     protected int getExperiencePoints(EntityPlayer player) {
-        return 10 + this.world.rand.nextInt(5);
+        return 10;
     }
 
     public void onUpdate() {
@@ -346,7 +346,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
                 }
             }
         }
-        StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
+        EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, EntityEffectProperties.class);
         boolean flying = this.isFlying() && !this.onGround || airBorneCounter > 10 || this.getAnimation() == ANIMATION_SHOOT_ARROWS;
         if (flying && flyProgress < 20.0F) {
             flyProgress += 1F;
@@ -375,7 +375,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
             this.setFlying(false);
             this.airTarget = null;
         }
-        if ((properties == null || properties != null && !properties.isStone) && !world.isRemote && (this.flock == null || this.flock != null && this.flock.isLeader(this)) && this.getRNG().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && this.onGround) {
+        if ((properties == null || !properties.isStone()) && !world.isRemote && (this.flock == null || this.flock != null && this.flock.isLeader(this)) && this.getRNG().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && this.onGround) {
             this.setFlying(true);
             this.launchTicks = 0;
             this.flyTicks = 0;

@@ -58,8 +58,9 @@ public class ItemDragonSkull extends Item implements ICustomRendered {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        String iceorfire = stack.getMetadata() == 0 ? "dragon.fire" : "dragon.ice";
-        tooltip.add(StatCollector.translateToLocal(iceorfire));
+        int meta = stack.getMetadata();
+        String identifier = meta == 0 ? "dragon.fire" : meta == 1 ? "dragon.ice" : "dragon.lightning";
+        tooltip.add(StatCollector.translateToLocal(identifier));
         if (stack.getTagCompound() != null) {
             tooltip.add(StatCollector.translateToLocal("dragon.stage") + stack.getTagCompound().getInteger("Stage"));
         }

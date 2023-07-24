@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.client.render.tile;
 
 import com.github.alexthe666.iceandfire.client.model.ModelDragonEgg;
+import com.github.alexthe666.iceandfire.entity.DragonType;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityEggInIce;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -17,7 +18,7 @@ public class RenderEggInIce extends TileEntitySpecialRenderer {
 			GL11.glPushMatrix();
 			GL11.glTranslatef((float) x + 0.5F, (float) y - 0.75F, (float) z + 0.5F);
 			GL11.glPushMatrix();
-			EnumDragonEgg eggType = egg.type.isFire ? EnumDragonEgg.BLUE : egg.type;
+			EnumDragonEgg eggType = egg.type.dragonType != DragonType.ICE ? EnumDragonEgg.BLUE : egg.type;
 			this.bindTexture(RenderPodium.getEggTexture(eggType));
 			GL11.glPushMatrix();
 			model.renderFrozen(egg);

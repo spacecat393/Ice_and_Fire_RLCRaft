@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.client.particle;
 
+import com.github.alexthe666.iceandfire.entity.EntityEffectProperties;
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
-import com.github.alexthe666.iceandfire.entity.SirenEntityProperties;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
@@ -30,10 +30,10 @@ public class ParticleSirenAppearance extends ParticleMobAppearance {
         super.onUpdate();
 
         if (this.entity == null) {
-            SirenEntityProperties sirenProps = EntityPropertiesHandler.INSTANCE.getProperties(Minecraft.getMinecraft().player, SirenEntityProperties.class);
+            EntityEffectProperties effectProperties = EntityPropertiesHandler.INSTANCE.getProperties(Minecraft.getMinecraft().player, EntityEffectProperties.class);
             EntitySiren siren = new EntitySiren(this.world);
-            if(sirenProps != null && sirenProps.getSiren(Minecraft.getMinecraft().player.world) != null){
-                siren = sirenProps.getSiren(Minecraft.getMinecraft().player.world);
+            if (effectProperties != null && effectProperties.getSiren(Minecraft.getMinecraft().player.world) != null) {
+                siren = effectProperties.getSiren(Minecraft.getMinecraft().player.world);
             }
             this.entity = siren;
         }
@@ -43,13 +43,11 @@ public class ParticleSirenAppearance extends ParticleMobAppearance {
         if (this.entity != null) {
             RenderManager rendermanager = Minecraft.getMinecraft().getRenderManager();
             rendermanager.setRenderPosition(Particle.interpPosX, Particle.interpPosY, Particle.interpPosZ);
-            float f = 0.42553192F;
             float f1 = ((float) this.particleAge + partialTicks) / (float) this.particleMaxAge;
             GlStateManager.depthMask(true);
             GlStateManager.enableBlend();
             GlStateManager.enableDepth();
             GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-            float f2 = 240.0F;
             OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
             GlStateManager.pushMatrix();
             float f3 = 0.05F + 0.5F * MathHelper.sin(f1 * (float) Math.PI);

@@ -4,16 +4,13 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
-import com.google.common.collect.Sets;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTool;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
@@ -22,26 +19,30 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Set;
 
-public class ItemModAxe extends ItemTool {
-	private static final Set<Block> EFFECTIVE_ON = Sets.newHashSet(new Block[]{Blocks.PLANKS, Blocks.BOOKSHELF, Blocks.LOG, Blocks.LOG2, Blocks.CHEST, Blocks.PUMPKIN, Blocks.LIT_PUMPKIN, Blocks.MELON_BLOCK, Blocks.LADDER, Blocks.OAK_DOOR, Blocks.WOODEN_PRESSURE_PLATE});
+public class ItemModAxe extends ItemAxe {
 
 	public ItemModAxe(ToolMaterial toolmaterial, String gameName, String name) {
-		super(toolmaterial, EFFECTIVE_ON);
-		this.attackDamage = toolmaterial == ModItems.boneTools ? 8 : 6;
-		this.attackSpeed = -3;
+		super(toolmaterial, toolmaterial == ModItems.boneTools ? 8 : 6, -3);
 		this.setTranslationKey(name);
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setRegistryName(IceAndFire.MODID, gameName);
 	}
 
-	public boolean getIsRepairable(ItemStack toRepair, ItemStack repair){
+	public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
 		ItemStack mat = this.toolMaterial.getRepairItemStack();
-		if(this.toolMaterial == ModItems.silverTools){
+		if(this.toolMaterial == ModItems.silverTools) {
 			NonNullList<ItemStack> silverItems = OreDictionary.getOres("ingotSilver");
-			for(ItemStack ingot : silverItems){
-				if(OreDictionary.itemMatches(repair, ingot, false)){
+			for (ItemStack ingot : silverItems){
+				if (OreDictionary.itemMatches(repair, ingot, false)) {
+					return true;
+				}
+			}
+		}
+		if (this.toolMaterial == ModItems.copperTools) {
+			NonNullList<ItemStack> copperItems = OreDictionary.getOres("ingotCopper");
+			for (ItemStack ingot : copperItems) {
+				if (OreDictionary.itemMatches(repair, ingot, false)) {
 					return true;
 				}
 			}

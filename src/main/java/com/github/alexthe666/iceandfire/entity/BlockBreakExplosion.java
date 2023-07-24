@@ -51,7 +51,6 @@ public class BlockBreakExplosion extends Explosion {
     @Override
     public void doExplosionA() {
         Set<BlockPos> set = Sets.<BlockPos>newHashSet();
-        int i = 16;
         for (int j = 0; j < 16; ++j) {
             for (int k = 0; k < 16; ++k) {
                 for (int l = 0; l < 16; ++l) {
@@ -143,13 +142,13 @@ public class BlockBreakExplosion extends Explosion {
             Block block = this.worldObj.getBlockState(blockpos).getBlock();
 
             if (spawnParticles && !worldObj.isAirBlock(blockpos)) {
-                double d0 = (double)((float)blockpos.getX() + this.worldObj.rand.nextFloat());
-                double d1 = (double)((float)blockpos.getY() + this.worldObj.rand.nextFloat());
-                double d2 = (double)((float)blockpos.getZ() + this.worldObj.rand.nextFloat());
+                double d0 = ((float)blockpos.getX() + this.worldObj.rand.nextFloat());
+                double d1 = ((float)blockpos.getY() + this.worldObj.rand.nextFloat());
+                double d2 = ((float)blockpos.getZ() + this.worldObj.rand.nextFloat());
                 double d3 = d0 - this.explosionX;
                 double d4 = d1 - this.explosionY;
                 double d5 = d2 - this.explosionZ;
-                double d6 = (double)MathHelper.sqrt(d3 * d3 + d4 * d4 + d5 * d5);
+                double d6 = MathHelper.sqrt(d3 * d3 + d4 * d4 + d5 * d5);
                 d3 = d3 / d6;
                 d4 = d4 / d6;
                 d5 = d5 / d6;

@@ -1,8 +1,8 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.entity.EntityEffectProperties;
 import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
-import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
 import com.github.alexthe666.iceandfire.message.MessageStoneStatue;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.resources.I18n;
@@ -94,13 +94,13 @@ public class ItemStoneStatue extends Item {
 							return EnumActionResult.SUCCESS;
 						}
 					}
-					if (entity != null && entity instanceof EntityLiving) {
+					if (entity instanceof EntityLiving) {
 						entity.setLocationAndAngles(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, player.rotationYaw, 0);
 						if (!worldIn.isRemote) {
 							worldIn.spawnEntity(entity);
 						}
-						StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, StoneEntityProperties.class);
-						properties.isStone = true;
+						EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, EntityEffectProperties.class);
+						properties.turnToStone();
 						IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageStoneStatue(entity.getEntityId(), true));
 						((EntityLiving) entity).readEntityFromNBT(stack.getTagCompound());
 						((EntityLiving) entity).setNoAI(true);

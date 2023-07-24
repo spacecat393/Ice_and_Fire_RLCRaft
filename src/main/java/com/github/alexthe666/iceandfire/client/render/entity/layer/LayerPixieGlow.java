@@ -1,8 +1,8 @@
 package com.github.alexthe666.iceandfire.client.render.entity.layer;
 
 import com.github.alexthe666.iceandfire.client.render.entity.RenderPixie;
+import com.github.alexthe666.iceandfire.entity.EntityEffectProperties;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
-import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -20,8 +20,8 @@ public class LayerPixieGlow implements LayerRenderer<EntityPixie> {
 	}
 
 	public void doRenderLayer(EntityPixie pixie, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-		StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(pixie, StoneEntityProperties.class);
-		if (properties != null && !properties.isStone || properties == null) {
+		EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(pixie, EntityEffectProperties.class);
+		if (properties == null || !properties.isStone()) {
 			switch (pixie.getColor()) {
 				default:
 					this.render.bindTexture(RenderPixie.TEXTURE_0);

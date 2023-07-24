@@ -191,7 +191,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
     }
 
     protected int getExperiencePoints(EntityPlayer player) {
-        return 15 + this.world.rand.nextInt(10);
+        return 15;
     }
 
     protected void onDeathUpdate() {
@@ -277,9 +277,9 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
             float f = this.getBrightness();
             BlockPos blockpos = this.getRidingEntity() instanceof EntityBoat ? (new BlockPos(this.posX, (double) Math.round(this.posY), this.posZ)).up() : new BlockPos(this.posX, (double) Math.round(this.posY), this.posZ);
             if (f > 0.5F && this.world.canSeeSky(blockpos)) {
-                StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
-                if (properties != null && !properties.isStone) {
-                    properties.isStone = true;
+                EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, EntityEffectProperties.class);
+                if (properties != null && !properties.isStone()) {
+                    properties.turnToStone();
                     this.motionX = 0;
                     this.motionY = 0;
                     this.motionZ = 0;
@@ -336,7 +336,6 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
                 float weaponX = (float) (posX + 1.9F * Math.cos((renderYawOffset + 90) * Math.PI / 180));
                 float weaponZ = (float) (posZ + 1.9F * Math.sin((renderYawOffset + 90) * Math.PI / 180));
                 float weaponY = (float) (posY + (this.getEyeHeight() / 2));
-                IBlockState state = world.getBlockState(new BlockPos(weaponX, weaponY, weaponZ));
                 BlockBreakExplosion explosion = new BlockBreakExplosion(world, this, weaponX, weaponY, weaponZ, 1F + this.getRNG().nextFloat());
                 explosion.doExplosionA();
                 explosion.doExplosionB(true);

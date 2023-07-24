@@ -21,9 +21,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
 
@@ -42,13 +40,14 @@ public class EntityIceDragon extends EntityDragonBase {
 	public boolean isSwimming;
 	public float swimProgress;
 	public int ticksSwiming;
+	public int swimCycle;
 	public BlockPos waterTarget;
 	public static final ResourceLocation FEMALE_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "dragon/ice_dragon_female"));
 	public static final ResourceLocation MALE_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "dragon/ice_dragon_male"));
 	public static final ResourceLocation SKELETON_LOOT = LootTableList.register(new ResourceLocation("iceandfire", "dragon/ice_dragon_skeleton"));
 
 	public EntityIceDragon(World worldIn) {
-		super(worldIn, 1, 1 + IceAndFire.CONFIG.dragonAttackDamage, IceAndFire.CONFIG.dragonHealth * 0.04, IceAndFire.CONFIG.dragonHealth, 0.15F, 0.4F);
+		super(worldIn, DragonType.ICE, 1, 1 + IceAndFire.CONFIG.dragonAttackDamage, IceAndFire.CONFIG.dragonHealth * 0.04, IceAndFire.CONFIG.dragonHealth, 0.15F, 0.4F);
 		this.setSize(0.78F, 1.2F);
 		this.ignoreFrustumCheck = true;
 		ANIMATION_SPEAK = Animation.create(20);
@@ -58,6 +57,7 @@ public class EntityIceDragon extends EntityDragonBase {
 		ANIMATION_FIRECHARGE = Animation.create(25);
 		ANIMATION_WINGBLAST = Animation.create(50);
 		ANIMATION_ROAR = Animation.create(40);
+		ANIMATION_EPIC_ROAR = Animation.create(60);
 		this.growth_stages = new float[][]{growth_stage_1, growth_stage_2, growth_stage_3, growth_stage_4, growth_stage_5};
 		this.stepHeight = 1;
 	}
@@ -159,7 +159,7 @@ public class EntityIceDragon extends EntityDragonBase {
 
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn) {
-		if(this.getAnimation() == ANIMATION_WINGBLAST){
+		if (this.getAnimation() == ANIMATION_WINGBLAST) {
 			return false;
 		}
 		switch (new Random().nextInt(4)) {
@@ -196,22 +196,22 @@ public class EntityIceDragon extends EntityDragonBase {
 				if (this.getAnimation() != this.ANIMATION_TAILWHACK) {
 					this.setAnimation(this.ANIMATION_TAILWHACK);
 					return false;
-				} else if (this.getAnimationTick() > 20 && this.getAnimationTick() < 25) {
+				} else if (this.getAnimationTick() > 27 && this.getAnimationTick() < 30) {
 					boolean flag2 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
 					if (entityIn instanceof EntityLivingBase) {
-						((EntityLivingBase) entityIn).knockBack(entityIn, 1, 1, 1);
+						((EntityLivingBase)entityIn).knockBack(entityIn, this.getDragonStage() * 0.6F, 1, 1);
 					}
 					this.attackDecision = this.getRNG().nextBoolean();
 					return flag2;
 				}
 				break;
 			case 3:
-				if(this.onGround && !this.isHovering() && !this.isFlying() && this.getDragonStage() > 2){
+				if (this.onGround && !this.isHovering() && !this.isFlying()) {
 					if (this.getAnimation() != this.ANIMATION_WINGBLAST) {
 						this.setAnimation(this.ANIMATION_WINGBLAST);
-						return false;
+						return true;
 					}
-				}else{
+				} else {
 					if (this.getAnimation() != this.ANIMATION_BITE) {
 						this.setAnimation(this.ANIMATION_BITE);
 						return false;
@@ -239,6 +239,14 @@ public class EntityIceDragon extends EntityDragonBase {
 	}
 
 	@Override
+	public boolean attackEntityFrom(DamageSource source, float amount) {
+		if (IceAndFire.dragonIce.damageType.contentEquals(source.damageType) || "ooze".contentEquals(source.damageType) || "cold_fire".contentEquals(source.damageType)) {
+				return false;
+		}
+		return super.attackEntityFrom(source, amount);
+	}
+
+	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
 		if(this.isInLava() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSleeping() && this.canMove() && this.onGround){
@@ -258,8 +266,6 @@ public class EntityIceDragon extends EntityDragonBase {
 					}
 
 				}
-			} else {
-				this.setBreathingFire(false);
 			}
 		}
 		boolean swimming = isSwimming() && !isHovering() && !isFlying() && ridingProgress == 0;
@@ -268,9 +274,12 @@ public class EntityIceDragon extends EntityDragonBase {
 		} else if (!swimming && swimProgress > 0.0F) {
 			swimProgress -= 0.5F;
 		}
-		if (this.isInsideWaterBlock() && !this.isSwimming()) {
+		if (this.isInsideWaterBlock() && !this.isSwimming() && (!this.isFlying() && !this.isHovering() || this.flyTicks > 100)) {
 			this.setSwimming(true);
-			ticksSwiming = 0;
+			this.setHovering(false);
+			this.setFlying(false);
+			this.flyTicks = 0;
+			this.ticksSwiming = 0;
 		}
 		if (this.isInsideWaterBlock()) {
 			swimAround();
@@ -281,9 +290,20 @@ public class EntityIceDragon extends EntityDragonBase {
 		}
 		if (this.isSwimming()) {
 			ticksSwiming++;
-			if (this.isInsideWaterBlock() && ticksSwiming > 1000 && !this.isChild() && !this.isHovering() && !this.isFlying()) {
+			if ((this.isInsideWaterBlock() || this.isOverWater()) && (ticksSwiming > 4000 || this.getAttackTarget() != null && this.isInWater() != this.getAttackTarget().isInWater()) && !this.isChild() && !this.isHovering() && !this.isFlying()) {
 				this.setHovering(true);
+				this.jump();
+				this.motionY += 0.8D;
+				this.setSwimming(false);
 			}
+		}
+		if (swimCycle < 48) {
+			swimCycle += 2;
+		} else {
+			swimCycle = 0;
+		}
+		if (this.isModelDead() && swimCycle != 0) {
+			swimCycle = 0;
 		}
 	}
 
@@ -298,9 +318,7 @@ public class EntityIceDragon extends EntityDragonBase {
 				this.setAnimation(this.ANIMATION_FIRECHARGE);
 			} else if (this.getAnimationTick() == 15) {
 				rotationYaw = renderYawOffset;
-				float headPosX = (float) (posX + 1.8F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
-				float headPosZ = (float) (posZ + 1.8F * getRenderSize() * 0.3F * Math.sin((rotationYaw + 90) * Math.PI / 180));
-				float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
+				Vec3d headPos = getHeadPosition();
 				this.playSound(ModSounds.ICEDRAGON_BREATH, 4, 1);
 				double d2 = controller.getLookVec().x;
 				double d3 = controller.getLookVec().y;
@@ -312,7 +330,7 @@ public class EntityIceDragon extends EntityDragonBase {
 				EntityDragonIceCharge entitylargefireball = new EntityDragonIceCharge(world, this, d2, d3, d4);
 				float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
 				entitylargefireball.setSizes(size, size);
-				entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
+				entitylargefireball.setPosition(headPos.x, headPos.y, headPos.z);
 				if (!world.isRemote) {
 					world.spawnEntity(entitylargefireball);
 				}
@@ -322,9 +340,7 @@ public class EntityIceDragon extends EntityDragonBase {
 			if (this.isBreathingFire()) {
 				if (this.isActuallyBreathingFire() && this.ticksExisted % 3 == 0) {
 					rotationYaw = renderYawOffset;
-					float headPosX = (float) (posX + 1.8F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
-					float headPosZ = (float) (posZ + 1.8F * getRenderSize() * 0.3F * Math.sin((rotationYaw + 90) * Math.PI / 180));
-					float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
+					Vec3d headPos = getHeadPosition();
 					double d2 = controller.getLookVec().x;
 					double d3 = controller.getLookVec().y;
 					double d4 = controller.getLookVec().z;
@@ -332,10 +348,9 @@ public class EntityIceDragon extends EntityDragonBase {
 					d2 = d2 + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
 					d3 = d3 + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
 					d4 = d4 + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
-					EntityDragonIceProjectile entitylargefireball = new EntityDragonIceProjectile(world, this, d2, d3, d4);
+					EntityDragonIce entitylargefireball = new EntityDragonIce(world, this, d2, d3, d4);
 					this.playSound(ModSounds.ICEDRAGON_BREATH, 4, 1);
-					float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
-					entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
+					entitylargefireball.setPosition(headPos.x, headPos.y, headPos.z);
 					if (!world.isRemote) {
 						world.spawnEntity(entitylargefireball);
 					}
@@ -393,12 +408,10 @@ public class EntityIceDragon extends EntityDragonBase {
 					this.setAnimation(this.ANIMATION_FIRECHARGE);
 				} else if (this.getAnimationTick() == 15) {
 					rotationYaw = renderYawOffset;
-					float headPosX = (float) (posX + 1.8F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
-					float headPosZ = (float) (posZ + 1.8F * getRenderSize() * 0.3F * Math.sin((rotationYaw + 90) * Math.PI / 180));
-					float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
-					double d2 = entity.posX - headPosX;
-					double d3 = entity.posY - headPosY;
-					double d4 = entity.posZ - headPosZ;
+					Vec3d headPos = getHeadPosition();
+					double d2 = entity.posX - headPos.x;
+					double d3 = entity.posY - headPos.y;
+					double d4 = entity.posZ - headPos.z;
 					float inaccuracy = 1.0F;
 					d2 = d2 + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
 					d3 = d3 + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
@@ -407,7 +420,7 @@ public class EntityIceDragon extends EntityDragonBase {
 					EntityDragonIceCharge entitylargefireball = new EntityDragonIceCharge(world, this, d2, d3, d4);
 					float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
 					entitylargefireball.setSizes(size, size);
-					entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
+					entitylargefireball.setPosition(headPos.x, headPos.y, headPos.z);
 					if (!world.isRemote) {
 						world.spawnEntity(entitylargefireball);
 					}
@@ -420,20 +433,18 @@ public class EntityIceDragon extends EntityDragonBase {
 				if (this.isBreathingFire()) {
 					if (this.isActuallyBreathingFire() && this.ticksExisted % 3 == 0) {
 						rotationYaw = renderYawOffset;
-						float headPosX = (float) (posX + 1.8F * getRenderSize() * 0.3F * Math.cos((rotationYaw + 90) * Math.PI / 180));
-						float headPosZ = (float) (posZ + 1.8F * getRenderSize() * 0.3F * Math.sin((rotationYaw + 90) * Math.PI / 180));
-						float headPosY = (float) (posY + 0.5 * getRenderSize() * 0.3F);
-						double d2 = entity.posX - headPosX;
-						double d3 = entity.posY - headPosY;
-						double d4 = entity.posZ - headPosZ;
+						Vec3d headPos = getHeadPosition();
+						double d2 = entity.posX - headPos.x;
+						double d3 = entity.posY - headPos.y;
+						double d4 = entity.posZ - headPos.z;
 						float inaccuracy = 1.0F;
 						d2 = d2 + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
 						d3 = d3 + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
 						d4 = d4 + this.rand.nextGaussian() * 0.007499999832361937D * (double)inaccuracy;
 						this.playSound(ModSounds.ICEDRAGON_BREATH, 4, 1);
-						EntityDragonIceProjectile entitylargefireball = new EntityDragonIceProjectile(world, this, d2, d3, d4);
+						EntityDragonIce entitylargefireball = new EntityDragonIce(world, this, d2, d3, d4);
 						float size = this.isChild() ? 0.4F : this.isAdult() ? 1.3F : 0.8F;
-						entitylargefireball.setPosition(headPosX, headPosY, headPosZ);
+						entitylargefireball.setPosition(headPos.x, headPos.y, headPos.z);
 						if (!world.isRemote && !entity.isDead) {
 							world.spawnEntity(entitylargefireball);
 						}
@@ -465,6 +476,36 @@ public class EntityIceDragon extends EntityDragonBase {
 		if (!world.isRemote) {
 			this.isSwimming = swimming;
 		}
+	}
+
+	@Override
+	protected ItemStack getSkull() {
+		return new ItemStack(ModItems.dragon_skull, 1, 1);
+	}
+
+	@Override
+	protected ItemStack getHorn() {
+		return new ItemStack(ModItems.dragon_horn_ice);
+	}
+
+	@Override
+	public Item getBlood() {
+		return ModItems.ice_dragon_blood;
+	}
+
+	@Override
+	public Item getHeart() {
+		return ModItems.ice_dragon_heart;
+	}
+
+	@Override
+	public Item getFlesh() {
+		return ModItems.ice_dragon_flesh;
+	}
+
+	@Override
+	protected int getBaseEggTypeValue() {
+		return 4;
 	}
 
 	@Override

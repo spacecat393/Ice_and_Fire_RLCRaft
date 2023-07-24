@@ -92,6 +92,10 @@ public class EntityPixie extends EntityTameable {
 		return entity.getPosition();
 	}
 
+	protected int getExperiencePoints(EntityPlayer player) {
+		return 3;
+	}
+
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
@@ -100,9 +104,9 @@ public class EntityPixie extends EntityTameable {
 	}
 
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
+		EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, EntityEffectProperties.class);
 
-		if (!this.world.isRemote && this.getRNG().nextInt(3) == 0 && this.getHeldItem(EnumHand.MAIN_HAND) != ItemStack.EMPTY && !properties.isStone) {
+		if (!this.world.isRemote && this.getRNG().nextInt(3) == 0 && this.getHeldItem(EnumHand.MAIN_HAND) != ItemStack.EMPTY && !properties.isStone()) {
 			this.entityDropItem(this.getHeldItem(EnumHand.MAIN_HAND), 0);
 			this.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
 			return true;

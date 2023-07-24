@@ -29,7 +29,7 @@ public class ModelSeaSerpentArmor extends ModelBiped {
         this.armFinR.setRotationPoint(-1.5F, 4.0F, -0.4F);
         this.armFinR.addBox(-0.5F, -5.4F, -6.0F, 1, 7, 5, 0.0F);
         this.setRotateAngle(armFinR, 3.141592653589793F, -1.3089969389957472F, -0.003490658503988659F);
-          this.headFin = new ModelRenderer(this, 0, 32);
+        this.headFin = new ModelRenderer(this, 0, 32);
         this.headFin.setRotationPoint(-3.5F, -8.8F, 3.5F);
         this.headFin.addBox(-0.5F, -8.4F, -7.9F, 1, 16, 14, 0.0F);
         this.setRotateAngle(headFin, 3.141592653589793F, -0.5235987755982988F, 0.0F);

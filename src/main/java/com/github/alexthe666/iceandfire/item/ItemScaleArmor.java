@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
+import com.github.alexthe666.iceandfire.entity.DragonType;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import net.minecraft.client.model.ModelBiped;
@@ -32,7 +33,13 @@ public class ItemScaleArmor extends ItemArmor {
 
 	@SideOnly(Side.CLIENT)
 	public net.minecraft.client.model.ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, net.minecraft.client.model.ModelBiped _default) {
-		return (ModelBiped) IceAndFire.PROXY.getArmorModel((armor_type.ordinal() < 3 ? (renderIndex == 2 ? 1 : 0) : (renderIndex == 2 ? 3 : 2)));
+		DragonType type = armor_type.eggType.dragonType;
+		if (type == DragonType.FIRE) {
+			return (ModelBiped) IceAndFire.PROXY.getArmorModel(renderIndex == 2 ? 5 : 4);
+		} else if (type == DragonType.ICE) {
+			return (ModelBiped) IceAndFire.PROXY.getArmorModel(renderIndex == 2 ? 7 : 6);
+		}
+		return (ModelBiped) IceAndFire.PROXY.getArmorModel(renderIndex == 2 ? 9 : 8);
 	}
 
 	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {

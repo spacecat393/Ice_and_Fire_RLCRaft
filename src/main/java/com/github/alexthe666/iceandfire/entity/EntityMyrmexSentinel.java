@@ -55,6 +55,10 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
         this.setSize(1.3F, 1.95F);
     }
 
+    protected int getExperiencePoints(EntityPlayer player) {
+        return 8;
+    }
+
     public Entity getHeldEntity() {
         return this.getPassengers().isEmpty() ? null : this.getPassengers().get(0);
     }
@@ -226,8 +230,7 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
     }
 
     public boolean attackEntityFrom(DamageSource source, float amount) {
-        StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, StoneEntityProperties.class);
-        if(amount >= 1.0D && !this.getPassengers().isEmpty() && rand.nextInt(2) == 0){
+        if(amount >= 1.0D && !this.getPassengers().isEmpty() && rand.nextInt(2) == 0) {
             for(Entity entity : this.getPassengers()){
                 entity.dismountRidingEntity();
             }

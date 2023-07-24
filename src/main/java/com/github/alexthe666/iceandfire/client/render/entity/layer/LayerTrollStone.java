@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.client.render.entity.layer;
 
+import com.github.alexthe666.iceandfire.entity.EntityEffectProperties;
 import com.github.alexthe666.iceandfire.entity.EntityTroll;
-import com.github.alexthe666.iceandfire.entity.StoneEntityProperties;
 import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
@@ -21,8 +21,8 @@ public class LayerTrollStone implements LayerRenderer {
 	public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float f, float f1, float i, float f2, float f3, float f4, float f5) {
 		if (entitylivingbaseIn instanceof EntityTroll) {
 			EntityTroll troll = (EntityTroll)entitylivingbaseIn;
-			StoneEntityProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(troll, StoneEntityProperties.class);
-			if (properties != null && properties.isStone) {
+			EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(troll, EntityEffectProperties.class);
+			if (properties != null && properties.isStone()) {
 				GlStateManager.depthMask(true);
 				GL11.glEnable(GL11.GL_CULL_FACE);
 				this.renderer.bindTexture(troll.getType().TEXTURE_STONE);

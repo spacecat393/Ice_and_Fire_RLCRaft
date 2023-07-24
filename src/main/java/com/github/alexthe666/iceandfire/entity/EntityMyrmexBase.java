@@ -6,7 +6,6 @@ import com.github.alexthe666.iceandfire.block.BlockMyrmexConnectedResin;
 import com.github.alexthe666.iceandfire.block.BlockMyrmexResin;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
-import com.github.alexthe666.iceandfire.entity.ai.PathNavigateExperimentalGround;
 import com.github.alexthe666.iceandfire.entity.ai.PathNavigateMyrmex;
 import com.github.alexthe666.iceandfire.structures.WorldGenMyrmexHive;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
@@ -286,9 +285,15 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
     public void useRecipe(MerchantRecipe recipe) {
         recipe.incrementToolUses();
         this.livingSoundTime = -this.getTalkInterval();
+        boolean shouldRewardExp = true;
         if (this.getHive() != null && this.getCustomer() != null) {
             this.getHive().setWorld(this.world);
-            this.getHive().modifyPlayerReputation(this.getCustomer().getUniqueID(), 2);
+            if (this.getHive().isPlayerReputationMaxed(this.getCustomer().getUniqueID())){
+                // Do not reward XP if the reputation is already maxed
+                shouldRewardExp = false;
+            } else {
+                this.getHive().modifyPlayerReputation(this.getCustomer().getUniqueID(), 2);
+            }
         }
         this.playSound(ModSounds.MYRMEX_IDLE, this.getSoundVolume(), this.getSoundPitch());
         int i = 3 + this.rand.nextInt(4);
@@ -309,7 +314,7 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
             this.wealth += recipe.getItemToBuy().getCount();
         }
 
-        if (recipe.getRewardsExp()) {
+        if (shouldRewardExp && recipe.getRewardsExp()) {
             this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY + 0.5D, this.posZ, i));
         }
     }

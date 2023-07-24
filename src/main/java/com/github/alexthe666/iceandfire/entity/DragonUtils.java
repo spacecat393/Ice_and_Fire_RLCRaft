@@ -5,14 +5,12 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.INpc;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.monster.EntityGolem;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.*;
 
@@ -38,13 +36,12 @@ public class DragonUtils {
 		}
 		float angle = (0.01745329251F * renderYawOffset) + 3.15F + (dragon.getRNG().nextFloat() * neg);
 
-		double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
-		double extraZ = (double) (radius * MathHelper.cos(angle));
+		double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
+		double extraZ = radius * MathHelper.cos(angle);
 		BlockPos radialPos = new BlockPos(dragon.posX + extraX, 0, dragon.posZ + extraZ);
 		BlockPos ground = dragon.world.getHeight(radialPos);
 		int distFromGround = (int) dragon.posY - ground.getY();
 		BlockPos newPos = radialPos.up(distFromGround > 16 ? (int) Math.min(IceAndFire.CONFIG.maxDragonFlight, dragon.posY + dragon.getRNG().nextInt(16) - 8) : (int) dragon.posY + dragon.getRNG().nextInt(16) + 1);
-		BlockPos pos = dragon.doesWantToLand() ? ground : newPos;
 		if (!dragon.isTargetBlocked(new Vec3d(newPos)) && dragon.getDistanceSqToCenter(newPos) > 6) {
 			return newPos;
 		}
@@ -55,13 +52,12 @@ public class DragonUtils {
 		float radius = 0.75F * (0.7F * dragon.getRenderSize() / 3) * - 7 - dragon.getRNG().nextInt(dragon.getDragonStage() * 6);
 		float neg = dragon.getRNG().nextBoolean() ? 1 : -1;
 		float angle = (0.01745329251F * dragon.renderYawOffset) + 3.15F + (dragon.getRNG().nextFloat() * neg);
-		double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
-		double extraZ = (double) (radius * MathHelper.cos(angle));
+		double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
+		double extraZ = radius * MathHelper.cos(angle);
 		BlockPos radialPos = new BlockPos(dragon.posX + extraX, 0, dragon.posZ + extraZ);
 		BlockPos ground = dragon.world.getHeight(radialPos);
 		int distFromGround = (int) dragon.posY - ground.getY();
 		BlockPos newPos = radialPos.up(distFromGround > 16 ? (int) Math.min(IceAndFire.CONFIG.maxDragonFlight, dragon.posY + dragon.getRNG().nextInt(16) - 8) : (int) dragon.posY + dragon.getRNG().nextInt(16) + 1);
-		BlockPos pos = dragon.doesWantToLand() ? ground : newPos;
 		BlockPos surface = dragon.world.getBlockState(newPos.down(2)).getMaterial() != Material.WATER ? newPos.down(dragon.getRNG().nextInt(10) + 1) : newPos;
 		if ( dragon.getDistanceSqToCenter(surface) > 6 && dragon.world.getBlockState(surface).getMaterial() == Material.WATER) {
 			return surface;
@@ -81,26 +77,25 @@ public class DragonUtils {
 			}
 		}));
 		double d2 = d1;
-		for (int j = 0; j < list.size(); ++j) {
-			Entity entity1 = (Entity) list.get(j);
-			AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().grow((double) entity1.getCollisionBorderSize() + 2F);
+		for (Entity entity : list) {
+			AxisAlignedBB axisalignedbb = entity.getEntityBoundingBox().grow((double) entity.getCollisionBorderSize() + 2F);
 			RayTraceResult raytraceresult = axisalignedbb.calculateIntercept(vec3d, vec3d2);
 
 			if (axisalignedbb.contains(vec3d)) {
 				if (d2 >= 0.0D) {
-					pointedEntity = entity1;
+					pointedEntity = entity;
 					d2 = 0.0D;
 				}
 			} else if (raytraceresult != null) {
 				double d3 = vec3d.distanceTo(raytraceresult.hitVec);
 
 				if (d3 < d2 || d2 == 0.0D) {
-					if (entity1.getLowestRidingEntity() == rider.getLowestRidingEntity() && !rider.canRiderInteract()) {
+					if (entity.getLowestRidingEntity() == rider.getLowestRidingEntity() && !rider.canRiderInteract()) {
 						if (d2 == 0.0D) {
-							pointedEntity = entity1;
+							pointedEntity = entity;
 						}
 					} else {
-						pointedEntity = entity1;
+						pointedEntity = entity;
 						d2 = d3;
 					}
 				}
@@ -113,8 +108,8 @@ public class DragonUtils {
 		float radius = 0.75F * (0.7F * 8) * -3 - hippo.getRNG().nextInt(48);
 		float neg = hippo.getRNG().nextBoolean() ? 1 : -1;
 		float angle = (0.01745329251F * hippo.renderYawOffset) + 3.15F + (hippo.getRNG().nextFloat() * neg);
-		double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
-		double extraZ = (double) (radius * MathHelper.cos(angle));
+		double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
+		double extraZ = radius * MathHelper.cos(angle);
 		if(hippo.hasHomePosition && hippo.homePos != null){
 			BlockPos dragonPos = new BlockPos(hippo);
 			BlockPos ground = hippo.world.getHeight(dragonPos);
@@ -130,7 +125,6 @@ public class DragonUtils {
 		BlockPos ground = hippo.world.getHeight(radialPos);
 		int distFromGround = (int) hippo.posY - ground.getY();
 		BlockPos newPos = radialPos.up(distFromGround > 16 ? (int) Math.min(IceAndFire.CONFIG.maxDragonFlight, hippo.posY + hippo.getRNG().nextInt(16) - 8) : (int) hippo.posY + hippo.getRNG().nextInt(16) + 1);
-		BlockPos pos = hippo.doesWantToLand() ? ground : newPos;
 		if (!hippo.isTargetBlocked(new Vec3d(newPos)) && hippo.getDistanceSqToCenter(newPos) > 6) {
 			return newPos;
 		}
@@ -142,14 +136,13 @@ public class DragonUtils {
 		float neg = bird.getRNG().nextBoolean() ? 1 : -1;
 		float renderYawOffset = bird.flock != null && !bird.flock.isLeader(bird) ? getStymphalianFlockDirection(bird) : bird.renderYawOffset;
 		float angle = (0.01745329251F * renderYawOffset) + 3.15F + (bird.getRNG().nextFloat() * neg);
-		double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
-		double extraZ = (double) (radius * MathHelper.cos(angle));
+		double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
+		double extraZ = radius * MathHelper.cos(angle);
 		BlockPos radialPos = getStymphalianFearPos(bird, new BlockPos(bird.posX + extraX, 0, bird.posZ + extraZ));
 		BlockPos ground = bird.world.getHeight(radialPos);
 		int distFromGround = (int) bird.posY - ground.getY();
-		int flightHeight = (int) Math.min(IceAndFire.CONFIG.stymphalianBirdFlightHeight, bird.flock != null && !bird.flock.isLeader(bird) ? ground.getY() + bird.getRNG().nextInt(16): ground.getY() + bird.getRNG().nextInt(16));
+		int flightHeight = Math.min(IceAndFire.CONFIG.stymphalianBirdFlightHeight, bird.flock != null && !bird.flock.isLeader(bird) ? ground.getY() + bird.getRNG().nextInt(16): ground.getY() + bird.getRNG().nextInt(16));
 		BlockPos newPos = radialPos.up(distFromGround > 16 ? flightHeight : (int) bird.posY + bird.getRNG().nextInt(16) + 1);
-		BlockPos pos = bird.doesWantToLand() ? ground : newPos;
 		if (!bird.isTargetBlocked(new Vec3d(newPos)) && bird.getDistanceSqToCenter(newPos) > 6) {
 			return newPos;
 		}
@@ -172,8 +165,6 @@ public class DragonUtils {
 		if(bird.getDistanceSq(leader) > 2){
 			double d0 = leader.posX - bird.posX;
 			double d2 = leader.posZ - bird.posZ;
-			double d1 = leader.posY + (double)leader.getEyeHeight() - (bird.posY + (double)bird.getEyeHeight());
-			double d3 = (double)MathHelper.sqrt(d0 * d0 + d2 * d2);
 			float f = (float)(MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
 			float degrees = MathHelper.wrapDegrees(f - bird.rotationYaw);
 
@@ -185,27 +176,12 @@ public class DragonUtils {
 
 	public static BlockPos getBlockInTargetsViewCockatrice(EntityCockatrice cockatrice, EntityLivingBase target) {
 		float radius = 10 + cockatrice.getRNG().nextInt(10);
-		float neg = cockatrice.getRNG().nextBoolean() ? 1 : -1;
 		float angle = (0.01745329251F * target.rotationYawHead);
-		double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
-		double extraZ = (double) (radius * MathHelper.cos(angle));
+		double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
+		double extraZ = radius * MathHelper.cos(angle);
 		BlockPos radialPos = new BlockPos(target.posX + extraX, 0, target.posZ + extraZ);
 		BlockPos ground = target.world.getHeight(radialPos);
 		if (!cockatrice.isTargetBlocked(new Vec3d(ground)) && cockatrice.getDistanceSqToCenter(ground) > 30) {
-			return ground;
-		}
-		return target.getPosition();
-	}
-
-	public static BlockPos getBlockInTargetsViewSeaSerpent(EntitySeaSerpent serpent, EntityLivingBase target) {
-		float radius = 10 * serpent.getSeaSerpentScale() + serpent.getRNG().nextInt(10);
-		float neg = serpent.getRNG().nextBoolean() ? 1 : -1;
-		float angle = (0.01745329251F * target.rotationYawHead);
-		double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
-		double extraZ = (double) (radius * MathHelper.cos(angle));
-		BlockPos radialPos = new BlockPos(target.posX + extraX, 0, target.posZ + extraZ);
-		BlockPos ground = target.world.getHeight(radialPos);
-		if (serpent.getDistanceSqToCenter(ground) > 30) {
 			return ground;
 		}
 		return target.getPosition();
@@ -242,7 +218,7 @@ public class DragonUtils {
 				|| className.contains("Cow") || className.contains("Sheep") || className.contains("Pig") || className.contains("Chicken")
 				|| className.contains("Rabbit") || className.contains("Peacock") || className.contains("Goat") || className.contains("Ferret")
 				|| className.contains("Hedgehog") || className.contains("Peahen") || className.contains("Peafowl") || className.contains("Sow")
-				|| className.contains("Hog") || className.contains("Hog");
+				|| className.contains("Hog");
 	}
 
 	public static boolean canDragonBreak(Block block){
@@ -259,30 +235,63 @@ public class DragonUtils {
 				block != net.minecraft.init.Blocks.END_GATEWAY;
 	}
 
-	public static boolean hasSameOwner(EntityTameable cockatrice, Entity entity){
-		if(entity instanceof EntityTameable){
-			EntityTameable tameable = (EntityTameable)entity;
-			if(tameable.getOwnerId() != null && cockatrice.getOwnerId() != null && tameable.getOwnerId().equals(cockatrice.getOwnerId())){
-				return true;
-			}
+	public static boolean hasSameOwner(Entity entity1, Entity entity2) {
+		if (!(entity1 instanceof IEntityOwnable && entity2 instanceof IEntityOwnable)) {
+			return false;
 		}
-		return false;
+		Entity owner = ((IEntityOwnable) entity1).getOwner();
+		Entity owner2 = ((IEntityOwnable) entity2).getOwner();
+		if (owner == null || owner2 == null) {
+			return false;
+		}
+		return owner.equals(owner2);
+	}
+
+	public static boolean isOwner(Entity owner, Entity entity) {
+		if (!(entity instanceof IEntityOwnable)) {
+			return false;
+		}
+		Entity owner2 = ((IEntityOwnable) entity).getOwner();
+		if (owner == null || owner2 == null) {
+			return false;
+		}
+		return owner.isEntityEqual(((IEntityOwnable) entity).getOwner());
 	}
 
     public static boolean isAlive(EntityLivingBase entity) {
-		if(entity instanceof IDeadMob && ((IDeadMob) entity).isMobDead()){
-			return false;
-		}
-		return true;
-    }
+		return !(entity instanceof IDeadMob) || !((IDeadMob) entity).isMobDead();
+	}
 
-
-    public static boolean canGrief(boolean weak) {
-		if(weak){
+	public static boolean canGrief(boolean weak) {
+		if (weak) {
 			return IceAndFire.CONFIG.dragonGriefing == 0;
-
-		}else{
-			return IceAndFire.CONFIG.dragonGriefing < 2;
 		}
-    }
+		return IceAndFire.CONFIG.dragonGriefing < 2;
+	}
+
+	public static EntityEquipmentSlot getEquipmentSlotFromDragonInvSlot(int slot) {
+		switch(slot) {
+			default:
+				return EntityEquipmentSlot.HEAD;
+			case 1:
+				return EntityEquipmentSlot.CHEST;
+			case 2:
+				return EntityEquipmentSlot.LEGS;
+			case 3:
+				return EntityEquipmentSlot.FEET;
+		}
+	}
+
+	public static int getDragonInvSlotFromEquipmentSlot(EntityEquipmentSlot slot) {
+		switch(slot) {
+			default:
+				return 0;
+			case CHEST:
+				return 1;
+			case LEGS:
+				return 2;
+			case FEET:
+				return 3;
+		}
+	}
 }

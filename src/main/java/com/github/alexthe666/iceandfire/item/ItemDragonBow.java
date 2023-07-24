@@ -18,6 +18,7 @@ import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemDragonBow extends ItemBow implements ICustomRendered {
 
@@ -48,6 +49,17 @@ public class ItemDragonBow extends ItemBow implements ICustomRendered {
 		});
 	}
 
+	public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
+		NonNullList<ItemStack> boneItems = OreDictionary.getOres("boneDragon");
+		for (ItemStack bone : boneItems) {
+			if (OreDictionary.itemMatches(repair, bone, false)) {
+				return true;
+			}
+		}
+		return super.getIsRepairable(toRepair, repair);
+	}
+
+
 	public static float getArrowVelocity(int i) {
 		float f = i / 20.0F;
 		f = (f * f + f * 2.0F) / 3.0F;
@@ -59,7 +71,7 @@ public class ItemDragonBow extends ItemBow implements ICustomRendered {
 		return f;
 	}
 
-	private ItemStack findAmmo(EntityPlayer player) {
+	protected ItemStack findAmmo(EntityPlayer player) {
 		if (this.func_185058_h_(player.getHeldItem(EnumHand.OFF_HAND))) {
 			return player.getHeldItem(EnumHand.OFF_HAND);
 		} else if (this.func_185058_h_(player.getHeldItem(EnumHand.MAIN_HAND))) {

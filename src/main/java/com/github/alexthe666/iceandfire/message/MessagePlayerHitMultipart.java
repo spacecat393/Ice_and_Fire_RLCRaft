@@ -37,7 +37,7 @@ public class MessagePlayerHitMultipart extends AbstractMessage<MessagePlayerHitM
     @SideOnly(Side.CLIENT)
     public void onClientReceived(Minecraft client, MessagePlayerHitMultipart message, EntityPlayer player, MessageContext messageContext) {
         Entity entity = player.world.getEntityByID(message.creatureID);
-        if (entity != null && entity instanceof EntityLivingBase) {
+        if (entity instanceof EntityLivingBase) {
             EntityLivingBase mob = (EntityLivingBase)entity;
             player.attackTargetEntityWithCurrentItem(mob);
         }
@@ -46,7 +46,7 @@ public class MessagePlayerHitMultipart extends AbstractMessage<MessagePlayerHitM
     @Override
     public void onServerReceived(MinecraftServer server, MessagePlayerHitMultipart message, EntityPlayer player, MessageContext messageContext) {
         Entity entity = player.world.getEntityByID(message.creatureID);
-        if (entity != null && entity instanceof EntityLivingBase) {
+        if (entity instanceof EntityLivingBase) {
             EntityLivingBase mob = (EntityLivingBase)entity;
             player.attackTargetEntityWithCurrentItem(mob);
         }

@@ -4,7 +4,6 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonArrow;
 import com.github.alexthe666.iceandfire.entity.EntityStymphalianArrow;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
-import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.dispenser.BehaviorProjectileDispense;
 import net.minecraft.dispenser.IPosition;
@@ -51,10 +50,17 @@ public class ModRecipes {
             }
         });
 
+        OreDictionary.registerOre("ingotCopper", ModItems.copperIngot);
+        OreDictionary.registerOre("nuggetCopper", ModItems.copperNugget);
+        OreDictionary.registerOre("oreCopper", ModBlocks.copperOre);
+        OreDictionary.registerOre("blockCopper", ModBlocks.copperBlock);
         OreDictionary.registerOre("ingotSilver", ModItems.silverIngot);
         OreDictionary.registerOre("nuggetSilver", ModItems.silverNugget);
         OreDictionary.registerOre("oreSilver", ModBlocks.silverOre);
         OreDictionary.registerOre("blockSilver", ModBlocks.silverBlock);
+        OreDictionary.registerOre("gemAmethyst", ModItems.amethystGem);
+        OreDictionary.registerOre("oreAmethyst", ModBlocks.amethystOre);
+        OreDictionary.registerOre("blockAmethyst", ModBlocks.amethystBlock);
         OreDictionary.registerOre("gemSapphire", ModItems.sapphireGem);
         OreDictionary.registerOre("oreSapphire", ModBlocks.sapphireOre);
         OreDictionary.registerOre("blockSapphire", ModBlocks.sapphireBlock);
@@ -72,7 +78,7 @@ public class ModRecipes {
         OreDictionary.registerOre("foodMeat", Items.COOKED_RABBIT);
         OreDictionary.registerOre("boneWithered", ModItems.witherbone);
         OreDictionary.registerOre("boneDragon", ModItems.dragonbone);
-        for(EnumSeaSerpent serpent : EnumSeaSerpent.values()){
+        for (EnumSeaSerpent serpent : EnumSeaSerpent.values()) {
             OreDictionary.registerOre("seaSerpentScales", serpent.scale);
         }
         OreDictionary.registerOre("listAllEgg", new ItemStack(ModItems.hippogryph_egg, 1, OreDictionary.WILDCARD_VALUE));
@@ -105,16 +111,21 @@ public class ModRecipes {
 
         addBanner("firedragon", new ItemStack(ModItems.dragon_skull, 1, 0));
         addBanner("icedragon", new ItemStack(ModItems.dragon_skull, 1, 1));
+        GameRegistry.addSmelting(ModBlocks.copperOre, new ItemStack(ModItems.copperIngot), 1);
         GameRegistry.addSmelting(ModBlocks.silverOre, new ItemStack(ModItems.silverIngot), 1);
+        GameRegistry.addSmelting(ModBlocks.amethystOre, new ItemStack(ModItems.amethystGem), 1);
         GameRegistry.addSmelting(ModBlocks.sapphireOre, new ItemStack(ModItems.sapphireGem), 1);
         GameRegistry.addSmelting(ModBlocks.myrmex_desert_resin_block, new ItemStack(ModBlocks.myrmex_desert_resin_glass), 1);
         GameRegistry.addSmelting(ModBlocks.myrmex_jungle_resin_block, new ItemStack(ModBlocks.myrmex_jungle_resin_glass), 1);
         ModItems.blindfoldArmor.setRepairItem(new ItemStack(Items.STRING));
+        ModItems.copperMetal.setRepairItem(new ItemStack(ModItems.copperIngot));
+        ModItems.copperTools.setRepairItem(new ItemStack(ModItems.copperIngot));
         ModItems.silverMetal.setRepairItem(new ItemStack(ModItems.silverIngot));
         ModItems.silverTools.setRepairItem(new ItemStack(ModItems.silverIngot));
         ModItems.boneTools.setRepairItem(new ItemStack(ModItems.dragonbone));
         ModItems.fireBoneTools.setRepairItem(new ItemStack(ModItems.dragonbone));
         ModItems.iceBoneTools.setRepairItem(new ItemStack(ModItems.dragonbone));
+        ModItems.lightningBoneTools.setRepairItem(new ItemStack(ModItems.dragonbone));
         for(EnumDragonArmor armor : EnumDragonArmor.values()){
             armor.armorMaterial.setRepairItem(new ItemStack(EnumDragonArmor.getScaleItem(armor)));
         }
@@ -124,15 +135,14 @@ public class ModRecipes {
         ModItems.white_deathworm.setRepairItem(new ItemStack(ModItems.deathworm_chitin, 1, 1));
         ModItems.red_deathworm.setRepairItem(new ItemStack(ModItems.deathworm_chitin, 1, 2));
         ModItems.trollWeapon.setRepairItem(new ItemStack(Blocks.STONE));
-        ModItems.troll_mountain.setRepairItem(new ItemStack(EnumTroll.MOUNTAIN.leather));
-        ModItems.troll_forest.setRepairItem(new ItemStack(EnumTroll.FOREST.leather));
-        ModItems.troll_frost.setRepairItem(new ItemStack(EnumTroll.FROST.leather));
+        ModItems.troll_mountain.setRepairItem(new ItemStack(ModItems.troll_leather_mountain));
+        ModItems.troll_forest.setRepairItem(new ItemStack(ModItems.troll_leather_forest));
+        ModItems.troll_frost.setRepairItem(new ItemStack(ModItems.troll_leather_frost));
         ItemStack waterBreathingPotion = new ItemStack(Items.POTIONITEM, 1, 0);
         NBTTagCompound tag = new NBTTagCompound();
         tag.setString("Potion", "water_breathing");
         waterBreathingPotion.setTagCompound(tag);
         BrewingRecipeRegistry.addRecipe(new ItemStack(Items.POTIONITEM, 1, 0), new ItemStack(ModItems.shiny_scales), waterBreathingPotion);
-
     }
 
     public static BannerPattern addBanner(String name, ItemStack craftingStack) {
@@ -147,9 +157,7 @@ public class ModRecipes {
         if (!bronzeItems.isEmpty()) {
             for (ItemStack bronzeIngot : bronzeItems) {
                 if (bronzeIngot != ItemStack.EMPTY) {
-                    ItemStack stack = bronzeIngot.copy();
                     GameRegistry.addSmelting(ModItems.stymphalian_bird_feather, bronzeIngot.copy(), 1);
-
                     break;
                 }
             }
