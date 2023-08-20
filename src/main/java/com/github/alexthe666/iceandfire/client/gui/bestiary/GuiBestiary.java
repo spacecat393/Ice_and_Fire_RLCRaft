@@ -992,15 +992,22 @@ public class GuiBestiary extends GuiScreen {
 	}
 
 	public void writeFromTxt() {
-		String filePath = "assets/iceandfire/lang/bestiary/" + Minecraft.getMinecraft().gameSettings.language + "/";
-		if (getClass().getClassLoader().getResourceAsStream(filePath) == null) {
-			filePath = "assets/iceandfire/lang/bestiary/en_US/";
-		}
+		String currentLanguage = Minecraft.getMinecraft().getLanguageManager().getCurrentLanguage().getJavaLocale().toString();
+		String filePath = "assets/iceandfire/lang/bestiary/" + currentLanguage + "/";
 		String fileName = this.pageType.toString().toLowerCase() + "_" + this.bookPages + ".txt";
 		InputStream fileReader = getClass().getClassLoader().getResourceAsStream(filePath + fileName);
+		if (fileReader == null) {
+			IceAndFire.logger.warn("The Bestiary translation at " + fileName + " is missing for " + currentLanguage);
+			filePath = "assets/iceandfire/lang/bestiary/en_US/";
+			fileReader = getClass().getClassLoader().getResourceAsStream(filePath + fileName);
+		}
+		if (fileReader == null) {
+			IceAndFire.logger.warn("The Bestiary translation " + fileName + " is missing.");
+			return;
+		}
 		try {
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fileReader));
-			String line = null;
+			String line;
 			int linenumber = 0;
 			while ((line = bufferedReader.readLine()) != null) {
 				GL11.glPushMatrix();
