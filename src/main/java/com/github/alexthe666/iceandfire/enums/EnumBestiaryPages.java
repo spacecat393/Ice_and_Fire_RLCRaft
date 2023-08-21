@@ -4,10 +4,7 @@ import com.github.alexthe666.iceandfire.item.ItemBestiary;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public enum EnumBestiaryPages {
 
@@ -16,6 +13,8 @@ public enum EnumBestiaryPages {
 	FIREDRAGONEGG(1),
 	ICEDRAGON(4),
 	ICEDRAGONEGG(1),
+	LIGHTNINGDRAGON(5),
+	LIGHTNINGDRAGONEGG(1),
 	TAMEDDRAGONS(3),
 	MATERIALS(2),
 	ALCHEMY(0),
@@ -34,7 +33,7 @@ public enum EnumBestiaryPages {
 	AMPHITHERE(2),
 	SEASERPENT(2);
 
-	public int pages;
+	public final int pages;
 
 	EnumBestiaryPages(int pages) {
 		this.pages = pages;
@@ -64,22 +63,6 @@ public enum EnumBestiaryPages {
 		return list;
 	}
 
-	public static boolean hasAllPages(ItemStack book) {
-		List<EnumBestiaryPages> allPages = new ArrayList<EnumBestiaryPages>();
-		for (int i = 0; i < EnumBestiaryPages.values().length; i++) {
-			allPages.add(EnumBestiaryPages.values()[i]);
-		}
-		List<EnumBestiaryPages> pages = containedPages(EnumBestiaryPages.toList(book.getTagCompound().getIntArray("Pages")));
-		for (EnumBestiaryPages page : allPages) {
-			if (!pages.contains(page)) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-		return false;
-	}
-
 	public static List<Integer> enumToInt(List<EnumBestiaryPages> pages) {
 		Iterator<com.github.alexthe666.iceandfire.enums.EnumBestiaryPages> itr = pages.iterator();
 		List<Integer> list = new ArrayList<Integer>();
@@ -107,14 +90,10 @@ public enum EnumBestiaryPages {
 		if (book.getItem() instanceof ItemBestiary) {
 			NBTTagCompound tag = book.getTagCompound();
 			List<EnumBestiaryPages> allPages = new ArrayList<EnumBestiaryPages>();
-			for (EnumBestiaryPages page : EnumBestiaryPages.values()) {
-				allPages.add(page);
-			}
+			Collections.addAll(allPages, EnumBestiaryPages.values());
 			List<EnumBestiaryPages> containedPages = containedPages(toList(tag.getIntArray("Pages")));
 			List<EnumBestiaryPages> possiblePages = new ArrayList<EnumBestiaryPages>();
-			Iterator<com.github.alexthe666.iceandfire.enums.EnumBestiaryPages> itr = allPages.iterator();
-			while (itr.hasNext()) {
-				EnumBestiaryPages page = itr.next();
+			for (EnumBestiaryPages page : allPages) {
 				if (!containedPages.contains(page)) {
 					possiblePages.add(page);
 				}

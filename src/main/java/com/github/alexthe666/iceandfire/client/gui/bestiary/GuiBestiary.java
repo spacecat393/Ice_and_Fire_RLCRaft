@@ -8,10 +8,10 @@ import com.github.alexthe666.iceandfire.enums.EnumBestiaryPages;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
+import com.google.common.collect.Maps;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiLanguage;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -21,17 +21,18 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import java.awt.*;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @SideOnly(Side.CLIENT)
 public class GuiBestiary extends GuiScreen {
@@ -40,24 +41,24 @@ public class GuiBestiary extends GuiScreen {
 	private static final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/gui/bestiary/bestiary.png");
 	private static final ResourceLocation DRAWINGS_0 = new ResourceLocation("iceandfire:textures/gui/bestiary/drawings_0.png");
 	private static final ResourceLocation DRAWINGS_1 = new ResourceLocation("iceandfire:textures/gui/bestiary/drawings_1.png");
+	private static final Map<String, ResourceLocation> PICTURE_LOCATION_CACHE = Maps.newHashMap();
 	public List<EnumBestiaryPages> allPageTypes = new ArrayList<EnumBestiaryPages>();
 	public EnumBestiaryPages pageType;
 	public List<IndexPageButton> indexButtons = new ArrayList<IndexPageButton>();
 	public ChangePageButton previousPage;
 	public ChangePageButton nextPage;
 	public int bookPages;
-	public int bookPagesTotal = 1;
 	public int indexPages;
 	public int indexPagesTotal = 1;
 	protected ItemStack book;
 	protected boolean index;
 	protected FontRenderer font;
 
-	private FontRenderer getFont(){
+	private FontRenderer getFont() {
 		FontRenderer font;
-		if(IceAndFire.CONFIG.useVanillaFont || !Minecraft.getMinecraft().gameSettings.language.equalsIgnoreCase("en_us")){
+		if (IceAndFire.CONFIG.useVanillaFont || !Minecraft.getMinecraft().gameSettings.language.equalsIgnoreCase("en_us")) {
 			font = Minecraft.getMinecraft().fontRenderer;
-		}else{
+		} else {
 			font = (FontRenderer) IceAndFire.PROXY.getFontRenderer();
 		}
 		font.setUnicodeFlag(Minecraft.getMinecraft().getLanguageManager().isCurrentLocaleUnicode());
@@ -68,8 +69,7 @@ public class GuiBestiary extends GuiScreen {
 	public GuiBestiary(ItemStack book) {
 		font = getFont();
 		this.book = book;
-		int indexPageTotal = 0;
-		if (!book.isEmpty() && book.getItem() != null && book.getItem() == ModItems.bestiary) {
+		if (!book.isEmpty() && book.getItem() == ModItems.bestiary) {
 			if (book.getTagCompound() != null) {
 				List<EnumBestiaryPages> pages = EnumBestiaryPages.containedPages(EnumBestiaryPages.toList(book.getTagCompound().getIntArray("Pages")));
 				allPageTypes.addAll(pages);
@@ -81,10 +81,10 @@ public class GuiBestiary extends GuiScreen {
 
 	public void initGui() {
 		super.initGui();
-		int centerX = (this.width - this.X) / 2;
-		int centerY = (this.height - this.Y) / 2;
-		this.buttonList.add(this.previousPage = new ChangePageButton(0, centerX + 15, centerY + 215, false, bookPages, 0));
-		this.buttonList.add(this.nextPage = new ChangePageButton(1, centerX + 357, centerY + 215, true, bookPages, 0));
+		int centerX = (this.width - X) / 2;
+		int centerY = (this.height - Y) / 2;
+		this.buttonList.add(this.previousPage = new ChangePageButton(0, centerX + 15, centerY + 215, false, 0));
+		this.buttonList.add(this.nextPage = new ChangePageButton(1, centerX + 357, centerY + 215, true, 0));
 		if (!allPageTypes.isEmpty()) {
 			for (int i = 0; i < allPageTypes.size(); i++) {
 				int xIndex = i % -2;
@@ -105,18 +105,14 @@ public class GuiBestiary extends GuiScreen {
 			}
 		}
 		for (int i = 0; i < this.indexButtons.size(); i++) {
-			if (i < 10 * (this.indexPages + 1) && i >= 10 * (this.indexPages) && this.index) {
-				this.indexButtons.get(i).visible = true;
-			} else {
-				this.indexButtons.get(i).visible = false;
-			}
+			this.indexButtons.get(i).visible = i < 10 * (this.indexPages + 1) && i >= 10 * (this.indexPages) && this.index;
 		}
 		this.drawDefaultBackground();
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		this.mc.renderEngine.bindTexture(TEXTURE);
-		int cornerX = (this.width - this.X) / 2;
-		int cornerY = (this.height - this.Y) / 2;
-		drawModalRectWithCustomSizedTexture(cornerX, cornerY, 0, 0, this.X, this.Y, 390F, 390F);
+		int cornerX = (this.width - X) / 2;
+		int cornerY = (this.height - Y) / 2;
+		drawModalRectWithCustomSizedTexture(cornerX, cornerY, 0, 0, X, Y, 390F, 390F);
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		RenderHelper.disableStandardItemLighting();
 		GL11.glDisable(GL11.GL_LIGHTING);
@@ -129,15 +125,15 @@ public class GuiBestiary extends GuiScreen {
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		short short1 = 240;
 		short short2 = 240;
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) short1 / 1.0F, (float) short2 / 1.0F);
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, short1, short2);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glDisable(GL11.GL_LIGHTING);
 		if (!index) {
 			drawPerPage(bookPages);
 			int pageLeft = bookPages * 2 + 1;
 			int pageRight = pageLeft + 1;
-			font.drawString("" + pageLeft, this.X / 4, this.Y - (int) (this.Y * 0.13), 0X303030, false);
-			font.drawString("" + pageRight, this.X - (int) (this.X * 0.24), this.Y - (int) (this.Y * 0.13), 0X303030, false);
+			font.drawString(String.valueOf(pageLeft), (float) X / 4, Y - (int) (Y * 0.13), 0X303030, false);
+			font.drawString(String.valueOf(pageRight), X - (int) (X * 0.24), Y - (int) (Y * 0.13), 0X303030, false);
 		}
 		GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glPopMatrix();
@@ -175,7 +171,7 @@ public class GuiBestiary extends GuiScreen {
 					drawItemStack(new ItemStack(ModItems.sapphireGem), 40, 60, 2F);
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1F);
-					drawImage(DRAWINGS_0, 144, 0, 389, 1, 50, 50, 512F);
+					drawImage(DRAWINGS_0, 144, 0, 389, 1, 50, 50);
 					GL11.glPopMatrix();
 					boolean drawGold = Minecraft.getMinecraft().player.ticksExisted % 20 < 10;
 					drawItemStack(new ItemStack(drawGold ? Items.GOLD_NUGGET : ModItems.silverNugget), 144, 34, 1.5F);
@@ -183,7 +179,7 @@ public class GuiBestiary extends GuiScreen {
 					drawItemStack(new ItemStack(drawGold ? ModBlocks.goldPile : ModBlocks.silverPile), 151, 7, 2F);
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1F);
-					drawImage(DRAWINGS_0, 144, 90, 389, 1, 50, 50, 512F);
+					drawImage(DRAWINGS_0, 144, 90, 389, 1, 50, 50);
 					GL11.glPopMatrix();
 					drawItemStack(new ItemStack(Blocks.PLANKS), 161, 124, 1.5F);
 					drawItemStack(new ItemStack(Blocks.PLANKS), 161, 107, 1.5F);
@@ -198,29 +194,29 @@ public class GuiBestiary extends GuiScreen {
 				if (bookPages == 0) {
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1F);
-					drawImage(DRAWINGS_0, 20, 50, 127, 0, 88, 62, 512F);
+					drawImage(DRAWINGS_0, 20, 50, 127, 0, 88, 62);
 					GL11.glPopMatrix();
 				}
 				if (bookPages == 1) {
 					GL11.glPushMatrix();
-					drawImage(DRAWINGS_0, 38, 60, 0, 0, 127, 62, 512F);
-					drawImage(DRAWINGS_0, 240, 5, 0, 185, 114, 62, 512F);
-					drawImage(DRAWINGS_0, 240, 150, 0, 62, 99, 37, 512F);
+					drawImage(DRAWINGS_0, 38, 60, 0, 0, 127, 62);
+					drawImage(DRAWINGS_0, 240, 5, 0, 185, 114, 62);
+					drawImage(DRAWINGS_0, 240, 150, 0, 62, 99, 37);
 					GL11.glPopMatrix();
 				}
 				if (bookPages == 2) {
 					GL11.glPushMatrix();
-					drawImage(DRAWINGS_0, 42, 80, 0, 99, 100, 41, 512F);
-					drawImage(DRAWINGS_0, 44, 160, 0, 140, 95, 45, 512F);
+					drawImage(DRAWINGS_0, 42, 80, 0, 99, 100, 41);
+					drawImage(DRAWINGS_0, 44, 160, 0, 140, 95, 45);
 					GL11.glPopMatrix();
 				}
 				if (bookPages == 3) {
 					GL11.glPushMatrix();
-					drawImage(DRAWINGS_0, 45, 50, 214, 0, 87, 63, 512F);
-					drawImage(DRAWINGS_0, 45, 110, 214, 62, 89, 62, 512F);
-					drawImage(DRAWINGS_0, 245, 10, 214, 124, 89, 63, 512F);
-					drawImage(DRAWINGS_0, 245, 70, 214, 184, 89, 64, 512F);
-					drawImage(DRAWINGS_0, 245, 130, 300, 0, 88, 62, 512F);
+					drawImage(DRAWINGS_0, 45, 50, 214, 0, 87, 63);
+					drawImage(DRAWINGS_0, 45, 110, 214, 62, 89, 62);
+					drawImage(DRAWINGS_0, 245, 10, 214, 124, 89, 63);
+					drawImage(DRAWINGS_0, 245, 70, 214, 184, 89, 64);
+					drawImage(DRAWINGS_0, 245, 130, 300, 0, 88, 62);
 					GL11.glPopMatrix();
 				}
 				writeFromTxt();
@@ -228,16 +224,16 @@ public class GuiBestiary extends GuiScreen {
 			case FIREDRAGONEGG:
 				if (bookPages == 0) {
 					GL11.glPushMatrix();
-					drawImage(DRAWINGS_0, 20, 95, 327, 118, 24, 33, 512F);
-					drawImage(DRAWINGS_0, 60, 95, 303, 118, 24, 33, 512F);
-					drawImage(DRAWINGS_0, 95, 95, 351, 118, 24, 33, 512F);
-					drawImage(DRAWINGS_0, 135, 95, 375, 118, 24, 33, 512F);
+					drawImage(DRAWINGS_0, 20, 95, 327, 118, 24, 33);
+					drawImage(DRAWINGS_0, 60, 95, 303, 118, 24, 33);
+					drawImage(DRAWINGS_0, 95, 95, 351, 118, 24, 33);
+					drawImage(DRAWINGS_0, 135, 95, 375, 118, 24, 33);
 					GL11.glPopMatrix();
 				}
 				if (bookPages == 1) {
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1F);
-					drawImage(DRAWINGS_0, 25, 20, 303, 62, 71, 56, 512F);
+					drawImage(DRAWINGS_0, 25, 20, 303, 62, 71, 56);
 					GL11.glPopMatrix();
 				}
 				writeFromTxt();
@@ -246,29 +242,29 @@ public class GuiBestiary extends GuiScreen {
 				if (bookPages == 0) {
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1F);
-					drawImage(DRAWINGS_0, 20, 50, 127, 248, 87, 62, 512F);
+					drawImage(DRAWINGS_0, 20, 50, 127, 248, 87, 62);
 					GL11.glPopMatrix();
 				}
 				if (bookPages == 1) {
 					GL11.glPushMatrix();
-					drawImage(DRAWINGS_0, 38, 60, 0, 247, 126, 61, 512F);
-					drawImage(DRAWINGS_0, 240, 5, 0, 432, 114, 62, 512F);
-					drawImage(DRAWINGS_0, 240, 150, 0, 309, 99, 37, 512F);
+					drawImage(DRAWINGS_0, 38, 60, 0, 247, 126, 61);
+					drawImage(DRAWINGS_0, 240, 5, 0, 432, 114, 62);
+					drawImage(DRAWINGS_0, 240, 150, 0, 309, 99, 37);
 					GL11.glPopMatrix();
 				}
 				if (bookPages == 2) {
 					GL11.glPushMatrix();
-					drawImage(DRAWINGS_0, 42, 80, 0, 346, 100, 41, 512F);
-					drawImage(DRAWINGS_0, 44, 160, 0, 387, 95, 45, 512F);
+					drawImage(DRAWINGS_0, 42, 80, 0, 346, 100, 41);
+					drawImage(DRAWINGS_0, 44, 160, 0, 387, 95, 45);
 					GL11.glPopMatrix();
 				}
 				if (bookPages == 3) {
 					GL11.glPushMatrix();
-					drawImage(DRAWINGS_0, 50, 52, 214, 248, 86, 62, 512F);
-					drawImage(DRAWINGS_0, 50, 112, 214, 310, 87, 62, 512F);
-					drawImage(DRAWINGS_0, 250, 12, 214, 372, 87, 63, 512F);
-					drawImage(DRAWINGS_0, 250, 72, 214, 432, 87, 64, 512F);
-					drawImage(DRAWINGS_0, 250, 132, 300, 248, 71, 62, 512F);
+					drawImage(DRAWINGS_0, 50, 52, 214, 248, 86, 62);
+					drawImage(DRAWINGS_0, 50, 112, 214, 310, 87, 62);
+					drawImage(DRAWINGS_0, 250, 12, 214, 372, 87, 63);
+					drawImage(DRAWINGS_0, 250, 72, 214, 432, 87, 64);
+					drawImage(DRAWINGS_0, 250, 132, 300, 248, 71, 62);
 					GL11.glPopMatrix();
 				}
 				writeFromTxt();
@@ -276,25 +272,30 @@ public class GuiBestiary extends GuiScreen {
 			case ICEDRAGONEGG:
 				if (bookPages == 0) {
 					GL11.glPushMatrix();
-					drawImage(DRAWINGS_0, 20, 95, 327, 366, 24, 33, 512F);
-					drawImage(DRAWINGS_0, 60, 95, 303, 366, 24, 33, 512F);
-					drawImage(DRAWINGS_0, 95, 95, 351, 366, 24, 33, 512F);
-					drawImage(DRAWINGS_0, 135, 95, 375, 366, 24, 33, 512F);
+					drawImage(DRAWINGS_0, 20, 95, 327, 366, 24, 33);
+					drawImage(DRAWINGS_0, 60, 95, 303, 366, 24, 33);
+					drawImage(DRAWINGS_0, 95, 95, 351, 366, 24, 33);
+					drawImage(DRAWINGS_0, 135, 95, 375, 366, 24, 33);
 					GL11.glPopMatrix();
 				}
 				if (bookPages == 1) {
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1F);
-					drawImage(DRAWINGS_0, 25, 20, 303, 309, 71, 56, 512F);
+					drawImage(DRAWINGS_0, 25, 20, 303, 309, 71, 56);
 					GL11.glPopMatrix();
 				}
+				writeFromTxt();
+				break;
+			case LIGHTNINGDRAGON:
+			case LIGHTNINGDRAGONEGG:
+				drawFromTxt();
 				writeFromTxt();
 				break;
 			case TAMEDDRAGONS:
 				if (bookPages == 0) {
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1F);
-					drawImage(DRAWINGS_0, 144, 90, 389, 1, 50, 50, 512F);
+					drawImage(DRAWINGS_0, 144, 90, 389, 1, 50, 50);
 					GL11.glPopMatrix();
 					drawItemStack(new ItemStack(Items.BONE), 145, 124, 1.5F);
 					drawItemStack(new ItemStack(Items.PORKCHOP), 145, 107, 1.5F);
@@ -310,7 +311,7 @@ public class GuiBestiary extends GuiScreen {
 				if (bookPages == 1) {
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1F);
-					drawImage(DRAWINGS_0, 144, 0, 389, 1, 50, 50, 512F);
+					drawImage(DRAWINGS_0, 144, 0, 389, 1, 50, 50);
 					GL11.glPopMatrix();
 					drawItemStack(new ItemStack(ModItems.dragon_skull), 161, 17, 1.5F);
 					drawItemStack(new ItemStack(Items.STICK), 161, 32, 1.5F);
@@ -324,7 +325,7 @@ public class GuiBestiary extends GuiScreen {
 					GL11.glPopMatrix();
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1F);
-					drawImage(DRAWINGS_0, 144, 0, 389, 1, 50, 50, 512F);
+					drawImage(DRAWINGS_0, 144, 0, 389, 1, 50, 50);
 					GL11.glPopMatrix();
 					boolean drawFire = Minecraft.getMinecraft().player.ticksExisted % 40 < 20;
 					drawItemStack(new ItemStack(drawFire ? ModBlocks.fire_lily : ModBlocks.frost_lily), 161, 17, 1.5F);
@@ -333,7 +334,7 @@ public class GuiBestiary extends GuiScreen {
 					drawItemStack(new ItemStack(drawFire ? ModItems.fire_stew : ModItems.frost_stew), 151, 10, 2F);
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1F);
-					drawImage(DRAWINGS_0, 144, 65, 389, 1, 50, 50, 512F);
+					drawImage(DRAWINGS_0, 144, 65, 389, 1, 50, 50);
 					GL11.glPopMatrix();
 					drawItemStack(new ItemStack(Items.STICK), 144, 97, 1.5F);
 					GL11.glPushMatrix();
@@ -355,7 +356,7 @@ public class GuiBestiary extends GuiScreen {
 
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1F);
-					drawImage(DRAWINGS_0, 144, 10, 389, 1, 50, 50, 512F);
+					drawImage(DRAWINGS_0, 144, 10, 389, 1, 50, 50);
 					GL11.glPopMatrix();
 					GL11.glPushMatrix();
 					GL11.glScalef(0.9F, 0.9F, 1F);
@@ -426,7 +427,7 @@ public class GuiBestiary extends GuiScreen {
 					drawItemStack(new ItemStack(drawFire ? ModItems.dragonbone_sword_fire : ModItems.dragonbone_sword_ice), 151, 10, 2F);
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1F);
-					drawImage(DRAWINGS_0, 144, 0, 389, 1, 50, 50, 512F);
+					drawImage(DRAWINGS_0, 144, 0, 389, 1, 50, 50);
 					GL11.glPopMatrix();
 				}
 				break;
@@ -434,7 +435,7 @@ public class GuiBestiary extends GuiScreen {
 				if (bookPages == 0) {
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1F);
-					drawImage(DRAWINGS_0, 35, 50, 388, 52, 58, 36, 512F);
+					drawImage(DRAWINGS_0, 35, 50, 388, 52, 58, 36);
 					GL11.glPopMatrix();
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1F);
@@ -448,13 +449,13 @@ public class GuiBestiary extends GuiScreen {
 					GL11.glPushMatrix();
 					GL11.glPushMatrix();
 					GL11.glScalef(0.8F, 0.8F, 1F);
-					drawImage(DRAWINGS_0, 29, 150, 303, 151, 61, 36, 512F);
-					drawImage(DRAWINGS_0, 91, 150, 364, 151, 61, 36, 512F);
-					drawImage(DRAWINGS_0, 151, 150, 425, 151, 61, 36, 512F);
-					drawImage(DRAWINGS_0, 29, 190, 303, 187, 61, 36, 512F);
-					drawImage(DRAWINGS_0, 91, 190, 364, 187, 61, 36, 512F);
-					drawImage(DRAWINGS_0, 151, 190, 425, 187, 61, 36, 512F);
-					drawImage(DRAWINGS_0, 90, 230, 425, 223, 61, 35, 512F);
+					drawImage(DRAWINGS_0, 29, 150, 303, 151, 61, 36);
+					drawImage(DRAWINGS_0, 91, 150, 364, 151, 61, 36);
+					drawImage(DRAWINGS_0, 151, 150, 425, 151, 61, 36);
+					drawImage(DRAWINGS_0, 29, 190, 303, 187, 61, 36);
+					drawImage(DRAWINGS_0, 91, 190, 364, 187, 61, 36);
+					drawImage(DRAWINGS_0, 151, 190, 425, 187, 61, 36);
+					drawImage(DRAWINGS_0, 90, 230, 425, 223, 61, 35);
 					GL11.glPopMatrix();
 
 					GL11.glPushMatrix();
@@ -472,7 +473,7 @@ public class GuiBestiary extends GuiScreen {
 
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1F);
-					drawImage(DRAWINGS_0, 144, 10, 389, 1, 50, 50, 512F);
+					drawImage(DRAWINGS_0, 144, 10, 389, 1, 50, 50);
 					GL11.glPopMatrix();
 					GL11.glPushMatrix();
 					GL11.glScalef(0.9F, 0.9F, 1F);
@@ -496,14 +497,14 @@ public class GuiBestiary extends GuiScreen {
 
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1F);
-					drawImage(DRAWINGS_0, 10, 89, 473, 117, 19, 34, 512F);
-					drawImage(DRAWINGS_0, 50, 78, 399, 106, 28, 45, 512F);
-					drawImage(DRAWINGS_0, 100, 89, 455, 117, 18, 34, 512F);
+					drawImage(DRAWINGS_0, 10, 89, 473, 117, 19, 34);
+					drawImage(DRAWINGS_0, 50, 78, 399, 106, 28, 45);
+					drawImage(DRAWINGS_0, 100, 89, 455, 117, 18, 34);
 					GL11.glPopMatrix();
 
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1F);
-					drawImage(DRAWINGS_0, 144, 70, 389, 1, 50, 50, 512F);
+					drawImage(DRAWINGS_0, 144, 70, 389, 1, 50, 50);
 					GL11.glPopMatrix();
 
 					GL11.glPushMatrix();
@@ -523,8 +524,8 @@ public class GuiBestiary extends GuiScreen {
 
 					GL11.glPushMatrix();
 					GL11.glScalef(1.7F, 1.7F, 1F);
-					drawImage(DRAWINGS_0, 37, 95, 473, 117, 19, 34, 512F);
-					drawImage(DRAWINGS_0, 60, 95, 455, 117, 18, 34, 512F);
+					drawImage(DRAWINGS_0, 37, 95, 473, 117, 19, 34);
+					drawImage(DRAWINGS_0, 60, 95, 455, 117, 18, 34);
 					GL11.glPopMatrix();
 
 				}
@@ -533,11 +534,11 @@ public class GuiBestiary extends GuiScreen {
 			case PIXIE:
 				if (bookPages == 0) {
 					GL11.glPushMatrix();
-					drawImage(DRAWINGS_0, 20, 60, 371, 258, 47, 35, 512F);
-					drawImage(DRAWINGS_0, 42, 95, 416, 258, 45, 35, 512F);
-					drawImage(DRAWINGS_0, 67, 60, 462, 258, 47, 35, 512F);
-					drawImage(DRAWINGS_0, 88, 95, 370, 293, 47, 35, 512F);
-					drawImage(DRAWINGS_0, 110, 60, 416, 293, 47, 35, 512F);
+					drawImage(DRAWINGS_0, 20, 60, 371, 258, 47, 35);
+					drawImage(DRAWINGS_0, 42, 95, 416, 258, 45, 35);
+					drawImage(DRAWINGS_0, 67, 60, 462, 258, 47, 35);
+					drawImage(DRAWINGS_0, 88, 95, 370, 293, 47, 35);
+					drawImage(DRAWINGS_0, 110, 60, 416, 293, 47, 35);
 					GL11.glPopMatrix();
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1F);
@@ -549,7 +550,7 @@ public class GuiBestiary extends GuiScreen {
 					GL11.glPushMatrix();
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1F);
-					drawImage(DRAWINGS_0, 144, 100, 389, 1, 50, 50, 512F);
+					drawImage(DRAWINGS_0, 144, 100, 389, 1, 50, 50);
 					GL11.glPopMatrix();
 					GL11.glPushMatrix();
 					GL11.glScalef(0.9F, 0.9F, 1F);
@@ -575,7 +576,7 @@ public class GuiBestiary extends GuiScreen {
 					GL11.glPushMatrix();
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1F);
-					drawImage(DRAWINGS_0, 144, 100, 389, 1, 50, 50, 512F);
+					drawImage(DRAWINGS_0, 144, 100, 389, 1, 50, 50);
 					GL11.glPopMatrix();
 					GL11.glPushMatrix();
 					GL11.glScalef(0.9F, 0.9F, 1F);
@@ -593,20 +594,19 @@ public class GuiBestiary extends GuiScreen {
 				if (bookPages == 0) {
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1.5F);
-					drawImage(DRAWINGS_0, 185, 8, 399, 328, 24, 63, 512F);
+					drawImage(DRAWINGS_0, 185, 8, 399, 328, 24, 63);
 					GL11.glPopMatrix();
 				}
 				if (bookPages == 1) {
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1.5F);
-					drawImage(DRAWINGS_0, 50, 35, 423, 328, 24, 63, 512F);
-					//drawImage(DRAWINGS_0, 68, 60, 447, 328, 24, 63, 512F);
+					drawImage(DRAWINGS_0, 50, 35, 423, 328, 24, 63);
 					GL11.glPopMatrix();
 
 					GL11.glPushMatrix();
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1F);
-					drawImage(DRAWINGS_0, 144, 50, 389, 1, 50, 50, 512F);
+					drawImage(DRAWINGS_0, 144, 50, 389, 1, 50, 50);
 					GL11.glPopMatrix();
 					GL11.glPushMatrix();
 					GL11.glScalef(0.9F, 0.9F, 1F);
@@ -623,7 +623,7 @@ public class GuiBestiary extends GuiScreen {
 					GL11.glPushMatrix();
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1F);
-					drawImage(DRAWINGS_0, 144, 95, 389, 1, 50, 50, 512F);
+					drawImage(DRAWINGS_0, 144, 95, 389, 1, 50, 50);
 					GL11.glPopMatrix();
 					GL11.glPushMatrix();
 					GL11.glScalef(0.9F, 0.9F, 1F);
@@ -642,13 +642,13 @@ public class GuiBestiary extends GuiScreen {
 				if (bookPages == 2) {
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1.5F);
-					drawImage(DRAWINGS_0, 185, 30, 447, 328, 24, 63, 512F);
+					drawImage(DRAWINGS_0, 185, 30, 447, 328, 24, 63);
 					GL11.glPopMatrix();
 
 					GL11.glPushMatrix();
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1F);
-					drawImage(DRAWINGS_0, 13, 24, 389, 1, 50, 50, 512F);
+					drawImage(DRAWINGS_0, 13, 24, 389, 1, 50, 50);
 					GL11.glPopMatrix();
 					GL11.glPushMatrix();
 					GL11.glScalef(0.9F, 0.9F, 1F);
@@ -666,7 +666,7 @@ public class GuiBestiary extends GuiScreen {
 					GL11.glPushMatrix();
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1F);
-					drawImage(DRAWINGS_0, 13, 84, 389, 1, 50, 50, 512F);
+					drawImage(DRAWINGS_0, 13, 84, 389, 1, 50, 50);
 					GL11.glPopMatrix();
 					GL11.glPushMatrix();
 					GL11.glScalef(0.9F, 0.9F, 1F);
@@ -679,19 +679,19 @@ public class GuiBestiary extends GuiScreen {
 					drawItemStack(new ItemStack(ModItems.sheep_boots), 64, 73, 2F);
 					GL11.glPopMatrix();
 				}
-					writeFromTxt();
+				writeFromTxt();
 				break;
 			case SIREN:
 				if (bookPages == 0) {
 					GL11.glPushMatrix();
 					GL11.glScalef(1.25F, 1.25F, 1.25F);
-					drawImage(DRAWINGS_1, 190, 25, 0, 0, 25, 42, 512F);
-					drawImage(DRAWINGS_1, 220, 15, 25, 0, 25, 42, 512F);
-					drawImage(DRAWINGS_1, 255, 25, 50, 0, 25, 42, 512F);
+					drawImage(DRAWINGS_1, 190, 25, 0, 0, 25, 42);
+					drawImage(DRAWINGS_1, 220, 15, 25, 0, 25, 42);
+					drawImage(DRAWINGS_1, 255, 25, 50, 0, 25, 42);
 
-					drawImage(DRAWINGS_1, 190, 135, 0, 42, 26, 28, 512F);
-					drawImage(DRAWINGS_1, 220, 125, 26, 42, 26, 28, 512F);
-					drawImage(DRAWINGS_1, 255, 135, 52, 42, 26, 28, 512F);
+					drawImage(DRAWINGS_1, 190, 135, 0, 42, 26, 28);
+					drawImage(DRAWINGS_1, 220, 125, 26, 42, 26, 28);
+					drawImage(DRAWINGS_1, 255, 135, 52, 42, 26, 28);
 					GL11.glPopMatrix();
 				}
 				if (bookPages == 1) {
@@ -705,7 +705,7 @@ public class GuiBestiary extends GuiScreen {
 					GL11.glPushMatrix();
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1F);
-					drawImage(DRAWINGS_0, 160, 0, 389, 1, 50, 50, 512F);
+					drawImage(DRAWINGS_0, 160, 0, 389, 1, 50, 50);
 					GL11.glPopMatrix();
 					GL11.glPushMatrix();
 					GL11.glScalef(0.9F, 0.9F, 1F);
@@ -726,12 +726,12 @@ public class GuiBestiary extends GuiScreen {
 			case HIPPOCAMPUS:
 				if(bookPages == 0){
 					GL11.glPushMatrix();
-					drawImage(DRAWINGS_1, 210, 25, 0, 70, 57, 49, 512F);
-					drawImage(DRAWINGS_1, 265, 25, 57, 70, 57, 49, 512F);
-					drawImage(DRAWINGS_1, 320, 25, 0, 119, 57, 49, 512F);
-					drawImage(DRAWINGS_1, 210, 80, 57, 119, 57, 49, 512F);
-					drawImage(DRAWINGS_1, 265, 80, 0, 168, 57, 49, 512F);
-					drawImage(DRAWINGS_1, 320, 80, 57, 168, 57, 49, 512F);
+					drawImage(DRAWINGS_1, 210, 25, 0, 70, 57, 49);
+					drawImage(DRAWINGS_1, 265, 25, 57, 70, 57, 49);
+					drawImage(DRAWINGS_1, 320, 25, 0, 119, 57, 49);
+					drawImage(DRAWINGS_1, 210, 80, 57, 119, 57, 49);
+					drawImage(DRAWINGS_1, 265, 80, 0, 168, 57, 49);
+					drawImage(DRAWINGS_1, 320, 80, 57, 168, 57, 49);
 					GL11.glPopMatrix();
 				}
 				if(bookPages == 1){
@@ -753,15 +753,15 @@ public class GuiBestiary extends GuiScreen {
 			case DEATHWORM:
 				if(bookPages == 0){
 					GL11.glPushMatrix();
-					drawImage(DRAWINGS_1, 230, 25, 0, 217, 133, 16, 512F);
-					drawImage(DRAWINGS_1, 230, 50, 0, 233, 133, 16, 512F);
-					drawImage(DRAWINGS_1, 230, 75, 0, 249, 133, 16, 512F);
+					drawImage(DRAWINGS_1, 230, 25, 0, 217, 133, 16);
+					drawImage(DRAWINGS_1, 230, 50, 0, 233, 133, 16);
+					drawImage(DRAWINGS_1, 230, 75, 0, 249, 133, 16);
 					GL11.glPopMatrix();
 				}
 				if(bookPages == 1){
 					GL11.glPushMatrix();
-					drawImage(DRAWINGS_1, 25, 95, 0, 265, 148, 44, 512F);
-					drawImage(DRAWINGS_1, 250, 5, 0, 309, 81, 162, 512F);
+					drawImage(DRAWINGS_1, 25, 95, 0, 265, 148, 44);
+					drawImage(DRAWINGS_1, 250, 5, 0, 309, 81, 162);
 					GL11.glPopMatrix();
 				}
 				if(bookPages == 2){
@@ -795,14 +795,14 @@ public class GuiBestiary extends GuiScreen {
 				if(bookPages == 0){
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1F);
-					drawImage(DRAWINGS_1, 155, 10, 114, 0, 88, 36, 512F);
-					drawImage(DRAWINGS_1, 155, 45, 114, 36, 88, 36, 512F);
+					drawImage(DRAWINGS_1, 155, 10, 114, 0, 88, 36);
+					drawImage(DRAWINGS_1, 155, 45, 114, 36, 88, 36);
 					GL11.glPopMatrix();
 				}
 				if(bookPages == 1){
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1F);
-					drawImage(DRAWINGS_0, 18, 10, 389, 1, 50, 50, 512F);
+					drawImage(DRAWINGS_0, 18, 10, 389, 1, 50, 50);
 					GL11.glPopMatrix();
 
 					GL11.glPushMatrix();
@@ -821,15 +821,15 @@ public class GuiBestiary extends GuiScreen {
 				if(bookPages == 0) {
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1F);
-					drawImage(DRAWINGS_1, 34, 46, 114, 72, 59, 37, 512F);
-					drawImage(DRAWINGS_1, 155, 35, 114, 109, 67, 35, 512F);
+					drawImage(DRAWINGS_1, 34, 46, 114, 72, 59, 37);
+					drawImage(DRAWINGS_1, 155, 35, 114, 109, 67, 35);
 					GL11.glPopMatrix();
 					drawItemStack(new ItemStack(ModItems.stymphalian_bird_feather), 109, 60, 2.5F);
 				}
 				if(bookPages == 1){
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1F);
-					drawImage(DRAWINGS_0, 18, 10, 389, 1, 50, 50, 512F);
+					drawImage(DRAWINGS_0, 18, 10, 389, 1, 50, 50);
 					GL11.glPopMatrix();
 
 					GL11.glPushMatrix();
@@ -847,11 +847,11 @@ public class GuiBestiary extends GuiScreen {
 				if(bookPages == 0) {
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1F);
-					drawImage(DRAWINGS_1, 15, 60, 156, 211, 25, 58, 512F);
-					drawImage(DRAWINGS_1, 50, 55, 181, 211, 25, 58, 512F);
-					drawImage(DRAWINGS_1, 85, 60, 206, 211, 25, 58, 512F);
-					drawImage(DRAWINGS_1, 155, 22, 114, 145, 24, 66, 512F);
-					drawImage(DRAWINGS_1, 190, 19, 188, 142, 47, 69, 512F);
+					drawImage(DRAWINGS_1, 15, 60, 156, 211, 25, 58);
+					drawImage(DRAWINGS_1, 50, 55, 181, 211, 25, 58);
+					drawImage(DRAWINGS_1, 85, 60, 206, 211, 25, 58);
+					drawImage(DRAWINGS_1, 155, 22, 114, 145, 24, 66);
+					drawImage(DRAWINGS_1, 190, 19, 188, 142, 47, 69);
 					GL11.glPopMatrix();
 				}
 				if(bookPages == 1){
@@ -874,26 +874,26 @@ public class GuiBestiary extends GuiScreen {
 				if(bookPages == 0) {
 					GL11.glPushMatrix();
 					GL11.glScalef(1.51F, 1.51F, 1F);
-					drawImage(DRAWINGS_1, 137, 10, 202, 16, 57, 21, 512F);
-					drawImage(DRAWINGS_1, 195, 10, 278, 16, 57, 21, 512F);
+					drawImage(DRAWINGS_1, 137, 10, 202, 16, 57, 21);
+					drawImage(DRAWINGS_1, 195, 10, 278, 16, 57, 21);
 					GL11.glPopMatrix();
 				}
 				if(bookPages == 1) {
 					GL11.glPushMatrix();
 					GL11.glScalef(1.51F, 1.51F, 1F);
-					drawImage(DRAWINGS_1, 7, 17, 202, 37, 59, 21, 512F);
-					drawImage(DRAWINGS_1, 65, 17, 278, 37, 59, 21, 512F);
-					drawImage(DRAWINGS_1, 7, 77, 202, 58, 59, 21, 512F);
-					drawImage(DRAWINGS_1, 65, 77, 278, 58, 59, 21, 512F);
-					drawImage(DRAWINGS_1, 145, 20, 278, 103, 43, 45, 512F);
-					drawImage(DRAWINGS_1, 195, 20, 321, 103, 43, 45, 512F);
+					drawImage(DRAWINGS_1, 7, 17, 202, 37, 59, 21);
+					drawImage(DRAWINGS_1, 65, 17, 278, 37, 59, 21);
+					drawImage(DRAWINGS_1, 7, 77, 202, 58, 59, 21);
+					drawImage(DRAWINGS_1, 65, 77, 278, 58, 59, 21);
+					drawImage(DRAWINGS_1, 145, 20, 278, 103, 43, 45);
+					drawImage(DRAWINGS_1, 195, 20, 321, 103, 43, 45);
 					GL11.glPopMatrix();
 				}
 				if(bookPages == 2) {
 					GL11.glPushMatrix();
 					GL11.glScalef(1.51F, 1.51F, 1F);
-					drawImage(DRAWINGS_1, 25, 13, 202, 79, 76, 24, 512F);
-					drawImage(DRAWINGS_1, 25, 40, 278, 79, 76, 24, 512F);
+					drawImage(DRAWINGS_1, 25, 13, 202, 79, 76, 24);
+					drawImage(DRAWINGS_1, 25, 40, 278, 79, 76, 24);
 					GL11.glPopMatrix();
 					drawItemStack(new ItemStack(ModItems.myrmex_desert_chitin), 125, 43, 2F);
 					drawItemStack(new ItemStack(ModItems.myrmex_jungle_chitin), 155, 43, 2F);
@@ -929,19 +929,19 @@ public class GuiBestiary extends GuiScreen {
 				if(bookPages == 0){
 					GL11.glPushMatrix();
 					GL11.glScalef(0.75F, 0.75F, 0.75F);
-					drawImage(DRAWINGS_1, 70, 97, 257, 163, 136, 93, 512F);
-					drawImage(DRAWINGS_1, 270, 50, 148, 267, 120, 51, 512F);
-					drawImage(DRAWINGS_1, 380, 50, 148, 318, 120, 51, 512F);
-					drawImage(DRAWINGS_1, 270, 100, 148, 369, 120, 51, 512F);
-					drawImage(DRAWINGS_1, 380, 100, 148, 420, 120, 51, 512F);
-					drawImage(DRAWINGS_1, 330, 150, 268, 267, 120, 51, 512F);
+					drawImage(DRAWINGS_1, 70, 97, 257, 163, 136, 93);
+					drawImage(DRAWINGS_1, 270, 50, 148, 267, 120, 51);
+					drawImage(DRAWINGS_1, 380, 50, 148, 318, 120, 51);
+					drawImage(DRAWINGS_1, 270, 100, 148, 369, 120, 51);
+					drawImage(DRAWINGS_1, 380, 100, 148, 420, 120, 51);
+					drawImage(DRAWINGS_1, 330, 150, 268, 267, 120, 51);
 					GL11.glPopMatrix();
 				}
 				if(bookPages == 2){
 					drawItemStack(new ItemStack(ModItems.amphithere_feather), 30, 20, 2.5F);
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1F);
-					drawImage(DRAWINGS_0, 18, 70, 389, 1, 50, 50, 512F);
+					drawImage(DRAWINGS_0, 18, 70, 389, 1, 50, 50);
 					GL11.glScalef(0.65F, 0.65F, 0.65F);
 					drawItemStack(new ItemStack(Items.FLINT), 36, 73, 1.5F);
 					drawItemStack(new ItemStack(Items.STICK), 36, 89, 1.5F);
@@ -955,17 +955,17 @@ public class GuiBestiary extends GuiScreen {
 				if(bookPages == 0) {
 					GL11.glPushMatrix();
 					GL11.glScalef(0.75F, 0.75F, 0.75F);
-					drawImage(DRAWINGS_1, 290, 5, 422, 0, 90, 64, 512F);
-					drawImage(DRAWINGS_1, 380, 5, 422, 64, 90, 64, 512F);
-					drawImage(DRAWINGS_1, 290, 70, 422, 128, 90, 64, 512F);
-					drawImage(DRAWINGS_1, 380, 70, 422, 192, 90, 64, 512F);
-					drawImage(DRAWINGS_1, 290, 140, 422, 256, 90, 64, 512F);
-					drawImage(DRAWINGS_1, 380, 140, 422, 320, 90, 64, 512F);
-					drawImage(DRAWINGS_1, 345, 210, 422, 384, 90, 64, 512F);
+					drawImage(DRAWINGS_1, 290, 5, 422, 0, 90, 64);
+					drawImage(DRAWINGS_1, 380, 5, 422, 64, 90, 64);
+					drawImage(DRAWINGS_1, 290, 70, 422, 128, 90, 64);
+					drawImage(DRAWINGS_1, 380, 70, 422, 192, 90, 64);
+					drawImage(DRAWINGS_1, 290, 140, 422, 256, 90, 64);
+					drawImage(DRAWINGS_1, 380, 140, 422, 320, 90, 64);
+					drawImage(DRAWINGS_1, 345, 210, 422, 384, 90, 64);
 					GL11.glPopMatrix();
 				}
 				if(bookPages == 1) {
-					drawImage(DRAWINGS_1, 60, 90, 337, 0, 70, 83, 512F);
+					drawImage(DRAWINGS_1, 60, 90, 337, 0, 70, 83);
 					int j = (Minecraft.getMinecraft().player.ticksExisted % (EnumSeaSerpent.values().length * 20) ) / 20;
 					drawItemStack(new ItemStack(EnumSeaSerpent.values()[j].scale), 130, 40, 2.5F);
 					drawItemStack(new ItemStack(ModItems.sea_serpent_fang), 90, 40, 2.5F);
@@ -973,7 +973,7 @@ public class GuiBestiary extends GuiScreen {
 				if(bookPages == 2){
 					GL11.glPushMatrix();
 					GL11.glScalef(1.5F, 1.5F, 1F);
-					drawImage(DRAWINGS_0, 18, 30, 389, 1, 50, 50, 512F);
+					drawImage(DRAWINGS_0, 18, 30, 389, 1, 50, 50);
 					GL11.glScalef(0.65F, 0.65F, 0.65F);
 					int j = (Minecraft.getMinecraft().player.ticksExisted % (EnumSeaSerpent.values().length * 20) ) / 20;
 					drawItemStack(new ItemStack(ModItems.sea_serpent_fang), 36, 32, 1.5F);
@@ -1010,6 +1010,9 @@ public class GuiBestiary extends GuiScreen {
 			String line;
 			int linenumber = 0;
 			while ((line = bufferedReader.readLine()) != null) {
+				if (line.contains("<") || line.contains(">")) {
+					continue;
+				}
 				GL11.glPushMatrix();
 				if(usingVanillaFont()) {
 					GL11.glScalef(0.945F, 0.945F, 0.945F);
@@ -1032,13 +1035,78 @@ public class GuiBestiary extends GuiScreen {
 		font.drawString(StatCollector.translateToLocal("bestiary." + this.pageType.toString().toLowerCase()), 10, 2, 0X7A756A, false);
 		GL11.glPopMatrix();
 	}
+
 	private boolean usingVanillaFont(){
 		return font == Minecraft.getMinecraft().fontRenderer;
 	}
 
-	public void drawImage(ResourceLocation texture, int x, int y, int u, int v, int width, int height, float scale) {
+	public void drawFromTxt() {
+		String currentLanguage = Minecraft.getMinecraft().getLanguageManager().getCurrentLanguage().getJavaLocale().toString();
+		String filePath = "assets/iceandfire/lang/bestiary/" + currentLanguage + "/";
+		String fileName = this.pageType.toString().toLowerCase() + "_" + this.bookPages + ".txt";
+		InputStream fileReader = getClass().getClassLoader().getResourceAsStream(filePath + fileName);
+		if (fileReader == null) {
+			IceAndFire.logger.warn("The Bestiary translation at " + fileName + " is missing for " + currentLanguage);
+			filePath = "assets/iceandfire/lang/bestiary/en_US/";
+			fileReader = getClass().getClassLoader().getResourceAsStream(filePath + fileName);
+		}
+		if (fileReader == null) {
+			IceAndFire.logger.warn("The Bestiary translation " + fileName + " is missing.");
+			return;
+		}
+		List<String[]> images = new ArrayList<>();
+		List<String[]> itemStacks = new ArrayList<>();
+		try {
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fileReader));
+			String line;
+			while ((line = bufferedReader.readLine()) != null) {
+				line = line.trim();
+				if (line.contains("<") || line.contains(">")) {
+					if (line.contains("<image>")) {
+						line = line.substring(8, line.length() - 1);
+						String[] image = line.split(" ");
+						images.add(image);
+					}
+				}
+				if (line.contains("<item>")) {
+					line = line.substring(7, line.length() - 1);
+					String[] itemStack = line.split(" ");
+					itemStacks.add(itemStack);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		if (!images.isEmpty()) {
+			for (String[] image : images) {
+				float scale = Float.parseFloat(image[7]);
+				GL11.glPushMatrix();
+				GL11.glScalef(scale, scale, 1F);
+				String texture = "iceandfire:textures/gui/bestiary/" + image[0];
+				ResourceLocation resourcelocation = PICTURE_LOCATION_CACHE.get(texture);
+				if (resourcelocation == null) {
+					resourcelocation = new ResourceLocation(texture);
+					PICTURE_LOCATION_CACHE.put(texture, resourcelocation);
+				}
+				drawImage(resourcelocation, Integer.parseInt(image[1]), Integer.parseInt(image[2]), Integer.parseInt(image[3]), Integer.parseInt(image[4]), Integer.parseInt(image[5]), Integer.parseInt(image[6]));
+				GL11.glPopMatrix();
+			}
+		}
+		if (!itemStacks.isEmpty()) {
+			for (String[] itemStack : itemStacks) {
+				drawItemStack(new ItemStack(getItemByRegistryName(itemStack[0]), 1), Integer.parseInt(itemStack[2]), Integer.parseInt(itemStack[3]), Float.parseFloat(itemStack[4]) * 2F);
+			}
+		}
+	}
+
+	private static Item getItemByRegistryName(String registryName) {
+		return ForgeRegistries.ITEMS.getValue(new ResourceLocation(registryName));
+	}
+
+	public void drawImage(ResourceLocation texture, int x, int y, int u, int v, int width, int height) {
 		this.mc.renderEngine.bindTexture(texture);
-		drawModalRectWithCustomSizedTexture(x, y, u, v, width, height, scale, scale);
+		drawModalRectWithCustomSizedTexture(x, y, u, v, width, height, 512F, 512F);
 	}
 
 	private void drawItemStack(ItemStack stack, int x, int y, float scale) {
