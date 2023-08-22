@@ -40,7 +40,6 @@ tile.iceandfire.pixie_house_2.name=白樺木精靈小屋
 tile.iceandfire.pixie_house_3.name=橡木精靈小屋
 tile.iceandfire.pixie_house_4.name=深色橡木精靈小屋
 tile.iceandfire.pixie_house_5.name=雲杉木精靈小屋
-tile.iceandfire.jar.name=玻璃廣口瓶
 tile.iceandfire.jar_0.name=紅粉精靈瓶
 tile.iceandfire.jar_1.name=靈紫精靈瓶
 tile.iceandfire.jar_2.name=天藍精靈瓶
@@ -59,6 +58,8 @@ tile.iceandfire.myrmex_desert_resin_block.name=硬化的沙漠恐蟻粘液
 tile.iceandfire.myrmex_jungle_resin_block.name=硬化的叢林恐蟻粘液
 tile.iceandfire.myrmex_desert_resin_glass.name=沙漠恐蟻粘液玻璃
 tile.iceandfire.myrmex_jungle_resin_glass.name=叢林恐蟻粘液玻璃
+
+
 
 item.iceandfire.bestiary.name=龍之寓言
 item.iceandfire.manuscript.name=手稿
@@ -299,7 +300,6 @@ dragon.blue=冰藍
 dragon.sapphire=寶藍
 dragon.silver=紋銀
 dragon.white=暗白
-dragon.stage=狀態 
 dragon.fire=烈火
 dragon.ice=寒冰
 dragon.name=名字: 

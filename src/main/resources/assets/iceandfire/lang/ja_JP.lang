@@ -61,6 +61,20 @@ tile.iceandfire.myrmex_jungle_resin_block.name=硬化したジャングルミュ
 tile.iceandfire.myrmex_desert_resin_glass.name=砂漠ミュルメクスの樹脂ガラス
 tile.iceandfire.myrmex_jungle_resin_glass.name=ジャングルミュルメクスの樹脂ガラス
 
+tile.iceandfire.lightning_lily.name=稲妻ユリ
+tile.iceandfire.copperpile.name=堆積した銅
+tile.iceandfire.copperOre.name=銅鉱石
+tile.iceandfire.amethystOre.name=アメシスト鉱石
+tile.iceandfire.copperBlock.name=銅ブロック
+tile.iceandfire.amethystBlock.name=アメシストブロック
+tile.iceandfire.crackledDirt.name=ひび焼けた土
+tile.iceandfire.crackledGrass.name=ひび焼けた草ブロック
+tile.iceandfire.crackledStone.name=ひび焼けた石
+tile.iceandfire.crackledCobblestone.name=ひび焼けた丸石
+tile.iceandfire.crackledGravel.name=ひび焼けた砂利
+tile.iceandfire.crackledGrassPath.name=ひび焼けた草の道
+tile.iceandfire.lightning_stone.name=稲妻石
+
 item.iceandfire.bestiary.name=ベスティアリ
 item.iceandfire.manuscript.name=手書きの紙片
 item.iceandfire.sapphireGem.name=サファイア
@@ -207,6 +221,27 @@ item.iceandfire.myrmex_jungle_chestplate.name=ジャングルミュルメクス�
 item.iceandfire.myrmex_jungle_leggings.name=ジャングルミュルメクスのレギンス
 item.iceandfire.myrmex_jungle_boots.name=ジャングルミュルメクスのブーツ
 
+item.iceandfire.amethystGem.name=アメシスト
+item.iceandfire.copperIngot.name="銅インゴット"
+item.iceandfire.copperNugget.name=銅塊
+item.iceandfire.copper_helmet.name=銅のヘルメット
+item.iceandfire.copper_chestplate.name=銅のチェストプレート
+item.iceandfire.copper_leggings.name=銅のレギンス
+item.iceandfire.copper_boots.name=銅のブーツ
+item.iceandfire.copper_pickaxe.name=銅のツルハシ
+item.iceandfire.copper_sword.name=銅の剣
+item.iceandfire.copper_axe.name=銅の斧
+item.iceandfire.copper_shovel.name=銅のシャベル
+item.iceandfire.copper_hoe.name=銅のクワ
+item.iceandfire.lightning_stew.name=雷ユリの調合薬
+item.iceandfire.dragonbone_sword_lightning.name=雷竜の剣
+item.iceandfire.dragonarmor_copper.name=銅のドラゴン用装備
+item.iceandfire.dragonarmor_silver.name=銀のドラゴン用装備
+item.iceandfire.lightning_dragon_flesh.name=ライトニングドラゴンの肉
+item.iceandfire.lightning_dragon_heart.name=ライトニングドラゴンの心臓"
+item.iceandfire.lightning_dragon_blood.name=ライトニングドラゴンの血
+item.iceandfire.dragon_horn_lightning.name=ドラゴンの角笛
+
 item.banner.firedragon.white=白のファイアドラゴン柄
 item.banner.firedragon.orange=橙のファイアドラゴン柄
 item.banner.firedragon.magenta=赤紫のファイアドラゴン柄
@@ -292,6 +327,9 @@ entity.myrmex_sentinel.name=ミュルメクスセンチネル
 entity.myrmex_royal.name=ミュルメクスロイヤル
 entity.myrmex_egg.name=ミュルメクスの卵
 
+entity.lightningdragon.name=ライトニングドラゴン
+entity.dragonlightningcharge.name=ドラゴンライトニングチャージ
+
 dragon.red=赤
 dragon.green=エメラルド
 dragon.bronze=ブロンズ
@@ -300,6 +338,13 @@ dragon.blue=青
 dragon.sapphire=サファイア
 dragon.silver=銀
 dragon.white=白
+
+dragon.electric=雷青
+dragon.amethyst=アメシスト
+dragon.copper=銅
+dragon.black=黒
+dragon.lightning=ライトニング
+
 dragon.stage=ステージ
 dragon.fire=ファイア
 dragon.ice=アイス
@@ -378,6 +423,8 @@ bestiary.firedragon=ファイアドラゴン
 bestiary.firedragonegg=ファイアドラゴンの卵
 bestiary.icedragon=アイスドラゴン
 bestiary.icedragonegg=アイスドラゴンの卵
+bestiary.lightningdragon=ライトニングドラゴン
+bestiary.lightningdragonegg=ライトニングドラゴンの卵
 bestiary.materials=ドラゴンの報酬
 bestiary.alchemy=ドラゴンの血
 bestiary.villagers=雪国の村人
@@ -400,6 +447,9 @@ dragon_sword_fire.hurt1=アイスドラゴンに+8ダメージ
 dragon_sword_fire.hurt2=炎で飲みこみ、突き飛ばす
 dragon_sword_ice.hurt1=ファイアドラゴンに+8ダメージ
 dragon_sword_ice.hurt2=氷に閉ざし、突き飛ばす
+dragon_sword_lightning.hurt1=ファイアドラゴンとアイスドラゴンに+4ダメージ
+dragon_sword_lightning.hurt2=雷を突き落とす
+
 myrmextools.hurt=虫でないものとデスワームに+4ダメージ
 myrmextools.poison=毒（0:10）
 
@@ -425,6 +475,9 @@ death.attack.dragon_fire.player_2=はドラゴンに灰燼に帰さしめられ�
 death.attack.dragon_ice.player_0=はドラゴンに凍結させられた
 death.attack.dragon_ice.player_1=はドラゴンに氷にされた
 death.attack.dragon_ice.player_2=はドラゴンに二度と動けなくされた
+death.attack.dragon_lightning.player_0=はドラゴンの雷に撃たれた
+death.attack.dragon_lightning.player_1=はドラゴンに感電させられた
+death.attack.dragon_lightning.player_2=はドラゴンの衝撃に打ちのめされた
 death.attack.gorgon.player_0=はゴルゴンに石像にされた
 death.attack.gorgon.player_1=はゴルゴンゾーラにされてしまった
 death.attack.gorgon.player_2=はゴルゴンに石化された
