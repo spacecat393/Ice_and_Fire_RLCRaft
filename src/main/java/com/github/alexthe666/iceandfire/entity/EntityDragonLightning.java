@@ -2,7 +2,7 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.particle.lightning.ParticleLightningVector;
-import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
+import com.github.alexthe666.iceandfire.compat.LycanitesCompat;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.util.DamageSource;
@@ -90,7 +90,7 @@ public class EntityDragonLightning extends EntityFireball implements IDragonProj
 				if (this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase && IceAndFire.CONFIG.dragonGriefing != 2) {
 					LightningExplosion explosion = new LightningExplosion(world, shootingEntity, this.posX, this.posY, this.posZ, ((EntityDragonBase) this.shootingEntity).getDragonStage() * 2.5F, flag);
 					explosion.doExplosionA();
-					explosion.doExplosionB(true);
+					explosion.doExplosionB(false);
 				}
 				this.setDead();
 				return;
@@ -110,10 +110,7 @@ public class EntityDragonLightning extends EntityFireball implements IDragonProj
 						((EntityLivingBase) movingObject.entityHit).knockBack(this.shootingEntity, 0.3F, xRatio, zRatio);
 					}
 					if (IceAndFire.CONFIG.lightningDragonParalysis) {
-						EntityEffectProperties effectProperties = EntityPropertiesHandler.INSTANCE.getProperties(movingObject.entityHit, EntityEffectProperties.class);
-						if (effectProperties != null) {
-							effectProperties.setParalyzedFor(IceAndFire.CONFIG.lightningDragonParalysisTicks);
-						}
+						LycanitesCompat.applyParalysis(movingObject.entityHit, IceAndFire.CONFIG.lightningDragonParalysisTicks);
 					}
 				}
 			}

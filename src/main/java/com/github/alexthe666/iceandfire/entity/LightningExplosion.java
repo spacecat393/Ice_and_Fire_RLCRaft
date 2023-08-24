@@ -1,11 +1,11 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.compat.LycanitesCompat;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -136,7 +136,7 @@ public class LightningExplosion extends Explosion {
 								}
 								if (DragonUtils.isOwner(entity, exploder)) {
 									entity.attackEntityFrom(IceAndFire.dragonLightning, ((float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f3 + 1.0D))) / 6);
-								} else if(!entity.isEntityEqual(exploder)){
+								} else if (!entity.isEntityEqual(exploder)) {
 									entity.attackEntityFrom(IceAndFire.dragonLightning, (float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f3 + 1.0D)) / 3);
 									if (entity instanceof EntityLivingBase) {
 										if (IceAndFire.CONFIG.lightningDragonKnockback) {
@@ -145,10 +145,7 @@ public class LightningExplosion extends Explosion {
 											((EntityLivingBase) entity).knockBack(entity, 0.3F, xRatio, zRatio);
 										}
 										if (IceAndFire.CONFIG.lightningDragonParalysis) {
-											EntityEffectProperties effectProperties = EntityPropertiesHandler.INSTANCE.getProperties(entity, EntityEffectProperties.class);
-											if (effectProperties != null) {
-												effectProperties.setParalyzedFor(IceAndFire.CONFIG.lightningDragonParalysisTicks);
-											}
+											LycanitesCompat.applyParalysis(entity, IceAndFire.CONFIG.lightningDragonParalysisTicks);
 										}
 									}
 								}

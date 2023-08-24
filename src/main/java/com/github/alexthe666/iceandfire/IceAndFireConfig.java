@@ -126,12 +126,12 @@ public class IceAndFireConfig {
 	public int chainLightningHops = 4;
 	public int chainLightningRange = 8;
 	public boolean chainLightningTransformsMobs = true;
-	public boolean chainLightningParalysis = false;
-	public int chainLightningParalysisChance = 4;
-	public int chainLightningParalysisTicks = 5;
+	public boolean chainLightningParalysis = true;
+	public int chainLightningParalysisChance = 1;
+	public int chainLightningParalysisTicks = 10;
 	public boolean lightningDragonKnockback = false;
-	public boolean lightningDragonParalysis = false;
-	public int lightningDragonParalysisTicks = 100;
+	public boolean lightningDragonParalysis = true;
+	public int lightningDragonParalysisTicks = 20;
 	public boolean silverArmorRedesign = true;
 
     public void init(Configuration config) {
@@ -271,14 +271,14 @@ public class IceAndFireConfig {
 		this.chainLightningRange = config.getInt("Chain Lightning Range", "all", 8, 5, 20, "Default range for chain lightning, this is the maximum range for a given hop");
 		this.chainLightningTransformsMobs = config.getBoolean("Chain Lightning Transforms Mobs", "all", true, "True if chain lightning should transform mobs");
 
-		this.chainLightningParalysis = config.getBoolean("Chain Lightning Paralysis", "all", false, "True if chain lightning causes paralysis");
-		this.chainLightningParalysisChance = config.getInt("Chain Lightning Paralysis Chance", "all", 4, 1, 100, "The chance of chain lightning causing paralysis. Higher number = lower chance.");
-		this.chainLightningParalysisTicks = config.getInt("Chain Lightning Paralysis Ticks", "all", 20, 1, 100, "The length of the paralysis effect for chain lightning in ticks");
+		this.chainLightningParalysis = config.getBoolean("Chain Lightning Paralysis", "all", true, "True if chain lightning causes paralysis");
+		this.chainLightningParalysisChance = config.getInt("Chain Lightning Paralysis Chance", "all", 1, 1, 100, "The chance of chain lightning causing paralysis. Higher number = lower chance.");
+		this.chainLightningParalysisTicks = config.getInt("Chain Lightning Paralysis Ticks", "all", 10, 1, 100, "The length of the paralysis effect for chain lightning in ticks");
 
-		this.lightningDragonKnockback = config.getBoolean("Lightning Dragon Knockback", "all", true, "True if lightning dragon projectile attacks should knockback their target");
-		this.lightningDragonParalysis = config.getBoolean("Lightning Dragon Paralysis", "all", false, "True if lightning dragons projectile attacks should apply paralysis");
-		this.lightningDragonParalysisTicks = config.getInt("Lightning Dragon Paralysis Ticks", "all", 100, 1, 100, "The length of the paralysis effect for lightning dragons in ticks");
+		this.lightningDragonKnockback = config.getBoolean("Lightning Dragon Knockback", "all", false, "True if lightning dragon projectile attacks should knockback their target");
+		this.lightningDragonParalysis = config.getBoolean("Lightning Dragon Paralysis", "all", true, "True if lightning dragons projectile attacks should apply paralysis");
+		this.lightningDragonParalysisTicks = config.getInt("Lightning Dragon Paralysis Ticks", "all", 20, 1, 200, "The length of the paralysis effect for lightning dragons in ticks");
 
-		this.silverArmorRedesign = config.getBoolean("Silver Armor Redesign", "all", true, "True if silver armor should use the updated silver armor model and texture");
+		this.silverArmorRedesign = config.getBoolean("Silver Armor Redesign", "all", false, "True if silver armor should use the updated silver armor model and texture");
 	}
 }

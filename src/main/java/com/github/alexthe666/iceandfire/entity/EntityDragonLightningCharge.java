@@ -1,8 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.client.particle.lightning.ParticleLightningVector;
-import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
+import com.github.alexthe666.iceandfire.compat.LycanitesCompat;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.entity.projectile.ProjectileHelper;
@@ -11,7 +10,6 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class EntityDragonLightningCharge extends EntityFireball implements IDragonProjectile {
@@ -135,10 +133,7 @@ public class EntityDragonLightningCharge extends EntityFireball implements IDrag
 							((EntityLivingBase) movingObject.entityHit).knockBack(this.shootingEntity, 0.9F, xRatio, zRatio);
 						}
 						if (IceAndFire.CONFIG.lightningDragonParalysis) {
-							EntityEffectProperties effectProperties = EntityPropertiesHandler.INSTANCE.getProperties(movingObject.entityHit, EntityEffectProperties.class);
-							if (effectProperties != null) {
-								effectProperties.setParalyzedFor(IceAndFire.CONFIG.lightningDragonParalysisTicks);
-							}
+							LycanitesCompat.applyParalysis(movingObject.entityHit, IceAndFire.CONFIG.lightningDragonParalysisTicks);
 						}
 					}
 				}

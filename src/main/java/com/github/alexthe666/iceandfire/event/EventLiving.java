@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.ai.EntitySheepAIFollowCyclops;
 import com.github.alexthe666.iceandfire.entity.ai.VillagerAIFearUntamed;
+import com.github.alexthe666.iceandfire.entity.DragonUtils;
 import com.github.alexthe666.iceandfire.item.ItemSeaSerpentArmor;
 import com.github.alexthe666.iceandfire.item.ItemTrollArmor;
 import com.github.alexthe666.iceandfire.message.MessagePlayerHitMultipart;
@@ -48,6 +49,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.GetCollisionBoxesEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
@@ -354,17 +356,9 @@ public class EventLiving {
 						entity.extinguish();
 					} else if (entity.deathTime > 0 && effectProperties.isFrozen()) {
 						effectProperties.reset();
-					} else if (effectProperties.effectData > 0) {
+					} else if (effectProperties.effectData > 0 && effectProperties.isFrozen()) {
 						effectProperties.effectData--;
-					} else {
-						effectProperties.reset();
-					}
-				} else if (effectProperties.isParalyzed()) {
-					if (entity.deathTime > 0 && effectProperties.isParalyzed()) {
-						effectProperties.reset();
-					} else if (effectProperties.effectData > 0) {
-						effectProperties.effectData--;
-					} else {
+					} else if (effectProperties.isFrozen()) {
 						effectProperties.reset();
 					}
 				}
@@ -374,13 +368,9 @@ public class EventLiving {
 				if (effectProperties.isFrozen()) {
 					entity.motionX *= 0.25;
 					entity.motionZ *= 0.25;
-					if(!(entity instanceof EntityDragon)) {
+					if (!(entity instanceof EntityDragon)) {
 						entity.motionY -= 0.1D;
 					}
-				} else if (effectProperties.isParalyzed()) {
-					entity.motionX = 0.0;
-					entity.motionY = 0.0;
-					entity.motionZ = 0.0;
 				}
 			}
 

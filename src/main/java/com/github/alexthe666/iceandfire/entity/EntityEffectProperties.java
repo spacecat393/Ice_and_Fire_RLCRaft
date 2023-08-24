@@ -9,7 +9,7 @@ import net.minecraft.world.World;
 public class EntityEffectProperties extends EntityProperties<EntityLivingBase> {
 
 	private enum EntityEffect {
-		NONE, STONE, FROZEN, PARALYZED, CHARMED;
+		NONE, STONE, FROZEN, CHARMED;
 		public static final EntityEffect[] values = values();
 	}
 
@@ -24,16 +24,20 @@ public class EntityEffectProperties extends EntityProperties<EntityLivingBase> {
 
 	@Override
 	public void saveNBTData(NBTTagCompound compound) {
-		compound.setInteger("activeEffect", activeEffect.ordinal());
-		compound.setInteger("effectData", effectData);
-		compound.setInteger("additionalData", additionalData);
+		if (compound != null) {
+			compound.setInteger("activeEffect", activeEffect.ordinal());
+			compound.setInteger("effectData", effectData);
+			compound.setInteger("additionalData", additionalData);
+		}
 	}
 
 	@Override
 	public void loadNBTData(NBTTagCompound compound) {
-		this.activeEffect = EntityEffect.values[compound.getInteger("activeEffect")];
-		this.effectData = compound.getInteger("effectData");
-		this.additionalData = compound.getInteger("additionalData");
+		if (compound != null) {
+			this.activeEffect = EntityEffect.values[compound.getInteger("activeEffect")];
+			this.effectData = compound.getInteger("effectData");
+			this.additionalData = compound.getInteger("additionalData");
+		}
 	}
 
 	@Override
@@ -70,19 +74,8 @@ public class EntityEffectProperties extends EntityProperties<EntityLivingBase> {
 		}
 	}
 
-	public void setParalyzedFor(int paralyzedFor) {
-		if (isStone() || isFrozen()) {
-			return;
-		}
-		if(!(this.getEntity() instanceof EntityLightningDragon)) {
-			this.activeEffect = EntityEffect.PARALYZED;
-			this.effectData = paralyzedFor;
-			this.additionalData = 0;
-		}
-	}
-
 	public void setCharmed(int entityID) {
-		if (isStone() || isFrozen() || isParalyzed()) {
+		if (isStone() || isFrozen()) {
 			return;
 		}
 		this.activeEffect = EntityEffect.CHARMED;
@@ -102,10 +95,6 @@ public class EntityEffectProperties extends EntityProperties<EntityLivingBase> {
 
 	public boolean isFrozen() {
 		return activeEffect == EntityEffect.FROZEN;
-	}
-
-	public boolean isParalyzed() {
-		return activeEffect == EntityEffect.PARALYZED;
 	}
 
 	public boolean isCharmed() {

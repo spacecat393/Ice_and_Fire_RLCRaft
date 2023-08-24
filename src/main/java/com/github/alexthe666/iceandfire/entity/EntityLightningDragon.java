@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.compat.LycanitesCompat;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.*;
@@ -246,6 +247,14 @@ public class EntityLightningDragon extends EntityDragonBase {
 	public void onStruckByLightning(EntityLightningBolt lightningBolt) {
 		this.heal(15F);
 		this.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 20, 1));
+	}
+
+	@Override
+	public void addPotionEffect(PotionEffect potioneffectIn) {
+		if (LycanitesCompat.isParalysisEffect(potioneffectIn)) {
+			return;
+		}
+		super.addPotionEffect(potioneffectIn);
 	}
 
 	@Override

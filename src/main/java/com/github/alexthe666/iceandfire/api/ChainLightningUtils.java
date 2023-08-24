@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.api;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.compat.LycanitesCompat;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.EntityEffectProperties;
@@ -48,6 +49,8 @@ public class ChainLightningUtils {
         attackEntityWithLightningDamage(attacker, target, damage);
         if (isParalysisEnabled) {
             applyParalysis(target, paralysisTicks, paralysisChance);
+        } else {
+            IceAndFire.logger.warn("The Paralysis Effect is currently disabled");
         }
 
         target.playSound(ModSounds.LIGHTNING_STRIKE, 1, 1);
@@ -127,10 +130,7 @@ public class ChainLightningUtils {
 
     private static void applyParalysis(EntityLivingBase target, int paralysisTicks, int paralysisChance) {
         if (paralysisChance <= 1 || target.world.rand.nextInt(paralysisChance) == 0) {
-            EntityEffectProperties effectProperties = EntityPropertiesHandler.INSTANCE.getProperties(target, EntityEffectProperties.class);
-            if (effectProperties != null) {
-                effectProperties.setParalyzedFor(paralysisTicks);
-            }
+            LycanitesCompat.applyParalysis(target, paralysisTicks);
         }
     }
 
