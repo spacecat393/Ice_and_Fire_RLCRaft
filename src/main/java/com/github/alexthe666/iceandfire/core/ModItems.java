@@ -34,7 +34,7 @@ public class ModItems {
 	public static ToolMaterial boneTools = EnumHelper.addToolMaterial("Dragonbone", 4, 1660, 10.0F, 4.0F, 22);
 	public static ToolMaterial fireBoneTools = EnumHelper.addToolMaterial("FireDragonbone", 4, 2000, 10.0F, 5.5F, 22);
 	public static ToolMaterial iceBoneTools = EnumHelper.addToolMaterial("IceDragonbone", 4, 2000, 10.0F, 5.5F, 22);
-	public static ToolMaterial lightningBoneTools = EnumHelper.addToolMaterial("lightningDragonbone", 4, 2000, 10.0F, 5.5F, 22);
+	public static ToolMaterial lightningBoneTools = EnumHelper.addToolMaterial("LightningDragonbone", 4, 2000, 10.0F, 5.5F, 22);
 	public static ToolMaterial trollWeapon = EnumHelper.addToolMaterial("trollWeapon", 2, 300, 11.0F, 1.0F, 1);
 	public static ToolMaterial myrmexChitin = EnumHelper.addToolMaterial("MyrmexChitin", 3, 600, 6.0F, 1.0F, 8);
 

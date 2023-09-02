@@ -3,15 +3,14 @@ package com.github.alexthe666.iceandfire.item;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import com.github.alexthe666.iceandfire.entity.EntityLightningDragon;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.IItemPropertyGetter;
@@ -77,16 +76,16 @@ public class ItemDragonHornActive extends Item {
 
 	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
 		if (entityLiving instanceof EntityPlayer) {
-			EntityPlayer entityplayer = (EntityPlayer) entityLiving;
+			EntityPlayer player = (EntityPlayer) entityLiving;
 			int i = this.getMaxItemUseDuration(stack) - timeLeft;
 			if (i < 20) {
 				return;
 			}
-			double d0 = entityplayer.prevPosX + (entityplayer.posX - entityplayer.prevPosX);
-			double d1 = entityplayer.prevPosY + (entityplayer.posY - entityplayer.prevPosY) + (double) entityplayer.getEyeHeight();
-			double d2 = entityplayer.prevPosZ + (entityplayer.posZ - entityplayer.prevPosZ);
-			float f1 = entityplayer.prevRotationPitch + (entityplayer.rotationPitch - entityplayer.prevRotationPitch);
-			float f2 = entityplayer.prevRotationYaw + (entityplayer.rotationYaw - entityplayer.prevRotationYaw);
+			double d0 = player.prevPosX + (player.posX - player.prevPosX);
+			double d1 = player.prevPosY + (player.posY - player.prevPosY) + (double) player.getEyeHeight();
+			double d2 = player.prevPosZ + (player.posZ - player.prevPosZ);
+			float f1 = player.prevRotationPitch + (player.rotationPitch - player.prevRotationPitch);
+			float f2 = player.prevRotationYaw + (player.rotationYaw - player.prevRotationYaw);
 			Vec3d vec3d = new Vec3d(d0, d1, d2);
 			float f3 = MathHelper.cos(-f2 * 0.017453292F - (float) Math.PI);
 			float f4 = MathHelper.sin(-f2 * 0.017453292F - (float) Math.PI);
@@ -101,50 +100,21 @@ public class ItemDragonHornActive extends Item {
 			}
 			if (raytraceresult.typeOfHit == RayTraceResult.Type.BLOCK) {
 				BlockPos pos = raytraceresult.getBlockPos();
-				worldIn.playSound(entityplayer, pos, SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 3, 0.75F);
+				worldIn.playSound(player, pos, SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, SoundCategory.NEUTRAL, 3, 0.75F);
+				EntityDragonBase dragon = null;
 				if (this == ModItems.dragon_horn_fire) {
-					EntityFireDragon dragon = new EntityFireDragon(worldIn);
-					dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
-					if (stack.getTagCompound() != null) {
-						dragon.readEntityFromNBT(stack.getTagCompound());
-					}
-					dragon.setFlying(false);
-					dragon.setHovering(false);
-					dragon.getNavigator().clearPath();
-					replaceItem(entityplayer, stack, new ItemStack(ModItems.dragon_horn));
-					if (!worldIn.isRemote) {
-						worldIn.spawnEntity(dragon);
-					}
+					dragon = new EntityFireDragon(worldIn);
 				}
 				if (this == ModItems.dragon_horn_ice) {
-					EntityIceDragon dragon = new EntityIceDragon(worldIn);
-					dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
-					if (stack.getTagCompound() != null) {
-						dragon.readEntityFromNBT(stack.getTagCompound());
-					}
-					dragon.setFlying(false);
-					dragon.setHovering(false);
-					dragon.getNavigator().clearPath();
-					replaceItem(entityplayer, stack, new ItemStack(ModItems.dragon_horn));
-					if (!worldIn.isRemote) {
-						worldIn.spawnEntity(dragon);
-					}
+					dragon = new EntityIceDragon(worldIn);
 				}
 				if (this == ModItems.dragon_horn_lightning) {
-					EntityLightningDragon dragon = new EntityLightningDragon(worldIn);
-					dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
-					if (stack.getTagCompound() != null) {
-						dragon.readEntityFromNBT(stack.getTagCompound());
-					}
-					dragon.setFlying(false);
-					dragon.setHovering(false);
-					dragon.getNavigator().clearPath();
-					replaceItem(entityplayer, stack, new ItemStack(ModItems.dragon_horn));
-					if (!worldIn.isRemote) {
-						worldIn.spawnEntity(dragon);
-					}
+					dragon = new EntityLightningDragon(worldIn);
 				}
-				entityplayer.addStat(StatList.getObjectUseStats(this));
+				if (dragon != null) {
+					maybeSpawnDragon(worldIn, pos, dragon, player, stack);
+				}
+				player.addStat(StatList.getObjectUseStats(this));
 			}
 		}
 
@@ -191,13 +161,22 @@ public class ItemDragonHornActive extends Item {
 		}
 	}
 
-	private void replaceItem(EntityPlayer player, ItemStack toReplace, ItemStack replacement) {
-		InventoryPlayer inventory = player.inventory;
-		int slot = inventory.getSlotFor(toReplace);
-		if (slot != -1) {
-			inventory.setInventorySlotContents(slot, replacement);
-		} else {
-			player.setHeldItem(player.getActiveHand(), new ItemStack(ModItems.dragon_horn));
+	private void maybeSpawnDragon(World world, BlockPos pos, EntityDragonBase dragon, EntityPlayer player, ItemStack horn) {
+		ItemStack stack = player.getHeldItemMainhand();
+		if (!stack.isEmpty() && stack.getItem() instanceof ItemDragonHornActive) {
+			dragon.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
+			if (horn.getTagCompound() != null) {
+				dragon.readEntityFromNBT(horn.getTagCompound());
+			}
+			dragon.setFlying(false);
+			dragon.setHovering(false);
+			dragon.getNavigator().clearPath();
+
+			player.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(ModItems.dragon_horn));
+
+			if (!world.isRemote) {
+				world.spawnEntity(dragon);
+			}
 		}
 	}
 }

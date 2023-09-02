@@ -21,10 +21,6 @@ public class EntityDragonLightning extends EntityFireball implements IDragonProj
 
 	public EntityDragonLightning(World worldIn, double posX, double posY, double posZ, double accelX, double accelY, double accelZ) {
 		super(worldIn, posX, posY, posZ, accelX, accelY, accelZ);
-
-		if (posX != 0 || posY != 0 || posZ != 0) {
-			lastPos = new Vec3d(posX, posY, posZ);
-		}
 	}
 
 	public EntityDragonLightning(World worldIn, EntityDragonBase shooter, double accelX, double accelY, double accelZ) {
@@ -34,19 +30,11 @@ public class EntityDragonLightning extends EntityFireball implements IDragonProj
 		this.accelerationX = accelX / d0 * (0.1D * (shooter.isFlying() ? 4 * shooter.getDragonStage() : 1));
 		this.accelerationY = accelY / d0 * (0.1D * (shooter.isFlying() ? 4 * shooter.getDragonStage() : 1));
 		this.accelerationZ = accelZ / d0 * (0.1D * (shooter.isFlying() ? 4 * shooter.getDragonStage() : 1));
-
-		lastPos = shooter.getHeadPosition();
+		this.lastPos = shooter.getHeadPosition();
 	}
 
 	public void setSizes(float width, float height) {
 		this.setSize(width, height);
-	}
-
-	@Override
-	public void setPosition(double x, double y, double z) {
-		if (lastPos == null && (x != 0 || y != 0 || z != 0)) {
-			lastPos = new Vec3d(posX, posY, posZ);
-		}
 	}
 
 	protected boolean isFireballFiery() {
@@ -128,6 +116,9 @@ public class EntityDragonLightning extends EntityFireball implements IDragonProj
 	}
 
 	private void emitLightningFx(Vec3d pos) {
+		if (lastPos == null && this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase) {
+			lastPos = ((EntityDragonBase) this.shootingEntity).getHeadPosition();
+		}
 		if (lastPos != null && !pos.equals(lastPos)) {
 			ParticleLightningVector source = new ParticleLightningVector(lastPos.x, lastPos.y, lastPos.z);
 			ParticleLightningVector target = new ParticleLightningVector(pos.x, pos.y, pos.z);

@@ -34,9 +34,17 @@ public class EntityEffectProperties extends EntityProperties<EntityLivingBase> {
 	@Override
 	public void loadNBTData(NBTTagCompound compound) {
 		if (compound != null) {
-			this.activeEffect = EntityEffect.values[compound.getInteger("activeEffect")];
-			this.effectData = compound.getInteger("effectData");
-			this.additionalData = compound.getInteger("additionalData");
+			int activeEffect = compound.getInteger("activeEffect");
+			int effectData = compound.getInteger("effectData");
+			int additionalData = compound.getInteger("additionalData");
+			if (activeEffect >= EntityEffect.values.length) {
+				activeEffect = EntityEffect.NONE.ordinal();
+				effectData = 0;
+				additionalData = 0;
+			}
+			this.activeEffect = EntityEffect.values[activeEffect];
+			this.effectData = effectData;
+			this.additionalData = additionalData;
 		}
 	}
 
