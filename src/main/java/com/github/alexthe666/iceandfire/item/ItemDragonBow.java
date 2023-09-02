@@ -59,7 +59,8 @@ public class ItemDragonBow extends ItemBow implements ICustomRendered {
 		return f;
 	}
 
-	private ItemStack findAmmo(EntityPlayer player) {
+	@Override
+	protected ItemStack findAmmo(EntityPlayer player) {
 		if (this.func_185058_h_(player.getHeldItem(EnumHand.OFF_HAND))) {
 			return player.getHeldItem(EnumHand.OFF_HAND);
 		} else if (this.func_185058_h_(player.getHeldItem(EnumHand.MAIN_HAND))) {
