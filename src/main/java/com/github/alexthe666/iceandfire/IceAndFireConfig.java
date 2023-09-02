@@ -10,7 +10,6 @@ public class IceAndFireConfig {
 	public boolean generateCopperOre = true;
 	public boolean generateSilverOre = true;
 	public boolean generateAmethystOre = true;
-
 	public boolean generateSapphireOre = true;
 	public boolean generateDragonSkeletons = true;
 	public int generateDragonSkeletonChance = 300;
@@ -18,6 +17,17 @@ public class IceAndFireConfig {
 	public int generateDragonDenChance = 180;
 	public boolean generateDragonRoosts = true;
 	public int generateDragonRoostChance = 360;
+	public String[] whitelistedFireDragonBiomeIds = new String[0];
+	public String[] blacklistedFireDragonBiomeIds = new String[0];
+	public String[] blacklistedFireDragonBiomeTags = new String[0];
+	public String[] whitelistedIceDragonBiomeIds = new String[0];
+	public String[] blacklistedIceDragonBiomeIds = new String[0];
+	public String[] blacklistedIceDragonBiomeTags = new String[0];
+	public String[] whitelistedLightningDragonBiomeIds = new String[0];
+	public String[] blacklistedLightningDragonBiomeIds = new String[0];
+	public String[] blacklistedLightningDragonBiomeTags = new String[0];
+	public String[] generateDragonRoostChanceForBiome = new String[0];
+	public String[] generateDragonDenChanceForBiome = new String[0];
 	public int dragonDenGoldAmount = 4;
 	public boolean generateSnowVillages = true;
 	public int generateSnowVillageChance = 100;
@@ -148,6 +158,22 @@ public class IceAndFireConfig {
 		this.generateDragonDenChance  = config.getInt("Generate Dragon Cave Chance", "all", 180, 1, 10000, "1 out of this number chance per chunk for generation");
 		this.generateDragonRoosts  = config.getBoolean("Generate Dragon Roosts", "all", true, "Whether to generate dragon roosts or not");
 		this.generateDragonRoostChance  = config.getInt("Generate Dragon Roost Chance", "all", 360, 1, 10000, "1 out of this number chance per chunk for generation");
+
+		this.whitelistedFireDragonBiomeIds = config.getStringList("Biome IDs Whitelisted For Fire Dragons", "all", new String[0], "These biomes may additionally contain Fire Dragon Dens or Roosts");
+		this.blacklistedFireDragonBiomeIds = config.getStringList("Biome IDs Blacklisted For Fire Dragons", "all", new String[0], "These biomes will not contain Fire Dragon Dens or Roosts");
+		this.blacklistedFireDragonBiomeTags = config.getStringList("Biome Tags Blacklisted For Fire Dragons", "all", new String[0], "These biome tags will not contain Fire Dragon Dens or Roosts");
+
+		this.whitelistedIceDragonBiomeIds = config.getStringList("Biome IDs Whitelisted For Ice Dragons", "all", new String[0], "These biomes may additionally contain Ice Dragon Dens or Roosts");
+		this.blacklistedIceDragonBiomeIds = config.getStringList("Biome IDs Blacklisted For Ice Dragons", "all", new String[0], "These biomes will not contain Ice Dragon Dens or Roosts");
+		this.blacklistedIceDragonBiomeTags = config.getStringList("Biome Tags Blacklisted For Ice Dragons", "all", new String[0], "These biome tags will not contain Ice Dragon Dens or Roosts");
+
+		this.whitelistedLightningDragonBiomeIds = config.getStringList("Biome IDs Whitelisted For Lightning Dragons", "all", new String[0], "These biomes may additionally contain Lightning Dragon Dens or Roosts");
+		this.blacklistedFireDragonBiomeIds = config.getStringList("Biome IDs Blacklisted For Lightning Dragons", "all", new String[0], "These biomes will not contain Lightning Dragon Dens or Roosts");
+		this.blacklistedFireDragonBiomeTags = config.getStringList("Biome Tags Blacklisted For Lightning Dragons", "all", new String[0], "These biome tags will not contain Lightning Dragon Dens or Roosts");
+
+		this.generateDragonRoostChanceForBiome = config.getStringList("Generate Dragon Roost Chance For Biome", "all", new String[0], "<biome_id>:<1 out of this number chance per chunk for generation>");
+		this.generateDragonDenChanceForBiome = config.getStringList("Generate Dragon Den Chance For Biome", "all", new String[0], "<biome_id>:<1 out of this number chance per chunk for generation>");
+
 		this.dragonDenGoldAmount  = config.getInt("Dragon Den Gold Amount", "all", 4, 1, 10000, "1 out of this number chance per block that gold will generate in dragon lairs.");
 		this.generateSnowVillages  = config.getBoolean("Generate Snow Villages", "all", true, "Whether to generate snow villages or not");
 		this.generateSnowVillageChance   = config.getInt("Generate Snow Village Chance", "all", 100, 1, 10000, "1 out of this number chance per chunk for generation");
@@ -161,7 +187,6 @@ public class IceAndFireConfig {
 		this.glacierSpawnChance = config.getInt("Glacier Spawn Weight", "all", 4, 1, 10000, "Glacier Spawn Weight. Higher number = more common");
 		this.oreToStoneRatioForDragonCaves = config.getInt("Dragon Cave Ore Ratio", "all", 45, 1, 10000, "Ratio of Stone(this number) to Ores in Dragon Caves");
 		this.dangerousWorldGenDistanceLimit = config.getInt("Dangerous World Gen Distance From Spawn", "all", 200, 0, Integer.MAX_VALUE, "How many blocks away does dangerous(dragons, cyclops, etc.) world gen have to generate from spawn");
-
 		this.dragonEggTime = config.getInt("Dragon Egg Hatch Time", "all", 7200, 1, Integer.MAX_VALUE, "How long it takes(in ticks) for a dragon egg to hatch");
 		this.dragonGriefing = config.getInt("Dragon Griefing", "all", 0, 0, 2, "Dragon griefing - 2 is no griefing, 1 is breaking weak blocks, 0 is default");
 		this.tamedDragonGriefing = config.getBoolean("Tamed Dragon Griefing", "all", true, "True if tamed dragons can follow the griefing rules.");
