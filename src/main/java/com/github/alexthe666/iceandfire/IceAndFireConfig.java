@@ -13,6 +13,7 @@ public class IceAndFireConfig {
 	public boolean generateSapphireOre = true;
 	public boolean generateDragonSkeletons = true;
 	public int generateDragonSkeletonChance = 300;
+	public int generateDragonSkeletonMaximumStage = 5;
 	public boolean generateDragonDens = true;
 	public int generateDragonDenChance = 180;
 	public boolean generateDragonRoosts = true;
@@ -154,6 +155,7 @@ public class IceAndFireConfig {
 		this.generateSapphireOre  = config.getBoolean("Generate Sapphire Ore", "all", true, "Whether to generate sapphire ore or not");
 		this.generateDragonSkeletons  = config.getBoolean("Generate Dragon Skeletons", "all", true, "Whether to generate dragon skeletons or not");
 		this.generateDragonSkeletonChance  = config.getInt("Generate Dragon Skeleton Chance", "all", 300, 1, 10000, "1 out of this number chance per chunk for generation");
+		this.generateDragonSkeletonMaximumStage = config.getInt("Generate Dragon Skeleton Maximum Stage", "all", 5, 0, 5, "The maximum stage for dragon skeletons in generation");
 		this.generateDragonDens  = config.getBoolean("Generate Dragon Caves", "all", true, "Whether to generate dragon caves or not");
 		this.generateDragonDenChance  = config.getInt("Generate Dragon Cave Chance", "all", 180, 1, 10000, "1 out of this number chance per chunk for generation");
 		this.generateDragonRoosts  = config.getBoolean("Generate Dragon Roosts", "all", true, "Whether to generate dragon roosts or not");
