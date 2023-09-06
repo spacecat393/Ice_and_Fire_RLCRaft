@@ -1,7 +1,8 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
+import com.github.alexthe666.iceandfire.api.InFCapabilities;
 import com.github.alexthe666.iceandfire.core.ModVillagers;
-import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.monster.EntityZombie;
@@ -37,8 +38,8 @@ public class EntitySnowVillager extends EntityVillager {
 	}
 
 	public boolean processInteract(EntityPlayer player, EnumHand hand) {
-		EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, EntityEffectProperties.class);
-		if (properties != null && properties.isStone()) {
+		IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(this);
+		if (capability != null && capability.isStoned()) {
 			return false;
 		}
 		return super.processInteract(player, hand);

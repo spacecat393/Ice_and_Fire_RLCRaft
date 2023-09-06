@@ -1,12 +1,12 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
+import com.github.alexthe666.iceandfire.api.InFCapabilities;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.*;
-import com.github.alexthe666.iceandfire.message.MessageStoneStatue;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
-import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -64,7 +64,7 @@ public class ItemGorgonHead extends Item implements ICustomRendered {
 		List<Entity> list = worldIn.getEntitiesInAABBexcluding(entity, entity.getEntityBoundingBox().expand(vec3d1.x * dist, vec3d1.y * dist, vec3d1.z * dist).grow(1.0D, 1.0D, 1.0D), Predicates.and(EntitySelectors.NOT_SPECTATING, new Predicate<Entity>() {
 			public boolean apply(@Nullable Entity entity) {
 				boolean blindness = entity instanceof EntityLivingBase && ((EntityLivingBase) entity).isPotionActive(MobEffects.BLINDNESS) || (entity instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) entity).canBeTurnedToStone());
-				return entity != null && entity.canBeCollidedWith() && !blindness && (entity instanceof EntityPlayer || (entity instanceof EntityLiving && EntityPropertiesHandler.INSTANCE.getProperties(entity, EntityEffectProperties.class) != null && !EntityPropertiesHandler.INSTANCE.getProperties(entity, EntityEffectProperties.class).isStone()));
+				return entity != null && entity.canBeCollidedWith() && !blindness && (entity instanceof EntityPlayer || (entity instanceof EntityLiving && InFCapabilities.getEntityEffectCapability((EntityLiving)entity) != null && !InFCapabilities.getEntityEffectCapability((EntityLiving)entity).isStoned()));
 			}
 		}));
 		double d2 = d1;
@@ -105,11 +105,10 @@ public class ItemGorgonHead extends Item implements ICustomRendered {
 						worldIn.spawnEntity(statue);
 					}
 				} else {
-					EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(pointedEntity, EntityEffectProperties.class);
-					if (properties != null) {
-						properties.turnToStone();
+					IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability((EntityLiving)pointedEntity);
+					if (capability != null) {
+						capability.setStoned();
 					}
-					IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageStoneStatue(pointedEntity.getEntityId(), true));
 					if (pointedEntity instanceof EntityDragonBase) {
 						EntityDragonBase dragon = (EntityDragonBase) pointedEntity;
 						dragon.setFlying(false);

@@ -1,6 +1,8 @@
 package com.github.alexthe666.iceandfire.event;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
+import com.github.alexthe666.iceandfire.api.InFCapabilities;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.entity.*;
@@ -10,13 +12,10 @@ import com.github.alexthe666.iceandfire.entity.DragonUtils;
 import com.github.alexthe666.iceandfire.item.ItemSeaSerpentArmor;
 import com.github.alexthe666.iceandfire.item.ItemTrollArmor;
 import com.github.alexthe666.iceandfire.message.MessagePlayerHitMultipart;
-import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.monster.EntityWitherSkeleton;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,7 +29,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -49,7 +47,6 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.GetCollisionBoxesEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
@@ -160,8 +157,8 @@ public class EventLiving {
 			entity.dropItem(ModItems.witherbone, entity.getRNG().nextInt(2));
 		}
 		if (entity instanceof EntityLiving) {
-			EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, EntityEffectProperties.class);
-			if (properties != null && properties.isStone()) {
+			IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(entity);
+			if (capability != null && capability.isStoned()) {
 				event.setCanceled(true);
 			}
 		}
@@ -172,8 +169,8 @@ public class EventLiving {
 	public void onEntityDespawn(LivingSpawnEvent.AllowDespawn event) {
 		EntityLivingBase entity = event.getEntityLiving();
 		if (entity instanceof EntityLiving) {
-			EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, EntityEffectProperties.class);
-			if (properties != null && properties.isStone()) {
+			IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(entity);
+			if (capability != null && capability.isStoned()) {
 				event.setResult(Event.Result.DENY);
 			}
 		}
@@ -271,17 +268,17 @@ public class EventLiving {
 		}
 		if (event.getTarget() instanceof EntityLiving) {
 			boolean stonePlayer = event.getTarget() instanceof EntityStoneStatue;
-			EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(event.getTarget(), EntityEffectProperties.class);
-			if (properties != null && properties.isStone() || stonePlayer) {
+			IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability((EntityLiving)event.getTarget());
+			if (capability != null && capability.isStoned() || stonePlayer) {
 				((EntityLiving) event.getTarget()).setHealth(((EntityLiving) event.getTarget()).getMaxHealth());
 				if (event.getEntityPlayer() != null) {
 					ItemStack stack = event.getEntityPlayer().getHeldItemMainhand();
 					if (stack.getItem() != null && (stack.getItem().canHarvestBlock(Blocks.STONE.getDefaultState()) || stack.getItem().getTranslationKey().contains("pickaxe"))) {
 						boolean silkTouch = EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, stack) > 0;
 						boolean ready = false;
-						if (properties != null && !stonePlayer) {
-							properties.effectData++;
-							ready = properties.effectData > 9;
+						if (capability != null && !stonePlayer) {
+							capability.tickData();
+							ready = capability.getAdditionalData() > 9;
 						}
 						if (stonePlayer) {
 							EntityStoneStatue statue = (EntityStoneStatue) event.getTarget();
@@ -343,130 +340,6 @@ public class EventLiving {
 				entity.dropItem(ModItems.rotten_egg, 1);
 			}
 		}
-		EntityEffectProperties effectProperties = EntityPropertiesHandler.INSTANCE.getProperties(entity, EntityEffectProperties.class);
-		if (effectProperties != null) {
-			boolean prevFrozen = effectProperties.isFrozen();
-			if (entity instanceof EntityIceDragon && prevFrozen) {
-				effectProperties.reset();
-			}
-			if (!entity.world.isRemote) {
-				if (effectProperties.isFrozen()) {
-					if (entity.isBurning()) {
-						effectProperties.reset();
-						entity.extinguish();
-					} else if (entity.deathTime > 0 && effectProperties.isFrozen()) {
-						effectProperties.reset();
-					} else if (effectProperties.effectData > 0 && effectProperties.isFrozen()) {
-						effectProperties.effectData--;
-					} else if (effectProperties.isFrozen()) {
-						effectProperties.reset();
-					}
-				}
-			}
-
-			if(!(entity instanceof EntityPlayer && ((EntityPlayer)entity).isCreative())){
-				if (effectProperties.isFrozen()) {
-					entity.motionX *= 0.25;
-					entity.motionZ *= 0.25;
-					if (!(entity instanceof EntityDragon)) {
-						entity.motionY -= 0.1D;
-					}
-				}
-			}
-
-			if (prevFrozen != effectProperties.isFrozen()) {
-				for (int i = 0; i < 15; i++) {
-					entity.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, entity.posX + ((rand.nextDouble() - 0.5D) * entity.width), entity.posY + ((rand.nextDouble()) * entity.height), entity.posZ + ((rand.nextDouble() - 0.5D) * entity.width), 0, 0, 0, new int[]{Block.getIdFromBlock(ModBlocks.dragon_ice)});
-				}
-				entity.playSound(SoundEvents.BLOCK_GLASS_BREAK, 3, 1);
-			}
-		}
-		if (entity instanceof EntityPlayer || entity instanceof EntityVillager || entity instanceof IHearsSiren) {
-			if (effectProperties != null && effectProperties.isCharmed() && effectProperties.effectData != 0) {
-				EntitySiren closestSiren = effectProperties.getSiren(entity.world);
-				if (closestSiren != null && closestSiren.isActuallySinging()) {
-					if (EntitySiren.isWearingEarplugs(entity) || effectProperties.additionalData > IceAndFire.CONFIG.sirenMaxSingTime) {
-						effectProperties.reset();
-						closestSiren.singCooldown = IceAndFire.CONFIG.sirenTimeBetweenSongs;
-					} else {
-						effectProperties.additionalData++;
-						if (rand.nextInt(7) == 0) {
-							for (int i = 0; i < 5; i++) {
-								entity.world.spawnParticle(EnumParticleTypes.HEART, entity.posX + ((rand.nextDouble() - 0.5D) * 3), entity.posY + ((rand.nextDouble() - 0.5D) * 3), entity.posZ + ((rand.nextDouble() - 0.5D) * 3), 0, 0, 0);
-							}
-						}
-						if(entity.collidedHorizontally){
-							if(entity instanceof EntityLiving){
-								((EntityLiving) entity).getJumpHelper().setJumping();
-							}else if(entity.onGround){
-								entity.motionY = 0.42F;
-							}
-						}
-						entity.motionX += (Math.signum(closestSiren.posX - entity.posX) * 0.5D - entity.motionX) * 0.100000000372529;
-						entity.motionY += (Math.signum(closestSiren.posY - entity.posY + 1) * 0.5D - entity.motionY) * 0.100000000372529;
-						entity.motionZ += (Math.signum(closestSiren.posZ - entity.posZ) * 0.5D - entity.motionZ) * 0.100000000372529;
-						double d0 = closestSiren.posX - entity.posX;
-						double d2 = closestSiren.posZ - entity.posZ;
-						double d1 = closestSiren.posY - 1 - entity.posY;
-						if (entity.isRiding()) {
-							entity.dismountRidingEntity();
-						}
-						double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
-						float f = (float) (MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
-						float f1 = (float) (-(MathHelper.atan2(d1, d3) * (180D / Math.PI)));
-						entity.rotationPitch = updateRotation(entity.rotationPitch, f1, 30F);
-						entity.rotationYaw = updateRotation(entity.rotationYaw, f, 30F);
-						if (entity.getDistance(closestSiren) < 5D) {
-							effectProperties.reset();
-							closestSiren.singCooldown = IceAndFire.CONFIG.sirenTimeBetweenSongs;
-							closestSiren.setSinging(false);
-							closestSiren.setAttackTarget(entity);
-							closestSiren.setAggressive(true);
-							closestSiren.triggerOtherSirens(entity);
-						}
-						if (closestSiren.isDead || entity.getDistance(closestSiren) > EntitySiren.SEARCH_RANGE * 2 || effectProperties.getSiren(entity.world) == null || entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative()) {
-							effectProperties.reset();
-						}
-					}
-				}
-			}
-		}
-
-		if (entity instanceof EntityLiving) {
-			boolean stonePlayer = entity instanceof EntityStoneStatue;
-			if (effectProperties != null && effectProperties.isStone() || stonePlayer) {
-				EntityLiving living = ((EntityLiving) entity);
-				if (!living.getPassengers().isEmpty()) {
-					for (Entity e : living.getPassengers()) {
-						e.dismountRidingEntity();
-					}
-				}
-				living.motionX *= 0D;
-				living.motionZ *= 0D;
-				living.motionY -= 0.1D;
-				living.swingProgress = 0;
-				living.limbSwing = 0;
-				living.setInvisible(!stonePlayer);
-				living.livingSoundTime = 0;
-				living.hurtTime = 0;
-				living.hurtResistantTime = living.maxHurtResistantTime - 1;
-				living.extinguish();
-				if (living instanceof EntityAnimal) {
-					((EntityAnimal) living).resetInLove();
-				}
-				if (!living.isAIDisabled()) {
-					living.setNoAI(true);
-				}
-				if (living.getAttackTarget() != null) {
-					living.setAttackTarget(null);
-				}
-				if (living instanceof EntityHorse) {
-					EntityHorse horse = (EntityHorse) living;
-					horse.tailCounter = 0;
-					horse.setEatingHaystack(false);
-				}
-			}
-		}
 	}
 
 	public static float updateRotation(float angle, float targetAngle, float maxIncrease) {
@@ -484,8 +357,8 @@ public class EventLiving {
 	public void onEntityInteract(PlayerInteractEvent.EntityInteractSpecific event) {
 		EntityLivingBase entity = event.getEntityLiving();
 		if (entity instanceof EntityLiving) {
-			EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, EntityEffectProperties.class);
-			if (properties != null && properties.isStone()) {
+			IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(entity);
+			if (capability != null && capability.isStoned()) {
 				event.setCanceled(true);
 			}
 		}
@@ -495,8 +368,8 @@ public class EventLiving {
 	public void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
 		EntityLivingBase entity = event.getEntityLiving();
 		if (entity instanceof EntityLiving) {
-			EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, EntityEffectProperties.class);
-			if (properties != null && properties.isStone()) {
+			IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(entity);
+			if (capability != null && capability.isStoned()) {
 				event.setCanceled(true);
 			}
 		}

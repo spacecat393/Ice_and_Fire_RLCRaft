@@ -1,8 +1,8 @@
 package com.github.alexthe666.iceandfire.client.particle;
 
-import com.github.alexthe666.iceandfire.entity.EntityEffectProperties;
+import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
+import com.github.alexthe666.iceandfire.api.InFCapabilities;
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
-import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleMobAppearance;
@@ -30,10 +30,11 @@ public class ParticleSirenAppearance extends ParticleMobAppearance {
         super.onUpdate();
 
         if (this.entity == null) {
-            EntityEffectProperties effectProperties = EntityPropertiesHandler.INSTANCE.getProperties(Minecraft.getMinecraft().player, EntityEffectProperties.class);
+            IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(Minecraft.getMinecraft().player);
             EntitySiren siren = new EntitySiren(this.world);
-            if (effectProperties != null && effectProperties.getSiren(Minecraft.getMinecraft().player.world) != null) {
-                siren = effectProperties.getSiren(Minecraft.getMinecraft().player.world);
+            if (capability != null ) {
+                EntitySiren temp = capability.getSiren(world);
+                if(temp != null) siren = temp;
             }
             this.entity = siren;
         }

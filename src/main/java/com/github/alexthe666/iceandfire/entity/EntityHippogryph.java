@@ -1,6 +1,8 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
+import com.github.alexthe666.iceandfire.api.InFCapabilities;
 import com.github.alexthe666.iceandfire.client.model.IFChainBuffer;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModKeys;
@@ -13,7 +15,6 @@ import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
-import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -562,8 +563,8 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 	}
 
 	public boolean canMove() {
-		EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, EntityEffectProperties.class);
-		if(properties != null && properties.isStone()){
+		IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(this);
+		if(capability != null && capability.isStoned()){
 			return false;
 		}
 		return !this.isSitting() && this.getControllingPassenger() == null && sitProgress == 0;
@@ -781,8 +782,8 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 			this.hoverTicks = 0;
 			this.flyTicks = 0;
 		}
-		EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, EntityEffectProperties.class);
-		if (properties != null && properties.isStone()) {
+		IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(this);
+		if (capability != null && capability.isStoned()) {
 			this.setFlying(false);
 			this.setHovering(false);
 		}
@@ -918,7 +919,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 			this.setFlying(false);
 			this.setHovering(false);
 		}
-		if ((properties == null || !properties.isStone()) && (!world.isRemote && this.getRNG().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSitting() && this.canMove() && this.onGround || this.posY < -1)) {
+		if ((capability == null || !capability.isStoned()) && (!world.isRemote && this.getRNG().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSitting() && this.canMove() && this.onGround || this.posY < -1)) {
 			this.setHovering(true);
 			this.hoverTicks = 0;
 			this.flyTicks = 0;

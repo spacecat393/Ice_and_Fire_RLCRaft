@@ -1,11 +1,11 @@
 package com.github.alexthe666.iceandfire.client.render.entity.layer;
 
+import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
+import com.github.alexthe666.iceandfire.api.InFCapabilities;
 import com.github.alexthe666.iceandfire.client.model.ICustomStatueModel;
 import com.github.alexthe666.iceandfire.client.model.ModelGuardianStatue;
 import com.github.alexthe666.iceandfire.client.model.ModelHorseStatue;
 import com.github.alexthe666.iceandfire.client.model.ModelTroll;
-import com.github.alexthe666.iceandfire.entity.EntityEffectProperties;
-import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
@@ -30,15 +30,15 @@ public class LayerStoneEntityCrack implements LayerRenderer {
 	@Override
 	public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float f, float f1, float i, float f2, float f3, float f4, float f5) {
 		if (entitylivingbaseIn instanceof EntityLiving) {
-			EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entitylivingbaseIn, EntityEffectProperties.class);
-			if (properties != null && properties.isStone() && properties.effectData > 0) {
+			IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(entitylivingbaseIn);
+			if (capability != null && capability.isStoned() && capability.getAdditionalData() > 0) {
 				GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.DST_COLOR, GlStateManager.DestFactor.SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 				GlStateManager.doPolygonOffset(-3.0F, -3.0F);
 				GlStateManager.enablePolygonOffset();
 				GlStateManager.enableBlend();
 				GlStateManager.enableAlpha();
 				GlStateManager.depthMask(true);
-				this.renderer.bindTexture(DESTROY_STAGES[properties.effectData - 1]);
+				this.renderer.bindTexture(DESTROY_STAGES[capability.getAdditionalData() - 1]);
 				if (this.renderer.getMainModel() instanceof ModelTroll) {
 					this.renderer.getMainModel().render(entitylivingbaseIn, f, 0, 0, f3, f4, f5);
 				} else if (this.renderer.getMainModel() instanceof ICustomStatueModel) {

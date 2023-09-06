@@ -1,13 +1,13 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
+import com.github.alexthe666.iceandfire.api.InFCapabilities;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.core.ModItems;
-import com.github.alexthe666.iceandfire.entity.EntityEffectProperties;
 import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import com.github.alexthe666.iceandfire.api.ChainLightningUtils;
-import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 
@@ -46,9 +46,11 @@ public class ItemAlchemySword extends ItemSword {
 			if (target instanceof EntityFireDragon) {
 				target.attackEntityFrom(DamageSource.DROWN, 13.5F);
 			}
-			EntityEffectProperties effectProperties = EntityPropertiesHandler.INSTANCE.getProperties(target, EntityEffectProperties.class);
-			effectProperties.setFrozenFor(200);
-			target.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, 2));
+			if(!target.world.isRemote) {
+				IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(target);
+				if(capability != null) capability.setFrozen(200);
+			}
+			//target.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, 2));
 			target.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 100, 2));
 			target.knockBack(target, 1F, attacker.posX - target.posX, attacker.posZ - target.posZ);
 		}

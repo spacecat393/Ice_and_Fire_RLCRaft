@@ -1,10 +1,10 @@
 package com.github.alexthe666.iceandfire.client.render.entity.layer;
 
+import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
+import com.github.alexthe666.iceandfire.api.InFCapabilities;
 import com.github.alexthe666.iceandfire.client.model.ICustomStatueModel;
 import com.github.alexthe666.iceandfire.client.model.ModelGuardianStatue;
 import com.github.alexthe666.iceandfire.client.model.ModelHorseStatue;
-import com.github.alexthe666.iceandfire.entity.EntityEffectProperties;
-import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
@@ -30,8 +30,8 @@ public class LayerStoneEntity implements LayerRenderer {
 	@Override
 	public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float f, float f1, float i, float f2, float f3, float f4, float f5) {
 		if (entitylivingbaseIn instanceof EntityLiving) {
-			EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entitylivingbaseIn, EntityEffectProperties.class);
-			if (properties != null && properties.isStone()) {
+			IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(entitylivingbaseIn);
+			if (capability != null && capability.isStoned()) {
 				GlStateManager.depthMask(true);
 				GL11.glEnable(GL11.GL_CULL_FACE);
 				this.renderer.bindTexture(new ResourceLocation(getStoneType(renderer.getMainModel(), 1)));

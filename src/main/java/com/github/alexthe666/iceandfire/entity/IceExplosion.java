@@ -1,11 +1,12 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
+import com.github.alexthe666.iceandfire.api.InFCapabilities;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -144,9 +145,9 @@ public class IceExplosion extends Explosion {
                                 } else if(!entity.isEntityEqual(exploder)) {
                                     entity.attackEntityFrom(IceAndFire.dragonIce, (float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f3 + 1.0D)) / 3);
                                     if (entity instanceof EntityLivingBase) {
-                                        EntityEffectProperties effectProperties = EntityPropertiesHandler.INSTANCE.getProperties(entity, EntityEffectProperties.class);
-                                        if (effectProperties != null) {
-                                            effectProperties.setFrozenFor(200);
+                                        IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability((EntityLivingBase)entity);
+                                        if (capability != null) {
+                                            capability.setFrozen(200);
                                         }
                                     }
                                 }

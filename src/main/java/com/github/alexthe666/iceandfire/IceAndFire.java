@@ -1,5 +1,9 @@
 package com.github.alexthe666.iceandfire;
 
+import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
+import com.github.alexthe666.iceandfire.capability.CapabilityHandler;
+import com.github.alexthe666.iceandfire.capability.entityeffect.EntityEffectCapability;
+import com.github.alexthe666.iceandfire.capability.entityeffect.EntityEffectStorage;
 import com.github.alexthe666.iceandfire.core.ModEntities;
 import com.github.alexthe666.iceandfire.core.ModRecipes;
 import com.github.alexthe666.iceandfire.core.ModVillagers;
@@ -25,6 +29,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
@@ -54,9 +59,13 @@ public class IceAndFire {
     public static final Logger logger = LogManager.getLogger(NAME);
     @Instance(value = MODID)
     public static IceAndFire INSTANCE;
-    @NetworkWrapper({MessageDragonArmor.class, MessageDragonControl.class, MessageHippogryphArmor.class, MessageStoneStatue.class,
-            MessageUpdatePixieHouse.class, MessageUpdatePodium.class, MessageUpdatePixieHouseModel.class, MessageUpdatePixieJar.class, MessageSirenSong.class,
-            MessageDeathWormHitbox.class, MessageMultipartInteract.class, MessageGetMyrmexHive.class, MessageSetMyrmexHiveNull.class, MessagePlayerHitMultipart.class, MessageChainLightningFX.class})
+    @NetworkWrapper({
+            MessageDragonArmor.class, MessageDragonControl.class, MessageHippogryphArmor.class,
+            MessageUpdatePixieHouse.class, MessageUpdatePodium.class, MessageUpdatePixieHouseModel.class,
+            MessageUpdatePixieJar.class, MessageSirenSong.class, MessageDeathWormHitbox.class,
+            MessageMultipartInteract.class, MessageGetMyrmexHive.class, MessageSetMyrmexHiveNull.class,
+            MessagePlayerHitMultipart.class, MessageChainLightningFX.class, MessageEntityEffect.class,
+            MessageResetEntityEffect.class})
     public static SimpleNetworkWrapper NETWORK_WRAPPER;
     @SidedProxy(clientSide = "com.github.alexthe666.iceandfire.ClientProxy", serverSide = "com.github.alexthe666.iceandfire.CommonProxy")
     public static CommonProxy PROXY;
@@ -75,7 +84,9 @@ public class IceAndFire {
     public void preInit(FMLPreInitializationEvent event) {
         loadConfig();
         syncConfig();
+        CapabilityManager.INSTANCE.register(IEntityEffectCapability.class, new EntityEffectStorage(), EntityEffectCapability::new);
         MinecraftForge.EVENT_BUS.register(new EventLiving());
+        MinecraftForge.EVENT_BUS.register(new CapabilityHandler());
         TAB = new CreativeTab(MODID);
         ModEntities.init();
         MinecraftForge.EVENT_BUS.register(PROXY);

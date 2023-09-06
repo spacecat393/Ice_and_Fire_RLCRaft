@@ -2,15 +2,15 @@ package com.github.alexthe666.iceandfire.event;
 
 import com.github.alexthe666.iceandfire.ClientProxy;
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
+import com.github.alexthe666.iceandfire.api.InFCapabilities;
 import com.github.alexthe666.iceandfire.client.render.entity.ICustomStoneLayer;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerStoneEntity;
 import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerStoneEntityCrack;
 import com.github.alexthe666.iceandfire.core.ModKeys;
 import com.github.alexthe666.iceandfire.entity.*;
-import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
@@ -133,11 +133,8 @@ public class EventClient {
 		}
 	}
 
-	private final Random rand = new Random();
-	private static final ResourceLocation SIREN_SHADER = new ResourceLocation("iceandfire:shaders/post/siren.json");
 	@SubscribeEvent
 	public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
-		EntityEffectProperties effectProperties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntityLiving(), EntityEffectProperties.class);
 		EntityLivingBase livingBase = event.getEntityLiving();
 		if (livingBase instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) livingBase;
@@ -149,24 +146,6 @@ public class EventClient {
 					currentView++;
 				}
 				IceAndFire.PROXY.setDragon3rdPersonView(currentView);
-			}
-			if (player.world.isRemote && effectProperties != null) {
-				EntityRenderer renderer = Minecraft.getMinecraft().entityRenderer;
-				EntitySiren siren = effectProperties.getSiren(event.getEntityLiving().world);
-				if (siren == null && effectProperties.isCharmed()) {
-					effectProperties.reset();
-				} else if (effectProperties.isCharmed()) {
-					if (rand.nextInt(40) == 0) {
-						IceAndFire.PROXY.spawnParticle("siren_appearance", player.world, player.posX, player.posY, player.posZ, 0, 0, 0);
-					}
-
-					if (IceAndFire.CONFIG.sirenShader && effectProperties.isCharmed() && !renderer.isShaderActive()) {
-						renderer.loadShader(SIREN_SHADER);
-					}
-
-				} else if (IceAndFire.CONFIG.sirenShader && !effectProperties.isCharmed() && renderer != null && renderer.getShaderGroup() != null && renderer.getShaderGroup().getShaderGroupName() != null && SIREN_SHADER.toString().equals(renderer.getShaderGroup().getShaderGroupName())) {
-					renderer.stopUseShader();
-				}
 			}
 		}
 	}
@@ -186,15 +165,15 @@ public class EventClient {
 	}
 	@SubscribeEvent
 	public void onPostRenderLiving(RenderLivingEvent.Post event) {
-		EntityEffectProperties effectProperties = EntityPropertiesHandler.INSTANCE.getProperties(event.getEntity(), EntityEffectProperties.class);
-		if(effectProperties != null && effectProperties.isFrozen()) {
+		IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(event.getEntity());
+		if(capability != null && capability.isFrozen()) {
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			GlStateManager.enableNormalize();
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 			float sideExpand = 0.25F;
 			AxisAlignedBB axisalignedbb1 = new AxisAlignedBB(event.getEntity().getRenderBoundingBox().minX - event.getEntity().posX + event.getX() - sideExpand, event.getEntity().getRenderBoundingBox().minY - event.getEntity().posY + event.getY(), event.getEntity().getRenderBoundingBox().minZ - event.getEntity().posZ + event.getZ() - sideExpand, event.getEntity().getRenderBoundingBox().maxX - event.getEntity().posX + event.getX() + sideExpand, event.getEntity().getRenderBoundingBox().maxY - event.getEntity().posY + event.getY() + sideExpand, event.getEntity().getRenderBoundingBox().maxZ - event.getEntity().posZ + event.getZ() + sideExpand);
-			event.getRenderer().bindTexture(getIceTexture(effectProperties.effectData));
+			event.getRenderer().bindTexture(getIceTexture(capability.getTime()));
 			renderAABB(axisalignedbb1, 0, 0, 0);
 			GlStateManager.disableBlend();
 			GlStateManager.disableNormalize();

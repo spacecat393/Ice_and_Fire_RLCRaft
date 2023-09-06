@@ -2,6 +2,8 @@ package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.api.FoodUtils;
+import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
+import com.github.alexthe666.iceandfire.api.InFCapabilities;
 import com.github.alexthe666.iceandfire.client.model.IFChainBuffer;
 import com.github.alexthe666.iceandfire.client.model.util.LegSolverQuadruped;
 import com.github.alexthe666.iceandfire.core.ModItems;
@@ -16,7 +18,6 @@ import net.ilexiconn.llibrary.client.model.tools.ChainBuffer;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
-import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.ilexiconn.llibrary.server.entity.multipart.IMultipartEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
@@ -29,7 +30,6 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
@@ -417,8 +417,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
 
     @Override
     public boolean isAIDisabled() {
-        EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, EntityEffectProperties.class);
-        return this.isModelDead() || properties == null || properties.isStone() || super.isAIDisabled();
+        IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(this);
+        return this.isModelDead() || capability == null || capability.isStoned() || super.isAIDisabled();
     }
 
     @Override
@@ -907,8 +907,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     public boolean canMove() {
-        EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, EntityEffectProperties.class);
-        if(properties != null && properties.isStone()) {
+        IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(this);
+        if(capability != null && capability.isStoned()) {
             return false;
         }
         return !this.isSitting() && !this.isSleeping() && this.getControllingPassenger() == null && !this.isModelDead() && sleepProgress == 0 && this.getAnimation() != ANIMATION_SHAKEPREY;
@@ -1024,8 +1024,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                         return true;
 
                     }
-                    EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, EntityEffectProperties.class);
-                    if (stack.getItem() == ModItems.dragon_horn && !world.isRemote && (properties == null || !properties.isStone())) {
+                    IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(this);
+                    if (stack.getItem() == ModItems.dragon_horn && !world.isRemote && (capability == null || !capability.isStoned())) {
                         this.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 3, 1.25F);
 
                         NBTTagCompound tag = new NBTTagCompound();
@@ -1253,8 +1253,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         if (!world.isRemote && this.isTackling() && this.getAttackTarget() == null) {
             this.setTackling(false);
         }
-        EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, EntityEffectProperties.class);
-        if (properties != null && properties.isStone()) {
+        IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(this);
+        if (capability != null && capability.isStoned()) {
             this.setFlying(false);
             this.setHovering(false);
             return;
@@ -1417,7 +1417,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             this.setFlying(false);
             this.setHovering(false);
         }
-        if ((properties == null || !properties.isStone()) && (!world.isRemote && this.getRNG().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSleeping() && this.canMove() && this.onGround || this.posY < -1)) {
+        if ((capability == null || !capability.isStoned()) && (!world.isRemote && this.getRNG().nextInt(FLIGHT_CHANCE_PER_TICK) == 0 && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSleeping() && this.canMove() && this.onGround || this.posY < -1)) {
             this.setHovering(true);
             this.setSleeping(false);
             this.setSitting(false);
@@ -1425,7 +1425,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             this.hoverTicks = 0;
             this.flyTicks = 0;
         }
-        if (this.getAttackTarget() != null && this.getAttackTarget().posY + 5 < this.posY && (properties == null || properties != null && !properties.isStone()) && (!world.isRemote  && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSleeping() && this.canMove() && this.onGround)) {
+        if (this.getAttackTarget() != null && this.getAttackTarget().posY + 5 < this.posY && (capability == null || capability != null && !capability.isStoned()) && (!world.isRemote  && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSleeping() && this.canMove() && this.onGround)) {
             this.setHovering(true);
             this.setSleeping(false);
             this.setSitting(false);
@@ -1555,8 +1555,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     public boolean doesWantToLand() {
-        EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, EntityEffectProperties.class);
-        return this.flyTicks > 6000 || down() || flyTicks > 40 && this.flyProgress == 0 || properties != null && properties.isStone();
+        IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(this);
+        return this.flyTicks > 6000 || down() || flyTicks > 40 && this.flyProgress == 0 || capability != null && capability.isStoned();
     }
 
     public abstract String getVariantName(int variant);

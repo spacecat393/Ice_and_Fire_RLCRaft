@@ -1,9 +1,9 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
+import com.github.alexthe666.iceandfire.api.InFCapabilities;
 import com.github.alexthe666.iceandfire.entity.DragonUtils;
-import com.github.alexthe666.iceandfire.entity.EntityEffectProperties;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
-import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.math.BlockPos;
@@ -49,14 +49,14 @@ public class DragonAIWaterTarget extends EntityAIBase {
 	}
 
 	public boolean continueExecuting() {
-		EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(dragon, EntityEffectProperties.class);
+		IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(dragon);
 		if (!dragon.isInWater()) {
 			return false;
 		}
 		if (dragon.isSleeping()) {
 			return false;
 		}
-		if (properties != null && properties.isStone()) {
+		if (capability != null && capability.isStoned()) {
 			return false;
 		}
 		return dragon.airTarget != null;

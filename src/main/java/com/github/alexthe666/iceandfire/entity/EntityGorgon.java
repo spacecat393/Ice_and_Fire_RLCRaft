@@ -1,14 +1,14 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
+import com.github.alexthe666.iceandfire.api.InFCapabilities;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.GorgonAIStareAttack;
-import com.github.alexthe666.iceandfire.message.MessageStoneStatue;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
-import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.ilexiconn.llibrary.server.entity.multipart.PartEntity;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
@@ -61,8 +61,8 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
 
 	public static boolean isStoneMob(EntityLivingBase mob) {
 		if (mob instanceof EntityLiving) {
-			EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(mob, EntityEffectProperties.class);
-			return properties != null && properties.isStone();
+			IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(mob);
+			return capability != null && capability.isStoned();
 		}
 		return false;
 	}
@@ -99,8 +99,9 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
 		this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntityLiving.class, 0, true, false, new Predicate<Entity>() {
 			@Override
 			public boolean apply(@Nullable Entity entity) {
-				EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, EntityEffectProperties.class);
-				return entity instanceof EntityLiving && DragonUtils.isAlive((EntityLiving)entity) && !(entity instanceof PartEntity) && (properties == null || properties != null && !properties.isStone()) || (entity instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) entity).canBeTurnedToStone());
+				if(!(entity instanceof EntityLiving)) return false;
+				IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability((EntityLiving)entity);
+				return DragonUtils.isAlive((EntityLiving)entity) && !(entity instanceof PartEntity) && (capability == null || capability != null && !capability.isStoned()) || (entity instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) entity).canBeTurnedToStone());
 			}
 		}));
 		this.tasks.removeTask(aiMelee);
@@ -212,15 +213,10 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
 							this.getAttackTarget().attackEntityFrom(IceAndFire.gorgon, Integer.MAX_VALUE);
 						} else {
 							if (this.getAttackTarget() instanceof EntityLiving && !(this.getAttackTarget() instanceof IBlacklistedFromStatues) || this.getAttackTarget() instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) this.getAttackTarget()).canBeTurnedToStone()) {
-								EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this.getAttackTarget(), EntityEffectProperties.class);
+								IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(this.getAttackTarget());
 								EntityLiving attackTarget = (EntityLiving) this.getAttackTarget();
-								if (properties != null && !properties.isStone()) {
-									properties.turnToStone();
-									if (world.isRemote) {
-										IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageStoneStatue(attackTarget.getEntityId(), true));
-									} else {
-										IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageStoneStatue(attackTarget.getEntityId(), true));
-									}
+								if (capability != null && !capability.isStoned()) {
+									capability.setStoned();
 									this.playSound(ModSounds.GORGON_TURN_STONE, 1, 1);
 									this.setAttackTarget(null);
 								}

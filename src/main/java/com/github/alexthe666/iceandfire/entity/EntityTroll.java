@@ -1,13 +1,14 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
+import com.github.alexthe666.iceandfire.api.InFCapabilities;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.TrollAIFleeSun;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
-import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -277,9 +278,9 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
             float f = this.getBrightness();
             BlockPos blockpos = this.getRidingEntity() instanceof EntityBoat ? (new BlockPos(this.posX, (double) Math.round(this.posY), this.posZ)).up() : new BlockPos(this.posX, (double) Math.round(this.posY), this.posZ);
             if (f > 0.5F && this.world.canSeeSky(blockpos)) {
-                EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(this, EntityEffectProperties.class);
-                if (properties != null && !properties.isStone()) {
-                    properties.turnToStone();
+                IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(this);
+                if (capability != null && !capability.isStoned()) {
+                    capability.setStoned();
                     this.motionX = 0;
                     this.motionY = 0;
                     this.motionZ = 0;

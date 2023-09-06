@@ -1,7 +1,8 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
+import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
+import com.github.alexthe666.iceandfire.api.InFCapabilities;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.entity.projectile.ProjectileHelper;
@@ -128,9 +129,9 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
 				if (this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase && !movingObject.entityHit.isEntityEqual(shootingEntity)) {
 					movingObject.entityHit.attackEntityFrom(IceAndFire.dragonIce, 10.0F);
 					if (movingObject.entityHit instanceof EntityLivingBase) {
-						EntityEffectProperties effectProperties = EntityPropertiesHandler.INSTANCE.getProperties(movingObject.entityHit, EntityEffectProperties.class);
-						if (effectProperties != null) {
-							effectProperties.setFrozenFor(200);
+						IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability((EntityLivingBase)movingObject.entityHit);
+						if (capability != null) {
+							capability.setFrozen(200);
 						}
 					}
 					if (movingObject.entityHit instanceof EntityLivingBase && ((EntityLivingBase) movingObject.entityHit).getHealth() == 0) {

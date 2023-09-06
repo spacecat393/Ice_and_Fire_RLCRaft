@@ -1,7 +1,8 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
+import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
+import com.github.alexthe666.iceandfire.api.InFCapabilities;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.util.DamageSource;
@@ -81,9 +82,9 @@ public class EntityDragonIce extends EntityFireball implements IDragonProjectile
 				this.applyEnchantments(this.shootingEntity, movingObject.entityHit);
 				movingObject.entityHit.attackEntityFrom(IceAndFire.dragonIce, 3);
 				if (movingObject.entityHit instanceof EntityLivingBase) {
-					EntityEffectProperties effectProperties = EntityPropertiesHandler.INSTANCE.getProperties(movingObject.entityHit, EntityEffectProperties.class);
-					if (effectProperties != null) {
-						effectProperties.setFrozenFor(200);
+					IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability((EntityLivingBase)movingObject.entityHit);
+					if (capability != null) {
+						capability.setFrozen(200);
 					}
 				}
 			}

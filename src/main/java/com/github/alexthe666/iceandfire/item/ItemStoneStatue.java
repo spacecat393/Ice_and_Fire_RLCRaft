@@ -1,10 +1,9 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.entity.EntityEffectProperties;
+import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
+import com.github.alexthe666.iceandfire.api.InFCapabilities;
 import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
-import com.github.alexthe666.iceandfire.message.MessageStoneStatue;
-import net.ilexiconn.llibrary.server.entity.EntityPropertiesHandler;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -99,9 +98,8 @@ public class ItemStoneStatue extends Item {
 						if (!worldIn.isRemote) {
 							worldIn.spawnEntity(entity);
 						}
-						EntityEffectProperties properties = EntityPropertiesHandler.INSTANCE.getProperties(entity, EntityEffectProperties.class);
-						properties.turnToStone();
-						IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageStoneStatue(entity.getEntityId(), true));
+						IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability((EntityLiving)entity);
+						capability.setStoned();
 						((EntityLiving) entity).readEntityFromNBT(stack.getTagCompound());
 						((EntityLiving) entity).setNoAI(true);
 						float yaw = MathHelper.wrapDegrees(player.rotationYaw + 180F);
