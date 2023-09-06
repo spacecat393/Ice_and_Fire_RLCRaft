@@ -2187,6 +2187,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     public void onDeath(DamageSource cause) {
         super.onDeath(cause);
         if (dragonInv != null && !this.world.isRemote) {
+            IEntityEffectCapability cap = InFCapabilities.getEntityEffectCapability(this);
+            if(cap != null && cap.isStoned()) return;
             for (int i = 0; i < dragonInv.getSizeInventory(); ++i) {
                 ItemStack itemstack = dragonInv.getStackInSlot(i);
                 if (!itemstack.isEmpty()) {
@@ -2273,7 +2275,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         return DragonUtils.canTameDragonAttack(this, entity);
     }
 
-    public void dropArmor(){
+    public void dropArmor() {
+        IEntityEffectCapability cap = InFCapabilities.getEntityEffectCapability(this);
+        if(cap != null && cap.isStoned()) return;
         if (dragonInv != null && !this.world.isRemote) {
             for (int i = 0; i < dragonInv.getSizeInventory(); ++i) {
                 ItemStack itemstack = dragonInv.getStackInSlot(i);

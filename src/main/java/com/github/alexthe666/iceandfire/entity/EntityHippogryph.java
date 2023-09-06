@@ -1106,6 +1106,8 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 	public void onDeath(DamageSource cause) {
 		super.onDeath(cause);
 		if (hippogryphInventory != null && !this.world.isRemote) {
+			IEntityEffectCapability cap = InFCapabilities.getEntityEffectCapability(this);
+			if(cap != null && cap.isStoned()) return;
 			for (int i = 0; i < hippogryphInventory.getSizeInventory(); ++i) {
 				ItemStack itemstack = hippogryphInventory.getStackInSlot(i);
 				if (!itemstack.isEmpty()) {
@@ -1174,6 +1176,8 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 	}
 
 	public void dropArmor(){
+		IEntityEffectCapability cap = InFCapabilities.getEntityEffectCapability(this);
+		if(cap != null && cap.isStoned()) return;
 		if (hippogryphInventory != null && !this.world.isRemote) {
 			for (int i = 0; i < hippogryphInventory.getSizeInventory(); ++i) {
 				ItemStack itemstack = hippogryphInventory.getStackInSlot(i);

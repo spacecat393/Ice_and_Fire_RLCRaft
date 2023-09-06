@@ -1,6 +1,8 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
+import com.github.alexthe666.iceandfire.api.InFCapabilities;
 import com.github.alexthe666.iceandfire.core.ModKeys;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.*;
@@ -792,7 +794,24 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
         return LOOT;
     }
 
+    @Override
+    public void onDeath(DamageSource cause) {
+        super.onDeath(cause);
+        if (hippocampusInventory != null && !this.world.isRemote) {
+            IEntityEffectCapability cap = InFCapabilities.getEntityEffectCapability(this);
+            if(cap != null && cap.isStoned()) return;
+            for (int i = 0; i < hippocampusInventory.getSizeInventory(); ++i) {
+                ItemStack itemstack = hippocampusInventory.getStackInSlot(i);
+                if (!itemstack.isEmpty()) {
+                    this.entityDropItem(itemstack, 0.0F);
+                }
+            }
+        }
+    }
+
     public void dropArmor(){
+        IEntityEffectCapability cap = InFCapabilities.getEntityEffectCapability(this);
+        if(cap != null && cap.isStoned()) return;
         if (hippocampusInventory != null && !this.world.isRemote) {
             for (int i = 0; i < hippocampusInventory.getSizeInventory(); ++i) {
                 ItemStack itemstack = hippocampusInventory.getStackInSlot(i);
