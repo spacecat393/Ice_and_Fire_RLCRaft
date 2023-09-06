@@ -773,6 +773,12 @@ public class EntityDeathWorm extends EntityTameable implements IBlacklistedFromS
         return this.getControllingPassenger() == null && this.world.isMaterialInBB(this.getEntityBoundingBox(), Material.SAND);
     }
 
+    @SideOnly(Side.CLIENT)
+    @Override
+    public AxisAlignedBB getRenderBoundingBox() {
+        return this.getEntityBoundingBox().grow((this.getEntityBoundingBox().maxX-this.getEntityBoundingBox().minX)*7, 0, (this.getEntityBoundingBox().maxZ-this.getEntityBoundingBox().minZ)*7);
+    }
+
     @Override
     public int getAnimationTick() {
         return animationTick;
