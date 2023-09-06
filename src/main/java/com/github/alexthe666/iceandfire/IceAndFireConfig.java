@@ -1,6 +1,10 @@
 package com.github.alexthe666.iceandfire;
 
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class IceAndFireConfig {
 
@@ -140,6 +144,8 @@ public class IceAndFireConfig {
 	public boolean lightningDragonParalysis = true;
 	public int lightningDragonParalysisTicks = 10;
 	public boolean silverArmorRedesign = false;
+	public String[] stoneEntityBlacklist = new String[]{""};
+	public int[] structureDimBlacklist = new int[]{};
 
     public void init(Configuration config) {
 		this.customMainMenu = config.getBoolean("Custom main menu", "all", true, "Whether to display the dragon on the main menu or not");
@@ -298,5 +304,18 @@ public class IceAndFireConfig {
 		this.lightningDragonParalysisTicks = config.getInt("Lightning Dragon Paralysis Ticks", "all", 10, 1, 200, "The length of the paralysis effect for lightning dragons in ticks");
 
 		this.silverArmorRedesign = config.getBoolean("Silver Armor Redesign", "all", false, "True if silver armor should use the updated silver armor model and texture");
+
+		this.stoneEntityBlacklist = config.getStringList("Stone Entity Blacklist", "all", new String[]{""}, "Entities in this list will be blacklisted from being stoned");
+		this.structureDimBlacklist = config.get("Structure Dim Blacklist", "all", new int[]{}, "Structures will not be spawned in dimensions in this list").getIntList();
+	}
+
+	private List<ResourceLocation> stoneBlacklist = null;
+
+	public List<ResourceLocation> getStoneEntityBlacklist() {
+		if(this.stoneBlacklist != null) return this.stoneBlacklist;
+		List<ResourceLocation> list = new ArrayList<>();
+		for(String string : this.stoneEntityBlacklist) list.add(new ResourceLocation(string));
+		this.stoneBlacklist = list;
+		return this.stoneBlacklist;
 	}
 }

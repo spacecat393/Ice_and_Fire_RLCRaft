@@ -8,6 +8,7 @@ import com.github.alexthe666.iceandfire.entity.*;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -62,9 +63,18 @@ public class ItemGorgonHead extends Item implements ICustomRendered {
 		double d1 = dist;
 		Entity pointedEntity = null;
 		List<Entity> list = worldIn.getEntitiesInAABBexcluding(entity, entity.getEntityBoundingBox().expand(vec3d1.x * dist, vec3d1.y * dist, vec3d1.z * dist).grow(1.0D, 1.0D, 1.0D), Predicates.and(EntitySelectors.NOT_SPECTATING, new Predicate<Entity>() {
-			public boolean apply(@Nullable Entity entity) {
-				boolean blindness = entity instanceof EntityLivingBase && ((EntityLivingBase) entity).isPotionActive(MobEffects.BLINDNESS) || (entity instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues) entity).canBeTurnedToStone());
-				return entity != null && entity.canBeCollidedWith() && !blindness && (entity instanceof EntityPlayer || (entity instanceof EntityLiving && InFCapabilities.getEntityEffectCapability((EntityLiving)entity) != null && !InFCapabilities.getEntityEffectCapability((EntityLiving)entity).isStoned()));
+			public boolean apply(@Nullable Entity in) {
+				if(in instanceof EntityLiving) {
+					EntityLiving entity = (EntityLiving)in;
+					if(!entity.isDead && DragonUtils.isAlive(entity) && entity.canBeCollidedWith() && !entity.isPotionActive(MobEffects.BLINDNESS) && !(entity instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues)entity).canBeTurnedToStone())) {
+						ResourceLocation id = EntityList.getKey(entity);
+						if(id != null && !IceAndFire.CONFIG.getStoneEntityBlacklist().contains(id)) {
+							IEntityEffectCapability cap = InFCapabilities.getEntityEffectCapability(entity);
+							return cap != null && !cap.isStoned();
+						}
+					}
+				}
+				return false;
 			}
 		}));
 		double d2 = d1;

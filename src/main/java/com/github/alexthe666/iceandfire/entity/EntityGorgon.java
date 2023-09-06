@@ -93,15 +93,20 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
 		this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true, false, new Predicate<EntityPlayer>() {
 			@Override
 			public boolean apply(@Nullable EntityPlayer entity) {
-				return true;
+				return entity != null && !entity.isCreative() && !entity.isSpectator();
 			}
 		}));
-		this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntityLiving.class, 0, true, false, new Predicate<Entity>() {
+		this.targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntityLiving.class, 0, true, false, new Predicate<EntityLiving>() {
 			@Override
-			public boolean apply(@Nullable Entity entity) {
-				if(!(entity instanceof EntityLiving)) return false;
-				IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability((EntityLiving)entity);
-				return DragonUtils.isAlive((EntityLiving)entity) && !(entity instanceof PartEntity) && (capability == null || capability != null && !capability.isStoned()) || (entity instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) entity).canBeTurnedToStone());
+			public boolean apply(@Nullable EntityLiving entity) {
+				if(entity != null && !entity.isDead && DragonUtils.isAlive(entity) && entity.canBeCollidedWith() && !(entity instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues)entity).canBeTurnedToStone())) {
+					ResourceLocation id = EntityList.getKey(entity);
+					if(id != null && !IceAndFire.CONFIG.getStoneEntityBlacklist().contains(id)) {
+						IEntityEffectCapability cap = InFCapabilities.getEntityEffectCapability(entity);
+						return cap != null && !cap.isStoned();
+					}
+				}
+				return false;
 			}
 		}));
 		this.tasks.removeTask(aiMelee);

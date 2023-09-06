@@ -266,7 +266,7 @@ public class EventLiving {
 				}
 			}
 		}
-		if (event.getTarget() instanceof EntityLiving) {
+		if (event.getTarget() instanceof EntityLiving && event.getTarget().isEntityAlive()) {
 			boolean stonePlayer = event.getTarget() instanceof EntityStoneStatue;
 			IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability((EntityLiving)event.getTarget());
 			if (capability != null && capability.isStoned() || stonePlayer) {
