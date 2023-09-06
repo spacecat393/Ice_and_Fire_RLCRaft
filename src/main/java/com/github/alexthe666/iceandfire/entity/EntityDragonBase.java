@@ -37,6 +37,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.ContainerHorseChest;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -1059,8 +1060,32 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                 }
             }
         }
-        return super.processInteract(player, hand);
+        //Don't call EntityAnimal::processInteract() due to custom breeding handling
+        if(stack.getItem() == Items.SPAWN_EGG) {
+            if(!this.world.isRemote) {
+                Class<? extends Entity> oclass = EntityList.getClass(ItemMonsterPlacer.getNamedIdFrom(stack));
 
+                if(oclass != null && this.getClass() == oclass) {
+                    EntityAgeable entityageable = this.createChild(this);
+
+                    if(entityageable != null) {
+                        entityageable.setGrowingAge(-24000);
+                        entityageable.setLocationAndAngles(this.posX, this.posY, this.posZ, 0.0F, 0.0F);
+                        this.world.spawnEntity(entityageable);
+
+                        if(stack.hasDisplayName()) {
+                            entityageable.setCustomNameTag(stack.getDisplayName());
+                        }
+
+                        if(!player.capabilities.isCreativeMode) {
+                            stack.shrink(1);
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+        else return false;
     }
 
     protected abstract ItemStack getSkull();

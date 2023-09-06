@@ -32,6 +32,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.IInventoryChangedListener;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
+import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -214,6 +215,11 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 		return this.ticksExisted % 50 > 43;
 	}
 
+	@Override
+	public boolean isBreedingItem(ItemStack stack) {
+		return stack.getItem() == Items.RABBIT_STEW;
+	}
+
 	public boolean processInteract(EntityPlayer player, EnumHand hand) {
 		ItemStack itemstack = player.getHeldItem(hand);
 		String s = TextFormatting.getTextWithoutFormattingCodes(player.getName());
@@ -241,12 +247,16 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 				}
 				return true;
 			}
-			if (itemstack != null && itemstack.getItem() == Items.RABBIT_STEW && this.getGrowingAge() == 0 && !isInLove()) {
-				this.setInLove(player);
+			if (this.isBreedingItem(itemstack) && this.getGrowingAge() == 0 && !isInLove()) {
 				this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
-				if (!player.isCreative()) {
-					itemstack.shrink(1);
-				}
+				if(!player.isCreative()) itemstack.shrink(1);
+				this.setInLove(player);
+				return true;
+			}
+			if (this.isBreedingItem(itemstack) && this.isChild()) {
+				this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
+				if(!player.isCreative()) itemstack.shrink(1);
+				this.ageUp((int)((float)(-this.getGrowingAge() / 20) * 0.1F), true);
 				return true;
 			}
 			if (itemstack != null && itemstack.getItem() == Items.STICK) {
@@ -298,7 +308,31 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 				}
 			}
 		}
-		return super.processInteract(player, hand);
+		//Don't call EntityAnimal::processInteract() due to custom breeding handling
+		if(itemstack.getItem() == Items.SPAWN_EGG) {
+			if(!this.world.isRemote) {
+				Class <? extends Entity > oclass = EntityList.getClass(ItemMonsterPlacer.getNamedIdFrom(itemstack));
+				if(oclass != null && this.getClass() == oclass) {
+					EntityAgeable entityageable = this.createChild(this);
+
+					if(entityageable != null) {
+						entityageable.setGrowingAge(-24000);
+						entityageable.setLocationAndAngles(this.posX, this.posY, this.posZ, 0.0F, 0.0F);
+						this.world.spawnEntity(entityageable);
+
+						if(itemstack.hasDisplayName()) {
+							entityageable.setCustomNameTag(itemstack.getDisplayName());
+						}
+
+						if(!player.capabilities.isCreativeMode) {
+							itemstack.shrink(1);
+						}
+					}
+				}
+			}
+			return true;
+		}
+		else return false;
 	}
 
 
