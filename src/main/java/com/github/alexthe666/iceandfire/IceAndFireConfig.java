@@ -46,7 +46,7 @@ public class IceAndFireConfig {
 	public int dragonAttackDamage = 17;
 	public int maxDragonFlight = 128;
 	public int dragonGoldSearchLength = 17;
-	public boolean canDragonsDespawn = true;
+	public boolean canDragonsDespawn = false;
 	public boolean dragonDigWhenStuck = true;
 	public boolean dragonDropSkull = true;
 	public boolean dragonDropHeart = true;
@@ -189,7 +189,7 @@ public class IceAndFireConfig {
 		this.dragonAttackDamage = config.getInt("Dragon Attack Damage", "all", 17, 1, 10000, "Max dragon attack damage. Attack Damage is scaled to this");
 		this.maxDragonFlight = config.getInt("Max Dragon Flight Height", "all", 128, 10, 1000, "How high dragons can fly, in Y height.");
 		this.dragonGoldSearchLength = config.getInt("Dragon Gold Search Length", "all", 17, 0, 10000, "How far away dragons will detect gold blocks being destroyed or chests being opened");
-		this.canDragonsDespawn = config.getBoolean("Dragons Despawn", "all", true, "True if dragons can despawn. Note that if this is false there may be SERIOUS lag issues.");
+		this.canDragonsDespawn = config.getBoolean("Dragons Despawn", "all", false, "True if dragons can despawn. Note that if this is false there may be SERIOUS lag issues.");
 		this.dragonDigWhenStuck = config.getBoolean("Dragons Dig When Stuck", "all", true, "True if dragons can break blocks if they get stuck. Turn this off if your dragons randomly explode.");
 		this.dragonDropSkull = config.getBoolean("Dragons Drop Skull", "all", true, "True if dragons can drop their skull on death.");
 		this.dragonDropHeart = config.getBoolean("Dragons Drop Heart", "all", true, "True if dragons can drop their heart on death.");
