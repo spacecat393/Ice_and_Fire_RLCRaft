@@ -4,7 +4,6 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -26,12 +25,12 @@ public class BlockMyrmexConnectedResin extends Block {
 
     public BlockMyrmexConnectedResin(boolean jungle, boolean glass) {
         super(Material.ROCK);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(UP, Boolean.valueOf(false))
-                .withProperty(DOWN, Boolean.valueOf(false))
-                .withProperty(NORTH, Boolean.valueOf(false))
-                .withProperty(EAST, Boolean.valueOf(false))
-                .withProperty(SOUTH, Boolean.valueOf(false))
-                .withProperty(WEST, Boolean.valueOf(false))
+        this.setDefaultState(this.blockState.getBaseState().withProperty(UP, Boolean.FALSE)
+                .withProperty(DOWN, Boolean.FALSE)
+                .withProperty(NORTH, Boolean.FALSE)
+                .withProperty(EAST, Boolean.FALSE)
+                .withProperty(SOUTH, Boolean.FALSE)
+                .withProperty(WEST, Boolean.FALSE)
         );
         if (glass) {
             this.setHardness(1.5F);
@@ -45,9 +44,10 @@ public class BlockMyrmexConnectedResin extends Block {
             this.setRegistryName(IceAndFire.MODID, jungle ? "myrmex_jungle_resin_block" : "myrmex_desert_resin_block");
         }
         this.setCreativeTab(IceAndFire.TAB);
-
     }
 
+    @Override
+    @SuppressWarnings("deprecation")
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
         return state.withProperty(UP, canFenceConnectTo(worldIn, pos, EnumFacing.UP))
                 .withProperty(DOWN, canFenceConnectTo(worldIn, pos, EnumFacing.DOWN))
@@ -57,10 +57,12 @@ public class BlockMyrmexConnectedResin extends Block {
                 .withProperty(WEST, canFenceConnectTo(worldIn, pos, EnumFacing.WEST));
     }
 
+    @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, new IProperty[]{UP, DOWN, NORTH, SOUTH, EAST, WEST});
+        return new BlockStateContainer(this, UP, DOWN, NORTH, SOUTH, EAST, WEST);
     }
 
+    @Override
     public int getMetaFromState(IBlockState state) {
         return 0;
     }
@@ -71,19 +73,19 @@ public class BlockMyrmexConnectedResin extends Block {
         return block == this;
     }
 
+    @Override
+    @SuppressWarnings("deprecation")
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
 
+    @Override
+    @SuppressWarnings("deprecation")
     @SideOnly(Side.CLIENT)
     public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
         IBlockState iblockstate = blockAccess.getBlockState(pos.offset(side));
         Block block = iblockstate.getBlock();
-
-        if (block == this) {
-            return false;
-        }
 
         return block != this && super.shouldSideBeRendered(blockState, blockAccess, pos, side);
     }
@@ -93,5 +95,4 @@ public class BlockMyrmexConnectedResin extends Block {
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.TRANSLUCENT;
     }
-
 }

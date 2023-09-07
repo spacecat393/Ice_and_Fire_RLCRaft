@@ -6,7 +6,6 @@ import com.github.alexthe666.iceandfire.item.ICustomRendered;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -28,9 +27,9 @@ import javax.annotation.Nullable;
 
 public class BlockMyrmexResin extends Block implements ICustomRendered {
 
-    private boolean sticky;
-    protected static final AxisAlignedBB STICKY_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.875D, 1.0D);
-    public static final PropertyEnum VARIANT = PropertyEnum.create("variant", BlockMyrmexResin.EnumType.class);
+    public final boolean sticky;
+    private static final AxisAlignedBB STICKY_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.875D, 1.0D);
+    public static final PropertyEnum<EnumType> VARIANT = PropertyEnum.create("variant", BlockMyrmexResin.EnumType.class);
 
     public BlockMyrmexResin(boolean sticky) {
         super(Material.CLAY);
@@ -43,13 +42,15 @@ public class BlockMyrmexResin extends Block implements ICustomRendered {
         this.sticky = sticky;
     }
 
+    @Override
+    @SuppressWarnings("deprecation")
     public float getSlipperiness(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable Entity entity) {
-        return entity != null && entity instanceof EntityMyrmexBase ? slipperiness : 0.75F;
+        return entity instanceof EntityMyrmexBase ? this.slipperiness : 0.75F;
     }
 
     @Override
     public int damageDropped(IBlockState state) {
-        return ((EnumType) state.getValue(VARIANT)).ordinal();
+        return state.getValue(VARIANT).ordinal();
     }
 
     @Override
@@ -59,11 +60,11 @@ public class BlockMyrmexResin extends Block implements ICustomRendered {
         items.add(new ItemStack(this, 1, 1));
     }
 
-    @Deprecated
+    @Override
+    @SuppressWarnings("deprecation")
     public boolean canEntitySpawn(IBlockState state, Entity entityIn) {
         return false;
     }
-
 
     @Override
     @SuppressWarnings("deprecation")
@@ -73,9 +74,10 @@ public class BlockMyrmexResin extends Block implements ICustomRendered {
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return ((EnumType) state.getValue(VARIANT)).ordinal();
+        return state.getValue(VARIANT).ordinal();
     }
 
+    @Override
     protected ItemStack getSilkTouchDrop(IBlockState state) {
         Item item = Item.getItemFromBlock(this);
         int i = this.getMetaFromState(state);
@@ -84,17 +86,19 @@ public class BlockMyrmexResin extends Block implements ICustomRendered {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, new IProperty[]{VARIANT});
+        return new BlockStateContainer(this, VARIANT);
     }
 
     @Nullable
+    @Override
+    @SuppressWarnings("deprecation")
     public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
-        return super.getCollisionBoundingBox(blockState, worldIn, pos);
+        return this.sticky ? STICKY_AABB : super.getCollisionBoundingBox(blockState, worldIn, pos);
     }
 
-
-    public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
-        if(sticky) {
+    @Override
+    public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
+        if(this.sticky) {
             if((entityIn instanceof EntityMyrmexBase)){
                 entityIn.motionX *= 1.2D;
                 entityIn.motionY *= 1.2D;
@@ -103,14 +107,14 @@ public class BlockMyrmexResin extends Block implements ICustomRendered {
                 entityIn.motionX *= 0.4D;
                 entityIn.motionZ *= 0.4D;
             }
-
         }
     }
 
     public enum EnumType implements IStringSerializable {
-        DESERT("desert"), JUNGLE("jungle");
+        DESERT("desert"),
+        JUNGLE("jungle");
 
-        private String name;
+        private final String name;
         EnumType(String name){
             this.name = name;
         }
@@ -124,6 +128,5 @@ public class BlockMyrmexResin extends Block implements ICustomRendered {
         public String getName() {
             return this.name;
         }
-
     }
 }

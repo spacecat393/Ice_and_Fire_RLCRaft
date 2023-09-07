@@ -2,37 +2,22 @@ package com.github.alexthe666.iceandfire.block;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockDirt;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.Random;
 
 public class BlockReturningState extends Block {
-    public Item itemBlock;
-    private IBlockState returnState;
+    private final IBlockState returnState;
     public static final PropertyBool REVERTS = PropertyBool.create("revert");
 
     public BlockReturningState(Material materialIn, String gameName, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound, IBlockState returnToState) {
-        super(materialIn);
-        this.setTranslationKey(name);
-        this.setHarvestLevel(toolUsed, toolStrength);
-        this.setHardness(hardness);
-        this.setResistance(resistance);
-        this.setSoundType(sound);
-        this.setCreativeTab(IceAndFire.TAB);
-        setRegistryName(IceAndFire.MODID, gameName);
-        this.returnState = returnToState;
-        this.setDefaultState(this.blockState.getBaseState().withProperty(REVERTS, Boolean.valueOf(false)));
-        this.setTickRandomly(true);
+        this(materialIn, gameName, name, toolUsed, toolStrength, hardness, resistance, sound, false, returnToState);
     }
 
     @SuppressWarnings("deprecation")
@@ -49,43 +34,30 @@ public class BlockReturningState extends Block {
         }
         setRegistryName(IceAndFire.MODID, gameName);
         this.returnState = returnToState;
-        this.setDefaultState(this.blockState.getBaseState().withProperty(REVERTS, Boolean.valueOf(false)));
+        this.setDefaultState(this.blockState.getBaseState().withProperty(REVERTS, Boolean.FALSE));
         this.setTickRandomly(true);
     }
 
-    public BlockReturningState(Material materialIn, String gameName, String name, float hardness, float resistance, SoundType sound, IBlockState returnToState) {
-        super(materialIn);
-        this.setTranslationKey(name);
-        this.setHardness(hardness);
-        this.setResistance(resistance);
-        this.setSoundType(sound);
-        this.setCreativeTab(IceAndFire.TAB);
-        setRegistryName(IceAndFire.MODID, gameName);
-        this.returnState = returnToState;
-        this.setDefaultState(this.blockState.getBaseState().withProperty(REVERTS, Boolean.valueOf(false)));
-        this.setTickRandomly(true);
-    }
-
+    @Override
     public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-        if (!worldIn.isRemote) {
-            if (!worldIn.isAreaLoaded(pos, 3))
-                return;
-            if (state.getValue(REVERTS) && rand.nextInt(3) == 0) {
-                worldIn.setBlockState(pos, returnState);
-            }
+        if (!worldIn.isRemote && state.getValue(REVERTS) && rand.nextInt(3) == 0 && worldIn.isAreaLoaded(pos, 3)) {
+            worldIn.setBlockState(pos, returnState);
         }
     }
 
+    @Override
+    @SuppressWarnings("deprecation")
     public IBlockState getStateFromMeta(int meta) {
         return this.getDefaultState().withProperty(REVERTS, meta == 1);
     }
 
+    @Override
     public int getMetaFromState(IBlockState state) {
         return state.getValue(REVERTS) ? 1 : 0;
     }
 
+    @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, new IProperty[]{REVERTS});
+        return new BlockStateContainer(this, REVERTS);
     }
-
 }

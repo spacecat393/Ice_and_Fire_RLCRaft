@@ -25,8 +25,8 @@ public class FoodUtils {
     }
 
     public static int getFoodPoints(ItemStack item, boolean meatOnly, boolean includeFish){
-        if(item != null && item != ItemStack.EMPTY && item.getItem() != null && item.getItem() instanceof ItemFood){
-            int food = (int)(((ItemFood)item.getItem()).getHealAmount(item) * 10);
+        if(item != null && item.getItem() instanceof ItemFood){
+            int food = ((ItemFood)item.getItem()).getHealAmount(item) * 10;
             if(!meatOnly){
                 return food;
             }else if(((ItemFood)item.getItem()).isWolfsFavoriteMeat()){
@@ -43,6 +43,7 @@ public class FoodUtils {
         if(item instanceof ItemSeeds && item != Items.NETHER_WART){
             return true;
         }
+
         NonNullList<ItemStack> listAllseed = OreDictionary.getOres("listAllseed");
         NonNullList<ItemStack> listAllSeeds = OreDictionary.getOres("listAllSeeds");
         NonNullList<ItemStack> seed = OreDictionary.getOres("seed");

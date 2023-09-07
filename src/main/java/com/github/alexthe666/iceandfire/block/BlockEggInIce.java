@@ -11,8 +11,8 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.stats.StatBase;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
@@ -25,10 +25,11 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class BlockEggInIce extends BlockContainer {
-	public Item itemBlock;
 
 	@SuppressWarnings("deprecation")
 	public BlockEggInIce() {
@@ -45,11 +46,6 @@ public class BlockEggInIce extends BlockContainer {
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
 		return new TileEntityEggInIce();
-	}
-
-	@SideOnly(Side.CLIENT)
-	public Item getItem(World worldIn, BlockPos pos) {
-		return Item.getItemFromBlock(Blocks.ICE);
 	}
 
 	@Override
@@ -77,22 +73,23 @@ public class BlockEggInIce extends BlockContainer {
 			return false;
 		}
 
-		return block == this ? false : super.shouldSideBeRendered(iblockstate, worldIn, pos, side);
+		return super.shouldSideBeRendered(iblockstate, worldIn, pos, side);
 	}
 
 	@Override
 	public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack) {
-		if (worldIn.getTileEntity(pos) != null) {
-			if (worldIn.getTileEntity(pos) instanceof TileEntityEggInIce) {
-				TileEntityEggInIce tile = (TileEntityEggInIce) worldIn.getTileEntity(pos);
-				tile.spawnEgg();
-			}
+		TileEntity tile = worldIn.getTileEntity(pos);
+		if(tile instanceof TileEntityEggInIce) {
+			((TileEntityEggInIce)tile).spawnEgg();
 		}
-		player.addStat(StatList.getBlockStats(this));
+
+		StatBase stat = StatList.getBlockStats(this);
+		if(stat != null) player.addStat(stat);
+
 		player.addExhaustion(0.025F);
 
 		if (this.canSilkHarvest(worldIn, pos, state, player) && EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, stack) > 0) {
-			java.util.List<ItemStack> items = new java.util.ArrayList<ItemStack>();
+			List<ItemStack> items = new ArrayList<>();
 			ItemStack itemstack = new ItemStack(Blocks.ICE, 1);
 
 			if (!itemstack.isEmpty()) {
@@ -108,9 +105,8 @@ public class BlockEggInIce extends BlockContainer {
 				return;
 			}
 
-			int i = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, stack);
 			harvesters.set(player);
-			this.dropBlockAsItem(worldIn, pos, state, i);
+			this.dropBlockAsItem(worldIn, pos, state, EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, stack));
 			harvesters.set(null);
 			Material material = worldIn.getBlockState(pos.down()).getMaterial();
 
@@ -125,10 +121,6 @@ public class BlockEggInIce extends BlockContainer {
 		return 0;
 	}
 
-	public int getMobilityFlag() {
-		return 0;
-	}
-
 	@Override
 	@SuppressWarnings("deprecation")
 	public boolean isOpaqueCube(IBlockState blockstate) {
@@ -139,9 +131,5 @@ public class BlockEggInIce extends BlockContainer {
 	@SuppressWarnings("deprecation")
 	public boolean isFullCube(IBlockState blockstate) {
 		return false;
-	}
-
-	public int getRenderType() {
-		return 3;
 	}
 }

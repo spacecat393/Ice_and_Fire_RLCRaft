@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.structures;
 
-import com.github.alexthe666.iceandfire.block.BlockGoldPile;
+import com.github.alexthe666.iceandfire.block.BlockCoinPile;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.EntityCyclops;
 import net.minecraft.block.BlockBone;
@@ -86,11 +86,11 @@ public class WorldGenCyclopsCave extends WorldGenerator {
                         sheepPenCount++;
                     }
                     if(rand.nextInt(80) == 0 && isTouchingAir(worldIn, blockpos.up())){
-                        worldIn.setBlockState(blockpos.up(), ModBlocks.goldPile.getDefaultState().withProperty(BlockGoldPile.LAYERS, 8), 3);
-                        worldIn.setBlockState(blockpos.up().north(), ModBlocks.goldPile.getDefaultState().withProperty(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
-                        worldIn.setBlockState(blockpos.up().south(), ModBlocks.goldPile.getDefaultState().withProperty(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
-                        worldIn.setBlockState(blockpos.up().west(), ModBlocks.goldPile.getDefaultState().withProperty(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
-                        worldIn.setBlockState(blockpos.up().east(), ModBlocks.goldPile.getDefaultState().withProperty(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)), 3);
+                        worldIn.setBlockState(blockpos.up(), ModBlocks.goldPile.getDefaultState().withProperty(BlockCoinPile.LAYERS, 8), 3);
+                        worldIn.setBlockState(blockpos.up().north(), ModBlocks.goldPile.getDefaultState().withProperty(BlockCoinPile.LAYERS, 1 + new Random().nextInt(7)), 3);
+                        worldIn.setBlockState(blockpos.up().south(), ModBlocks.goldPile.getDefaultState().withProperty(BlockCoinPile.LAYERS, 1 + new Random().nextInt(7)), 3);
+                        worldIn.setBlockState(blockpos.up().west(), ModBlocks.goldPile.getDefaultState().withProperty(BlockCoinPile.LAYERS, 1 + new Random().nextInt(7)), 3);
+                        worldIn.setBlockState(blockpos.up().east(), ModBlocks.goldPile.getDefaultState().withProperty(BlockCoinPile.LAYERS, 1 + new Random().nextInt(7)), 3);
                         worldIn.setBlockState(blockpos.up(2), Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.HORIZONTALS[new Random().nextInt(3)]), 3);
                         if (worldIn.getBlockState(blockpos.up(2)).getBlock() instanceof BlockChest) {
                             TileEntity tileentity1 = worldIn.getTileEntity(blockpos.up(2));

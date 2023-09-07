@@ -7,14 +7,12 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
@@ -29,9 +27,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.Random;
 
 public class BlockPodium extends BlockContainer implements ICustomRendered {
-    public static final PropertyEnum VARIANT = PropertyEnum.create("variant", BlockPodium.EnumType.class);
-    public Item itemBlock;
+    public static final PropertyEnum<EnumType> VARIANT = PropertyEnum.create("variant", BlockPodium.EnumType.class);
+    private static final AxisAlignedBB AABB = new AxisAlignedBB(0.125F, 0, 0.125F, 0.875F, 1.4375F, 0.875F);
 
+    @SuppressWarnings("deprecation")
     public BlockPodium() {
         super(Material.WOOD);
         this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, BlockPodium.EnumType.OAK));
@@ -46,42 +45,34 @@ public class BlockPodium extends BlockContainer implements ICustomRendered {
     @Override
     @SuppressWarnings("deprecation")
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return new AxisAlignedBB(0.125F, 0, 0.125F, 0.875F, 1.4375F, 0.875F);
+        return AABB;
     }
 
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        if (worldIn.getTileEntity(pos) instanceof TileEntityPodium) {
-            TileEntityPodium podium = (TileEntityPodium) worldIn.getTileEntity(pos);
-            if (!podium.getStackInSlot(0).isEmpty()) {
-                worldIn.spawnEntity(new EntityItem(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, podium.getStackInSlot(0)));
-            }
+        TileEntity tile = worldIn.getTileEntity(pos);
+        if (tile instanceof TileEntityPodium && !((TileEntityPodium)tile).getStackInSlot(0).isEmpty()) {
+            worldIn.spawnEntity(new EntityItem(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, ((TileEntityPodium)tile).getStackInSlot(0)));
         }
         super.breakBlock(worldIn, pos, state);
     }
 
     @Override
     public int damageDropped(IBlockState state) {
-        return ((BlockPodium.EnumType) state.getValue(VARIANT)).getMetadata();
+        return state.getValue(VARIANT).getMetadata();
     }
 
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (playerIn.isSneaking()) {
-            return false;
-        } else {
-            playerIn.openGui(IceAndFire.INSTANCE, 1, worldIn, pos.getX(), pos.getY(), pos.getZ());
-            return true;
-        }
+        if (playerIn.isSneaking()) return false;
+        playerIn.openGui(IceAndFire.INSTANCE, 1, worldIn, pos.getX(), pos.getY(), pos.getZ());
+        return true;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
-        BlockPodium.EnumType[] aenumtype = BlockPodium.EnumType.values();
-        int i = aenumtype.length;
-
-        for (EnumType enumtype : aenumtype) {
+        for (EnumType enumtype : BlockPodium.EnumType.values()) {
             items.add(new ItemStack(this, 1, enumtype.getMetadata()));
         }
     }
@@ -94,12 +85,12 @@ public class BlockPodium extends BlockContainer implements ICustomRendered {
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return ((BlockPodium.EnumType) state.getValue(VARIANT)).getMetadata();
+        return state.getValue(VARIANT).getMetadata();
     }
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, new IProperty[]{VARIANT});
+        return new BlockStateContainer(this, VARIANT);
     }
 
     @Override
@@ -116,15 +107,16 @@ public class BlockPodium extends BlockContainer implements ICustomRendered {
 
     @Override
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-        IBlockState iblockstate = worldIn.getBlockState(pos.down());
-        return iblockstate.isSideSolid(worldIn, pos, EnumFacing.UP);
+        return worldIn.getBlockState(pos.down()).isSideSolid(worldIn, pos, EnumFacing.UP);
     }
 
-    @Deprecated
+    @Override
+    @SuppressWarnings("deprecation")
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
         worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
     }
 
+    @Override
     public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         this.checkFall(worldIn, pos);
     }
@@ -133,9 +125,8 @@ public class BlockPodium extends BlockContainer implements ICustomRendered {
         if (!this.canPlaceBlockAt(worldIn, pos)) {
             worldIn.destroyBlock(pos, true);
             return false;
-        } else {
-            return true;
         }
+        return true;
     }
 
     @Override
@@ -154,44 +145,29 @@ public class BlockPodium extends BlockContainer implements ICustomRendered {
         return new TileEntityPodium();
     }
 
-    public static enum EnumType implements IStringSerializable {
-        OAK(0, "oak"), SPRUCE(1, "spruce"), BIRCH(2, "birch"), JUNGLE(3, "jungle"), ACACIA(4, "acacia"), DARK_OAK(5, "dark_oak", "big_oak");
-        private static final BlockPodium.EnumType[] META_LOOKUP = new BlockPodium.EnumType[values().length];
-        private static final String __OBFID = "CL_00002081";
+    public enum EnumType implements IStringSerializable {
+        OAK("oak"),
+        SPRUCE("spruce"),
+        BIRCH("birch"),
+        JUNGLE("jungle"),
+        ACACIA("acacia"),
+        DARK_OAK("dark_oak");
 
-        static {
-            BlockPodium.EnumType[] var0 = values();
-            int var1 = var0.length;
-
-            for (EnumType var3 : var0) {
-                META_LOOKUP[var3.getMetadata()] = var3;
-            }
-        }
-
-        private final int meta;
         private final String name;
-        private final String unlocalizedName;
 
-        private EnumType(int meta, String name) {
-            this(meta, name, name);
-        }
-
-        private EnumType(int meta, String name, String unlocalizedName) {
-            this.meta = meta;
+        EnumType(String name) {
             this.name = name;
-            this.unlocalizedName = unlocalizedName;
         }
 
         public static BlockPodium.EnumType byMetadata(int meta) {
-            if (meta < 0 || meta >= META_LOOKUP.length) {
+            if (meta < 0 || meta >= values().length) {
                 meta = 0;
             }
-
-            return META_LOOKUP[meta];
+            return values()[meta];
         }
 
         public int getMetadata() {
-            return this.meta;
+            return this.ordinal();
         }
 
         @Override
@@ -202,10 +178,6 @@ public class BlockPodium extends BlockContainer implements ICustomRendered {
         @Override
         public String getName() {
             return this.name;
-        }
-
-        public String getUnlocalizedName() {
-            return this.unlocalizedName;
         }
     }
 }

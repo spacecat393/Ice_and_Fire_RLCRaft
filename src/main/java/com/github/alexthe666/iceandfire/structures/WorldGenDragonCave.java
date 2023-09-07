@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.structures;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.block.BlockGoldPile;
+import com.github.alexthe666.iceandfire.block.BlockCoinPile;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import net.minecraft.block.BlockChest;
@@ -30,7 +30,7 @@ public abstract class WorldGenDragonCave extends WorldGenerator {
 
         if (chance < 60) {
             boolean generateGold = IceAndFire.CONFIG.dragonDenGoldAmount <= 1 || new Random().nextInt(IceAndFire.CONFIG.dragonDenGoldAmount) == 0;
-            world.setBlockState(pos, generateGold ? getPile().withProperty(BlockGoldPile.LAYERS, 1 + new Random().nextInt(7)) : Blocks.AIR.getDefaultState(), 3);
+            world.setBlockState(pos, generateGold ? getPile().withProperty(BlockCoinPile.LAYERS, 1 + new Random().nextInt(7)) : Blocks.AIR.getDefaultState(), 3);
         } else if (chance == 61) {
             world.setBlockState(pos, Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.HORIZONTALS[new Random().nextInt(3)]), 3);
             if (world.getBlockState(pos).getBlock() instanceof BlockChest) {

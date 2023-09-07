@@ -149,9 +149,9 @@ public class CommonProxy {
                 if (obj instanceof Block) {
                     ItemBlock itemBlock;
                     if (obj == ModBlocks.jar_pixie) {
-                        itemBlock = ((BlockJar) obj).new ItemBlockJar((Block) obj);
+                        itemBlock = new BlockJar.ItemBlockJar((Block) obj);
                     } else if (obj instanceof BlockPixieHouse) {
-                        itemBlock = ((BlockPixieHouse) obj).new ItemBlockPixieHouse((Block) obj);
+                        itemBlock = new BlockPixieHouse.ItemBlockPixieHouse((Block) obj);
                     } else if (obj instanceof BlockPodium) {
                         itemBlock = new ItemBlockPodium((Block) obj);
                     } else if (obj instanceof BlockMyrmexResin) {

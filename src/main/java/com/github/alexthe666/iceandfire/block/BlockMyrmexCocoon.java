@@ -25,7 +25,6 @@ import javax.annotation.Nullable;
 
 public class BlockMyrmexCocoon extends BlockContainer {
 
-
     public BlockMyrmexCocoon(boolean jungle) {
         super(Material.GROUND);
         this.setHardness(2.5F);
@@ -34,37 +33,38 @@ public class BlockMyrmexCocoon extends BlockContainer {
         this.setCreativeTab(IceAndFire.TAB);
         this.setSoundType(SoundType.SLIME);
         this.setRegistryName(IceAndFire.MODID, jungle ? "jungle_myrmex_cocoon" : "desert_myrmex_cocoon");
-
     }
 
-
+    @Override
+    @SuppressWarnings("deprecation")
     public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
+    @Override
+    @SuppressWarnings("deprecation")
     public boolean isFullCube(IBlockState state) {
         return false;
     }
 
+    @Override
+    @SuppressWarnings("deprecation")
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
-        if (face == EnumFacing.UP) {
-            return BlockFaceShape.SOLID;
-        }
-        return super.getBlockFaceShape(worldIn, state, pos, face);
+        return face == EnumFacing.UP ? BlockFaceShape.SOLID : super.getBlockFaceShape(worldIn, state, pos, face);
     }
 
-
-
+    @Override
     @SideOnly(Side.CLIENT)
-    public BlockRenderLayer getBlockLayer() {
+    public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }
 
-
+    @Override
     public EnumBlockRenderType getRenderType(IBlockState state) {
         return EnumBlockRenderType.MODEL;
     }
 
+    @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
         TileEntity tileentity = worldIn.getTileEntity(pos);
         if (tileentity instanceof IInventory) {
@@ -76,12 +76,9 @@ public class BlockMyrmexCocoon extends BlockContainer {
 
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-        if (player.isSneaking()) {
-            return false;
-        } else {
-            player.openGui(IceAndFire.INSTANCE, 6, world, pos.getX(), pos.getY(), pos.getZ());
-            return true;
-        }
+        if (player.isSneaking()) return false;
+        player.openGui(IceAndFire.INSTANCE, 6, world, pos.getX(), pos.getY(), pos.getZ());
+        return true;
     }
 
     @Nullable

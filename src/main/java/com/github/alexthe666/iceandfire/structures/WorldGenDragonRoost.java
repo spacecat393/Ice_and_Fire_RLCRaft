@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.structures;
 
-import com.github.alexthe666.iceandfire.block.BlockGoldPile;
+import com.github.alexthe666.iceandfire.block.BlockCoinPile;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.state.IBlockState;
@@ -88,7 +88,7 @@ public abstract class WorldGenDragonRoost extends WorldGenerator {
                 }
             }
         } else {
-            world.setBlockState(position, getPileBlock().withProperty(BlockGoldPile.LAYERS, height), 3);
+            world.setBlockState(position, getPileBlock().withProperty(BlockCoinPile.LAYERS, height), 3);
         }
     }
 
