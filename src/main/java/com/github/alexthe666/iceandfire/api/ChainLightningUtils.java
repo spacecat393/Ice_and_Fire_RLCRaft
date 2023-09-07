@@ -4,11 +4,9 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.compat.LycanitesCompat;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.DragonUtils;
+import com.github.alexthe666.iceandfire.entity.EntityMutlipartPart;
 import com.github.alexthe666.iceandfire.message.MessageChainLightningFX;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityOwnable;
+import net.minecraft.entity.*;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.passive.EntityPig;
@@ -38,7 +36,7 @@ public class ChainLightningUtils {
     }
 
     public static void createChainLightningFromTarget(World world, EntityLivingBase target, EntityLivingBase attacker, float damage, int hops, int range) {
-        float damageReductionPerHop = damage / (hops + 1);
+        float damageReductionPerHop = damage / (float)(hops + 1);
 
         boolean isParalysisEnabled = IceAndFire.CONFIG.chainLightningParalysis;
         int paralysisTicks = IceAndFire.CONFIG.chainLightningParalysisTicks;
@@ -53,31 +51,28 @@ public class ChainLightningUtils {
 
         LightningSource lightningSource = new LightningSource(target);
 
-        List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(lightningSource.get(), lightningSource.getBoundingBox(range));
-        if (entities.isEmpty()) {
-            return;
+        List<EntityLivingBase> entityLiving = new ArrayList<>();
+        for(Entity ent : world.getEntitiesWithinAABBExcludingEntity(lightningSource.get(), lightningSource.getBoundingBox(range))) {
+            if(ent instanceof EntityMutlipartPart) ent = ((EntityMutlipartPart)ent).getParent();
+            if(ent instanceof EntityLivingBase &&
+                    ent.isEntityAlive() &&
+                    !entityLiving.contains((EntityLivingBase)ent) &&
+                    lightningSource.canChainTo(ent, attacker))
+                entityLiving.add((EntityLivingBase)ent);
         }
+        if(entityLiving.isEmpty()) return;
 
-        entities.sort(getFindByNearestComparator(lightningSource));
+        entityLiving.sort(getFindByNearestComparator(lightningSource));
 
         LinkedList<Integer> alreadyTargetedEntities = new LinkedList<>();
-
-        while (hops > 0 && damage > 0) {
-            Optional<Entity> optional = entities.stream()
-                    .filter(e -> lightningSource.canChainTo(e, attacker) && !alreadyTargetedEntities.contains(e.getEntityId()))
-                    .findFirst();
-
-            if (!optional.isPresent()) {
-                break;
-            }
-
-            EntityLivingBase nextTarget = (EntityLivingBase) optional.get();
+        for(EntityLivingBase nextTarget : entityLiving) {
+            if(hops <= 0 || damage <= 0) break;
+            if(alreadyTargetedEntities.contains(nextTarget.getEntityId())) continue;
 
             attackEntityWithLightningDamage(attacker, nextTarget, damage);
             if (isParalysisEnabled) {
                 applyParalysis(nextTarget, paralysisTicks, paralysisChance);
             }
-
             alreadyTargetedEntities.add(nextTarget.getEntityId());
             lightningSource.set(nextTarget);
 
