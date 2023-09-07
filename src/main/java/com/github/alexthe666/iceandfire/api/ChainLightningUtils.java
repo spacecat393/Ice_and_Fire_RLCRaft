@@ -15,7 +15,7 @@ import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -47,8 +47,6 @@ public class ChainLightningUtils {
         attackEntityWithLightningDamage(attacker, target, damage);
         if (isParalysisEnabled) {
             applyParalysis(target, paralysisTicks, paralysisChance);
-        } else {
-            IceAndFire.logger.warn("The Paralysis Effect is currently disabled");
         }
 
         target.playSound(ModSounds.LIGHTNING_STRIKE, 1, 1);
@@ -109,7 +107,7 @@ public class ChainLightningUtils {
                 EntityLightningBolt lightningBolt = new EntityLightningBolt(target.world, target.posX, target.posY, target.posZ, true);
                 target.onStruckByLightning(lightningBolt);
             } else {
-                target.attackEntityFrom(new EntityDamageSource("LightningBolt", attacker), damage);
+                target.attackEntityFrom(new EntityDamageSourceIndirect("lightningBolt", attacker, attacker), damage);
 
                 if (target instanceof EntityCreeper) {
                     EntityCreeper creeper = (EntityCreeper) target;
@@ -122,7 +120,7 @@ public class ChainLightningUtils {
                 }
             }
         } else {
-            target.attackEntityFrom(new EntityDamageSource("LightningBolt", attacker), damage);
+            target.attackEntityFrom(new EntityDamageSourceIndirect("lightningBolt", attacker, attacker), damage);
         }
     }
 
