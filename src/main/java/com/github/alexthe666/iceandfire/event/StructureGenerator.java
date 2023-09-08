@@ -30,6 +30,7 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.fml.common.IWorldGenerator;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 public class StructureGenerator implements IWorldGenerator {
@@ -92,51 +93,45 @@ public class StructureGenerator implements IWorldGenerator {
 				PIXIE_VILLAGE.generate(world, random, height);
 			}
 
-			if((IceAndFireConfig.WORLDGEN.generateDragonRoosts || IceAndFireConfig.WORLDGEN.generateDragonDens) && isDragonGenAllowedInDim(world.provider.getDimension()) && isDragonGenAllowedInBiome(types, biomeName)) {
-				if(IceAndFireConfig.WORLDGEN.generateDragonRoosts) {
-					Integer chance = IceAndFireConfig.getDragonRoostChance().get(biomeName);
-					if(chance == null) {
-						boolean isHills = types.contains(Type.HILLS) || types.contains(Type.MOUNTAIN) && !isSnowy;
-						chance = isHills ? IceAndFireConfig.WORLDGEN.generateDragonRoostChance : IceAndFireConfig.WORLDGEN.generateDragonRoostChance * 2;
-					}
-					if(random.nextInt(chance) == 0) {//Chance was nested inside previously so does not affect overall spawning to reduce to one check
-						if(IceAndFireConfig.getLightningDragonEnabledNames().contains(biomeName) || types.contains(Type.JUNGLE) || types.contains(Type.SAVANNA) || types.contains(Type.MESA)) {
-							LIGHTNING_DRAGON_ROOST.generate(world, random, height);
+			if ((IceAndFireConfig.WORLDGEN.generateDragonRoosts || IceAndFireConfig.WORLDGEN.generateDragonDens) && isDragonGenAllowedInDim(world.provider.getDimension()) && isDragonGenAllowedInBiome(types, biomeName)) {
+				DragonType dragonType = getDragonGenType(types, biome, biomeName, isCold, isSnowy);
+				if (dragonType != null) {
+					if (IceAndFireConfig.WORLDGEN.generateDragonRoosts) {
+						Integer chance = IceAndFireConfig.getDragonRoostChance().get(biomeName);
+						if (chance == null) {
+							boolean isHills = types.contains(Type.HILLS) || types.contains(Type.MOUNTAIN) && !isSnowy;
+							chance = isHills ? IceAndFireConfig.WORLDGEN.generateDragonRoostChance : IceAndFireConfig.WORLDGEN.generateDragonRoostChance * 2;
 						}
-						else if(IceAndFireConfig.getFireDragonEnabledNames().contains(biomeName) || !biome.getEnableSnow() && biome.getDefaultTemperature() > -0.5 && biome != Biomes.ICE_PLAINS && !isCold && !isSnowy && !types.contains(Type.WET) && !types.contains(Type.OCEAN) && !types.contains(Type.RIVER)) {
-							FIRE_DRAGON_ROOST.generate(world, random, height);
-						}
-						else if(IceAndFireConfig.getIceDragonEnabledNames().contains(biomeName) || isCold && isSnowy) {
-							ICE_DRAGON_ROOST.generate(world, random, height);
-						}
-					}
-				}
-
-				if(IceAndFireConfig.WORLDGEN.generateDragonDens) {
-					Integer chance = IceAndFireConfig.getDragonDenChance().get(biomeName);
-					if(chance == null) {
-						boolean isHills = types.contains(Type.HILLS) || types.contains(Type.MOUNTAIN);
-						chance = isHills ? IceAndFireConfig.WORLDGEN.generateDragonDenChance : IceAndFireConfig.WORLDGEN.generateDragonDenChance * 2;
-					}
-					if(random.nextInt(chance) == 0) {//Chance was nested inside previously so does not affect overall spawning to reduce to one check
-						if(IceAndFireConfig.getLightningDragonEnabledNames().contains(biomeName) || types.contains(Type.JUNGLE) || types.contains(Type.SAVANNA) || types.contains(Type.MESA)) {
-							int newY = 20 + random.nextInt(20);
-							BlockPos pos = new BlockPos(x, newY, z);
-							if (!world.canBlockSeeSky(pos)) {
-								LIGHTNING_DRAGON_CAVE.generate(world, random, pos);
+						if (random.nextInt(chance) == 0) {
+							if (dragonType == DragonType.FIRE) {
+								FIRE_DRAGON_ROOST.generate(world, random, height);
+							}
+							else if (dragonType == DragonType.ICE) {
+								ICE_DRAGON_ROOST.generate(world, random, height);
+							}
+							else if (dragonType == DragonType.LIGHTNING) {
+								LIGHTNING_DRAGON_ROOST.generate(world, random, height);
 							}
 						}
-						else if(IceAndFireConfig.getFireDragonEnabledNames().contains(biomeName) || !biome.getEnableSnow() && biome.getDefaultTemperature() > -0.5 && !isCold && !isSnowy && !types.contains(Type.WET) && !types.contains(Type.OCEAN) && !types.contains(Type.RIVER) && !types.contains(Type.BEACH)) {
-							int newY = 20 + random.nextInt(20);
-							BlockPos pos = new BlockPos(x, newY, z);
-							if (!world.canBlockSeeSky(pos)) {
-								FIRE_DRAGON_CAVE.generate(world, random, pos);
+					}
+					if (IceAndFireConfig.WORLDGEN.generateDragonDens && !types.contains(Type.BEACH) && !types.contains(Type.OCEAN)) {
+						int newY = 20 + random.nextInt(20);
+						BlockPos pos = new BlockPos(x, newY, z);
+						if (!world.canBlockSeeSky(pos)) {
+							Integer chance = IceAndFireConfig.getDragonDenChance().get(biomeName);
+							if (chance == null) {
+								boolean isHills = types.contains(Type.HILLS) || types.contains(Type.MOUNTAIN);
+								chance = isHills ? IceAndFireConfig.WORLDGEN.generateDragonDenChance : IceAndFireConfig.WORLDGEN.generateDragonDenChance * 2;
 							}
-						}
-						else if(IceAndFireConfig.getIceDragonEnabledNames().contains(biomeName) || isCold && isSnowy && !types.contains(Type.BEACH)) {
-							int newY = 20 + random.nextInt(20);
-							BlockPos pos = new BlockPos(x, newY, z);
-							ICE_DRAGON_CAVE.generate(world, random, pos);
+							if (random.nextInt(chance) == 0) {
+								if (dragonType == DragonType.FIRE) {
+									FIRE_DRAGON_CAVE.generate(world, random, pos);
+								} else if (dragonType == DragonType.ICE) {
+									ICE_DRAGON_CAVE.generate(world, random, pos);
+								} else if (dragonType == DragonType.LIGHTNING) {
+									LIGHTNING_DRAGON_CAVE.generate(world, random, pos);
+								}
+							}
 						}
 					}
 				}
@@ -337,6 +332,22 @@ public class StructureGenerator implements IWorldGenerator {
 			if(dictSet.contains(type)) return false;
 		}
 		return true;
+	}
+
+	@Nullable
+	private DragonType getDragonGenType(Set<BiomeDictionary.Type> dictSet, Biome biome, String biomeName, boolean isCold, boolean isSnowy) {
+		if (IceAndFireConfig.getFireDragonEnabledNames().contains(biomeName)) {
+			return DragonType.FIRE;
+		} else if (IceAndFireConfig.getIceDragonEnabledNames().contains(biomeName)) {
+			return DragonType.ICE;
+		} else if (IceAndFireConfig.getLightningDragonEnabledNames().contains(biomeName) || dictSet.contains(Type.JUNGLE) || dictSet.contains(Type.SAVANNA) || dictSet.contains(Type.MESA)) {
+			return DragonType.LIGHTNING;
+		} else if (!biome.getEnableSnow() && biome.getDefaultTemperature() > -0.5 && !isCold && !isSnowy && !dictSet.contains(Type.WET) && !dictSet.contains(Type.OCEAN) && !dictSet.contains(Type.RIVER)) {
+			return DragonType.FIRE;
+		} else if (isCold && isSnowy) {
+			return DragonType.ICE;
+		}
+		return null;
 	}
 
 	private BlockPos getNetherHeight(World world, BlockPos pos){
