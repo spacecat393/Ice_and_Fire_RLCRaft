@@ -58,6 +58,10 @@ public class StructureGenerator implements IWorldGenerator {
 		String biomeName =  biome.getRegistryName() != null ? biome.getRegistryName().toString() : "";
 		Set<Type> types = BiomeDictionary.getTypes(biome);
 
+		//More common checks
+		boolean isCold = types.contains(Type.COLD);
+		boolean isSnowy = types.contains(Type.SNOWY);
+
 		if(isFarEnoughFromSpawn(world, height)) {
 			if(IceAndFireConfig.WORLDGEN.generateGorgonTemple && random.nextInt(IceAndFireConfig.WORLDGEN.generateGorgonChance) == 0 && types.contains(Type.BEACH) && world.getBlockState(height.down()).isFullBlock() && world.isAirBlock(height.up())) {
 				Rotation rotation = Rotation.values()[random.nextInt(Rotation.values().length)];
@@ -76,7 +80,7 @@ public class StructureGenerator implements IWorldGenerator {
 				}
 			}
 
-			if(IceAndFireConfig.WORLDGEN.generateSirenIslands && random.nextInt(IceAndFireConfig.WORLDGEN.generateSirenChance) == 0 && types.contains(Type.OCEAN) && !types.contains(Type.COLD)) {
+			if(IceAndFireConfig.WORLDGEN.generateSirenIslands && random.nextInt(IceAndFireConfig.WORLDGEN.generateSirenChance) == 0 && types.contains(Type.OCEAN) && !isCold) {
 				SIREN_ISLAND.generate(world, random, height);
 			}
 
@@ -92,17 +96,17 @@ public class StructureGenerator implements IWorldGenerator {
 				if(IceAndFireConfig.WORLDGEN.generateDragonRoosts) {
 					Integer chance = IceAndFireConfig.getDragonRoostChance().get(biomeName);
 					if(chance == null) {
-						boolean isHills = types.contains(Type.HILLS) || types.contains(Type.MOUNTAIN) && !types.contains(Type.SNOWY);
+						boolean isHills = types.contains(Type.HILLS) || types.contains(Type.MOUNTAIN) && !isSnowy;
 						chance = isHills ? IceAndFireConfig.WORLDGEN.generateDragonRoostChance : IceAndFireConfig.WORLDGEN.generateDragonRoostChance * 2;
 					}
 					if(random.nextInt(chance) == 0) {//Chance was nested inside previously so does not affect overall spawning to reduce to one check
 						if(IceAndFireConfig.getLightningDragonEnabledNames().contains(biomeName) || types.contains(Type.JUNGLE) || types.contains(Type.SAVANNA) || types.contains(Type.MESA)) {
 							LIGHTNING_DRAGON_ROOST.generate(world, random, height);
 						}
-						else if(IceAndFireConfig.getFireDragonEnabledNames().contains(biomeName) || !biome.getEnableSnow() && biome.getDefaultTemperature() > -0.5 && biome != Biomes.ICE_PLAINS && !types.contains(Type.COLD) && !types.contains(Type.SNOWY) && !types.contains(Type.WET) && !types.contains(Type.OCEAN) && !types.contains(Type.RIVER)) {
+						else if(IceAndFireConfig.getFireDragonEnabledNames().contains(biomeName) || !biome.getEnableSnow() && biome.getDefaultTemperature() > -0.5 && biome != Biomes.ICE_PLAINS && !isCold && !isSnowy && !types.contains(Type.WET) && !types.contains(Type.OCEAN) && !types.contains(Type.RIVER)) {
 							FIRE_DRAGON_ROOST.generate(world, random, height);
 						}
-						else if(IceAndFireConfig.getIceDragonEnabledNames().contains(biomeName) || types.contains(Type.COLD) && types.contains(Type.SNOWY)) {
+						else if(IceAndFireConfig.getIceDragonEnabledNames().contains(biomeName) || isCold && isSnowy) {
 							ICE_DRAGON_ROOST.generate(world, random, height);
 						}
 					}
@@ -122,14 +126,14 @@ public class StructureGenerator implements IWorldGenerator {
 								LIGHTNING_DRAGON_CAVE.generate(world, random, pos);
 							}
 						}
-						else if(IceAndFireConfig.getFireDragonEnabledNames().contains(biomeName) || !biome.getEnableSnow() && biome.getDefaultTemperature() > -0.5 && !types.contains(Type.COLD) && !types.contains(Type.SNOWY) && !types.contains(Type.WET) && !types.contains(Type.OCEAN) && !types.contains(Type.RIVER) && !types.contains(Type.BEACH)) {
+						else if(IceAndFireConfig.getFireDragonEnabledNames().contains(biomeName) || !biome.getEnableSnow() && biome.getDefaultTemperature() > -0.5 && !isCold && !isSnowy && !types.contains(Type.WET) && !types.contains(Type.OCEAN) && !types.contains(Type.RIVER) && !types.contains(Type.BEACH)) {
 							int newY = 20 + random.nextInt(20);
 							BlockPos pos = new BlockPos(x, newY, z);
 							if (!world.canBlockSeeSky(pos)) {
 								FIRE_DRAGON_CAVE.generate(world, random, pos);
 							}
 						}
-						else if(IceAndFireConfig.getIceDragonEnabledNames().contains(biomeName) || types.contains(Type.COLD) && types.contains(Type.SNOWY) && !types.contains(Type.BEACH)) {
+						else if(IceAndFireConfig.getIceDragonEnabledNames().contains(biomeName) || isCold && isSnowy && !types.contains(Type.BEACH)) {
 							int newY = 20 + random.nextInt(20);
 							BlockPos pos = new BlockPos(x, newY, z);
 							ICE_DRAGON_CAVE.generate(world, random, pos);
@@ -162,7 +166,7 @@ public class StructureGenerator implements IWorldGenerator {
 					firedragon.rotationYaw = random.nextInt(360);
 					if(!world.isRemote) world.spawnEntity(firedragon);
 				}
-				else if(random.nextInt(IceAndFireConfig.WORLDGEN.generateDragonSkeletonChance) == 0 && types.contains(Type.COLD) && types.contains(Type.SNOWY)) {
+				else if(random.nextInt(IceAndFireConfig.WORLDGEN.generateDragonSkeletonChance) == 0 && isCold && isSnowy) {
 					EntityIceDragon icedragon = new EntityIceDragon(world);
 					icedragon.setPosition(x, height.getY() + 1, z);
 					int dragonage = 10 + random.nextInt(IceAndFireConfig.WORLDGEN.generateDragonSkeletonMaximumStage) * 25;
@@ -204,7 +208,7 @@ public class StructureGenerator implements IWorldGenerator {
 			}
 		}
 
-		if(IceAndFireConfig.WORLDGEN.generateSnowVillages && isVillageGenAllowedInDim(world.provider.getDimension()) && types.contains(Type.COLD) && types.contains(Type.SNOWY)) {
+		if(IceAndFireConfig.WORLDGEN.generateSnowVillages && isVillageGenAllowedInDim(world.provider.getDimension()) && isCold && isSnowy) {
 			SNOW_VILLAGE.generate(world, random, height);
 		}
 
@@ -255,7 +259,7 @@ public class StructureGenerator implements IWorldGenerator {
 		}
 
 		if(IceAndFireConfig.WORLDGEN.generateSapphireOre) {
-			if(types.contains(Type.SNOWY)) {
+			if(isSnowy) {
 				int count = 3 + random.nextInt(6);
 				for(int sapphireAmount = 0; sapphireAmount < count; sapphireAmount++) {
 					int oreHeight = random.nextInt(28) + 4;
@@ -276,7 +280,7 @@ public class StructureGenerator implements IWorldGenerator {
 					world.setBlockState(height, ModBlocks.lightning_lily.getDefaultState());
 				}
 			}
-			else if(types.contains(Type.COLD) && types.contains(Type.SNOWY)) {
+			else if(isCold && isSnowy) {
 				if (ModBlocks.frost_lily.canPlaceBlockAt(world, height)) {
 					world.setBlockState(height, ModBlocks.frost_lily.getDefaultState());
 				}
