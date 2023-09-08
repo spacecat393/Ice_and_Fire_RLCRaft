@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public class ChangePageButton extends GuiButton {
+	private static final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/gui/bestiary/widgets.png");
 	private final boolean right;
 	private final int color;
 
@@ -23,7 +24,7 @@ public class ChangePageButton extends GuiButton {
 		if (this.enabled) {
 			boolean flag = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			mc.renderEngine.bindTexture(new ResourceLocation("iceandfire:textures/gui/bestiary/widgets.png"));
+			mc.renderEngine.bindTexture(TEXTURE);
 			int i = 0;
 			int j = 64;
 			if (flag) {

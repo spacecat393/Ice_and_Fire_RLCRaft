@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
@@ -88,7 +88,7 @@ public class TileEntityEggInIce extends TileEntity implements ITickable {
 	@Override
 	public void update() {
 		age++;
-		if (age >= IceAndFire.CONFIG.dragonEggTime && type != null) {
+		if (age >= IceAndFireConfig.DRAGON_SETTINGS.dragonEggTime && type != null) {
 			world.destroyBlock(pos, false);
 			world.setBlockState(pos, Blocks.WATER.getDefaultState());
 			EntityIceDragon dragon = new EntityIceDragon(world);

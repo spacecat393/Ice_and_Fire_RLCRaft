@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.compat.LycanitesCompat;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.google.common.collect.Lists;
@@ -139,13 +140,13 @@ public class LightningExplosion extends Explosion {
 								} else if (!entity.isEntityEqual(exploder)) {
 									entity.attackEntityFrom(IceAndFire.dragonLightning, (float) ((int) ((d10 * d10 + d10) / 2.0D * 7.0D * (double) f3 + 1.0D)) / 3);
 									if (entity instanceof EntityLivingBase) {
-										if (IceAndFire.CONFIG.lightningDragonKnockback) {
+										if (IceAndFireConfig.DRAGON_SETTINGS.lightningDragonKnockback) {
 											double xRatio = exploder.posX - entity.posX;
 											double zRatio = exploder.posZ - entity.posZ;
 											((EntityLivingBase) entity).knockBack(entity, 0.3F, xRatio, zRatio);
 										}
-										if (IceAndFire.CONFIG.lightningDragonParalysis) {
-											LycanitesCompat.applyParalysis(entity, IceAndFire.CONFIG.lightningDragonParalysisTicks);
+										if (IceAndFireConfig.DRAGON_SETTINGS.lightningDragonParalysis) {
+											LycanitesCompat.applyParalysis(entity, IceAndFireConfig.DRAGON_SETTINGS.lightningDragonParalysisTicks);
 										}
 									}
 								}

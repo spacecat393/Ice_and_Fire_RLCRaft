@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.capability.entityeffect;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
 import com.github.alexthe666.iceandfire.entity.*;
 import net.minecraft.entity.Entity;
@@ -136,7 +136,7 @@ public class EntityEffectCapability implements IEntityEffectCapability {
 
     @Override
     public void setCharmed(int entityID) {
-        this.setCharmed(IceAndFire.CONFIG.sirenMaxSingTime, entityID);
+        this.setCharmed(IceAndFireConfig.ENTITY_SETTINGS.sirenMaxSingTime, entityID);
     }
 
     @Override

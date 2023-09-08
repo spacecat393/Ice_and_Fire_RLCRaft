@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.structures.WorldGenMyrmexHive;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -8,7 +9,6 @@ import com.mojang.authlib.GameProfile;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EntitySelectors;
@@ -581,7 +581,7 @@ public class MyrmexHive {
 
     public boolean repopulate() {
         int roomCount = this.getAllRooms().size();
-        return this.numMyrmex < Math.min(IceAndFire.CONFIG.myrmexColonySize, roomCount * 9) && reproduces;
+        return this.numMyrmex < Math.min(IceAndFireConfig.WORLDGEN.myrmexColonySize, roomCount * 9) && reproduces;
     }
 
     public void addMyrmex(EntityMyrmexBase myrmex) {

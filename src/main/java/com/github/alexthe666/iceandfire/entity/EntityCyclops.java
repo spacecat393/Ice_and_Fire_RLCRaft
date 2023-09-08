@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.CyclopsAIAttackMelee;
 import com.github.alexthe666.iceandfire.entity.ai.CyclopsAITargetSheepPlayers;
@@ -130,8 +130,8 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.35D);
-        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IceAndFire.CONFIG.cyclopsAttackStrength);
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IceAndFire.CONFIG.cyclopsMaxHealth);
+        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IceAndFireConfig.ENTITY_SETTINGS.cyclopsAttackStrength);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IceAndFireConfig.ENTITY_SETTINGS.cyclopsMaxHealth);
         this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1D);
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(20.0D);
 
@@ -197,7 +197,7 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
             double extraY = raiseUp;
             passenger.setPosition(this.posX + extraX, this.posY + extraY, this.posZ + extraZ);
             if(this.getAnimationTick() == 32){
-                passenger.attackEntityFrom(DamageSource.causeMobDamage(this), passenger instanceof EntityPlayer ? (float)IceAndFire.CONFIG.cyclopsBiteStrength : passenger instanceof EntityLivingBase ? (float) ((EntityLivingBase) passenger).getMaxHealth() * 2F : (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 2F);
+                passenger.attackEntityFrom(DamageSource.causeMobDamage(this), passenger instanceof EntityPlayer ? (float)IceAndFireConfig.ENTITY_SETTINGS.cyclopsBiteStrength : passenger instanceof EntityLivingBase ? (float) ((EntityLivingBase) passenger).getMaxHealth() * 2F : (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 2F);
                 passenger.dismountRidingEntity();
             }
         }
@@ -286,7 +286,7 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
     }
 
     public void breakBlock() {
-        if (IceAndFire.CONFIG.cyclopsGriefing) {
+        if (IceAndFireConfig.ENTITY_SETTINGS.cyclopsGriefing) {
             for (int a = (int) Math.round(this.getEntityBoundingBox().minX) - 1; a <= (int) Math.round(this.getEntityBoundingBox().maxX) + 1; a++) {
                 for (int b = (int) Math.round(this.getEntityBoundingBox().minY) + 1; (b <= (int) Math.round(this.getEntityBoundingBox().maxY) + 2) && (b <= 127); b++) {
                     for (int c = (int) Math.round(this.getEntityBoundingBox().minZ) - 1; c <= (int) Math.round(this.getEntityBoundingBox().maxZ) + 1; c++) {

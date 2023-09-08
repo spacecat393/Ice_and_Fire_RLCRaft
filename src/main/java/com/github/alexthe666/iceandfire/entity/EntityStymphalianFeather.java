@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,13 +21,13 @@ public class EntityStymphalianFeather extends EntityArrow {
 
     public EntityStymphalianFeather(World worldIn, EntityLivingBase shooter) {
         super(worldIn, shooter);
-        this.setDamage(IceAndFire.CONFIG.stymphalianBirdFeatherAttackStength);
+        this.setDamage(IceAndFireConfig.ENTITY_SETTINGS.stymphalianBirdFeatherAttackStength);
     }
 
     public void setDead() {
         super.setDead();
-        if(IceAndFire.CONFIG.stymphalianBirdFeatherDropChance > 0){
-            if (!world.isRemote && this.rand.nextInt(IceAndFire.CONFIG.stymphalianBirdFeatherDropChance) == 0) {
+        if(IceAndFireConfig.ENTITY_SETTINGS.stymphalianBirdFeatherProjectileItem){
+            if (!world.isRemote && this.rand.nextInt(IceAndFireConfig.ENTITY_SETTINGS.stymphalianBirdFeatherDropChance) == 0) {
                 this.entityDropItem(getArrowStack(), 0.1F);
             }
         }

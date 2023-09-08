@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.api;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.compat.LycanitesCompat;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.DragonUtils;
@@ -23,14 +24,14 @@ import java.util.*;
 public class ChainLightningUtils {
 
     public static void createChainLightningFromTarget(World world, EntityLivingBase target, EntityLivingBase attacker) {
-        float damage = IceAndFire.CONFIG.chainLightningDamage;
-        int hops = IceAndFire.CONFIG.chainLightningHops;
+        float damage = IceAndFireConfig.MISC_SETTINGS.chainLightningDamage;
+        int hops = IceAndFireConfig.MISC_SETTINGS.chainLightningHops;
 
         createChainLightningFromTarget(world, target, attacker, damage, hops);
     }
 
     public static void createChainLightningFromTarget(World world, EntityLivingBase target, EntityLivingBase attacker, float damage, int hops) {
-        int range = IceAndFire.CONFIG.chainLightningRange;
+        int range = IceAndFireConfig.MISC_SETTINGS.chainLightningRange;
 
         createChainLightningFromTarget(world, target, attacker, damage, hops, range);
     }
@@ -38,9 +39,9 @@ public class ChainLightningUtils {
     public static void createChainLightningFromTarget(World world, EntityLivingBase target, EntityLivingBase attacker, float damage, int hops, int range) {
         float damageReductionPerHop = damage / (float)(hops + 1);
 
-        boolean isParalysisEnabled = IceAndFire.CONFIG.chainLightningParalysis;
-        int paralysisTicks = IceAndFire.CONFIG.chainLightningParalysisTicks;
-        int paralysisChance = IceAndFire.CONFIG.chainLightningParalysisChance;
+        boolean isParalysisEnabled = IceAndFireConfig.MISC_SETTINGS.chainLightningParalysis;
+        int paralysisTicks = IceAndFireConfig.MISC_SETTINGS.chainLightningParalysisTicks;
+        int paralysisChance = IceAndFireConfig.MISC_SETTINGS.chainLightningParalysisChance;
 
         attackEntityWithLightningDamage(attacker, target, damage);
         if (isParalysisEnabled) {
@@ -97,7 +98,7 @@ public class ChainLightningUtils {
     }
 
     private static void attackEntityWithLightningDamage(EntityLivingBase attacker, EntityLivingBase target, float damage) {
-        if (IceAndFire.CONFIG.chainLightningTransformsMobs) {
+        if (IceAndFireConfig.MISC_SETTINGS.chainLightningTransformsMobs) {
             if (target instanceof EntityPig || target instanceof EntityVillager) {
                 EntityLightningBolt lightningBolt = new EntityLightningBolt(target.world, target.posX, target.posY, target.posZ, true);
                 target.onStruckByLightning(lightningBolt);

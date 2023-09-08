@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.core.ModVillagers;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.structures.WorldGenMyrmexHive;
@@ -139,7 +139,7 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
                 return;
             }
         }
-        if(!world.isRemote && eggTicks > IceAndFire.CONFIG.myrmexPregnantTicks && this.getHive() == null || !world.isRemote && this.getHive() != null && this.getHive().repopulate() && eggTicks > IceAndFire.CONFIG.myrmexPregnantTicks){
+        if(!world.isRemote && eggTicks > IceAndFireConfig.ENTITY_SETTINGS.myrmexPregnantTicks && this.getHive() == null || !world.isRemote && this.getHive() != null && this.getHive().repopulate() && eggTicks > IceAndFireConfig.ENTITY_SETTINGS.myrmexPregnantTicks){
             float radius = -5.25F;
             float angle = (0.01745329251F * this.renderYawOffset);
             double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));

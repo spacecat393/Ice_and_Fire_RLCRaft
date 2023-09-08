@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
 import com.github.alexthe666.iceandfire.api.InFCapabilities;
 import com.github.alexthe666.iceandfire.core.ModSounds;
@@ -103,7 +103,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(24.0D);
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
         this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(Math.min(2048, IceAndFire.CONFIG.stymphalianBirdTargetSearchLength));
+        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(Math.min(2048, IceAndFireConfig.ENTITY_SETTINGS.stymphalianBirdTargetSearchLength));
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(4.0D);
     }
 
@@ -187,7 +187,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
 
     protected void onDeathUpdate() {
         super.onDeathUpdate();
-        if (this.deathTime == 20 && !this.world.isRemote && IceAndFire.CONFIG.stymphalianBirdsOreDictDrops) {
+        if (this.deathTime == 20 && !this.world.isRemote && IceAndFireConfig.ENTITY_SETTINGS.stymphalianBirdsOreDictDrops) {
             NonNullList<ItemStack> bronzeItems = OreDictionary.getOres("ingotBronze");
             NonNullList<ItemStack> copperItems = OreDictionary.getOres("ingotCopper");
             if (!bronzeItems.isEmpty()) {
@@ -404,8 +404,8 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
             aiFlightLaunch = true;
         }
         AnimationHandler.INSTANCE.updateAnimations(this);
-        if(this.posY > IceAndFire.CONFIG.stymphalianBirdFlightHeight){
-            this.setPosition(this.posX, IceAndFire.CONFIG.stymphalianBirdFlightHeight, this.posZ);
+        if(this.posY > IceAndFireConfig.ENTITY_SETTINGS.stymphalianBirdFlightHeight){
+            this.setPosition(this.posX, IceAndFireConfig.ENTITY_SETTINGS.stymphalianBirdFlightHeight, this.posZ);
         }
     }
 
@@ -558,6 +558,6 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
 
     @Override
     public boolean shouldAnimalsFear(Entity entity) {
-        return IceAndFire.CONFIG.stympahlianBirdAttackAnimals;
+        return IceAndFireConfig.ENTITY_SETTINGS.stympahlianBirdAttackAnimals;
     }
 }

@@ -18,7 +18,7 @@ import java.util.List;
 public class GuiLectern extends GuiContainer {
 	private static final ResourceLocation furnaceGuiTextures = new ResourceLocation("iceandfire:textures/gui/lectern.png");
 	private final InventoryPlayer playerInventory;
-	private IInventory tileFurnace;
+	private final IInventory tileFurnace;
 
 	public GuiLectern(InventoryPlayer playerInv, IInventory furnaceInv) {
 		super(new ContainerLectern(playerInv, furnaceInv));
@@ -39,11 +39,9 @@ public class GuiLectern extends GuiContainer {
 	}
 
 	public boolean hasAllPages() {
-		if (!tileFurnace.getStackInSlot(0).isEmpty()) {
-			if (tileFurnace.getStackInSlot(0).getItem() == ModItems.bestiary) {
-				List list = EnumBestiaryPages.possiblePages(tileFurnace.getStackInSlot(0));
-				return list == null || list.isEmpty();
-			}
+		if (tileFurnace.getStackInSlot(0).getItem() == ModItems.bestiary) {
+			List<EnumBestiaryPages> list = EnumBestiaryPages.possiblePages(tileFurnace.getStackInSlot(0));
+			return list == null || list.isEmpty();
 		}
 		return false;
 	}
@@ -65,7 +63,6 @@ public class GuiLectern extends GuiContainer {
 		int k = this.tileFurnace.getField(3);
 		return k != 0 && j != 0 ? j * p_175381_1_ / k : 0;
 	}
-
 
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {

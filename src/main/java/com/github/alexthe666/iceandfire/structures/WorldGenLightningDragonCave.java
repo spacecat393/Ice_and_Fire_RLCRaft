@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.structures;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityLightningDragon;
@@ -27,7 +27,7 @@ public class WorldGenLightningDragonCave extends WorldGenDragonCave {
 	}
 
 	protected IBlockState getGemstone() {
-		return IceAndFire.CONFIG.generateAmethystOre ? ModBlocks.amethystOre.getDefaultState() : Blocks.EMERALD_ORE.getDefaultState();
+		return IceAndFireConfig.WORLDGEN.generateAmethystOre ? ModBlocks.amethystOre.getDefaultState() : Blocks.EMERALD_ORE.getDefaultState();
 	}
 
 	protected ResourceLocation getLootTable() {

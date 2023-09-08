@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.client.gui.bestiary;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
@@ -11,6 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class IndexPageButton extends GuiButton {
+	private static final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/gui/bestiary/widgets.png");
 
 	public IndexPageButton(int id, int x, int y, String buttonText) {
 		super(id, x, y, 160, 32, buttonText);
@@ -18,11 +20,12 @@ public class IndexPageButton extends GuiButton {
 		this.height = 32;
 	}
 
+	@Override
 	public void drawButton(Minecraft mc, int mouseX, int mouseY, float partial) {
 		if (this.visible) {
-			FontRenderer fontrenderer  = IceAndFire.CONFIG.useVanillaFont ? Minecraft.getMinecraft().fontRenderer : (FontRenderer) IceAndFire.PROXY.getFontRenderer();
+			FontRenderer fontrenderer  = IceAndFireConfig.CLIENT_SETTINGS.useVanillaFont ? Minecraft.getMinecraft().fontRenderer : (FontRenderer) IceAndFire.PROXY.getFontRenderer();
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-			mc.renderEngine.bindTexture(new ResourceLocation("iceandfire:textures/gui/bestiary/widgets.png"));
+			mc.renderEngine.bindTexture(TEXTURE);
 			this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
 			this.drawTexturedModalRect(this.x, this.y, 0, this.hovered ? 32 : 0, this.width, this.height);
 			fontrenderer.drawString(this.displayString, (float) (this.x + this.width / 2 - fontrenderer.getStringWidth(this.displayString) / 2), (float) this.y + (float) (this.height - 8) / 2, this.hovered ? 0XFAE67D : 0X303030, false);

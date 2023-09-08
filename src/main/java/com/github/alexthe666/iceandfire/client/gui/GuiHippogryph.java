@@ -28,12 +28,14 @@ public class GuiHippogryph extends GuiContainer {
 		this.allowUserInput = false;
 	}
 
+	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		super.drawGuiContainerForegroundLayer(mouseX, mouseY);
 		this.fontRenderer.drawString(this.hippogryphInv.getDisplayName().getUnformattedText(), 8, 6, 4210752);
 		this.fontRenderer.drawString(this.playerInventory.getDisplayName().getUnformattedText(), 8, this.ySize - 96 + 2, 4210752);
 	}
 
+	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		this.mc.getTextureManager().bindTexture(TEXTURE);
@@ -46,6 +48,7 @@ public class GuiHippogryph extends GuiContainer {
 		GuiInventory.drawEntityOnScreen(i + 51, j + 60, 17, (float) (i + 51) - this.mousePosx, (float) (j + 75 - 50) - this.mousePosY, this.hippogryph);
 	}
 
+	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		this.mousePosx = (float) mouseX;
 		this.mousePosY = (float) mouseY;

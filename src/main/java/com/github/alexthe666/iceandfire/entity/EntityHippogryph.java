@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
 import com.github.alexthe666.iceandfire.api.InFCapabilities;
 import com.github.alexthe666.iceandfire.client.model.IFChainBuffer;
@@ -893,7 +894,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 			flyProgress -= 0.5F;
 		}
 		if ((flying || hovering) && ticksExisted % 20 == 0 && !this.onGround) {
-			this.playSound(SoundEvents.ENTITY_ENDERDRAGON_FLAP, this.getSoundVolume() * (IceAndFire.CONFIG.dragonFlapNoiseDistance / 2), 0.6F + this.rand.nextFloat() * 0.6F * this.getSoundPitch());
+			this.playSound(SoundEvents.ENTITY_ENDERDRAGON_FLAP, this.getSoundVolume() * ((float)IceAndFireConfig.DRAGON_SETTINGS.dragonFlapNoiseDistance / 2F), 0.6F + this.rand.nextFloat() * 0.6F * this.getSoundPitch());
 		}
 		if (this.onGround && this.doesWantToLand() && (this.isFlying() || this.isHovering())) {
 			this.setFlying(false);

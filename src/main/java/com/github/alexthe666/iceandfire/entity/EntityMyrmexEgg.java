@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.structures.WorldGenMyrmexHive;
@@ -101,7 +101,7 @@ public class EntityMyrmexEgg extends EntityLiving implements IBlacklistedFromSta
         if (!canSeeSky()) {
             this.setMyrmexAge(this.getMyrmexAge() + 1);
         }
-        if(this.getMyrmexAge() > IceAndFire.CONFIG.myrmexEggTicks){
+        if(this.getMyrmexAge() > IceAndFireConfig.ENTITY_SETTINGS.myrmexEggTicks){
             this.setDead();
             EntityMyrmexBase myrmex;
             switch(this.getMyrmexCaste()){

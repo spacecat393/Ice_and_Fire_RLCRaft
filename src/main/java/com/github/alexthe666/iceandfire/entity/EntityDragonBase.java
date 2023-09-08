@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.api.FoodUtils;
 import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
 import com.github.alexthe666.iceandfire.api.InFCapabilities;
@@ -279,7 +280,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     protected PathNavigate createNavigator(World worldIn) {
-        return IceAndFire.CONFIG.experimentalPathFinder ? new PathNavigateExperimentalGround(this, worldIn) : super.createNavigator(worldIn);
+        return IceAndFireConfig.DRAGON_SETTINGS.experimentalPathFinder ? new PathNavigateExperimentalGround(this, worldIn) : super.createNavigator(worldIn);
     }
 
     public boolean canDestroyBlock(BlockPos pos){
@@ -645,7 +646,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20.0D);
         getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
         getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(Math.min(2048, IceAndFire.CONFIG.dragonTargetSearchLength));
+        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(Math.min(2048, IceAndFireConfig.DRAGON_SETTINGS.dragonTargetSearchLength));
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(4.0D);
 
     }
@@ -920,14 +921,14 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         ItemStack stack = player.getHeldItem(hand);
         int lastDeathStage = this.getAgeInDays() / 5;
         if (this.isModelDead() && this.getDeathStage() < lastDeathStage && player.capabilities.allowEdit) {
-            if (!world.isRemote && !stack.isEmpty() && stack.getItem() != null && stack.getItem() == Items.GLASS_BOTTLE && this.getDeathStage() < lastDeathStage / 2 && IceAndFire.CONFIG.dragonDropBlood) {
+            if (!world.isRemote && !stack.isEmpty() && stack.getItem() != null && stack.getItem() == Items.GLASS_BOTTLE && this.getDeathStage() < lastDeathStage / 2 && IceAndFireConfig.DRAGON_SETTINGS.dragonDropBlood) {
                 if (!player.capabilities.isCreativeMode) {
                     stack.shrink(1);
                 }
                 this.setDeathStage(this.getDeathStage() + 1);
                 player.inventory.addItemStackToInventory(new ItemStack(getBlood(), 1));
                 return true;
-            } else if (!world.isRemote && stack.isEmpty() && IceAndFire.CONFIG.dragonDropSkull) {
+            } else if (!world.isRemote && stack.isEmpty() && IceAndFireConfig.DRAGON_SETTINGS.dragonDropSkull) {
                 if (this.getDeathStage() == lastDeathStage - 1) {
                     ItemStack skull = getSkull();
                     skull.setTagCompound(new NBTTagCompound());
@@ -939,7 +940,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                         this.entityDropItem(skull, 1);
                     }
                     this.setDead();
-                } else if (this.getDeathStage() == (int) (lastDeathStage / 2) - 1 && IceAndFire.CONFIG.dragonDropHeart) {
+                } else if (this.getDeathStage() == (int) (lastDeathStage / 2) - 1 && IceAndFireConfig.DRAGON_SETTINGS.dragonDropHeart) {
                     ItemStack heart = new ItemStack(getHeart(), 1);
                     ItemStack egg = new ItemStack(this.getVariantEgg(this.rand.nextInt(4)), 1);
                     if (!world.isRemote) {
@@ -1132,12 +1133,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
 
     @Override
     public boolean canDespawn() {
-        return IceAndFire.CONFIG.canDragonsDespawn;
+        return IceAndFireConfig.DRAGON_SETTINGS.canDragonsDespawn;
     }
 
     @Override
     protected void despawnEntity() {
-        if(IceAndFire.CONFIG.canDragonsDespawn) {
+        if(IceAndFireConfig.DRAGON_SETTINGS.canDragonsDespawn) {
             super.despawnEntity();
         }
     }
@@ -1225,7 +1226,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             } else {
                 ticksStill = 0;
             }
-            if (this.getDragonStage() >= 3 && isStuck() && this.world.getGameRules().getBoolean("mobGriefing") && IceAndFire.CONFIG.dragonGriefing != 2) {
+            if (this.getDragonStage() >= 3 && isStuck() && this.world.getGameRules().getBoolean("mobGriefing") && IceAndFireConfig.DRAGON_SETTINGS.dragonGriefing != 2) {
                 if (this.getAnimation() == NO_ANIMATION && this.ticksExisted % 5 == 0) {
                     this.setAnimation(ANIMATION_TAILWHACK);
                 }
@@ -1319,7 +1320,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                 flightCycle = 0;
             }
             if (flightCycle == 2) {
-                this.playSound(ModSounds.DRAGON_FLIGHT, this.getSoundVolume() * IceAndFire.CONFIG.dragonFlapNoiseDistance, getSoundPitch());
+                this.playSound(ModSounds.DRAGON_FLIGHT, this.getSoundVolume() * IceAndFireConfig.DRAGON_SETTINGS.dragonFlapNoiseDistance, getSoundPitch());
             }
             if (flightCycle == 11) {
                 this.spawnGroundEffects();
@@ -1473,7 +1474,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                 this.growDragon(0);
             }
         }
-        if (this.getAgeInTicks() % IceAndFire.CONFIG.dragonHungerTickRate == 0) {
+        if (this.getAgeInTicks() % IceAndFireConfig.DRAGON_SETTINGS.dragonHungerTickRate == 0) {
             if (this.getHunger() > 0) {
                 this.setHunger(this.getHunger() - 1);
             }
@@ -1520,12 +1521,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         if(this.posY > this.world.getHeight()){
             return true;
         }
-        return this.posY > IceAndFire.CONFIG.maxDragonFlight;
+        return this.posY > IceAndFireConfig.DRAGON_SETTINGS.maxDragonFlight;
     }
 
     public void breakBlock() {
-        if (IceAndFire.CONFIG.dragonGriefing != 2 || this.isTamed() && !IceAndFire.CONFIG.tamedDragonGriefing) {
-            float hardness = IceAndFire.CONFIG.dragonGriefing == 1 || this.getDragonStage() <= 3 ? 1.6F : 5F;
+        if (IceAndFireConfig.DRAGON_SETTINGS.dragonGriefing != 2 || this.isTamed() && !IceAndFireConfig.DRAGON_SETTINGS.tamedDragonGriefing) {
+            float hardness = IceAndFireConfig.DRAGON_SETTINGS.dragonGriefing == 1 || this.getDragonStage() <= 3 ? 1.6F : 5F;
             if (!isModelDead() && this.getDragonStage() >= 3 && this.canMove()) {
                 for (int a = (int) Math.round(this.getEntityBoundingBox().minX) - 1; a <= (int) Math.round(this.getEntityBoundingBox().maxX) + 1; a++) {
                     for (int b = (int) Math.round(this.getEntityBoundingBox().minY) + 1; (b <= (int) Math.round(this.getEntityBoundingBox().maxY) + 2) && (b <= 127); b++) {
@@ -2006,8 +2007,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     public void flyTowardsTarget() {
-        if(airTarget != null && airTarget.getY() > IceAndFire.CONFIG.maxDragonFlight){
-            airTarget = new BlockPos(airTarget.getX(), IceAndFire.CONFIG.maxDragonFlight, airTarget.getZ());
+        if(airTarget != null && airTarget.getY() > IceAndFireConfig.DRAGON_SETTINGS.maxDragonFlight){
+            airTarget = new BlockPos(airTarget.getX(), IceAndFireConfig.DRAGON_SETTINGS.maxDragonFlight, airTarget.getZ());
         }
         if (airTarget != null && isTargetInAir() && this.isFlying() && this.getDistanceSquared(new Vec3d(airTarget.getX(), this.posY, airTarget.getZ())) > 3) {
             double y = this.attackDecision ? airTarget.getY() : this.posY;

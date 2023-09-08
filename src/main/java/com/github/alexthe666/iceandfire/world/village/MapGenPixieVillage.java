@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.world.village;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -24,7 +24,7 @@ public class MapGenPixieVillage extends WorldGenerator {
 	public MapGenPixieVillage() {
 		this.distance = 9;
 		this.minTownSeparation = 4;
-		this.size = IceAndFire.CONFIG.pixieVillageSize;
+		this.size = IceAndFireConfig.WORLDGEN.pixieVillageSize;
 	}
 
 	public MapGenPixieVillage(Map<String, String> map) {

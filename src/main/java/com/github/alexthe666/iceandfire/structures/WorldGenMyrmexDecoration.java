@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.structures;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.block.BlockCoinPile;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.MyrmexHive;
@@ -182,9 +182,9 @@ public class WorldGenMyrmexDecoration {
                 Block ore = Blocks.REDSTONE_ORE;
                 if (rand.nextInt(3) == 0) {
                     int chance = rand.nextInt(3);
-                     if (chance == 1 && IceAndFire.CONFIG.generateSilverOre) {
+                     if (chance == 1 && IceAndFireConfig.WORLDGEN.generateSilverOre) {
                         ore = ModBlocks.silverOre;
-                    } else if (chance == 2 && IceAndFire.CONFIG.generateCopperOre) {
+                    } else if (chance == 2 && IceAndFireConfig.WORLDGEN.generateCopperOre) {
                          ore = ModBlocks.copperOre;
                      } else {
                          ore = Blocks.GOLD_ORE;
@@ -193,9 +193,9 @@ public class WorldGenMyrmexDecoration {
                     ore = Blocks.DIAMOND_ORE;
                 } else if (rand.nextInt(2) == 0) {
                     int chance = rand.nextInt(3);
-                    if (chance == 1 && IceAndFire.CONFIG.generateSapphireOre) {
+                    if (chance == 1 && IceAndFireConfig.WORLDGEN.generateSapphireOre) {
                         ore = ModBlocks.sapphireOre;
-                    } else if (chance == 2 && IceAndFire.CONFIG.generateAmethystOre) {
+                    } else if (chance == 2 && IceAndFireConfig.WORLDGEN.generateAmethystOre) {
                         ore = ModBlocks.amethystOre;
                     } else {
                         ore = Blocks.EMERALD_ORE;

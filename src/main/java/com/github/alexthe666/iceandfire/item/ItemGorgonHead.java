@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
 import com.github.alexthe666.iceandfire.api.InFCapabilities;
 import com.github.alexthe666.iceandfire.core.ModSounds;
@@ -68,7 +69,7 @@ public class ItemGorgonHead extends Item implements ICustomRendered {
 					EntityLiving entity = (EntityLiving)in;
 					if(!entity.isDead && DragonUtils.isAlive(entity) && entity.canBeCollidedWith() && !entity.isPotionActive(MobEffects.BLINDNESS) && !(entity instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues)entity).canBeTurnedToStone())) {
 						ResourceLocation id = EntityList.getKey(entity);
-						if(id != null && !IceAndFire.CONFIG.getStoneEntityBlacklist().contains(id)) {
+						if(id != null && !IceAndFireConfig.getStoneEntityBlacklist().contains(id)) {
 							IEntityEffectCapability cap = InFCapabilities.getEntityEffectCapability(entity);
 							return cap != null && !cap.isStoned();
 						}

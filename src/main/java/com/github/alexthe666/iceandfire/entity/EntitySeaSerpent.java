@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.client.model.IFChainBuffer;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.*;
@@ -148,7 +148,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.15D);
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(3.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(Math.min(2048, IceAndFire.CONFIG.dragonTargetSearchLength));
+        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(Math.min(2048, IceAndFireConfig.DRAGON_SETTINGS.dragonTargetSearchLength));
     }
 
     public void resetParts(float scale) {
@@ -289,8 +289,8 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
 
     private void updateAttributes() {
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(Math.min(0.25D, 0.15D * this.getSeaSerpentScale() * this.getAncientModifier()));
-        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(Math.max(4, IceAndFire.CONFIG.seaSerpentAttackStrength * this.getSeaSerpentScale() * this.getAncientModifier()));
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(Math.max(10, IceAndFire.CONFIG.seaSerpentBaseHealth * this.getSeaSerpentScale() * this.getAncientModifier()));
+        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(Math.max(4, IceAndFireConfig.ENTITY_SETTINGS.seaSerpentAttackStrength * this.getSeaSerpentScale() * this.getAncientModifier()));
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(Math.max(10, IceAndFireConfig.ENTITY_SETTINGS.seaSerpentBaseHealth * this.getSeaSerpentScale() * this.getAncientModifier()));
         this.heal(30F * this.getSeaSerpentScale());
     }
 
@@ -606,7 +606,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
     }
 
     public void breakBlock() {
-        if (IceAndFire.CONFIG.seaSerpentGriefing) {
+        if (IceAndFireConfig.ENTITY_SETTINGS.seaSerpentGriefing) {
             for (int a = (int) Math.round(this.getEntityBoundingBox().minX) - 2; a <= (int) Math.round(this.getEntityBoundingBox().maxX) + 2; a++) {
                 for (int b = (int) Math.round(this.getEntityBoundingBox().minY); (b <= (int) Math.round(this.getEntityBoundingBox().maxY) + 2) && (b <= 127); b++) {
                     for (int c = (int) Math.round(this.getEntityBoundingBox().minZ) - 2; c <= (int) Math.round(this.getEntityBoundingBox().maxZ) + 2; c++) {

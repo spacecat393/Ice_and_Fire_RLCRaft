@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
 import com.github.alexthe666.iceandfire.api.InFCapabilities;
 import net.minecraft.entity.EntityLivingBase;
@@ -110,7 +111,7 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
 				return;
 			}
 			if (movingObject.entityHit == null || !(movingObject.entityHit instanceof IDragonProjectile) && movingObject.entityHit != shootingEntity) {
-				if (this.shootingEntity != null && IceAndFire.CONFIG.dragonGriefing != 2) {
+				if (this.shootingEntity != null && IceAndFireConfig.DRAGON_SETTINGS.dragonGriefing != 2) {
 					int explodeSize = 2;
 					if(this.shootingEntity instanceof EntityDragonBase){
 						explodeSize = 2 + ((EntityDragonBase) this.shootingEntity).getDragonStage();

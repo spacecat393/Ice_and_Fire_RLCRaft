@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
 import com.github.alexthe666.iceandfire.api.InFCapabilities;
 import com.github.alexthe666.iceandfire.core.ModSounds;
@@ -9,7 +10,6 @@ import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
-import net.ilexiconn.llibrary.server.entity.multipart.PartEntity;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.item.EntityXPOrb;
@@ -101,7 +101,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
 			public boolean apply(@Nullable EntityLiving entity) {
 				if(entity != null && !entity.isDead && DragonUtils.isAlive(entity) && entity.canBeCollidedWith() && !(entity instanceof IBlacklistedFromStatues && !((IBlacklistedFromStatues)entity).canBeTurnedToStone())) {
 					ResourceLocation id = EntityList.getKey(entity);
-					if(id != null && !IceAndFire.CONFIG.getStoneEntityBlacklist().contains(id)) {
+					if(id != null && !IceAndFireConfig.getStoneEntityBlacklist().contains(id)) {
 						IEntityEffectCapability cap = InFCapabilities.getEntityEffectCapability(entity);
 						return cap != null && !cap.isStoned();
 					}
@@ -271,7 +271,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
 		super.applyEntityAttributes();
 		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
 		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3.0D);
-		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IceAndFire.CONFIG.gorgonMaxHealth);
+		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IceAndFireConfig.ENTITY_SETTINGS.gorgonMaxHealth);
 		this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(1.0D);
 	}
 

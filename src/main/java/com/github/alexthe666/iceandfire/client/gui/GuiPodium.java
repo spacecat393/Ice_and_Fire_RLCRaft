@@ -12,9 +12,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiPodium extends GuiContainer {
+	private static final ResourceLocation TEXTURE = new ResourceLocation("iceandfire:textures/gui/podium.png");
 
-	private IInventory playerInventory;
-	private IInventory podiumInventory;
+	private final IInventory playerInventory;
+	private final IInventory podiumInventory;
 
 	public GuiPodium(InventoryPlayer playerInv, IInventory podiumInv) {
 		super(new ContainerPodium(playerInv, podiumInv, Minecraft.getMinecraft().player));
@@ -36,7 +37,7 @@ public class GuiPodium extends GuiContainer {
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		this.mc.getTextureManager().bindTexture(new ResourceLocation("iceandfire:textures/gui/podium.png"));
+		this.mc.getTextureManager().bindTexture(TEXTURE);
 		int k = (this.width - this.xSize) / 2;
 		int l = (this.height - this.ySize) / 2;
 		this.drawTexturedModalRect(k, l, 0, 0, this.xSize, this.ySize);

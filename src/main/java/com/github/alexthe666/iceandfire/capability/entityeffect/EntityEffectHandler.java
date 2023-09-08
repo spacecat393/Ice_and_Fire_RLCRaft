@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.capability.entityeffect;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
@@ -55,7 +55,7 @@ public class EntityEffectHandler {
 
                     if(entity.getDistanceSq(siren) < 25D) {//Within 5 blocks
                         capability.reset();
-                        siren.singCooldown = IceAndFire.CONFIG.sirenTimeBetweenSongs;
+                        siren.singCooldown = IceAndFireConfig.ENTITY_SETTINGS.sirenTimeBetweenSongs;
                         siren.setSinging(false);
                         siren.setAttackTarget(entity);
                         siren.setAggressive(true);
@@ -64,7 +64,7 @@ public class EntityEffectHandler {
                     return;
                 }
                 //If siren exists but time is up or invalid, set cooldown
-                siren.singCooldown = IceAndFire.CONFIG.sirenTimeBetweenSongs;
+                siren.singCooldown = IceAndFireConfig.ENTITY_SETTINGS.sirenTimeBetweenSongs;
             }
             //Reset effect if ended or invalid
             capability.reset();

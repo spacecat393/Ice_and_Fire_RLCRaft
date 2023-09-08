@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.api.FoodUtils;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.*;
@@ -76,7 +76,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
     }
 
     public boolean getCanSpawnHere() {
-        return this.getRNG().nextInt(IceAndFire.CONFIG.cockatriceSpawnCheckChance + 1) == 0 && super.getCanSpawnHere();
+        return this.getRNG().nextInt(IceAndFireConfig.ENTITY_SPAWNING.cockatriceSpawnCheckChance + 1) == 0 && super.getCanSpawnHere();
     }
 
     protected void initEntityAI() {
@@ -544,7 +544,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
         if(this.getAttackTarget() == null){
             return 0;
         }
-        float dist = IceAndFire.CONFIG.cockatriceChickenSearchLength;
+        float dist = IceAndFireConfig.ENTITY_SETTINGS.cockatriceChickenSearchLength;
         List<EntityCockatrice> list = world.getEntitiesWithinAABB(EntityCockatrice.class, this.getEntityBoundingBox().expand(dist, dist, dist));
         int i = 0;
         for(EntityCockatrice cockatrice : list){

@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.IDragonFlute;
 import net.minecraft.entity.Entity;
@@ -29,7 +30,7 @@ public class ItemDragonFlute extends Item {
 		ItemStack itemStackIn = player.getHeldItem(hand);
 		player.getCooldownTracker().setCooldown(this, 60);
 
-		float chunksize = 16 * IceAndFire.CONFIG.dragonFluteDistance;
+		float chunksize = 16 * IceAndFireConfig.DRAGON_SETTINGS.dragonFluteDistance;
 		List<Entity> list = worldIn.<Entity>getEntitiesWithinAABBExcludingEntity(player, (new AxisAlignedBB(player.posX, player.posY, player.posZ, player.posX + 1.0D, player.posY + 1.0D, player.posZ + 1.0D)).grow(chunksize, 256, chunksize));
 		Collections.sort(list, new Sorter(player));
 		List<IDragonFlute> dragons = new ArrayList<IDragonFlute>();

@@ -30,7 +30,6 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityEntry;
@@ -219,9 +218,9 @@ public class CommonProxy {
         IceAndFire.GLACIER = new BiomeGlacier().setRegistryName(IceAndFire.MODID, "Glacier");
         event.getRegistry().register(IceAndFire.GLACIER);
         BiomeDictionary.addTypes(IceAndFire.GLACIER, BiomeDictionary.Type.SNOWY, BiomeDictionary.Type.COLD, BiomeDictionary.Type.SPARSE, BiomeDictionary.Type.DEAD, BiomeDictionary.Type.WASTELAND);
-        if (IceAndFire.CONFIG.spawnGlaciers) {
+        if (IceAndFireConfig.WORLDGEN.spawnGlaciers) {
             BiomeManager.addSpawnBiome(IceAndFire.GLACIER);
-            BiomeManager.addBiome(BiomeManager.BiomeType.COOL, new BiomeManager.BiomeEntry(IceAndFire.GLACIER, IceAndFire.CONFIG.glacierSpawnChance));
+            BiomeManager.addBiome(BiomeManager.BiomeType.COOL, new BiomeManager.BiomeEntry(IceAndFire.GLACIER, IceAndFireConfig.WORLDGEN.glacierSpawnChance));
 
         }
     }
@@ -258,13 +257,6 @@ public class CommonProxy {
 
     public Object getFontRenderer() {
         return null;
-    }
-
-    @SubscribeEvent
-    public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
-        if (event.getModID().equalsIgnoreCase(IceAndFire.MODID)) {
-            IceAndFire.syncConfig();
-        }
     }
 
     public int getDragon3rdPersonView() {

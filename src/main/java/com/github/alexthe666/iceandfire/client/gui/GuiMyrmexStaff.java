@@ -6,7 +6,6 @@ import com.github.alexthe666.iceandfire.client.gui.bestiary.ChangePageButton;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.message.MessageGetMyrmexHive;
 import com.github.alexthe666.iceandfire.structures.WorldGenMyrmexHive;
-import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -16,28 +15,29 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GuiMyrmexStaff extends GuiScreen {
     private static final ResourceLocation JUNGLE_TEXTURE = new ResourceLocation("iceandfire:textures/gui/myrmex_staff_jungle.png");
     private static final ResourceLocation DESERT_TEXTURE = new ResourceLocation("iceandfire:textures/gui/myrmex_staff_desert.png");
-    private ItemStack staff;
-    private boolean jungle;
+    private final boolean jungle;
     private static final WorldGenMyrmexHive.RoomType[] ROOMS = {WorldGenMyrmexHive.RoomType.FOOD, WorldGenMyrmexHive.RoomType.NURSERY, WorldGenMyrmexHive.RoomType.EMPTY};
     public ChangePageButton previousPage;
     public ChangePageButton nextPage;
     int ticksSinceDeleted = 0;
     int currentPage = 0;
-    private final List<Room> allRoomPos = Lists.<Room>newArrayList();
-    private final List<MyrmexDeleteButton> allRoomButtonPos = Lists.<MyrmexDeleteButton>newArrayList();
+    private final List<Room> allRoomPos = new ArrayList<>();
+    private final List<MyrmexDeleteButton> allRoomButtonPos = new ArrayList<>();
     private static final int ROOMS_PER_PAGE = 5;
     private int hiveCount;
+
     public GuiMyrmexStaff(ItemStack staff) {
-        this.staff = staff;
         this.jungle = staff.getItem() == ModItems.myrmex_jungle_staff;
         initGui();
     }
 
+    @Override
     public void initGui() {
         super.initGui();
         this.buttonList.clear();
@@ -58,11 +58,7 @@ public class GuiMyrmexStaff extends GuiScreen {
             int yIndex = rooms % ROOMS_PER_PAGE;
             //IndexPageButton button = new IndexPageButton(2 + i, centerX + 15 + (xIndex * 200), centerY + 10 + (yIndex * 20) - (xIndex == 1 ? 20 : 0), StatCollector.translateToLocal("bestiary." + EnumBestiaryPages.values()[allPageTypes.get(i).ordinal()].toString().toLowerCase()));
             MyrmexDeleteButton button = new MyrmexDeleteButton(2 + rooms, i + x_translate, j + y_translate + (yIndex) * 22, allRoomPos.get(rooms).pos, I18n.format("myrmex.message.delete"));
-            if (rooms < ROOMS_PER_PAGE * (this.currentPage + 1) && rooms >= ROOMS_PER_PAGE * this.currentPage) {
-                button.visible = true;
-            }else{
-                button.visible = false;
-            }
+            button.visible = rooms < ROOMS_PER_PAGE * (this.currentPage + 1) && rooms >= ROOMS_PER_PAGE * this.currentPage;
             this.buttonList.add(button);
             this.allRoomButtonPos.add(button);
         }
@@ -92,7 +88,6 @@ public class GuiMyrmexStaff extends GuiScreen {
         }
     }
 
-
     @Override
     protected void actionPerformed(GuiButton button) {
         if (button.id == 0) {
@@ -109,10 +104,12 @@ public class GuiMyrmexStaff extends GuiScreen {
         initGui();
     }
 
+    @Override
     public boolean doesGuiPauseGame() {
         return false;
     }
 
+    @Override
     public void drawDefaultBackground() {
         super.drawDefaultBackground();
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
@@ -122,6 +119,7 @@ public class GuiMyrmexStaff extends GuiScreen {
         this.drawTexturedModalRect(i, j, 0, 0, 248, 166);
     }
 
+    @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
         if (ticksSinceDeleted > 0) {
@@ -165,21 +163,21 @@ public class GuiMyrmexStaff extends GuiScreen {
                 hiveCount++;
                 this.fontRenderer.drawString(I18n.format("myrmex.message.room.enterance_bottom", pos.getX(), pos.getY(), pos.getZ()), i, j + 16 + hiveCount * 22, color, true);
             }*/
-
         }
     }
 
+    @Override
     public void onGuiClosed() {
         IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageGetMyrmexHive(ClientProxy.getReferedClientHive()));
     }
-
 
     private void drawRoomInfo(String type, BlockPos pos, int i, int j, int color){
         String translate = "myrmex.message.room." + type;
         this.fontRenderer.drawString(I18n.format(translate, pos.getX(), pos.getY(), pos.getZ()), i, j + 36 + hiveCount * 22, color, true);
         hiveCount++;
     }
-    private class Room {
+
+    private static class Room {
         public BlockPos pos;
         public String string;
 

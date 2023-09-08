@@ -1,14 +1,12 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.block.BlockEggInIce;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
-import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityEggInIce;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.entity.effect.EntityLightningBolt;
 
@@ -53,7 +51,7 @@ public class DragonType {
         if (this == FIRE) {
             egg.setDragonAge(egg.getDragonAge() + 1);
 
-            if (egg.getDragonAge() > IceAndFire.CONFIG.dragonEggTime) {
+            if (egg.getDragonAge() > IceAndFireConfig.DRAGON_SETTINGS.dragonEggTime) {
                 egg.world.setBlockToAir(pos);
                 EntityFireDragon dragon = new EntityFireDragon(egg.world);
                 if(egg.hasCustomName()){
@@ -83,7 +81,7 @@ public class DragonType {
         } else if (this == LIGHTNING) {
             egg.setDragonAge(egg.getDragonAge() + 1);
 
-            if (egg.getDragonAge() > IceAndFire.CONFIG.dragonEggTime) {
+            if (egg.getDragonAge() > IceAndFireConfig.DRAGON_SETTINGS.dragonEggTime) {
                 egg.world.setBlockToAir(pos);
                 EntityLightningDragon dragon = new EntityLightningDragon(egg.world);
                 if(egg.hasCustomName()){

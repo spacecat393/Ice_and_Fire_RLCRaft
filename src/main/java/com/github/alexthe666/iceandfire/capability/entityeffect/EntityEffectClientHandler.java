@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.capability.entityeffect;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
 import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
@@ -40,13 +41,13 @@ public class EntityEffectClientHandler {
             }
             if(entity == Minecraft.getMinecraft().player) {
                 if(world.rand.nextInt(40) == 0) IceAndFire.PROXY.spawnParticle("siren_appearance", world, entity.posX, entity.posY, entity.posZ, 0, 0, 0);
-                if(IceAndFire.CONFIG.sirenShader && !renderer.isShaderActive()) renderer.loadShader(SIREN_SHADER);
+                if(IceAndFireConfig.CLIENT_SETTINGS.sirenShader && !renderer.isShaderActive()) renderer.loadShader(SIREN_SHADER);
             }
         }
         else {
             if(entity == Minecraft.getMinecraft().player) {
                 EntityRenderer renderer = Minecraft.getMinecraft().entityRenderer;
-                if(IceAndFire.CONFIG.sirenShader &&
+                if(IceAndFireConfig.CLIENT_SETTINGS.sirenShader &&
                         renderer != null &&
                         renderer.getShaderGroup() != null &&
                         renderer.getShaderGroup().getShaderGroupName() != null &&

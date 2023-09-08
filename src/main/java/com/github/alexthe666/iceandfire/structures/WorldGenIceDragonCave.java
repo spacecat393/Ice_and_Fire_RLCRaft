@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.structures;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
@@ -10,10 +10,6 @@ import net.minecraft.util.ResourceLocation;
 
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 public class WorldGenIceDragonCave extends WorldGenDragonCave {
 	public static final ResourceLocation ICEDRAGON_CHEST = LootTableList.register(new ResourceLocation("iceandfire", "ice_dragon_female_cave"));
@@ -32,7 +28,7 @@ public class WorldGenIceDragonCave extends WorldGenDragonCave {
 	}
 
 	protected IBlockState getGemstone() {
-		return IceAndFire.CONFIG.generateAmethystOre ? ModBlocks.amethystOre.getDefaultState() : Blocks.EMERALD_ORE.getDefaultState();
+		return IceAndFireConfig.WORLDGEN.generateAmethystOre ? ModBlocks.amethystOre.getDefaultState() : Blocks.EMERALD_ORE.getDefaultState();
 	}
 
 	protected ResourceLocation getLootTable() {

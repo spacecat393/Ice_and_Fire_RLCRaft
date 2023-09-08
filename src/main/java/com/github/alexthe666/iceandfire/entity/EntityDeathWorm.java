@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.core.ModKeys;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.*;
@@ -92,7 +93,7 @@ public class EntityDeathWorm extends EntityTameable implements IBlacklistedFromS
                 if (EntityDeathWorm.this.isTamed()) {
                     return input instanceof EntityMob;
                 } else {
-                    return (IceAndFire.CONFIG.deathWormAttackMonsters ? input instanceof EntityLivingBase : (input instanceof EntityAnimal || input instanceof EntityPlayer)) && DragonUtils.isAlive(input) && !(input instanceof EntityDragonBase && ((EntityDragonBase) input).isModelDead()) && !EntityDeathWorm.this.isOwner(input);
+                    return (IceAndFireConfig.ENTITY_SETTINGS.deathWormAttackMonsters ? input instanceof EntityLivingBase : (input instanceof EntityAnimal || input instanceof EntityPlayer)) && DragonUtils.isAlive(input) && !(input instanceof EntityDragonBase && ((EntityDragonBase) input).isModelDead()) && !EntityDeathWorm.this.isOwner(input);
                 }
             }
         }));
@@ -104,7 +105,7 @@ public class EntityDeathWorm extends EntityTameable implements IBlacklistedFromS
         int j = MathHelper.floor(this.getEntityBoundingBox().minY);
         int k = MathHelper.floor(this.posZ);
         BlockPos blockpos = new BlockPos(i, j, k);
-        return this.world.getBlockState(blockpos.down()).getBlock() == this.spawnableBlock && this.getRNG().nextInt(1 + IceAndFire.CONFIG.deathWormSpawnCheckChance) == 0 && this.world.getLight(blockpos) > 8 && super.getCanSpawnHere();
+        return this.world.getBlockState(blockpos.down()).getBlock() == this.spawnableBlock && this.getRNG().nextInt(1 + IceAndFireConfig.ENTITY_SPAWNING.deathWormSpawnCheckChance) == 0 && this.world.getLight(blockpos) > 8 && super.getCanSpawnHere();
     }
 
     public void onUpdateParts() {
@@ -344,9 +345,9 @@ public class EntityDeathWorm extends EntityTameable implements IBlacklistedFromS
         super.applyEntityAttributes();
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.15D);
-        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IceAndFire.CONFIG.deathWormAttackStrength);
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IceAndFire.CONFIG.deathWormMaxHealth);
-        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(Math.min(2048, IceAndFire.CONFIG.deathWormTargetSearchLength));
+        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IceAndFireConfig.ENTITY_SETTINGS.deathWormAttackStrength);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IceAndFireConfig.ENTITY_SETTINGS.deathWormMaxHealth);
+        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(Math.min(2048, IceAndFireConfig.ENTITY_SETTINGS.deathWormTargetSearchLength));
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(3.0D);
     }
 
@@ -517,8 +518,8 @@ public class EntityDeathWorm extends EntityTameable implements IBlacklistedFromS
 
     private void updateAttributes() {
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(Math.min(0.2D, 0.15D * this.getScaleForAge()));
-        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(Math.max(1, IceAndFire.CONFIG.deathWormAttackStrength * this.getScaleForAge()));
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(Math.max(6, IceAndFire.CONFIG.deathWormMaxHealth * this.getScaleForAge()));
+        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(Math.max(1, IceAndFireConfig.ENTITY_SETTINGS.deathWormAttackStrength * this.getScaleForAge()));
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(Math.max(6, IceAndFireConfig.ENTITY_SETTINGS.deathWormMaxHealth * this.getScaleForAge()));
         this.heal(30F * this.getScaleForAge());
     }
 

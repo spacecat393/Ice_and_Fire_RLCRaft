@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
 import com.github.alexthe666.iceandfire.api.InFCapabilities;
 import com.github.alexthe666.iceandfire.core.ModSounds;
@@ -74,7 +74,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
 
     public boolean getCanSpawnHere() {
         BlockPos pos = new BlockPos(this);
-        return this.getRNG().nextInt(IceAndFire.CONFIG.trollSpawnCheckChance + 1) == 0 && !this.world.canSeeSky(pos) && pos.getY() <= 50 && super.getCanSpawnHere();
+        return this.getRNG().nextInt(IceAndFireConfig.ENTITY_SPAWNING.trollSpawnCheckChance + 1) == 0 && !this.world.canSeeSky(pos) && pos.getY() <= 50 && super.getCanSpawnHere();
     }
 
     protected void initEntityAI() {
@@ -92,8 +92,8 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.35D);
-        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IceAndFire.CONFIG.trollAttackStrength);
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IceAndFire.CONFIG.trollMaxHealth);
+        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IceAndFireConfig.ENTITY_SETTINGS.trollAttackStrength);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IceAndFireConfig.ENTITY_SETTINGS.trollMaxHealth);
         this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1D);
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(9.0D);
 
@@ -201,7 +201,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
     protected void onDeathUpdate() {
         super.onDeathUpdate();
         if (this.deathTime == 20 && !this.world.isRemote) {
-            if(IceAndFire.CONFIG.trollsDropWeapon) {
+            if(IceAndFireConfig.ENTITY_SETTINGS.trollsDropWeapon) {
                 if (this.getRNG().nextInt(3) == 0) {
                     ItemStack weaponStack = new ItemStack(this.getWeaponType().item, 1, 0);
                     weaponStack.attemptDamageItem(this.getRNG().nextInt(250), this.getRNG(), null);

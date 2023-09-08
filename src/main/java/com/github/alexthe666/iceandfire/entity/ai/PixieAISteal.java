@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -32,7 +32,7 @@ public class PixieAISteal extends EntityAIBase {
 	}
 
 	public boolean shouldExecute() {
-		if(!IceAndFire.CONFIG.pixiesStealItems){
+		if(!IceAndFireConfig.ENTITY_SETTINGS.pixiesStealItems){
 			return false;
 		}
 		if (temptedEntity.getRNG().nextInt(3) == 0) {

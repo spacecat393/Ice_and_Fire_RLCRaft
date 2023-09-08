@@ -19,19 +19,18 @@ import net.minecraft.util.math.BlockPos;
 public class GuiMyrmexAddRoom extends GuiScreen {
     private static final ResourceLocation JUNGLE_TEXTURE = new ResourceLocation("iceandfire:textures/gui/myrmex_staff_jungle.png");
     private static final ResourceLocation DESERT_TEXTURE = new ResourceLocation("iceandfire:textures/gui/myrmex_staff_desert.png");
-    private ItemStack staff;
-    private boolean jungle;
-    private BlockPos interactPos;
-    private EnumFacing facing;
+    private final boolean jungle;
+    private final BlockPos interactPos;
+    private final EnumFacing facing;
 
     public GuiMyrmexAddRoom(ItemStack staff, BlockPos interactPos, EnumFacing facing) {
-        this.staff = staff;
         this.jungle = staff.getItem() == ModItems.myrmex_jungle_staff;
         this.interactPos = interactPos;
         this.facing = facing;
         initGui();
     }
 
+    @Override
     public void initGui() {
         super.initGui();
         this.buttonList.clear();
@@ -44,7 +43,6 @@ public class GuiMyrmexAddRoom extends GuiScreen {
             this.buttonList.add(new GuiButton(3, i + 50, j + 110, 150, 20, I18n.format("myrmex.message.establishroom_enterance_bottom")));
             this.buttonList.add(new GuiButton(4, i + 50, j + 135, 150, 20, I18n.format("myrmex.message.establishroom_misc")));
         }
-
     }
 
     @Override
@@ -74,6 +72,7 @@ public class GuiMyrmexAddRoom extends GuiScreen {
         Minecraft.getMinecraft().displayGuiScreen(null);
     }
 
+    @Override
     public void drawDefaultBackground() {
         super.drawDefaultBackground();
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
@@ -83,6 +82,7 @@ public class GuiMyrmexAddRoom extends GuiScreen {
         this.drawTexturedModalRect(i, j, 0, 0, 248, 166);
     }
 
+    @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
         initGui();
@@ -98,17 +98,16 @@ public class GuiMyrmexAddRoom extends GuiScreen {
                 this.fontRenderer.drawString(I18n.format("myrmex.message.colony"), i + 80, j - 3, color, true);
             }
             this.fontRenderer.drawString(I18n.format("myrmex.message.create_new_room", interactPos.getX(), interactPos.getY(), interactPos.getZ()), i + 30, j + 6, color, true);
-
         }
-
     }
 
+    @Override
     public void onGuiClosed() {
         IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageGetMyrmexHive(ClientProxy.getReferedClientHive()));
     }
 
+    @Override
     public boolean doesGuiPauseGame() {
         return false;
     }
-
 }

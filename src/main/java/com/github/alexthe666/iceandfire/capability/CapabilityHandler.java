@@ -34,15 +34,11 @@ public class CapabilityHandler {
         World world = entity.world;
 
         IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(entity);
-        if(capability == null) {
-            System.out.println("Capability null for: " + entity.getName());
-            return;
-        }
+        if(capability == null) return;
         capability.tickUpdate(entity, world);//Tick both client and server
 
         //Send packet from server if now dirty
         if(!world.isRemote && capability.isDirty()) {
-            System.out.println("Capability dirty, syncing for: " + entity.getName());
             syncEntityEffectUpdate(capability, entity);
         }
     }
@@ -53,7 +49,6 @@ public class CapabilityHandler {
             EntityLivingBase entity = (EntityLivingBase)event.getEntity();
             IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(entity);
             if(capability == null) return;
-            System.out.println("Entity joined, syncing for: " + entity.getName());
             syncEntityEffectInitial(capability, entity);
         }
     }
@@ -64,7 +59,6 @@ public class CapabilityHandler {
             EntityLivingBase entity = (EntityLivingBase)event.getTarget();
             IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(entity);
             if(capability == null) return;
-            System.out.println("Entity start tracking, syncing for: " + entity.getName());
             syncEntityEffectDirect(capability, entity, (EntityPlayerMP)event.getEntityPlayer());
         }
     }
@@ -107,11 +101,9 @@ public class CapabilityHandler {
     private static void messageEntityEffectTracking(IEntityEffectCapability capability, EntityLivingBase entity) {
         Capability<IEntityEffectCapability> def = InFCapabilities.ENTITY_EFFECT;
         if(!capability.getEffect().syncToAllTracking()) {
-            System.out.println("Message tracking reset: " + entity.getName());
             IceAndFire.NETWORK_WRAPPER.sendToAllTracking(new MessageResetEntityEffect(entity.getEntityId()), entity);
         }
         else {
-            System.out.println("Message tracking: " + entity.getName());
             IceAndFire.NETWORK_WRAPPER.sendToAllTracking(new MessageEntityEffect(def.getStorage().writeNBT(def, capability, null), entity.getEntityId()), entity);
         }
     }
@@ -122,11 +114,9 @@ public class CapabilityHandler {
     private static void messageEntityEffectDirectTracking(IEntityEffectCapability capability, EntityLivingBase entity, EntityPlayerMP player) {
         Capability<IEntityEffectCapability> def = InFCapabilities.ENTITY_EFFECT;
         if(!capability.getEffect().syncToAllTracking()) {
-            System.out.println("Message direct tracking reset: " + entity.getName());
             IceAndFire.NETWORK_WRAPPER.sendTo(new MessageResetEntityEffect(entity.getEntityId()), player);
         }
         else {
-            System.out.println("Message direct tracking: " + entity.getName());
             IceAndFire.NETWORK_WRAPPER.sendTo(new MessageEntityEffect(def.getStorage().writeNBT(def, capability, null), entity.getEntityId()), player);
         }
     }
@@ -137,11 +127,9 @@ public class CapabilityHandler {
     private static void messageEntityEffectClient(IEntityEffectCapability capability, EntityPlayerMP player) {
         Capability<IEntityEffectCapability> def = InFCapabilities.ENTITY_EFFECT;
         if(!capability.getEffect().syncToAffectedClient()) {
-            System.out.println("Message client reset");
             IceAndFire.NETWORK_WRAPPER.sendTo(new MessageResetEntityEffect(player.getEntityId()), player);
         }
         else {
-            System.out.println("Message client");
             IceAndFire.NETWORK_WRAPPER.sendTo(new MessageEntityEffect(def.getStorage().writeNBT(def, capability, null), player.getEntityId()), player);
         }
     }

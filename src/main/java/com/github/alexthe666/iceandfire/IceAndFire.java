@@ -31,7 +31,6 @@ import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -46,10 +45,9 @@ import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.File;
 import java.util.Random;
 
-@Mod(modid = IceAndFire.MODID, dependencies = "required-after:llibrary@[" + IceAndFire.LLIBRARY_VERSION + ",)", version = IceAndFire.VERSION, name = IceAndFire.NAME, guiFactory = "com.github.alexthe666.iceandfire.client.gui.IceAndFireGuiFactory")
+@Mod(modid = IceAndFire.MODID, dependencies = "required-after:llibrary@[" + IceAndFire.LLIBRARY_VERSION + ",)", version = IceAndFire.VERSION, name = IceAndFire.NAME)
 public class IceAndFire {
 
     public static final String MODID = "iceandfire";
@@ -77,13 +75,9 @@ public class IceAndFire {
     public static DamageSource gorgon;
     public static Biome GLACIER;
     public static Potion FROZEN_POTION;
-    public static IceAndFireConfig CONFIG = new IceAndFireConfig();
-    public static Configuration config;
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        loadConfig();
-        syncConfig();
         CapabilityManager.INSTANCE.register(IEntityEffectCapability.class, new EntityEffectStorage(), EntityEffectCapability::new);
         MinecraftForge.EVENT_BUS.register(new EventLiving());
         MinecraftForge.EVENT_BUS.register(new CapabilityHandler());
@@ -95,26 +89,6 @@ public class IceAndFire {
         ThaumcraftCompatBridge.loadThaumcraftCompat();
         LootFunctionManager.registerFunction(new CustomizeToDragon.Serializer());
         LootFunctionManager.registerFunction(new CustomizeToSeaSerpent.Serializer());
-    }
-
-
-    public static void loadConfig() {
-        File configFile = new File(Loader.instance().getConfigDir(), "ice_and_fire.cfg");
-        if (!configFile.exists()) {
-            try {
-                configFile.createNewFile();
-            } catch (Exception e) {
-                logger.warn("Could not create a new Ice and Fire config file.");
-                logger.warn(e.getLocalizedMessage());
-            }
-        }
-        config = new Configuration(configFile);
-        config.load();
-    }
-
-    public static void syncConfig(){
-        CONFIG.init(config);
-        config.save();
     }
 
     @EventHandler

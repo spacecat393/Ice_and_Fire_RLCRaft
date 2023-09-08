@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.event;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
 import com.github.alexthe666.iceandfire.api.InFCapabilities;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
@@ -204,7 +205,7 @@ public class EventLiving {
 	}
 
 	private static void signalChickenAlarm(EntityLivingBase chicken, EntityLivingBase attacker){
-		float d0 = IceAndFire.CONFIG.cockatriceChickenSearchLength;
+		float d0 = IceAndFireConfig.ENTITY_SETTINGS.cockatriceChickenSearchLength;
 		List<Entity> list = chicken.world.getEntitiesWithinAABB(EntityCockatrice.class, (new AxisAlignedBB(chicken.posX, chicken.posY, chicken.posZ, chicken.posX + 1.0D, chicken.posY + 1.0D, chicken.posZ + 1.0D)).grow(d0, 10.0D, d0));
 		list.sort(new EntityAINearestAttackableTarget.Sorter(attacker));
 		if (!list.isEmpty()) {
@@ -227,7 +228,7 @@ public class EventLiving {
 	}
 
 	private static void signalAmphithereAlarm(EntityLivingBase villager, EntityLivingBase attacker){
-		float d0 = IceAndFire.CONFIG.amphithereVillagerSearchLength;
+		float d0 = (float)IceAndFireConfig.ENTITY_SETTINGS.amphithereVillagerSearchLength;
 		List<Entity> list = villager.world.getEntitiesWithinAABB(EntityAmphithere.class, (new AxisAlignedBB(villager.posX - 1.0D, villager.posY - 1.0D, villager.posZ - 1.0D, villager.posX + 1.0D, villager.posY + 1.0D, villager.posZ + 1.0D)).grow(d0, d0, d0));
 		list.sort(new EntityAINearestAttackableTarget.Sorter(attacker));
 		if (!list.isEmpty()) {
@@ -252,7 +253,7 @@ public class EventLiving {
 	@SubscribeEvent
 	public void onPlayerAttack(AttackEntityEvent event) {
 		if (event.getTarget() != null && isAnimaniaSheep(event.getTarget())) {
-			float dist = IceAndFire.CONFIG.cyclopesSheepSearchLength;
+			float dist = IceAndFireConfig.ENTITY_SETTINGS.cyclopesSheepSearchLength;
 			List<Entity> list = event.getTarget().world.getEntitiesWithinAABBExcludingEntity(event.getEntityPlayer(), event.getEntityPlayer().getEntityBoundingBox().expand(dist, dist, dist));
 			list.sort(new EntityAINearestAttackableTarget.Sorter(event.getEntityPlayer()));
 			if (!list.isEmpty()) {
@@ -333,8 +334,8 @@ public class EventLiving {
 
 			}
 		}
-		if (IceAndFire.CONFIG.chickensLayRottenEggs && !entity.world.isRemote && isAnimaniaChicken(entity) && !entity.isChild() && entity instanceof EntityAnimal) {
-			if (entity.ticksExisted > 30 && entity.getRNG().nextInt(IceAndFire.CONFIG.cockatriceEggChance * 6000) == 0) {
+		if (IceAndFireConfig.ENTITY_SETTINGS.chickensLayRottenEggs && !entity.world.isRemote && isAnimaniaChicken(entity) && !entity.isChild() && entity instanceof EntityAnimal) {
+			if (entity.ticksExisted > 30 && entity.getRNG().nextInt(IceAndFireConfig.ENTITY_SETTINGS.chickenEggChance * 6000) == 0) {
 				entity.playSound(SoundEvents.ENTITY_CHICKEN_HURT, 2.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
 				entity.playSound(SoundEvents.ENTITY_CHICKEN_EGG, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
 				entity.dropItem(ModItems.rotten_egg, 1);
@@ -378,7 +379,7 @@ public class EventLiving {
 	@SubscribeEvent
 	public void onPlayerRightClick(PlayerInteractEvent.RightClickBlock event) {
 		if (event.getEntityPlayer() != null && (event.getWorld().getBlockState(event.getPos()).getBlock() instanceof BlockChest)) {
-			float dist = IceAndFire.CONFIG.dragonGoldSearchLength;
+			float dist = IceAndFireConfig.DRAGON_SETTINGS.dragonGoldSearchLength;
 			List<Entity> list = event.getWorld().getEntitiesWithinAABBExcludingEntity(event.getEntityPlayer(), event.getEntityPlayer().getEntityBoundingBox().expand(dist, dist, dist));
 			list.sort(new EntityAINearestAttackableTarget.Sorter(event.getEntityPlayer()));
 			if (!list.isEmpty()) {
@@ -400,7 +401,7 @@ public class EventLiving {
 	@SubscribeEvent
 	public void onBreakBlock(BlockEvent.BreakEvent event) {
 		if (event.getPlayer() != null && (event.getState().getBlock() == ModBlocks.goldPile || event.getState().getBlock() == ModBlocks.silverPile)) {
-			float dist = IceAndFire.CONFIG.dragonGoldSearchLength;
+			float dist = IceAndFireConfig.DRAGON_SETTINGS.dragonGoldSearchLength;
 			List<Entity> list = event.getWorld().getEntitiesWithinAABBExcludingEntity(event.getPlayer(), event.getPlayer().getEntityBoundingBox().expand(dist, dist, dist));
 			list.sort(new EntityAINearestAttackableTarget.Sorter(event.getPlayer()));
 			if (!list.isEmpty()) {
@@ -449,11 +450,11 @@ public class EventLiving {
 			EntityAnimal animal = (EntityAnimal) event.getEntity();
 			animal.tasks.addTask(8, new EntitySheepAIFollowCyclops(animal, 1.2D));
 		}
-		if (event.getEntity() != null && DragonUtils.isVillager(event.getEntity()) && event.getEntity() instanceof EntityCreature && IceAndFire.CONFIG.villagersFearDragons) {
+		if (event.getEntity() != null && DragonUtils.isVillager(event.getEntity()) && event.getEntity() instanceof EntityCreature && IceAndFireConfig.DRAGON_SETTINGS.villagersFearDragons) {
 			EntityCreature villager = (EntityCreature) event.getEntity();
 			villager.tasks.addTask(1, new VillagerAIFearUntamed(villager, EntityLivingBase.class, (entity) -> entity instanceof IVillagerFear, 12.0F, 0.8D, 0.8D));
 		}
-		if (event.getEntity() != null && DragonUtils.isLivestock(event.getEntity()) && event.getEntity() instanceof EntityCreature && IceAndFire.CONFIG.animalsFearDragons) {
+		if (event.getEntity() != null && DragonUtils.isLivestock(event.getEntity()) && event.getEntity() instanceof EntityCreature && IceAndFireConfig.DRAGON_SETTINGS.animalsFearDragons) {
 			EntityCreature animal = (EntityCreature) event.getEntity();
 			animal.tasks.addTask(1, new VillagerAIFearUntamed(animal, EntityLivingBase.class, (entity) -> entity instanceof IAnimalFear && ((IAnimalFear) entity).shouldAnimalsFear(animal), 12.0F, 1.2D, 1.5D));
 		}

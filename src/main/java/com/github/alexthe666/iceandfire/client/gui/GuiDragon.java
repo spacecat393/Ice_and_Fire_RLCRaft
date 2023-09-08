@@ -19,16 +19,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiDragon extends GuiContainer {
 	private static final ResourceLocation texture = new ResourceLocation("iceandfire:textures/gui/dragon.png");
-	private IInventory playerInventory;
-	private IInventory dragonInv;
-	private EntityDragonBase dragon;
+	private final EntityDragonBase dragon;
 	private float mousePosx;
 	private float mousePosY;
 
 	public GuiDragon(IInventory playerInv, EntityDragonBase dragon) {
 		super(new ContainerDragon(dragon, Minecraft.getMinecraft().player));
-		this.playerInventory = playerInv;
-		this.dragonInv = dragon.dragonInv;
 		this.dragon = dragon;
 		this.allowUserInput = false;
 		this.ySize = 214;
@@ -112,5 +108,4 @@ public class GuiDragon extends GuiContainer {
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		this.renderHoveredToolTip(mouseX, mouseY);
 	}
-
 }

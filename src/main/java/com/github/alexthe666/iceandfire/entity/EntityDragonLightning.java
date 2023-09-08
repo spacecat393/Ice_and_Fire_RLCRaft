@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.client.particle.lightning.ParticleLightningVector;
 import com.github.alexthe666.iceandfire.compat.LycanitesCompat;
 import net.minecraft.entity.EntityLivingBase;
@@ -75,7 +76,7 @@ public class EntityDragonLightning extends EntityFireball implements IDragonProj
 				return;
 			}
 			if (movingObject.entityHit == null || !(movingObject.entityHit instanceof IDragonProjectile) && this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase && movingObject.entityHit != shootingEntity) {
-				if (this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase && IceAndFire.CONFIG.dragonGriefing != 2) {
+				if (this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase && IceAndFireConfig.DRAGON_SETTINGS.dragonGriefing != 2) {
 					LightningExplosion explosion = new LightningExplosion(world, shootingEntity, this.posX, this.posY, this.posZ, ((EntityDragonBase) this.shootingEntity).getDragonStage() * 2.5F, flag);
 					explosion.doExplosionA();
 					explosion.doExplosionB(false);
@@ -92,13 +93,13 @@ public class EntityDragonLightning extends EntityFireball implements IDragonProj
 				this.applyEnchantments(this.shootingEntity, movingObject.entityHit);
 				movingObject.entityHit.attackEntityFrom(IceAndFire.dragonLightning, 3);
 				if(movingObject.entityHit instanceof EntityLivingBase){
-					if (IceAndFire.CONFIG.lightningDragonKnockback) {
+					if (IceAndFireConfig.DRAGON_SETTINGS.lightningDragonKnockback) {
 						double xRatio = this.shootingEntity.posX - movingObject.entityHit.posX;
 						double zRatio = this.shootingEntity.posZ - movingObject.entityHit.posZ;
 						((EntityLivingBase) movingObject.entityHit).knockBack(this.shootingEntity, 0.3F, xRatio, zRatio);
 					}
-					if (IceAndFire.CONFIG.lightningDragonParalysis) {
-						LycanitesCompat.applyParalysis(movingObject.entityHit, IceAndFire.CONFIG.lightningDragonParalysisTicks);
+					if (IceAndFireConfig.DRAGON_SETTINGS.lightningDragonParalysis) {
+						LycanitesCompat.applyParalysis(movingObject.entityHit, IceAndFireConfig.DRAGON_SETTINGS.lightningDragonParalysisTicks);
 					}
 				}
 			}

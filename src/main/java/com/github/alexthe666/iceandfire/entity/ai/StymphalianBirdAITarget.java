@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.entity.EntityGorgon;
 import com.github.alexthe666.iceandfire.entity.EntityStymphalianBird;
 import com.google.common.base.Predicate;
@@ -21,7 +21,7 @@ public class StymphalianBirdAITarget<T extends EntityLivingBase> extends EntityA
         super(entityIn, classTarget, 0, checkSight, false, new Predicate<EntityLivingBase>() {
             @Override
             public boolean apply(@Nullable EntityLivingBase entity) {
-                return !EntityGorgon.isStoneMob(entity) && (entity instanceof EntityPlayer && !((EntityPlayer) entity).isCreative() || entity instanceof EntityVillager || entity instanceof EntityGolem || entity instanceof EntityAnimal && IceAndFire.CONFIG.stympahlianBirdAttackAnimals);
+                return !EntityGorgon.isStoneMob(entity) && (entity instanceof EntityPlayer && !((EntityPlayer) entity).isCreative() || entity instanceof EntityVillager || entity instanceof EntityGolem || entity instanceof EntityAnimal && IceAndFireConfig.ENTITY_SETTINGS.stympahlianBirdAttackAnimals);
             }
         });
         this.bird = entityIn;

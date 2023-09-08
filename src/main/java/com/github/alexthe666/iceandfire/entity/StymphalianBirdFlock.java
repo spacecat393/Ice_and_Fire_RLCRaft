@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.entity.ai.StymphalianBirdAIAirTarget;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -36,7 +36,7 @@ public class StymphalianBirdFlock {
 
     @Nullable
     public static StymphalianBirdFlock getNearbyFlock(EntityStymphalianBird bird){
-        float d0 = IceAndFire.CONFIG.stymphalianBirdFlockLength;
+        float d0 = IceAndFireConfig.ENTITY_SETTINGS.stymphalianBirdFlockLength;
         List<Entity> list = bird.world.getEntitiesInAABBexcluding(bird, (new AxisAlignedBB(bird.posX, bird.posY, bird.posZ, bird.posX + 1.0D, bird.posY + 1.0D, bird.posZ + 1.0D)).grow(d0, 10.0D, d0), EntityStymphalianBird.STYMPHALIAN_PREDICATE);
         Collections.sort(list, new EntityAINearestAttackableTarget.Sorter(bird));
         if (!list.isEmpty()) {

@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.entity.projectile.ProjectileHelper;
@@ -108,7 +109,7 @@ public class EntityDragonFireCharge extends EntityFireball implements IDragonPro
 				return;
 			}
 			if (movingObject.entityHit == null || !(movingObject.entityHit instanceof IDragonProjectile) && movingObject.entityHit != shootingEntity) {
-				if (this.shootingEntity != null && IceAndFire.CONFIG.dragonGriefing != 2) {
+				if (this.shootingEntity != null && IceAndFireConfig.DRAGON_SETTINGS.dragonGriefing != 2) {
 					int explodeSize = 2;
 					if(this.shootingEntity instanceof EntityDragonBase){
 						explodeSize = 2 + ((EntityDragonBase) this.shootingEntity).getDragonStage();

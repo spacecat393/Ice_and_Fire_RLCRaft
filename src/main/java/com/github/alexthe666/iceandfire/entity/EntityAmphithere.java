@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.client.model.IFChainBuffer;
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModKeys;
@@ -306,7 +307,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
         if (this.getUntamedRider() == null) {
             ridingTime = 0;
         }
-        if (!this.isTamed() && ridingTime > IceAndFire.CONFIG.amphithereTameTime && this.getUntamedRider() != null && this.getUntamedRider() instanceof EntityPlayer) {
+        if (!this.isTamed() && ridingTime > IceAndFireConfig.ENTITY_SETTINGS.amphithereTameTime && this.getUntamedRider() != null && this.getUntamedRider() instanceof EntityPlayer) {
             this.world.setEntityState(this, (byte) 45);
             this.setTamedBy((EntityPlayer) this.getUntamedRider());
         }
@@ -478,9 +479,9 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.4D);
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IceAndFire.CONFIG.amphithereMaxHealth);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IceAndFireConfig.ENTITY_SETTINGS.amphithereMaxHealth);
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
-        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IceAndFire.CONFIG.amphithereAttackStrength);
+        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IceAndFireConfig.ENTITY_SETTINGS.amphithereAttackStrength);
         this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32.0D);
     }
 

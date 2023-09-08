@@ -21,23 +21,24 @@ public class GuiMyrmexCocoon extends GuiContainer {
         this.upperChestInventory = upperInv;
         this.lowerChestInventory = lowerInv;
         this.allowUserInput = false;
-        int i = 222;
-        int j = 114;
         this.inventoryRows = lowerInv.getSizeInventory() / 9;
         this.ySize = 114 + this.inventoryRows * 18;
     }
 
+    @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
         super.drawScreen(mouseX, mouseY, partialTicks);
         this.renderHoveredToolTip(mouseX, mouseY);
     }
 
+    @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         this.fontRenderer.drawString(this.lowerChestInventory.getDisplayName().getUnformattedText(), 8, 6, 4210752);
         this.fontRenderer.drawString(this.upperChestInventory.getDisplayName().getUnformattedText(), 8, this.ySize - 96 + 2, 4210752);
     }
 
+    @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.getTextureManager().bindTexture(CHEST_GUI_TEXTURE);

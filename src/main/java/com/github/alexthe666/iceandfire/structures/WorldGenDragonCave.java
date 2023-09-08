@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.structures;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.block.BlockCoinPile;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
@@ -29,7 +29,7 @@ public abstract class WorldGenDragonCave extends WorldGenerator {
         }
 
         if (chance < 60) {
-            boolean generateGold = IceAndFire.CONFIG.dragonDenGoldAmount <= 1 || new Random().nextInt(IceAndFire.CONFIG.dragonDenGoldAmount) == 0;
+            boolean generateGold = IceAndFireConfig.WORLDGEN.dragonDenGoldAmount <= 1 || new Random().nextInt(IceAndFireConfig.WORLDGEN.dragonDenGoldAmount) == 0;
             world.setBlockState(pos, generateGold ? getPile().withProperty(BlockCoinPile.LAYERS, 1 + new Random().nextInt(7)) : Blocks.AIR.getDefaultState(), 3);
         } else if (chance == 61) {
             world.setBlockState(pos, Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.HORIZONTALS[new Random().nextInt(3)]), 3);
@@ -47,7 +47,7 @@ public abstract class WorldGenDragonCave extends WorldGenerator {
         if(hardness == -1.0F || world.isAirBlock(pos)){
             return;
         }
-        boolean isOre = new Random().nextInt(IceAndFire.CONFIG.oreToStoneRatioForDragonCaves + 1) == 0;
+        boolean isOre = new Random().nextInt(IceAndFireConfig.WORLDGEN.oreToStoneRatioForDragonCaves + 1) == 0;
         if (isOre) {
             int chance = world.rand.nextInt(199) + 1;
             if (chance < 30) {
@@ -57,10 +57,10 @@ public abstract class WorldGenDragonCave extends WorldGenerator {
                 world.setBlockState(pos, Blocks.GOLD_ORE.getDefaultState(), 3);
             }
             if (chance > 40 && chance < 45) {
-                world.setBlockState(pos, IceAndFire.CONFIG.generateCopperOre ? ModBlocks.copperOre.getDefaultState() : getStone(), 3);
+                world.setBlockState(pos, IceAndFireConfig.WORLDGEN.generateCopperOre ? ModBlocks.copperOre.getDefaultState() : getStone(), 3);
             }
             if (chance > 45 && chance < 50) {
-                world.setBlockState(pos, IceAndFire.CONFIG.generateSilverOre ? ModBlocks.silverOre.getDefaultState() : getStone(), 3);
+                world.setBlockState(pos, IceAndFireConfig.WORLDGEN.generateSilverOre ? ModBlocks.silverOre.getDefaultState() : getStone(), 3);
             }
             if (chance > 50 && chance < 60) {
                 world.setBlockState(pos, Blocks.COAL_ORE.getDefaultState(), 3);

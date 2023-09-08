@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.client.gui.bestiary;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
@@ -56,7 +57,7 @@ public class GuiBestiary extends GuiScreen {
 
 	private FontRenderer getFont() {
 		FontRenderer font;
-		if (IceAndFire.CONFIG.useVanillaFont || !Minecraft.getMinecraft().gameSettings.language.equalsIgnoreCase("en_us")) {
+		if (IceAndFireConfig.CLIENT_SETTINGS.useVanillaFont || !Minecraft.getMinecraft().gameSettings.language.equalsIgnoreCase("en_us")) {
 			font = Minecraft.getMinecraft().fontRenderer;
 		} else {
 			font = (FontRenderer) IceAndFire.PROXY.getFontRenderer();
@@ -79,6 +80,7 @@ public class GuiBestiary extends GuiScreen {
 		index = true;
 	}
 
+	@Override
 	public void initGui() {
 		super.initGui();
 		int centerX = (this.width - X) / 2;
@@ -142,6 +144,7 @@ public class GuiBestiary extends GuiScreen {
 		RenderHelper.enableStandardItemLighting();
 	}
 
+	@Override
 	public boolean doesGuiPauseGame() {
 		return false;
 	}
@@ -1148,5 +1151,4 @@ public class GuiBestiary extends GuiScreen {
 			this.pageType = allPageTypes.get(button.id - 2);
 		}
 	}
-
 }

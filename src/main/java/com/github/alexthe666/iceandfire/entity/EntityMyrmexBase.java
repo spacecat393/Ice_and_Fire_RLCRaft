@@ -1,6 +1,6 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.block.BlockMyrmexBiolight;
 import com.github.alexthe666.iceandfire.block.BlockMyrmexConnectedResin;
 import com.github.alexthe666.iceandfire.block.BlockMyrmexResin;
@@ -33,8 +33,6 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigate;
-import net.minecraft.pathfinding.PathNavigateClimber;
-import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.scoreboard.Team;
@@ -195,7 +193,7 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
         }
         if (this.getGrowthStage() < 2) {
             growthTicks++;
-            if (growthTicks == IceAndFire.CONFIG.myrmexLarvaTicks) {
+            if (growthTicks == IceAndFireConfig.ENTITY_SETTINGS.myrmexLarvaTicks) {
                 this.setGrowthStage(this.getGrowthStage() + 1);
                 growthTicks = 0;
             }
