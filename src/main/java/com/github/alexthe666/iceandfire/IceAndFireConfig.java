@@ -670,6 +670,10 @@ public class IceAndFireConfig {
 		@Config.Comment("If true, uses a custom shader when players are charmed by sirens")
 		@Config.Name("Use Siren Shader")
 		public boolean sirenShader = true;
+
+		@Config.Comment("Render stoned entities using layered rendering")
+		@Config.Name("Layered Stoned Entity Texture")
+		public boolean customStoneTexture = false;
 	}
 
 	@Mod.EventBusSubscriber(modid = IceAndFire.MODID)

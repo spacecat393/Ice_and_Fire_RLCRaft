@@ -11,7 +11,6 @@ import com.github.alexthe666.iceandfire.world.village.MapGenSnowVillage;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockMatcher;
-import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Mirror;
@@ -350,6 +349,7 @@ public class StructureGenerator implements IWorldGenerator {
 		return null;
 	}
 
+	//TODO: Is there a better method for this?
 	private BlockPos getNetherHeight(World world, BlockPos pos){
 		for(int i = 0; i < 255; i++){
 			BlockPos ground = pos.up(i);

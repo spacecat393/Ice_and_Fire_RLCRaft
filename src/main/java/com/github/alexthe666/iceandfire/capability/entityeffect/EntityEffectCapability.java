@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 
 public class EntityEffectCapability implements IEntityEffectCapability {
 
+    //TODO: Bite effect to replace mounting system
     public enum EntityEffectEnum {
         CHARMED(0, true, false) {
             @Override

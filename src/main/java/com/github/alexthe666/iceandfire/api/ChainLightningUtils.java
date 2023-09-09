@@ -120,6 +120,7 @@ public class ChainLightningUtils {
         }
     }
 
+    //TODO: Transition to EntityEffectEnum.SHOCKED?
     private static void applyParalysis(EntityLivingBase target, int paralysisTicks, int paralysisChance) {
         if (paralysisChance <= 1 || target.world.rand.nextInt(paralysisChance) == 0) {
             LycanitesCompat.applyParalysis(target, paralysisTicks);
