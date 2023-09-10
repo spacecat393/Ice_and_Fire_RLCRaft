@@ -1457,7 +1457,23 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             this.hoverTicks = 0;
             this.flyTicks = 0;
         }
-        if (this.getAttackTarget() != null && this.getAttackTarget().posY + 5 < this.posY && (capability == null || capability != null && !capability.isStoned()) && (!world.isRemote  && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSleeping() && this.canMove() && this.onGround)) {
+        if (this.getAttackTarget() != null && this.getAttackTarget().posY + 5 < this.posY && (capability == null || !capability.isStoned()) && (!world.isRemote  && !this.isSitting() && !this.isFlying() && this.getPassengers().isEmpty() && !this.isChild() && !this.isHovering() && !this.isSleeping() && this.canMove() && this.onGround)) {
+            this.setHovering(true);
+            this.setSleeping(false);
+            this.setSitting(false);
+            this.flyHovering = 0;
+            this.hoverTicks = 0;
+            this.flyTicks = 0;
+        }
+        if(!this.world.isRemote
+                && this.isInWater()
+                && this.getAttackTarget() != null
+                && this.getRNG().nextInt(15) == 0
+                && (capability == null || !capability.isStoned())
+                && this.canMove()
+                && !this.isHovering()
+                && !this.isFlying()
+                && !this.isChild()) {
             this.setHovering(true);
             this.setSleeping(false);
             this.setSitting(false);
