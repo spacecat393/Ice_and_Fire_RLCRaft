@@ -34,20 +34,18 @@ public class RenderPixieHouse extends TileEntitySpecialRenderer<TileEntityPixieH
 	public void render(TileEntityPixieHouse entity, double x, double y, double z, float f, int f1, float alpha) {
 		int rotation = 0;
 		int meta = 0;
-
-		IBlockState state = entity.getWorld().getBlockState(entity.getPos());
-		if (state.getBlock() instanceof BlockPixieHouse) {
+		if (entity != null && entity.getWorld() != null && entity.getWorld().getBlockState(entity.getPos()).getBlock() instanceof BlockPixieHouse) {
+			IBlockState state = entity.getWorld().getBlockState(entity.getPos());
 			meta = entity.houseType;
 			if (state.getValue(BlockPixieHouse.FACING) == EnumFacing.NORTH) {
 				rotation = 180;
 			}
-			if (state.getValue(BlockPixieHouse.FACING) == EnumFacing.EAST) {
+			else if (state.getValue(BlockPixieHouse.FACING) == EnumFacing.EAST) {
 				rotation = -90;
 			}
-			if (state.getValue(BlockPixieHouse.FACING) == EnumFacing.WEST) {
+			else if (state.getValue(BlockPixieHouse.FACING) == EnumFacing.WEST) {
 				rotation = 90;
 			}
-
 		} else if (ItemTESRContext.INSTANCE.getCurrentStack() != ItemStack.EMPTY) {
 			meta = ItemTESRContext.INSTANCE.getCurrentStack().getItemDamage();
 		}
@@ -56,19 +54,19 @@ public class RenderPixieHouse extends TileEntitySpecialRenderer<TileEntityPixieH
 		GL11.glPushMatrix();
 		GL11.glRotatef(180, 1, 0, 0);
 		GL11.glRotatef(rotation, 0, 1F, 0);
-		if (entity.hasPixie) {
+		if (entity != null && entity.getWorld() != null && entity.hasPixie) {
 			GL11.glPushMatrix();
 			GL11.glTranslatef(0F, 0.95F, 0F);
 			GL11.glScalef(0.55F, 0.55F, 0.55F);
 			GL11.glPushMatrix();
 			//GL11.glRotatef(MathHelper.clampAngle(entity.ticksExisted * 3), 0, 1, 0);
 			switch (entity.pixieType) {
-				default: this.bindTexture(RenderPixie.TEXTURE_0);
-				case 1: this.bindTexture(RenderPixie.TEXTURE_1);
-				case 2: this.bindTexture(RenderPixie.TEXTURE_2);
-				case 3: this.bindTexture(RenderPixie.TEXTURE_3);
-				case 4: this.bindTexture(RenderPixie.TEXTURE_4);
-				case 5: this.bindTexture(RenderPixie.TEXTURE_5);
+				default: this.bindTexture(RenderPixie.TEXTURE_0); break;
+				case 1: this.bindTexture(RenderPixie.TEXTURE_1); break;
+				case 2: this.bindTexture(RenderPixie.TEXTURE_2); break;
+				case 3: this.bindTexture(RenderPixie.TEXTURE_3); break;
+				case 4: this.bindTexture(RenderPixie.TEXTURE_4); break;
+				case 5: this.bindTexture(RenderPixie.TEXTURE_5); break;
 			}
 			GL11.glPushMatrix();
 			GlStateManager.enableBlend();
@@ -95,12 +93,12 @@ public class RenderPixieHouse extends TileEntitySpecialRenderer<TileEntityPixieH
 			GL11.glPopMatrix();
 		}
 		switch (meta) {
-			case 0: this.bindTexture(TEXTURE_0);
-			case 1: this.bindTexture(TEXTURE_1);
-			case 2: this.bindTexture(TEXTURE_2);
-			case 3: this.bindTexture(TEXTURE_3);
-			case 4: this.bindTexture(TEXTURE_4);
-			case 5: this.bindTexture(TEXTURE_5);
+			case 0: this.bindTexture(TEXTURE_0); break;
+			case 1: this.bindTexture(TEXTURE_1); break;
+			case 2: this.bindTexture(TEXTURE_2); break;
+			case 3: this.bindTexture(TEXTURE_3); break;
+			case 4: this.bindTexture(TEXTURE_4); break;
+			case 5: this.bindTexture(TEXTURE_5); break;
 		}
 		GL11.glPushMatrix();
 		GL11.glDisable(GL11.GL_CULL_FACE);

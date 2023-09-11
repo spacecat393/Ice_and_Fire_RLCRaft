@@ -110,12 +110,12 @@ public class RenderPixie extends RenderLiving<EntityPixie> {
 			IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(pixie);
 			if (capability == null || !capability.isStoned()) {
 				switch (pixie.getColor()) {
-					case 1: this.render.bindTexture(RenderPixie.TEXTURE_1);
-					case 2: this.render.bindTexture(RenderPixie.TEXTURE_2);
-					case 3: this.render.bindTexture(RenderPixie.TEXTURE_3);
-					case 4: this.render.bindTexture(RenderPixie.TEXTURE_4);
-					case 5: this.render.bindTexture(RenderPixie.TEXTURE_5);
-					default: this.render.bindTexture(RenderPixie.TEXTURE_0);
+					default: this.render.bindTexture(RenderPixie.TEXTURE_0); break;
+					case 1: this.render.bindTexture(RenderPixie.TEXTURE_1); break;
+					case 2: this.render.bindTexture(RenderPixie.TEXTURE_2); break;
+					case 3: this.render.bindTexture(RenderPixie.TEXTURE_3); break;
+					case 4: this.render.bindTexture(RenderPixie.TEXTURE_4); break;
+					case 5: this.render.bindTexture(RenderPixie.TEXTURE_5); break;
 				}
 				GlStateManager.enableBlend();
 				GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
