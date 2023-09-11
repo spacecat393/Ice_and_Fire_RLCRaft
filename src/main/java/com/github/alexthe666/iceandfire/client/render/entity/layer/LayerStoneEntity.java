@@ -6,9 +6,10 @@ import com.github.alexthe666.iceandfire.api.InFCapabilities;
 import com.github.alexthe666.iceandfire.client.model.ICustomStatueModel;
 import com.github.alexthe666.iceandfire.client.model.ModelGuardianStatue;
 import com.github.alexthe666.iceandfire.client.model.ModelHorseStatue;
+import com.github.alexthe666.iceandfire.client.texture.DesaturatedStonedTexture;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
@@ -20,22 +21,29 @@ import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityLlama;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
-public class LayerStoneEntity implements LayerRenderer {
+@SideOnly(Side.CLIENT)
+public class LayerStoneEntity implements LayerRenderer<EntityLivingBase> {
 
 	private static final ModelHorseStatue HORSE_MODEL = new ModelHorseStatue();
 	private static final ModelGuardianStatue GUARDIAN_MODEL = new ModelGuardianStatue();
-	private final RenderLivingBase renderer;
+	private final RenderLivingBase<? extends EntityLivingBase> renderer;
 
-	public LayerStoneEntity(RenderLivingBase renderer) {
+	public LayerStoneEntity(RenderLivingBase<? extends EntityLivingBase> renderer) {
 		this.renderer = renderer;
 	}
 
 	private static Method getEntityTexture;
 	private static boolean reflected;
+
+	private final Map<String, ResourceLocation> STONED_TEXTURE_CACHE = new HashMap<>();
 
 	private ResourceLocation stoneTexture;
 
@@ -44,7 +52,8 @@ public class LayerStoneEntity implements LayerRenderer {
 		if(entitylivingbaseIn instanceof EntityLiving) {
 			IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(entitylivingbaseIn);
 			if(capability != null && capability.isStoned()) {
-				ResourceLocation textureBase = null;
+				ResourceLocation entityTexture = null;
+				if(this.stoneTexture == null) this.stoneTexture = new ResourceLocation(getStoneType(renderer.getMainModel()));
 				if(IceAndFireConfig.CLIENT_SETTINGS.customStoneTexture) {
 					try {
 						if(getEntityTexture == null && !reflected) {
@@ -58,19 +67,29 @@ public class LayerStoneEntity implements LayerRenderer {
 							}
 						}
 						if(getEntityTexture != null) {
-							textureBase = (ResourceLocation)getEntityTexture.invoke(renderer, entitylivingbaseIn);
+							entityTexture = (ResourceLocation)getEntityTexture.invoke(renderer, entitylivingbaseIn);
 						}
 					}
 					catch(Exception ex) {
 						ex.printStackTrace();
 					}
 				}
-
 				GlStateManager.depthMask(true);
 				GL11.glEnable(GL11.GL_CULL_FACE);
 
-				if(this.stoneTexture == null) this.stoneTexture = new ResourceLocation(getStoneType(renderer.getMainModel()));
-				this.renderer.bindTexture(this.stoneTexture);
+				if(entityTexture != null) {
+					ResourceLocation cacheName = new ResourceLocation("iceandfire:stonecache/" + entityTexture.getNamespace() + "/" + entityTexture.getPath());
+					ResourceLocation resolvedTexture = STONED_TEXTURE_CACHE.get(cacheName.toString());
+					if(resolvedTexture == null) {
+						DesaturatedStonedTexture desat = new DesaturatedStonedTexture(entityTexture, stoneTexture);
+						Minecraft.getMinecraft().getTextureManager().loadTexture(cacheName, desat);
+						STONED_TEXTURE_CACHE.put(cacheName.toString(), cacheName);
+						resolvedTexture = cacheName;
+					}
+					entityTexture = resolvedTexture;
+				}
+
+				this.renderer.bindTexture(entityTexture == null ? this.stoneTexture : entityTexture);
 
 				if (this.renderer.getMainModel() instanceof ICustomStatueModel) {
 					((ICustomStatueModel) this.renderer.getMainModel()).renderStatue();
@@ -80,30 +99,6 @@ public class LayerStoneEntity implements LayerRenderer {
 					GUARDIAN_MODEL.render(entitylivingbaseIn, f, 0, 0, f3, f4, f5);
 				} else {
 					this.renderer.getMainModel().render(entitylivingbaseIn, f, 0, 0, f3, f4, f5);
-				}
-
-				if(IceAndFireConfig.CLIENT_SETTINGS.customStoneTexture && textureBase != null) {
-					this.renderer.bindTexture(textureBase);
-
-					GlStateManager.enableBlend();
-					GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-					OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
-					GlStateManager.color(1.0F, 1.0F, 1.0F, 0.15F);
-					GlStateManager.doPolygonOffset(-1.0F, -1.0F);
-					GlStateManager.enablePolygonOffset();
-
-					if (this.renderer.getMainModel() instanceof ICustomStatueModel) {
-						((ICustomStatueModel) this.renderer.getMainModel()).renderStatue();
-					} else if (entitylivingbaseIn instanceof AbstractHorse && !(entitylivingbaseIn instanceof EntityLlama)) {
-						HORSE_MODEL.render(entitylivingbaseIn, f, 0, 0, f3, f4, f5);
-					} else if (entitylivingbaseIn instanceof EntityGuardian) {
-						GUARDIAN_MODEL.render(entitylivingbaseIn, f, 0, 0, f3, f4, f5);
-					} else {
-						this.renderer.getMainModel().render(entitylivingbaseIn, f, 0, 0, f3, f4, f5);
-					}
-
-					GlStateManager.doPolygonOffset(0.0F, 0.0F);
-					GlStateManager.disablePolygonOffset();
 				}
 
 				GL11.glDisable(GL11.GL_CULL_FACE);
