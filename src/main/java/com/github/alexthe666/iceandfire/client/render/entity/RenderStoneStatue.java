@@ -1,18 +1,22 @@
 package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.client.model.ModelStonePlayer;
-import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerStonePlayerEntityCrack;
 import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
+import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
+import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
+@SideOnly(Side.CLIENT)
 public class RenderStoneStatue extends RenderLiving<EntityStoneStatue> {
 
 	private static final ModelStonePlayer MODEL = new ModelStonePlayer(0, false);
@@ -30,6 +34,7 @@ public class RenderStoneStatue extends RenderLiving<EntityStoneStatue> {
 		this.addLayer(layerbipedarmor);
 	}
 
+	@Override
 	public ModelBase getMainModel() {
 		return MODEL;
 	}
@@ -43,40 +48,70 @@ public class RenderStoneStatue extends RenderLiving<EntityStoneStatue> {
 			if (!this.bindEntityTexture(entity)) {
 				return;
 			}
-
 			if (flag1) {
 				GlStateManager.enableBlendProfile(GlStateManager.Profile.TRANSPARENT_MODEL);
 			}
-
 			if (entity.smallArms) {
 				MODEL_SLIM.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
 			} else {
 				MODEL.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
 			}
-
 			if (flag1) {
 				GlStateManager.disableBlendProfile(GlStateManager.Profile.TRANSPARENT_MODEL);
 			}
 		}
 	}
 
-	public String getStoneType(ModelBase model, int size) {
-		int x = model.textureWidth;
-		int y = model.textureHeight;
-		int sizeX = Math.min(128, x * size);
-		int sizeY = Math.min(128, y * size);
-		String str = "iceandfire:textures/models/gorgon/stone" + sizeX + "x" + sizeY + ".png";
-		if (sizeX <= 16 && sizeY <= 16) {
-			return "textures/blocks/stone.png";
-		} else {
-			return str;
-		}
+	private String getStoneType(ModelBase model) {
+		int sizeX = clampTexture(model.textureWidth);
+		int sizeY = clampTexture(model.textureHeight);
+		if(sizeX > sizeY && sizeX/2 != sizeY) sizeY = sizeX/2;
+		if(sizeY > sizeX && sizeY/2 != sizeX) sizeX = sizeY/2;
+		return sizeX <= 16 && sizeY <= 16 ? "textures/blocks/stone.png" : "iceandfire:textures/models/gorgon/stone" + sizeX + "x" + sizeY + ".png";
 	}
 
+	private int clampTexture(int i) {
+		if(i >= 128) return 128;
+		if(i >= 64) return 64;
+		if(i >= 32) return 32;
+		return 16;
+	}
 
 	@Nullable
 	@Override
 	protected ResourceLocation getEntityTexture(EntityStoneStatue entity) {
-		return new ResourceLocation(getStoneType(entity.smallArms ? MODEL : MODEL_SLIM, 1));
+		return new ResourceLocation(getStoneType(entity.smallArms ? MODEL : MODEL_SLIM));
+	}
+
+	@SideOnly(Side.CLIENT)
+	public static class LayerStonePlayerEntityCrack implements LayerRenderer<EntityStoneStatue> {
+
+		private static final ResourceLocation[] DESTROY_STAGES = new ResourceLocation[]{new ResourceLocation("textures/blocks/destroy_stage_0.png"), new ResourceLocation("textures/blocks/destroy_stage_1.png"), new ResourceLocation("textures/blocks/destroy_stage_2.png"), new ResourceLocation("textures/blocks/destroy_stage_3.png"), new ResourceLocation("textures/blocks/destroy_stage_4.png"), new ResourceLocation("textures/blocks/destroy_stage_5.png"), new ResourceLocation("textures/blocks/destroy_stage_6.png"), new ResourceLocation("textures/blocks/destroy_stage_7.png"), new ResourceLocation("textures/blocks/destroy_stage_8.png"), new ResourceLocation("textures/blocks/destroy_stage_9.png")};
+		private final RenderLivingBase<EntityStoneStatue> renderer;
+
+		public LayerStonePlayerEntityCrack(RenderLivingBase<EntityStoneStatue> renderer) {
+			this.renderer = renderer;
+		}
+
+		@Override
+		public void doRenderLayer(EntityStoneStatue stoneStatue, float f, float f1, float i, float f2, float f3, float f4, float f5) {
+			int breakCount = stoneStatue.getCrackAmount();
+			if (breakCount > 0) {
+				GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.DST_COLOR, GlStateManager.DestFactor.SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+				GlStateManager.doPolygonOffset(-3.0F, -3.0F);
+				GlStateManager.enablePolygonOffset();
+				GlStateManager.enableBlend();
+				GlStateManager.depthMask(true);
+				this.renderer.bindTexture(DESTROY_STAGES[breakCount - 1]);
+				this.renderer.getMainModel().render(stoneStatue, f, f1, f2, f3, f4, f5);
+				GlStateManager.doPolygonOffset(0.0F, 0.0F);
+				GlStateManager.disablePolygonOffset();
+			}
+		}
+
+		@Override
+		public boolean shouldCombineTextures() {
+			return true;
+		}
 	}
 }

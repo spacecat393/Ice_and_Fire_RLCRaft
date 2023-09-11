@@ -2,7 +2,6 @@ package com.github.alexthe666.iceandfire.client.render.entity;
 
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.GlStateManager;
@@ -12,9 +11,12 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
-public class RenderDragonFireCharge extends Render {
+@SideOnly(Side.CLIENT)
+public class RenderDragonFireCharge extends Render<Entity> {
 
 	private final Type type;
 
@@ -46,11 +48,10 @@ public class RenderDragonFireCharge extends Render {
 	}
 
 	private Block getBlock() {
-		if (type == Type.ICE) {
-			return ModBlocks.dragon_ice;
-		} else if (type == Type.LIGHTNING) {
-			return ModBlocks.lightning_stone;
+		switch(this.type) {
+			case ICE: return ModBlocks.lightning_stone;
+			case LIGHTNING: return ModBlocks.dragon_ice;
+			default: return Blocks.MAGMA;
 		}
-		return Blocks.MAGMA;
 	}
 }

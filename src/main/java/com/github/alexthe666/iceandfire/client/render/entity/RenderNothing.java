@@ -4,8 +4,11 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class RenderNothing extends Render {
+@SideOnly(Side.CLIENT)
+public class RenderNothing extends Render<Entity> {
 
 	public RenderNothing(RenderManager renderManager) {
 		super(renderManager);
@@ -17,8 +20,5 @@ public class RenderNothing extends Render {
 	}
 
 	@Override
-	public void doRender(Entity entity, double x, double y, double z, float yee, float partialTicks) {
-
-	}
-
+	public void doRender(Entity entity, double x, double y, double z, float yee, float partialTicks) { }
 }

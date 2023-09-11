@@ -5,7 +5,10 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class RenderDragonEgg extends RenderLiving<EntityDragonEgg> {
 
 	public static final ResourceLocation EGG_RED = new ResourceLocation("iceandfire:textures/models/firedragon/egg_red.png");
@@ -28,32 +31,18 @@ public class RenderDragonEgg extends RenderLiving<EntityDragonEgg> {
 	@Override
 	protected ResourceLocation getEntityTexture(EntityDragonEgg entity) {
 		switch(entity.getType()){
-			default:
-				return EGG_RED;
-			case GREEN:
-				return EGG_GREEN;
-			case BRONZE:
-				return EGG_BRONZE;
-			case GRAY:
-				return EGG_GREY;
-			case BLUE:
-				return EGG_BLUE;
-			case WHITE:
-				return EGG_WHITE;
-			case SAPPHIRE:
-				return EGG_SAPPHIRE;
-			case SILVER:
-				return EGG_SILVER;
-			case ELECTRIC:
-				return EGG_ELECTRIC;
-			case AMETHYST:
-				return EGG_AMETHYST;
-			case COPPER:
-				return EGG_COPPER;
-			case BLACK:
-				return EGG_BLACK;
-
+			default: return EGG_RED;
+			case GREEN: return EGG_GREEN;
+			case BRONZE: return EGG_BRONZE;
+			case GRAY: return EGG_GREY;
+			case BLUE: return EGG_BLUE;
+			case WHITE: return EGG_WHITE;
+			case SAPPHIRE: return EGG_SAPPHIRE;
+			case SILVER: return EGG_SILVER;
+			case ELECTRIC: return EGG_ELECTRIC;
+			case AMETHYST: return EGG_AMETHYST;
+			case COPPER: return EGG_COPPER;
+			case BLACK: return EGG_BLACK;
 		}
 	}
-
 }

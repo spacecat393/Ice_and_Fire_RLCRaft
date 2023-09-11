@@ -5,14 +5,18 @@ import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 
+@SideOnly(Side.CLIENT)
 public class RenderDeathWorm extends RenderLiving<EntityDeathWorm> {
-    public static final ResourceLocation TEXTURE_WHITE = new ResourceLocation("iceandfire:textures/models/deathworm/deathworm_red.png");
-    public static final ResourceLocation TEXTURE_RED = new ResourceLocation("iceandfire:textures/models/deathworm/deathworm_white.png");
-    public static final ResourceLocation TEXTURE_YELLOW = new ResourceLocation("iceandfire:textures/models/deathworm/deathworm_yellow.png");
+
+    private static final ResourceLocation TEXTURE_RED = new ResourceLocation("iceandfire:textures/models/deathworm/deathworm_red.png");
+    private static final ResourceLocation TEXTURE_WHITE = new ResourceLocation("iceandfire:textures/models/deathworm/deathworm_white.png");
+    private static final ResourceLocation TEXTURE_YELLOW = new ResourceLocation("iceandfire:textures/models/deathworm/deathworm_yellow.png");
 
     public RenderDeathWorm(RenderManager renderManager) {
         super(renderManager, new ModelDeathWorm(), 0);
@@ -27,6 +31,11 @@ public class RenderDeathWorm extends RenderLiving<EntityDeathWorm> {
     @Nullable
     @Override
     protected ResourceLocation getEntityTexture(EntityDeathWorm entity) {
-        return entity.getVariant() == 2 ? TEXTURE_WHITE : entity.getVariant() == 1 ? TEXTURE_RED : TEXTURE_YELLOW;
+        switch(entity.getVariant()) {
+            case 0: return TEXTURE_YELLOW;
+            case 1: return TEXTURE_WHITE;
+            case 2: return TEXTURE_RED;
+            default: return TEXTURE_YELLOW;
+        }
     }
 }

@@ -6,9 +6,13 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
-public class RenderGorgonHead extends TileEntitySpecialRenderer {
+@SideOnly(Side.CLIENT)
+public class RenderGorgonHead extends TileEntitySpecialRenderer<TileEntity> {
+
 	private static final ResourceLocation ACTIVE_TEXTURE = new ResourceLocation("iceandfire:textures/models/gorgon/head_active.png");
 	private static final ResourceLocation INACTIVE_TEXTURE = new ResourceLocation("iceandfire:textures/models/gorgon/head_inactive.png");
 	private static final ModelBase ACTIVE_MODEL = new ModelGorgonHeadActive();
@@ -22,7 +26,6 @@ public class RenderGorgonHead extends TileEntitySpecialRenderer {
 	@Override
 	public void render(TileEntity entity, double x, double y, double z, float f, int f1, float alpha) {
 		ModelBase model = active ? ACTIVE_MODEL : INACTIVE_MODEL;
-
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float) x + 0.5F, (float) y - 0.75F, (float) z + 0.5F);
 		GL11.glPushMatrix();
@@ -32,7 +35,5 @@ public class RenderGorgonHead extends TileEntitySpecialRenderer {
 		GL11.glPopMatrix();
 		GL11.glPopMatrix();
 		GL11.glPopMatrix();
-
 	}
-
 }

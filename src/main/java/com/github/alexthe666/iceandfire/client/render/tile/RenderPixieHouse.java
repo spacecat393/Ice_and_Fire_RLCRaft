@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.client.model.ModelPixieHouse;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderPixie;
 import com.github.alexthe666.iceandfire.entity.tile.TileEntityPixieHouse;
 import net.ilexiconn.llibrary.client.util.ItemTESRContext;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -13,8 +14,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.EnumSkyBlock;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
+@SideOnly(Side.CLIENT)
 public class RenderPixieHouse extends TileEntitySpecialRenderer<TileEntityPixieHouse> {
 
 	private static final ModelPixieHouse MODEL = new ModelPixieHouse();
@@ -31,15 +35,16 @@ public class RenderPixieHouse extends TileEntitySpecialRenderer<TileEntityPixieH
 		int rotation = 0;
 		int meta = 0;
 
-		if (entity != null && entity.getWorld() != null && entity.getWorld().getBlockState(entity.getPos()).getBlock() instanceof BlockPixieHouse) {
+		IBlockState state = entity.getWorld().getBlockState(entity.getPos());
+		if (state.getBlock() instanceof BlockPixieHouse) {
 			meta = entity.houseType;
-			if (entity.getWorld().getBlockState(entity.getPos()).getValue(BlockPixieHouse.FACING) == EnumFacing.NORTH) {
+			if (state.getValue(BlockPixieHouse.FACING) == EnumFacing.NORTH) {
 				rotation = 180;
 			}
-			if (entity.getWorld().getBlockState(entity.getPos()).getValue(BlockPixieHouse.FACING) == EnumFacing.EAST) {
+			if (state.getValue(BlockPixieHouse.FACING) == EnumFacing.EAST) {
 				rotation = -90;
 			}
-			if (entity.getWorld().getBlockState(entity.getPos()).getValue(BlockPixieHouse.FACING) == EnumFacing.WEST) {
+			if (state.getValue(BlockPixieHouse.FACING) == EnumFacing.WEST) {
 				rotation = 90;
 			}
 
@@ -51,31 +56,19 @@ public class RenderPixieHouse extends TileEntitySpecialRenderer<TileEntityPixieH
 		GL11.glPushMatrix();
 		GL11.glRotatef(180, 1, 0, 0);
 		GL11.glRotatef(rotation, 0, 1F, 0);
-		if (entity != null && entity.getWorld() != null && entity.hasPixie) {
+		if (entity.hasPixie) {
 			GL11.glPushMatrix();
 			GL11.glTranslatef(0F, 0.95F, 0F);
 			GL11.glScalef(0.55F, 0.55F, 0.55F);
 			GL11.glPushMatrix();
 			//GL11.glRotatef(MathHelper.clampAngle(entity.ticksExisted * 3), 0, 1, 0);
 			switch (entity.pixieType) {
-				default:
-					this.bindTexture(RenderPixie.TEXTURE_0);
-					break;
-				case 1:
-					this.bindTexture(RenderPixie.TEXTURE_1);
-					break;
-				case 2:
-					this.bindTexture(RenderPixie.TEXTURE_2);
-					break;
-				case 3:
-					this.bindTexture(RenderPixie.TEXTURE_3);
-					break;
-				case 4:
-					this.bindTexture(RenderPixie.TEXTURE_4);
-					break;
-				case 5:
-					this.bindTexture(RenderPixie.TEXTURE_5);
-					break;
+				default: this.bindTexture(RenderPixie.TEXTURE_0);
+				case 1: this.bindTexture(RenderPixie.TEXTURE_1);
+				case 2: this.bindTexture(RenderPixie.TEXTURE_2);
+				case 3: this.bindTexture(RenderPixie.TEXTURE_3);
+				case 4: this.bindTexture(RenderPixie.TEXTURE_4);
+				case 5: this.bindTexture(RenderPixie.TEXTURE_5);
 			}
 			GL11.glPushMatrix();
 			GlStateManager.enableBlend();
@@ -102,24 +95,12 @@ public class RenderPixieHouse extends TileEntitySpecialRenderer<TileEntityPixieH
 			GL11.glPopMatrix();
 		}
 		switch (meta) {
-			case 0:
-				this.bindTexture(TEXTURE_0);
-				break;
-			case 1:
-				this.bindTexture(TEXTURE_1);
-				break;
-			case 2:
-				this.bindTexture(TEXTURE_2);
-				break;
-			case 3:
-				this.bindTexture(TEXTURE_3);
-				break;
-			case 4:
-				this.bindTexture(TEXTURE_4);
-				break;
-			case 5:
-				this.bindTexture(TEXTURE_5);
-				break;
+			case 0: this.bindTexture(TEXTURE_0);
+			case 1: this.bindTexture(TEXTURE_1);
+			case 2: this.bindTexture(TEXTURE_2);
+			case 3: this.bindTexture(TEXTURE_3);
+			case 4: this.bindTexture(TEXTURE_4);
+			case 5: this.bindTexture(TEXTURE_5);
 		}
 		GL11.glPushMatrix();
 		GL11.glDisable(GL11.GL_CULL_FACE);
@@ -128,7 +109,5 @@ public class RenderPixieHouse extends TileEntitySpecialRenderer<TileEntityPixieH
 		GL11.glPopMatrix();
 		GL11.glPopMatrix();
 		GL11.glPopMatrix();
-
 	}
-
 }

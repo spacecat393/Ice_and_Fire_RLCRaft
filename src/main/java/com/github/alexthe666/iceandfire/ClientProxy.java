@@ -16,7 +16,6 @@ import com.github.alexthe666.iceandfire.client.particle.lightning.ParticleLightn
 import com.github.alexthe666.iceandfire.client.particle.lightning.ParticleLightningVector;
 import com.github.alexthe666.iceandfire.client.render.entity.RenderAmphithereArrow;
 import com.github.alexthe666.iceandfire.client.render.entity.*;
-import com.github.alexthe666.iceandfire.client.render.entity.layer.LayerDragonArmor;
 import com.github.alexthe666.iceandfire.client.render.tile.*;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
@@ -474,7 +473,7 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	public void updateDragonArmorRender(String clear){
-		LayerDragonArmor.clearCache(clear);
+		RenderDragonBase.clearCache(clear);
 	}
 
 	public static MyrmexHive getReferedClientHive(){

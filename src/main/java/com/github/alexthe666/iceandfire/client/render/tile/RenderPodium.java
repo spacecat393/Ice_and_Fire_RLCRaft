@@ -9,46 +9,35 @@ import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.github.alexthe666.iceandfire.item.ItemDragonEgg;
 import com.github.alexthe666.iceandfire.item.ItemMyrmexEgg;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
-public class RenderPodium extends TileEntitySpecialRenderer {
+@SideOnly(Side.CLIENT)
+public class RenderPodium extends TileEntitySpecialRenderer<TileEntityPodium> {
+
+    private static final ModelDragonEgg MODEL = new ModelDragonEgg();
 
     protected static ResourceLocation getEggTexture(EnumDragonEgg type) {
         switch (type) {
-            default:
-                return RenderDragonEgg.EGG_RED;
-            case GREEN:
-                return RenderDragonEgg.EGG_GREEN;
-            case BRONZE:
-                return RenderDragonEgg.EGG_BRONZE;
-            case GRAY:
-                return RenderDragonEgg.EGG_GREY;
-            case BLUE:
-                return RenderDragonEgg.EGG_BLUE;
-            case WHITE:
-                return RenderDragonEgg.EGG_WHITE;
-            case SAPPHIRE:
-                return RenderDragonEgg.EGG_SAPPHIRE;
-            case SILVER:
-                return RenderDragonEgg.EGG_SILVER;
-            case ELECTRIC:
-                return RenderDragonEgg.EGG_ELECTRIC;
-            case AMETHYST:
-                return RenderDragonEgg.EGG_AMETHYST;
-            case COPPER:
-                return RenderDragonEgg.EGG_COPPER;
-            case BLACK:
-                return RenderDragonEgg.EGG_BLACK;
+            default: return RenderDragonEgg.EGG_RED;
+            case GREEN: return RenderDragonEgg.EGG_GREEN;
+            case BRONZE: return RenderDragonEgg.EGG_BRONZE;
+            case GRAY: return RenderDragonEgg.EGG_GREY;
+            case BLUE: return RenderDragonEgg.EGG_BLUE;
+            case WHITE: return RenderDragonEgg.EGG_WHITE;
+            case SAPPHIRE: return RenderDragonEgg.EGG_SAPPHIRE;
+            case SILVER: return RenderDragonEgg.EGG_SILVER;
+            case ELECTRIC: return RenderDragonEgg.EGG_ELECTRIC;
+            case AMETHYST: return RenderDragonEgg.EGG_AMETHYST;
+            case COPPER: return RenderDragonEgg.EGG_COPPER;
+            case BLACK: return RenderDragonEgg.EGG_BLACK;
         }
     }
 
     @Override
-    public void render(TileEntity entity, double x, double y, double z, float f, int f1, float alpha) {
-        ModelDragonEgg model = new ModelDragonEgg();
-        TileEntityPodium podium = (TileEntityPodium) entity;
-
+    public void render(TileEntityPodium podium, double x, double y, double z, float f, int f1, float alpha) {
         if (!podium.getStackInSlot(0).isEmpty()) {
             if (podium.getStackInSlot(0).getItem() instanceof ItemDragonEgg) {
                 ItemDragonEgg item = (ItemDragonEgg) podium.getStackInSlot(0).getItem();
@@ -57,24 +46,23 @@ public class RenderPodium extends TileEntitySpecialRenderer {
                 GL11.glPushMatrix();
                 this.bindTexture(getEggTexture(item.type));
                 GL11.glPushMatrix();
-                model.renderPodium();
+                MODEL.renderPodium();
                 GL11.glPopMatrix();
                 GL11.glPopMatrix();
                 GL11.glPopMatrix();
             }
-            if (podium.getStackInSlot(0).getItem() instanceof ItemMyrmexEgg) {
+            else if (podium.getStackInSlot(0).getItem() instanceof ItemMyrmexEgg) {
                 boolean jungle = podium.getStackInSlot(0).getItem() == ModItems.myrmex_jungle_egg;
                 GL11.glPushMatrix();
                 GL11.glTranslatef((float) x + 0.5F, (float) y + 0.475F, (float) z + 0.5F);
                 GL11.glPushMatrix();
                 this.bindTexture(jungle ? RenderMyrmexEgg.EGG_JUNGLE : RenderMyrmexEgg.EGG_DESERT);
                 GL11.glPushMatrix();
-                model.renderPodium();
+                MODEL.renderPodium();
                 GL11.glPopMatrix();
                 GL11.glPopMatrix();
                 GL11.glPopMatrix();
             }
         }
-
     }
 }

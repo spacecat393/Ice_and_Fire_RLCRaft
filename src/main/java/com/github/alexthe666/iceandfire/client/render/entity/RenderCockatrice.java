@@ -16,15 +16,18 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
+@SideOnly(Side.CLIENT)
 public class RenderCockatrice extends RenderLiving<EntityCockatrice> {
 
-    public static final ResourceLocation TEXTURE_ROOSTER = new ResourceLocation("iceandfire:textures/models/cockatrice/cockatrice_0.png");
-    public static final ResourceLocation TEXTURE_HEN = new ResourceLocation("iceandfire:textures/models/cockatrice/cockatrice_1.png");
+    private static final ResourceLocation TEXTURE_ROOSTER = new ResourceLocation("iceandfire:textures/models/cockatrice/cockatrice_0.png");
+    private static final ResourceLocation TEXTURE_HEN = new ResourceLocation("iceandfire:textures/models/cockatrice/cockatrice_1.png");
     private static final ResourceLocation TEXTURE_BEAM = new ResourceLocation("iceandfire:textures/models/cockatrice/beam.png");
-    public static final ResourceLocation TEXTURE_ROOSTER_CHICK = new ResourceLocation("iceandfire:textures/models/cockatrice/cockatrice_0_chick.png");
-    public static final ResourceLocation TEXTURE_HEN_CHICK = new ResourceLocation("iceandfire:textures/models/cockatrice/cockatrice_1_chick.png");
+    private static final ResourceLocation TEXTURE_ROOSTER_CHICK = new ResourceLocation("iceandfire:textures/models/cockatrice/cockatrice_0_chick.png");
+    private static final ResourceLocation TEXTURE_HEN_CHICK = new ResourceLocation("iceandfire:textures/models/cockatrice/cockatrice_1_chick.png");
 
     public RenderCockatrice(RenderManager renderManager) {
         super(renderManager, new ModelCockatrice(), 0.6F);
@@ -37,6 +40,7 @@ public class RenderCockatrice extends RenderLiving<EntityCockatrice> {
         return new Vec3d(d0, d1, d2);
     }
 
+    @Override
     public boolean shouldRender(EntityCockatrice livingEntity, ICamera camera, double camX, double camY, double camZ) {
         if (super.shouldRender(livingEntity, camera, camX, camY, camZ)) {
             return true;
@@ -46,22 +50,23 @@ public class RenderCockatrice extends RenderLiving<EntityCockatrice> {
                 if (entitylivingbase != null) {
                     Vec3d vec3d = this.getPosition(entitylivingbase, (double) entitylivingbase.height * 0.5D, 1.0F);
                     Vec3d vec3d1 = this.getPosition(livingEntity, (double) livingEntity.getEyeHeight(), 1.0F);
-                    if (camera.isBoundingBoxInFrustum(new AxisAlignedBB(vec3d1.x, vec3d1.y, vec3d1.z, vec3d.x, vec3d.y, vec3d.z))) {
-                        return true;
-                    }
+                    return camera.isBoundingBoxInFrustum(new AxisAlignedBB(vec3d1.x, vec3d1.y, vec3d1.z, vec3d.x, vec3d.y, vec3d.z));
                 }
             }
-
             return false;
         }
     }
 
+    @Override
     public void doRender(EntityCockatrice entity, double x, double y, double z, float entityYaw, float partialTicks) {
         super.doRender(entity, x, y, z, entityYaw, partialTicks);
         EntityLivingBase entitylivingbase = entity.getTargetedEntity();
 
-        boolean blindness = entity.isPotionActive(MobEffects.BLINDNESS) || entitylivingbase != null && entitylivingbase.isPotionActive(MobEffects.BLINDNESS);
-        if (!blindness && entitylivingbase != null && EntityGorgon.isEntityLookingAt(entity, entitylivingbase, EntityCockatrice.VIEW_RADIUS) && EntityGorgon.isEntityLookingAt(entitylivingbase, entity, EntityCockatrice.VIEW_RADIUS)) {
+        if (entitylivingbase != null &&
+                !entity.isPotionActive(MobEffects.BLINDNESS) &&
+                !entitylivingbase.isPotionActive(MobEffects.BLINDNESS) &&
+                EntityGorgon.isEntityLookingAt(entity, entitylivingbase, EntityCockatrice.VIEW_RADIUS) &&
+                EntityGorgon.isEntityLookingAt(entitylivingbase, entity, EntityCockatrice.VIEW_RADIUS)) {
             float f = entity.getAttackAnimationScale(partialTicks);
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder bufferbuilder = tessellator.getBuffer();
@@ -71,7 +76,6 @@ public class RenderCockatrice extends RenderLiving<EntityCockatrice> {
             GlStateManager.disableCull();
             GlStateManager.disableBlend();
             GlStateManager.depthMask(true);
-            float f1 = 240.0F;
             OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
             GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
             float f2 = (float) entity.world.getTotalWorldTime() + partialTicks;
@@ -88,15 +92,11 @@ public class RenderCockatrice extends RenderLiving<EntityCockatrice> {
             float f6 = (float) Math.atan2(vec3d2.z, vec3d2.x);
             GlStateManager.rotate((((float) Math.PI / 2F) + -f6) * (180F / (float) Math.PI), 0.0F, 1.0F, 0.0F);
             GlStateManager.rotate(f5 * (180F / (float) Math.PI), 1.0F, 0.0F, 0.0F);
-            int i = 1;
             double d1 = (double) f2 * 0.05D * -1.5D;
             bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-            float f7 = f * f;
             int j = 225;
             int k = 225;
             int l = 225;
-            double d2 = 0.2D;
-            double d3 = 0.282D;
             double d4 = 0.0D + Math.cos(d1 + 2.356194490192345D) * 0.282D;
             double d5 = 0.0D + Math.sin(d1 + 2.356194490192345D) * 0.282D;
             double d6 = 0.0D + Math.cos(d1 + (Math.PI / 4D)) * 0.282D;
@@ -113,8 +113,6 @@ public class RenderCockatrice extends RenderLiving<EntityCockatrice> {
             double d17 = 0.0D + Math.sin(d1 + (Math.PI / 2D)) * 0.2D;
             double d18 = 0.0D + Math.cos(d1 + (Math.PI * 3D / 2D)) * 0.2D;
             double d19 = 0.0D + Math.sin(d1 + (Math.PI * 3D / 2D)) * 0.2D;
-            double d20 = 0.0D;
-            double d21 = 0.4999D;
             double d22 = (double) (-1.0F + f3);
             double d23 = d0 * 2.5D + d22;
             bufferbuilder.pos(d12, d0, d13).tex(0.4999D, d23).color(j, k, l, 255).endVertex();
@@ -156,5 +154,4 @@ public class RenderCockatrice extends RenderLiving<EntityCockatrice> {
             return cockatrice.isHen() ? TEXTURE_HEN : TEXTURE_ROOSTER;
         }
     }
-
 }

@@ -7,33 +7,27 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class RenderDragonSkull extends Render<EntityDragonSkull> {
 
-	public static final float[] growth_stage_1 = new float[]{1F, 3F};
-	public static final float[] growth_stage_2 = new float[]{3F, 7F};
-	public static final float[] growth_stage_3 = new float[]{7F, 12.5F};
-	public static final float[] growth_stage_4 = new float[]{12.5F, 20F};
-	public static final float[] growth_stage_5 = new float[]{20F, 30F};
-	public float[][] growth_stages;
-	private IceAndFireTabulaModel fireDragonModel;
-	private IceAndFireTabulaModel iceDragonModel;
-	private IceAndFireTabulaModel lightningDragonModel;
+	private static final float[][] growth_stages = new float[][]{{1F, 3F}, {3F, 7F}, {7F, 12.5F}, {12.5F, 20F}, {20F, 30F}};
+	private final IceAndFireTabulaModel fireDragonModel;
+	private final IceAndFireTabulaModel iceDragonModel;
+	private final IceAndFireTabulaModel lightningDragonModel;
 
 	public RenderDragonSkull(RenderManager renderManager, ModelBase fireDragonModel, ModelBase iceDragonModel, ModelBase lightningDragonModel) {
 		super(renderManager);
-		growth_stages = new float[][]{growth_stage_1, growth_stage_2, growth_stage_3, growth_stage_4, growth_stage_5};
 		this.fireDragonModel = (IceAndFireTabulaModel)fireDragonModel;
 		this.iceDragonModel	 = (IceAndFireTabulaModel)iceDragonModel;
-		this.lightningDragonModel = (IceAndFireTabulaModel)iceDragonModel;
+		this.lightningDragonModel = (IceAndFireTabulaModel)lightningDragonModel;
 	}
 
+	@Override
 	public void doRender(EntityDragonSkull entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		GlStateManager.pushMatrix();
 		GlStateManager.disableCull();
@@ -79,6 +73,8 @@ public class RenderDragonSkull extends Render<EntityDragonSkull> {
 		cube.rotateAngleY = rotY;
 		cube.rotateAngleZ = rotZ;
 	}
+
+	@Override
 	protected ResourceLocation getEntityTexture(EntityDragonSkull entity) {
 		if (entity.getType() == 1) {
 			return EnumDragonTextures.getIceDragonSkullTextures(entity);
@@ -99,5 +95,4 @@ public class RenderDragonSkull extends Render<EntityDragonSkull> {
 	private int getAgeFactor(EntityDragonSkull skull) {
 		return (skull.getDragonStage() > 1 ? skull.getDragonAge() - (25 * (skull.getDragonStage() - 1)) : skull.getDragonAge());
 	}
-
 }
