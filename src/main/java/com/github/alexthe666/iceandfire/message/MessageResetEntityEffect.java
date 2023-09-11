@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.message;
 import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
 import com.github.alexthe666.iceandfire.api.InFCapabilities;
 import com.github.alexthe666.iceandfire.capability.entityeffect.EntityEffectCapability;
+import com.github.alexthe666.iceandfire.capability.entityeffect.EntityEffectProvider;
 import com.github.alexthe666.iceandfire.capability.entityeffect.EntityEffectStorage;
 import io.netty.buffer.ByteBuf;
 import net.ilexiconn.llibrary.server.network.AbstractMessage;
@@ -45,14 +46,13 @@ public class MessageResetEntityEffect extends AbstractMessage<MessageResetEntity
         Entity entity = Minecraft.getMinecraft().world.getEntityByID(message.getEntityId());
         if (entity != null) {
             Minecraft.getMinecraft().addScheduledTask(() -> {
-                Capability<IEntityEffectCapability> def = InFCapabilities.ENTITY_EFFECT;
-                IEntityEffectCapability capability = entity.getCapability(def, null);
+                IEntityEffectCapability capability = entity.getCapability(EntityEffectProvider.ENTITY_EFFECT, null);
                 if (capability != null) {
                     NBTTagCompound compound = new NBTTagCompound();
                     compound.setString(EntityEffectStorage.effectId, EntityEffectCapability.EntityEffectEnum.NONE.name());
                     compound.setInteger(EntityEffectStorage.effectTime, 0);
                     compound.setInteger(EntityEffectStorage.effectAdditionalData, 0);
-                    def.getStorage().readNBT(def, capability, null, compound);
+                    EntityEffectProvider.readNBT(capability, null, compound);
                 }
             });
         }

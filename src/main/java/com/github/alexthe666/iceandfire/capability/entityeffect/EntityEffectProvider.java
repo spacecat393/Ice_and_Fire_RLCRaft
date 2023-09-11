@@ -4,36 +4,41 @@ import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 
 public class EntityEffectProvider implements ICapabilitySerializable<NBTBase> {
 
-    private final Capability<IEntityEffectCapability> capability;
-    private final IEntityEffectCapability instance;
+    @CapabilityInject(IEntityEffectCapability.class)
+    public static final Capability<IEntityEffectCapability> ENTITY_EFFECT = null;
 
-    public EntityEffectProvider(Capability<IEntityEffectCapability> newCap) {
-        this.capability = newCap;
-        this.instance = this.capability.getDefaultInstance();
-    }
+    private final IEntityEffectCapability instance = ENTITY_EFFECT.getDefaultInstance();
 
     @Override
     public boolean hasCapability(Capability<?> requested, EnumFacing facing) {
-        return requested == this.capability;
+        return requested == ENTITY_EFFECT;
     }
 
     @Override
     public <T> T getCapability(Capability<T> requested, EnumFacing facing) {
-        if(requested == this.capability) return this.capability.cast(this.instance);
-        return null;
+        return requested == ENTITY_EFFECT ? ENTITY_EFFECT.cast(this.instance) : null;
     }
 
     @Override
     public NBTBase serializeNBT() {
-        return this.capability.writeNBT(this.instance, null);
+        return writeNBT(this.instance, null);
     }
 
     @Override
     public void deserializeNBT(NBTBase nbt) {
-        this.capability.readNBT(this.instance, null, nbt);
+        readNBT(this.instance, null, nbt);
+    }
+
+    public static NBTBase writeNBT(IEntityEffectCapability capability, EnumFacing side) {
+        return ENTITY_EFFECT.writeNBT(capability, side);
+    }
+
+    public static void readNBT(IEntityEffectCapability capability, EnumFacing side, NBTBase nbt) {
+        ENTITY_EFFECT.readNBT(capability, side, nbt);
     }
 }

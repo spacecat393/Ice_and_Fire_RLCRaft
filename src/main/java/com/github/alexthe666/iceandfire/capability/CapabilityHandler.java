@@ -21,10 +21,12 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class CapabilityHandler {
 
+    private static final ResourceLocation ENTITY_EFFECT = new ResourceLocation(IceAndFire.MODID, "entity_effect");
+
     @SubscribeEvent
     public void attachCapability(AttachCapabilitiesEvent<Entity> event) {
         if(event.getObject() instanceof EntityLivingBase) {
-            event.addCapability(new ResourceLocation(IceAndFire.MODID, InFCapabilities.ENTITY_EFFECT_IDENTIFIER), new EntityEffectProvider(InFCapabilities.ENTITY_EFFECT));
+            event.addCapability(ENTITY_EFFECT, new EntityEffectProvider());
         }
     }
 
@@ -99,12 +101,11 @@ public class CapabilityHandler {
      * Update all players tracking entity with current entity effect, or set to NONE if tracking is not needed
      */
     private static void messageEntityEffectTracking(IEntityEffectCapability capability, EntityLivingBase entity) {
-        Capability<IEntityEffectCapability> def = InFCapabilities.ENTITY_EFFECT;
         if(!capability.getEffect().syncToAllTracking()) {
             IceAndFire.NETWORK_WRAPPER.sendToAllTracking(new MessageResetEntityEffect(entity.getEntityId()), entity);
         }
         else {
-            IceAndFire.NETWORK_WRAPPER.sendToAllTracking(new MessageEntityEffect(def.getStorage().writeNBT(def, capability, null), entity.getEntityId()), entity);
+            IceAndFire.NETWORK_WRAPPER.sendToAllTracking(new MessageEntityEffect(EntityEffectProvider.writeNBT(capability, null), entity.getEntityId()), entity);
         }
     }
 
@@ -112,12 +113,11 @@ public class CapabilityHandler {
      * Update specific player tracking entity with current entity effect, or set to NONE if tracking is not needed
      */
     private static void messageEntityEffectDirectTracking(IEntityEffectCapability capability, EntityLivingBase entity, EntityPlayerMP player) {
-        Capability<IEntityEffectCapability> def = InFCapabilities.ENTITY_EFFECT;
         if(!capability.getEffect().syncToAllTracking()) {
             IceAndFire.NETWORK_WRAPPER.sendTo(new MessageResetEntityEffect(entity.getEntityId()), player);
         }
         else {
-            IceAndFire.NETWORK_WRAPPER.sendTo(new MessageEntityEffect(def.getStorage().writeNBT(def, capability, null), entity.getEntityId()), player);
+            IceAndFire.NETWORK_WRAPPER.sendTo(new MessageEntityEffect(EntityEffectProvider.writeNBT(capability, null), entity.getEntityId()), player);
         }
     }
 
@@ -125,12 +125,11 @@ public class CapabilityHandler {
      * Update client player with current player effect, or set to NONE if tracking is not needed
      */
     private static void messageEntityEffectClient(IEntityEffectCapability capability, EntityPlayerMP player) {
-        Capability<IEntityEffectCapability> def = InFCapabilities.ENTITY_EFFECT;
         if(!capability.getEffect().syncToAffectedClient()) {
             IceAndFire.NETWORK_WRAPPER.sendTo(new MessageResetEntityEffect(player.getEntityId()), player);
         }
         else {
-            IceAndFire.NETWORK_WRAPPER.sendTo(new MessageEntityEffect(def.getStorage().writeNBT(def, capability, null), player.getEntityId()), player);
+            IceAndFire.NETWORK_WRAPPER.sendTo(new MessageEntityEffect(EntityEffectProvider.writeNBT(capability, null), player.getEntityId()), player);
         }
     }
 }

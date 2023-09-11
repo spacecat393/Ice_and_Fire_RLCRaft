@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.message;
 
 import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
 import com.github.alexthe666.iceandfire.api.InFCapabilities;
+import com.github.alexthe666.iceandfire.capability.entityeffect.EntityEffectProvider;
 import io.netty.buffer.ByteBuf;
 import net.ilexiconn.llibrary.server.network.AbstractMessage;
 import net.minecraft.client.Minecraft;
@@ -53,10 +54,9 @@ public class MessageEntityEffect extends AbstractMessage<MessageEntityEffect> {
         Entity entity = Minecraft.getMinecraft().world.getEntityByID(message.getEntityId());
         if (entity != null) {
             Minecraft.getMinecraft().addScheduledTask(() -> {
-                Capability<IEntityEffectCapability> def = InFCapabilities.ENTITY_EFFECT;
-                IEntityEffectCapability capability = entity.getCapability(def, null);
+                IEntityEffectCapability capability = entity.getCapability(EntityEffectProvider.ENTITY_EFFECT, null);
                 if (capability != null) {
-                    def.getStorage().readNBT(def, capability, null, message.getNBT());
+                    EntityEffectProvider.readNBT(capability, null, message.getNBT());
                 }
             });
         }

@@ -13,6 +13,9 @@ public class EntityEffectStorage implements Capability.IStorage<IEntityEffectCap
 
     @Override
     public NBTBase writeNBT(Capability<IEntityEffectCapability> capability, IEntityEffectCapability instance, EnumFacing side) {
+        if (instance == null) {
+            return null;
+        }
         NBTTagCompound compound = new NBTTagCompound();
         compound.setString(effectId, instance.getEffect().name());
         compound.setInteger(effectTime, instance.getTime());
@@ -22,9 +25,12 @@ public class EntityEffectStorage implements Capability.IStorage<IEntityEffectCap
 
     @Override
     public void readNBT(Capability<IEntityEffectCapability> capability, IEntityEffectCapability instance, EnumFacing side, NBTBase nbt) {
-        if(nbt instanceof NBTTagCompound) {
+        if (instance == null || nbt == null) {
+            return;
+        }
+        if (nbt instanceof NBTTagCompound) {
             NBTTagCompound compound = (NBTTagCompound)nbt;
-            if(compound.hasKey(effectId)) {
+            if (compound.hasKey(effectId)) {
                 instance.setEffect(
                         EntityEffectCapability.EntityEffectEnum.valueOf(compound.getString(effectId)),
                         compound.hasKey(effectTime) ? compound.getInteger(effectTime) : 0,
