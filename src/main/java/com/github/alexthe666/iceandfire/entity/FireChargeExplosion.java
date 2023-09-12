@@ -204,7 +204,7 @@ public class FireChargeExplosion extends Explosion {
 					} else if (exploder instanceof EntityIceDragon) {
 						IceAndFire.PROXY.spawnParticle("dragonice", worldObj, (d0 + this.explosionX) / 2.0D, (d1 + this.explosionY) / 2.0D, (d2 + this.explosionZ) / 2.0D, d3, d4, d5);
 					} else if (exploder instanceof EntityLightningDragon) {
-						IceAndFire.PROXY.spawnParticle("dragonlightning", worldObj, (d0 + this.explosionX) / 2.0D, (d1 + this.explosionY) / 2.0D, (d2 + this.explosionZ) / 2.0D, d3, d4, d5);
+						IceAndFire.PROXY.spawnParticle("spark", worldObj, (d0 + this.explosionX) / 2.0D, (d1 + this.explosionY) / 2.0D, (d2 + this.explosionZ) / 2.0D, d3, d4, d5);
 					}
 				}
 

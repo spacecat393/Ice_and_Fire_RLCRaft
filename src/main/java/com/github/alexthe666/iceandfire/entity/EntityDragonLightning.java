@@ -31,7 +31,6 @@ public class EntityDragonLightning extends EntityFireball implements IDragonProj
 		this.accelerationX = accelX / d0 * (0.1D * (shooter.isFlying() ? 4 * shooter.getDragonStage() : 1));
 		this.accelerationY = accelY / d0 * (0.1D * (shooter.isFlying() ? 4 * shooter.getDragonStage() : 1));
 		this.accelerationZ = accelZ / d0 * (0.1D * (shooter.isFlying() ? 4 * shooter.getDragonStage() : 1));
-		this.lastPos = shooter.getHeadPosition();
 	}
 
 	public void setSizes(float width, float height) {
@@ -119,6 +118,9 @@ public class EntityDragonLightning extends EntityFireball implements IDragonProj
 	}
 
 	private void emitLightningFx(Vec3d pos) {
+		if (!world.isRemote) {
+			return;
+		}
 		if (lastPos == null && this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase) {
 			lastPos = ((EntityDragonBase) this.shootingEntity).getHeadPosition();
 		}

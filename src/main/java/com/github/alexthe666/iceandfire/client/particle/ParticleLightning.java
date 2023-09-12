@@ -15,7 +15,6 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -69,6 +68,7 @@ public class ParticleLightning extends Particle {
             fractal(2, length / 4, 0.5F, 0.8F, 50);
             fractal(2, length / 15, 0.5F, 0.9F, 55);
             fractal(2, length / 30, 0.5F, 1.0F, 60);
+            fractal(2, length / 60, 0, 0, 0);
         }
 
         calculateCollisionAndDiffs();

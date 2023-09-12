@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.entity;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.integration.LycanitesCompat;
+import com.github.alexthe666.iceandfire.client.particle.lightning.ParticleLightningVector;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.entity.projectile.ProjectileHelper;
@@ -11,6 +12,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class EntityDragonLightningCharge extends EntityFireball implements IDragonProjectile {
@@ -49,9 +51,10 @@ public class EntityDragonLightningCharge extends EntityFireball implements IDrag
 
 	@Override
 	public void onUpdate() {
-		for (int i = 0; i < 2; ++i) {
+		for (int i = 0; i < 10; ++i) {
 			IceAndFire.PROXY.spawnParticle("spark", world, this.posX + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), this.posY + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), this.posZ + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), 0.0D, 0.0D, 0.0D);
 		}
+
 		if (this.isInWater()) {
 			setDead();
 		}
@@ -90,7 +93,7 @@ public class EntityDragonLightningCharge extends EntityFireball implements IDrag
 			this.motionX *= f;
 			this.motionY *= f;
 			this.motionZ *= f;
-			this.world.spawnParticle(this.getParticleType(), this.posX, this.posY + 0.5D, this.posZ, 0.0D, 0.0D, 0.0D);
+			this.world.spawnParticle(this.getParticleType(), this.posX, this.posY + 0.5D, this.posZ, 0.0D, 0.0D, 0.0D, new int[0]);
 			this.setPosition(this.posX, this.posY, this.posZ);
 		} else {
 			this.setDead();
