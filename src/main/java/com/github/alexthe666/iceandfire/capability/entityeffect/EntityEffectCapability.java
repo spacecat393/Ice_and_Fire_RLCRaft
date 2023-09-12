@@ -100,7 +100,6 @@ public class EntityEffectCapability implements IEntityEffectCapability {
     private EntityEffectEnum previousEffect = EntityEffectEnum.NONE;
     private int previousAdditionalData = 0;
 
-
     @Override
     public EntityEffectEnum getEffect() {
         return this.activeEffect;
@@ -247,7 +246,6 @@ public class EntityEffectCapability implements IEntityEffectCapability {
         this.previousEffect = this.activeEffect;
         this.previousAdditionalData = this.activeAdditionalData;
     }
-
 
     @Override
     public EntitySiren getSiren(World world) {
