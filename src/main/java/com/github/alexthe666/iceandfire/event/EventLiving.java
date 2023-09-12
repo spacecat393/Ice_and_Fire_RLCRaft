@@ -458,6 +458,11 @@ public class EventLiving {
 			EntityCreature animal = (EntityCreature) event.getEntity();
 			animal.tasks.addTask(1, new VillagerAIFearUntamed(animal, EntityLivingBase.class, (entity) -> entity instanceof IAnimalFear && ((IAnimalFear) entity).shouldAnimalsFear(animal), 12.0F, 1.2D, 1.5D));
 		}
+		//Fix from RLTweaker for queens changing their type resulting in incorrect trades
+		//Theres probably a better spot for this, but this is the easiest
+		if (event.getEntity() instanceof EntityMyrmexQueen && !event.getWorld().isRemote) {
+			((EntityMyrmexQueen)event.getEntity()).refreshIncorrectTrades();
+		}
 	}
 
 	public static boolean isAnimaniaSheep(Entity entity){

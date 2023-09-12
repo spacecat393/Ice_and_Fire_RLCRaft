@@ -651,6 +651,10 @@ public class IceAndFireConfig {
 		@Config.Name("Chain Lightning Paralysis Ticks")
 		@Config.RangeInt(min = 1, max = 100)
 		public int chainLightningParalysisTicks = 10;
+
+		@Config.Comment("Should a trade be added to Craftsman snow villagers to trade snow for sapphires?")
+		@Config.Name("Snow Villager Allow Craftsman Snow Trade")
+		public boolean allowSnowForSapphireTrade = true;
 	}
 
 	public static class ClientConfig {

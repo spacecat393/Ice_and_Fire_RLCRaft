@@ -27,6 +27,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -315,6 +316,26 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
         if (shouldRewardExp && recipe.getRewardsExp()) {
             this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY + 0.5D, this.posZ, i));
         }
+    }
+
+    public void refreshIncorrectTrades() {
+        if(this.buyingList != null) {
+            boolean isJungle = this.isJungle();
+            boolean invalid = false;
+            for(MerchantRecipe trade : this.buyingList) {
+                Item item = trade.getItemToBuy().getItem();
+                if(isJungle && item == ModItems.myrmex_desert_resin) {
+                    invalid = true;
+                    break;
+                }
+                else if(!isJungle && item == ModItems.myrmex_jungle_resin) {
+                    invalid = true;
+                    break;
+                }
+            }
+            if(invalid) this.buyingList = null;
+        }
+        if(this.buyingList == null) this.populateBuyingList();
     }
 
     private void populateBuyingList() {
