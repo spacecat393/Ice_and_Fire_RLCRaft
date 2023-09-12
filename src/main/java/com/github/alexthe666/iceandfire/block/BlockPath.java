@@ -23,8 +23,8 @@ public class BlockPath extends BlockGrassPath {
 
     public enum Type {
         CHARED("iceandfire.charedGrassPath", "chared_grass_path", ModBlocks.charedDirt),
-        CRACKLED("iceandfire.frozenGrassPath", "frozen_grass_path", ModBlocks.frozenDirt),
-        FROZEN("iceandfire.crackledGrassPath", "crackled_grass_path", ModBlocks.crackledDirt);
+        FROZEN("iceandfire.frozenGrassPath", "frozen_grass_path", ModBlocks.frozenDirt),
+        CRACKLED("iceandfire.crackledGrassPath", "crackled_grass_path", ModBlocks.crackledDirt);
 
         private final String translation;
         private final String reg;

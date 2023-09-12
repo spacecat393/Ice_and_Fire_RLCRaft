@@ -207,28 +207,17 @@ public class IceExplosion extends Explosion {
                 if (state.getMaterial() != Material.AIR && !state.getBlock().getTranslationKey().contains("grave") && DragonUtils.canDragonBreak(state.getBlock()) && mobGriefing) {
                     if (block == Blocks.GRASS_PATH) {
                         worldObj.setBlockState(blockpos, ModBlocks.frozenGrassPath.getDefaultState());
-                    }
-                    if (block instanceof BlockGrass) {
+                    } else if (block == Blocks.GRASS) {
                         worldObj.setBlockState(blockpos, ModBlocks.frozenGrass.getDefaultState());
-                    }
-
-                    if (block instanceof BlockDirt) {
+                    } else if (block instanceof BlockGrass || block instanceof BlockDirt) {
                         worldObj.setBlockState(blockpos, ModBlocks.frozenDirt.getDefaultState());
-                    }
-
-                    if (block instanceof BlockLeaves || state.getMaterial() == Material.WATER) {
+                    } else if (block instanceof BlockLeaves || state.getMaterial() == Material.WATER) {
                         worldObj.setBlockState(blockpos, Blocks.AIR.getDefaultState());
-                    }
-
-                    if (block instanceof BlockGravel) {
+                    } else if (block instanceof BlockGravel) {
                         worldObj.setBlockState(blockpos, ModBlocks.frozenGravel.getDefaultState());
-                    }
-
-                    if (state.getMaterial() == Material.WOOD) {
+                    } else if (state.getMaterial() == Material.WOOD) {
                         worldObj.setBlockState(blockpos, ModBlocks.frozenSplinters.getDefaultState());
-                    }
-
-                    if (state.getMaterial() == Material.ROCK && (block != ModBlocks.frozenCobblestone && block != Blocks.COBBLESTONE && block != Blocks.MOSSY_COBBLESTONE && block != Blocks.COBBLESTONE_WALL)) {
+                    } else if (state.getMaterial() == Material.ROCK && (block != ModBlocks.frozenCobblestone && block != Blocks.COBBLESTONE && block != Blocks.MOSSY_COBBLESTONE && block != Blocks.COBBLESTONE_WALL)) {
                         worldObj.setBlockState(blockpos, ModBlocks.frozenStone.getDefaultState());
                     } else if (state.getMaterial() == Material.ROCK) {
                         worldObj.setBlockState(blockpos, ModBlocks.frozenCobblestone.getDefaultState());

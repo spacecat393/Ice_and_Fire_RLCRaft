@@ -14,9 +14,9 @@ import net.minecraft.world.World;
 public class WorldGenIceDragonRoost extends WorldGenDragonRoost {
 
     protected void transformState(World world, BlockPos blockpos, IBlockState state) {
-        if (state.getMaterial() == Material.GRASS) {
+        if (state.getMaterial() == Material.GRASS && state.getBlock() == Blocks.GRASS) {
             world.setBlockState(blockpos, ModBlocks.frozenGrass.getDefaultState());
-        } else if (state.getMaterial() == Material.GROUND && state.getBlock() == Blocks.DIRT) {
+        } else if (state.getMaterial() == Material.GRASS || state.getMaterial() == Material.GROUND && state.getBlock() == Blocks.DIRT) {
             world.setBlockState(blockpos, ModBlocks.frozenDirt.getDefaultState());
         } else if (state.getMaterial() == Material.GROUND && state.getBlock() == Blocks.GRAVEL) {
             world.setBlockState(blockpos, ModBlocks.frozenGravel.getDefaultState());

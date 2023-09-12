@@ -14,10 +14,10 @@ import net.minecraft.world.World;
 public class WorldGenLightningDragonRoost extends WorldGenDragonRoost {
 
     protected void transformState(World world, BlockPos blockpos, IBlockState state) {
-        if (state.getMaterial() == Material.GRASS) {
+        if (state.getMaterial() == Material.GRASS && state.getBlock() == Blocks.GRASS) {
             world.setBlockState(blockpos, ModBlocks.crackledGrass.getDefaultState());
-        } else if (state.getMaterial() == Material.GROUND && state.getBlock() == Blocks.DIRT) {
-            world.setBlockState(blockpos, ModBlocks.crackledGrass.getDefaultState());
+        } else if (state.getMaterial() == Material.GRASS || state.getMaterial() == Material.GROUND && state.getBlock() == Blocks.DIRT) {
+            world.setBlockState(blockpos, ModBlocks.crackledDirt.getDefaultState());
         } else if (state.getMaterial() == Material.GROUND && state.getBlock() == Blocks.GRAVEL) {
             world.setBlockState(blockpos, ModBlocks.crackledGravel.getDefaultState());
         } else if (state.getMaterial() == Material.ROCK && (state.getBlock() == Blocks.COBBLESTONE || state.getBlock().getTranslationKey().contains("cobblestone"))) {

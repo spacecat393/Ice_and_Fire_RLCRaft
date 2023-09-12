@@ -17,9 +17,9 @@ public class WorldGenFireDragonRoost extends WorldGenDragonRoost {
         if (state.getBlock() instanceof BlockContainer) {
             return;
         }
-        if (state.getMaterial() == Material.GRASS) {
+        if (state.getMaterial() == Material.GRASS && state.getBlock() == Blocks.GRASS) {
             world.setBlockState(blockpos, ModBlocks.charedGrass.getDefaultState());
-        } else if (state.getMaterial() == Material.GROUND && state.getBlock() == Blocks.DIRT) {
+        } else if (state.getMaterial() == Material.GRASS || state.getMaterial() == Material.GROUND && state.getBlock() == Blocks.DIRT) {
             world.setBlockState(blockpos, ModBlocks.charedDirt.getDefaultState());
         } else if (state.getMaterial() == Material.GROUND && state.getBlock() == Blocks.GRAVEL) {
             world.setBlockState(blockpos, ModBlocks.charedGravel.getDefaultState());
