@@ -24,60 +24,26 @@ public class GuiHandler implements IGuiHandler {
 		TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
 
 		switch (id) {
-
 			case 0:
-				if (entity != null) {
-					if (entity instanceof EntityDragonBase) {
-						return new ContainerDragon((EntityDragonBase) entity, player);
-					}
-				}
+				if(entity instanceof EntityDragonBase) return new ContainerDragon((EntityDragonBase) entity, player);
 				break;
-
 			case 1:
-				if (tile != null) {
-
-					if (tile instanceof TileEntityPodium) {
-						return new ContainerPodium(player.inventory, (TileEntityPodium) tile, player);
-					}
-				}
+				if(tile instanceof TileEntityPodium) return new ContainerPodium(player.inventory, (TileEntityPodium) tile, player);
 				break;
-
 			case 2:
-				if (tile != null) {
-
-					if (tile instanceof TileEntityLectern) {
-						return new ContainerLectern(player.inventory, (TileEntityLectern) tile);
-					}
-				}
+				if(tile instanceof TileEntityLectern) return new ContainerLectern(player.inventory, (TileEntityLectern) tile);
 				break;
-
 			case 4:
-				if (entity != null) {
-					if (entity instanceof EntityHippogryph) {
-						return new ContainerHippogryph((EntityHippogryph) entity, player);
-					}
-				}
+				if(entity instanceof EntityHippogryph) return new ContainerHippogryph((EntityHippogryph) entity, player);
 				break;
-
 			case 5:
-				if (entity != null) {
-					if (entity instanceof EntityHippocampus) {
-						return new ContainerHippocampus((EntityHippocampus) entity, player);
-					}
-				}
+				if(entity instanceof EntityHippocampus) return new ContainerHippocampus((EntityHippocampus) entity, player);
 				break;
-
 			case 6:
-				if (tile != null) {
-
-					if (tile instanceof TileEntityMyrmexCocoon) {
-						return new ContainerMyrmexCocoon(player.inventory, (TileEntityMyrmexCocoon) tile, player);
-					}
-				}
+				if(tile instanceof TileEntityMyrmexCocoon) return new ContainerMyrmexCocoon(player.inventory, (TileEntityMyrmexCocoon) tile, player);
 				break;
 		}
 		return null;
-
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -86,58 +52,25 @@ public class GuiHandler implements IGuiHandler {
 		Entity entity = world.getEntityByID(x);
 		TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
 		switch (id) {
-
 			case 0:
-				if (entity != null) {
-
-					if (entity instanceof EntityDragonBase) {
-						return new com.github.alexthe666.iceandfire.client.gui.GuiDragon(player.inventory, (EntityDragonBase) entity);
-					}
-				}
+				if(entity instanceof EntityDragonBase) return new com.github.alexthe666.iceandfire.client.gui.GuiDragon(player.inventory, (EntityDragonBase) entity);
 				break;
-
 			case 1:
-				if (tile != null) {
-
-					if (tile instanceof TileEntityPodium) {
-						return new com.github.alexthe666.iceandfire.client.gui.GuiPodium(player.inventory, (TileEntityPodium) tile);
-					}
-				}
+				if(tile instanceof TileEntityPodium) return new com.github.alexthe666.iceandfire.client.gui.GuiPodium(player.inventory, (TileEntityPodium) tile);
 				break;
-
 			case 2:
-				if (tile != null) {
-
-					if (tile instanceof TileEntityLectern) {
-						return new com.github.alexthe666.iceandfire.client.gui.GuiLectern(player.inventory, (TileEntityLectern) tile);
-					}
-				}
+				if(tile instanceof TileEntityLectern) return new com.github.alexthe666.iceandfire.client.gui.GuiLectern(player.inventory, (TileEntityLectern) tile);
 				break;
 			case 3:
 				return new com.github.alexthe666.iceandfire.client.gui.bestiary.GuiBestiary(player.getActiveItemStack());
-
 			case 4:
-				if (entity != null) {
-
-					if (entity instanceof EntityHippogryph) {
-						return new com.github.alexthe666.iceandfire.client.gui.GuiHippogryph(player.inventory, (EntityHippogryph) entity);
-					}
-				}
+				if(entity instanceof EntityHippogryph) return new com.github.alexthe666.iceandfire.client.gui.GuiHippogryph(player.inventory, (EntityHippogryph) entity);
 				break;
 			case 5:
-				if (entity != null) {
-
-					if (entity instanceof EntityHippocampus) {
-						return new com.github.alexthe666.iceandfire.client.gui.GuiHippocampus(player.inventory, (EntityHippocampus) entity);
-					}
-				}
+				if(entity instanceof EntityHippocampus) return new com.github.alexthe666.iceandfire.client.gui.GuiHippocampus(player.inventory, (EntityHippocampus) entity);
 				break;
 			case 6:
-				if (tile != null) {
-					if (tile instanceof TileEntityMyrmexCocoon) {
-						return new com.github.alexthe666.iceandfire.client.gui.GuiMyrmexCocoon(player.inventory, (TileEntityMyrmexCocoon) tile);
-					}
-				}
+				if(tile instanceof TileEntityMyrmexCocoon) return new com.github.alexthe666.iceandfire.client.gui.GuiMyrmexCocoon(player.inventory, (TileEntityMyrmexCocoon) tile);
 				break;
 		}
 		return entity;
