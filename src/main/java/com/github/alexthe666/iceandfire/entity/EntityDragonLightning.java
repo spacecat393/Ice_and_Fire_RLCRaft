@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.entity;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.client.particle.lightning.ParticleLightningVector;
-import com.github.alexthe666.iceandfire.compat.LycanitesCompat;
+import com.github.alexthe666.iceandfire.integration.LycanitesCompat;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.util.DamageSource;
@@ -84,16 +84,18 @@ public class EntityDragonLightning extends EntityFireball implements IDragonProj
 				this.setDead();
 				return;
 			}
-			if (!(movingObject.entityHit instanceof IDragonProjectile) && !movingObject.entityHit.isEntityEqual(shootingEntity)) {
-				if (this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase) {
-					if (movingObject.entityHit instanceof EntityLivingBase && ((EntityLivingBase) movingObject.entityHit).getHealth() == 0) {
-						((EntityDragonBase) this.shootingEntity).attackDecision = true;
+			if (!(movingObject.entityHit instanceof IDragonProjectile) && (this.shootingEntity == null || !movingObject.entityHit.isEntityEqual(shootingEntity))) {
+				if (this.shootingEntity != null) {
+					if(this.shootingEntity instanceof EntityDragonBase) {
+						if (movingObject.entityHit instanceof EntityLivingBase && ((EntityLivingBase) movingObject.entityHit).getHealth() == 0) {
+							((EntityDragonBase) this.shootingEntity).attackDecision = true;
+						}
 					}
+					this.applyEnchantments(this.shootingEntity, movingObject.entityHit);
 				}
-				this.applyEnchantments(this.shootingEntity, movingObject.entityHit);
 				movingObject.entityHit.attackEntityFrom(IceAndFire.dragonLightning, 3);
 				if(movingObject.entityHit instanceof EntityLivingBase){
-					if (IceAndFireConfig.DRAGON_SETTINGS.lightningDragonKnockback) {
+					if (IceAndFireConfig.DRAGON_SETTINGS.lightningDragonKnockback && this.shootingEntity != null) {
 						double xRatio = this.shootingEntity.posX - movingObject.entityHit.posX;
 						double zRatio = this.shootingEntity.posZ - movingObject.entityHit.posZ;
 						((EntityLivingBase) movingObject.entityHit).knockBack(this.shootingEntity, 0.3F, xRatio, zRatio);

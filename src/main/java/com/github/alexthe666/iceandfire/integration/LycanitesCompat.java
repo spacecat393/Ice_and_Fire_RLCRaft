@@ -1,4 +1,4 @@
-package com.github.alexthe666.iceandfire.compat;
+package com.github.alexthe666.iceandfire.integration;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
