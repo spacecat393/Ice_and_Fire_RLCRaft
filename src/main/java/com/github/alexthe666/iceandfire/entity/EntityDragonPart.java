@@ -1,5 +1,8 @@
 package com.github.alexthe666.iceandfire.entity;
 
+import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
+import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
+import com.github.alexthe666.iceandfire.entity.util.EntityMutlipartPart;
 import net.minecraft.util.DamageSource;
 
 public class EntityDragonPart extends EntityMutlipartPart {

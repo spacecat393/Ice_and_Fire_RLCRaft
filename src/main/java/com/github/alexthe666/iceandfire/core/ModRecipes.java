@@ -1,7 +1,7 @@
 package com.github.alexthe666.iceandfire.core;
 
-import com.github.alexthe666.iceandfire.entity.EntityDragonArrow;
-import com.github.alexthe666.iceandfire.entity.EntityStymphalianArrow;
+import com.github.alexthe666.iceandfire.entity.projectile.EntityDragonArrow;
+import com.github.alexthe666.iceandfire.entity.projectile.EntityStymphalianArrow;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
 import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
 import net.minecraft.block.BlockDispenser;

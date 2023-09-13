@@ -7,6 +7,10 @@ import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.StymphalianBirdAIAirTarget;
 import com.github.alexthe666.iceandfire.entity.ai.StymphalianBirdAIFlee;
 import com.github.alexthe666.iceandfire.entity.ai.StymphalianBirdAITarget;
+import com.github.alexthe666.iceandfire.entity.projectile.EntityStymphalianFeather;
+import com.github.alexthe666.iceandfire.entity.util.IAnimalFear;
+import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
+import com.github.alexthe666.iceandfire.entity.util.StymphalianBirdFlock;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
@@ -63,7 +67,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
     public StymphalianBirdFlock flock;
     private boolean aiFlightLaunch = false;
     public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "stymphalian_bird"));
-    protected static final Predicate<Entity> STYMPHALIAN_PREDICATE = new Predicate<Entity>() {
+    public static final Predicate<Entity> STYMPHALIAN_PREDICATE = new Predicate<Entity>() {
         public boolean apply(@Nullable Entity entity) {
             return entity instanceof EntityStymphalianBird;
         }
