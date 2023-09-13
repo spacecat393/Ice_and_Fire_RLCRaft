@@ -28,21 +28,15 @@ public class TileEntityPixieHouse extends TileEntity implements ITickable {
 	public int pixieType;
 	public int ticksExisted;
 	public NonNullList<ItemStack> pixieItems = NonNullList.<ItemStack>withSize(1, ItemStack.EMPTY);
-	private Random rand;
 
-	public TileEntityPixieHouse() {
-		this.rand = new Random();
-	}
-
+	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
 		compound.setInteger("HouseType", houseType);
 		compound.setBoolean("HasPixie", hasPixie);
 		compound.setInteger("PixieType", pixieType);
 		compound.setBoolean("TamedPixie", tamedPixie);
-		if (pixieOwnerUUID != null) {
-			compound.setUniqueId("PixieOwnerUUID", pixieOwnerUUID);
-		}
+		if(pixieOwnerUUID != null) compound.setUniqueId("PixieOwnerUUID", pixieOwnerUUID);
 		ItemStackHelper.saveAllItems(compound, this.pixieItems);
 		return compound;
 	}
@@ -54,6 +48,7 @@ public class TileEntityPixieHouse extends TileEntity implements ITickable {
 		return new SPacketUpdateTileEntity(pos, 1, tag);
 	}
 
+	@Override
 	public NBTTagCompound getUpdateTag() {
 		return this.writeToNBT(new NBTTagCompound());
 	}
@@ -61,11 +56,12 @@ public class TileEntityPixieHouse extends TileEntity implements ITickable {
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
 		readFromNBT(packet.getNbtCompound());
-		if (!world.isRemote) {
+		if(!world.isRemote) {
 			IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageUpdatePixieHouseModel(pos.toLong(), packet.getNbtCompound().getInteger("HouseType")));
 		}
 	}
 
+	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		houseType = compound.getInteger("HouseType");
 		hasPixie = compound.getBoolean("HasPixie");
@@ -80,11 +76,17 @@ public class TileEntityPixieHouse extends TileEntity implements ITickable {
 	@Override
 	public void update() {
 		ticksExisted++;
-		if (!world.isRemote && this.hasPixie && new Random().nextInt(100) == 0) {
-			releasePixie();
-		}
-		if (this.hasPixie) {
-			IceAndFire.PROXY.spawnParticle("if_pixie", this.world, this.pos.getX() + 0.5F + (double) (this.rand.nextFloat() * PARTICLE_WIDTH * 2F) - (double) PARTICLE_WIDTH, this.pos.getY() + (double) (this.rand.nextFloat() * PARTICLE_HEIGHT), this.pos.getZ() + 0.5F + (double) (this.rand.nextFloat() * PARTICLE_WIDTH * 2F) - (double) PARTICLE_WIDTH, EntityPixie.PARTICLE_RGB[this.pixieType][0], EntityPixie.PARTICLE_RGB[this.pixieType][1], EntityPixie.PARTICLE_RGB[this.pixieType][2]);
+		if(!world.isRemote && this.hasPixie && this.world.rand.nextInt(100) == 0) releasePixie();
+		if(this.hasPixie) {
+			IceAndFire.PROXY.spawnParticle(
+					"if_pixie",
+					this.world,
+					this.pos.getX() + 0.5F + (double)(this.world.rand.nextFloat() * PARTICLE_WIDTH * 2F) - (double)PARTICLE_WIDTH,
+					this.pos.getY() + (double)(this.world.rand.nextFloat() * PARTICLE_HEIGHT),
+					this.pos.getZ() + 0.5F + (double)(this.world.rand.nextFloat() * PARTICLE_WIDTH * 2F) - (double)PARTICLE_WIDTH,
+					EntityPixie.PARTICLE_RGB[this.pixieType][0],
+					EntityPixie.PARTICLE_RGB[this.pixieType][1],
+					EntityPixie.PARTICLE_RGB[this.pixieType][2]);
 		}
 	}
 
@@ -93,15 +95,13 @@ public class TileEntityPixieHouse extends TileEntity implements ITickable {
 		pixie.setPositionAndRotation(this.pos.getX() + 0.5F, this.pos.getY() + 1F, this.pos.getZ() + 0.5F, new Random().nextInt(360), 0);
 		pixie.setHeldItem(EnumHand.MAIN_HAND, pixieItems.get(0));
 		pixie.setColor(this.pixieType);
-		if (!world.isRemote) {
-			world.spawnEntity(pixie);
-		}
+		if(!world.isRemote) world.spawnEntity(pixie);
 		this.hasPixie = false;
 		this.pixieType = 0;
 		pixie.ticksUntilHouseAI = 500;
 		pixie.setTamed(this.tamedPixie);
 		pixie.setOwnerId(this.pixieOwnerUUID);
-		if (!world.isRemote) {
+		if(!world.isRemote) {
 			IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageUpdatePixieHouse(pos.toLong(), false, 0));
 		}
 	}

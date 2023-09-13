@@ -16,16 +16,15 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 
 public class TileEntityPodium extends TileEntity implements ITickable, ISidedInventory {
+
 	private static final int[] slotsTop = new int[]{0};
 	private NonNullList<ItemStack> stacks = NonNullList.<ItemStack>withSize(1, ItemStack.EMPTY);
 
 	@Override
 	public void update() {
-
 	}
 
 	@Override
@@ -40,43 +39,27 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
 
 	@Override
 	public ItemStack decrStackSize(int index, int count) {
-		if (!this.stacks.get(index).isEmpty()) {
+		if(!this.stacks.get(index).isEmpty()) {
 			ItemStack itemstack;
-
-			if (this.stacks.get(index).getCount() <= count) {
+			if(this.stacks.get(index).getCount() <= count) {
 				itemstack = this.stacks.get(index);
 				this.stacks.set(index, ItemStack.EMPTY);
-				return itemstack;
-			} else {
+			}
+			else {
 				itemstack = this.stacks.get(index).splitStack(count);
-
-				if (this.stacks.get(index).isEmpty()) {
+				if(this.stacks.get(index).isEmpty()) {
 					this.stacks.set(index, ItemStack.EMPTY);
 				}
-
-				return itemstack;
 			}
-		} else {
-			return ItemStack.EMPTY;
-		}
-	}
-
-	public ItemStack getStackInSlotOnClosing(int index) {
-		if (!this.stacks.get(index).isEmpty()) {
-			ItemStack itemstack = this.stacks.get(index);
-			this.stacks.set(index, itemstack);
 			return itemstack;
-		} else {
-			return ItemStack.EMPTY;
 		}
+		else return ItemStack.EMPTY;
 	}
 
 	@Override
 	public void setInventorySlotContents(int index, ItemStack stack) {
-		boolean flag = !stack.isEmpty() && stack.isItemEqual(this.stacks.get(index)) && ItemStack.areItemStackTagsEqual(stack, this.stacks.get(index));
 		this.stacks.set(index, stack);
-
-		if (!stack.isEmpty() && stack.getCount() > this.getInventoryStackLimit()) {
+		if(!stack.isEmpty() && stack.getCount() > this.getInventoryStackLimit()) {
 			stack.setCount(this.getInventoryStackLimit());
 		}
 	}
@@ -169,6 +152,7 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
 		return new SPacketUpdateTileEntity(pos, 1, tag);
 	}
 
+	@Override
 	public NBTTagCompound getUpdateTag() {
 		return this.writeToNBT(new NBTTagCompound());
 	}
@@ -176,7 +160,7 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
 		readFromNBT(packet.getNbtCompound());
-		if (!world.isRemote) {
+		if(!world.isRemote) {
 			IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageUpdatePodium(pos.toLong(), this.getStackInSlot(0)));
 		}
 	}
@@ -187,17 +171,14 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
 
 	@Override
 	public ITextComponent getDisplayName() {
-		return this.hasCustomName() ? new TextComponentString(this.getName()) : new TextComponentTranslation(this.getName(), new Object[0]);
+		return new TextComponentTranslation(this.getName());
 	}
 
 	@Override
 	public boolean isEmpty() {
-		for (int i = 0; i < this.getSizeInventory(); i++) {
-			if (!this.getStackInSlot(i).isEmpty()) {
-				return false;
-			}
+		for(int i = 0; i < this.getSizeInventory(); i++) {
+			if(!this.getStackInSlot(i).isEmpty()) return false;
 		}
 		return true;
 	}
-
 }

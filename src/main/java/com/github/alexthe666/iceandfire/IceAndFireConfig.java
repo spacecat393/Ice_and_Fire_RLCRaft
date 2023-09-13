@@ -440,6 +440,11 @@ public class IceAndFireConfig {
 		@Config.Name("Pixies Steal Items")
 		public boolean pixiesStealItems = true;
 
+		@Config.Comment("Amount of ticks before a Pixie is ready to produce dust again")
+		@Config.Name("Pixie Dust Production Cooldown")
+		@Config.RangeInt(min = 100)
+		public int pixieCooldown = 24000;
+
 		@Config.Comment("Maximum Cyclops Health")
 		@Config.Name("Cyclops Max Health")
 		@Config.RangeDouble(min = 1, max = 10000)

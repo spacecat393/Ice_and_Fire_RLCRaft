@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity.tile;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouse;
@@ -16,9 +17,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.MathHelper;
-
-import java.util.Random;
 import java.util.UUID;
 
 public class TileEntityJar extends TileEntity implements ITickable {
@@ -34,27 +32,19 @@ public class TileEntityJar extends TileEntity implements ITickable {
 	public NonNullList<ItemStack> pixieItems = NonNullList.<ItemStack>withSize(1, ItemStack.EMPTY);
 	public float rotationYaw;
 	public float prevRotationYaw;
-	private Random rand;
-
-	public TileEntityJar() {
-		this.rand = new Random();
-		this.hasPixie = true;
-	}
 
 	public TileEntityJar(boolean empty) {
-		this.rand = new Random();
 		this.hasPixie = !empty;
 	}
 
+	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		super.writeToNBT(compound);
 		compound.setBoolean("HasPixie", hasPixie);
 		compound.setInteger("PixieType", pixieType);
 		compound.setBoolean("HasProduced", hasProduced);
 		compound.setBoolean("TamedPixie", tamedPixie);
-		if (pixieOwnerUUID != null) {
-			compound.setUniqueId("PixieOwnerUUID", pixieOwnerUUID);
-		}
+		if(pixieOwnerUUID != null) compound.setUniqueId("PixieOwnerUUID", pixieOwnerUUID);
 		compound.setInteger("TicksExisted", ticksExisted);
 		ItemStackHelper.saveAllItems(compound, this.pixieItems);
 		return compound;
@@ -67,6 +57,7 @@ public class TileEntityJar extends TileEntity implements ITickable {
 		return new SPacketUpdateTileEntity(pos, 1, tag);
 	}
 
+	@Override
 	public NBTTagCompound getUpdateTag() {
 		return this.writeToNBT(new NBTTagCompound());
 	}
@@ -74,11 +65,13 @@ public class TileEntityJar extends TileEntity implements ITickable {
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
 		readFromNBT(packet.getNbtCompound());
-		if (!world.isRemote) {
-			IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageUpdatePixieHouseModel(pos.toLong(), packet.getNbtCompound().getInteger("PixieType")));
-		}
+		if(!world.isRemote) IceAndFire.NETWORK_WRAPPER.sendToAll(
+				new MessageUpdatePixieHouseModel(
+						pos.toLong(),
+						packet.getNbtCompound().getInteger("PixieType")));
 	}
 
+	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		hasPixie = compound.getBoolean("HasPixie");
 		pixieType = compound.getInteger("PixieType");
@@ -94,54 +87,53 @@ public class TileEntityJar extends TileEntity implements ITickable {
 	@Override
 	public void update() {
 		ticksExisted++;
-		if (this.hasPixie) {
-			IceAndFire.PROXY.spawnParticle("if_pixie", this.world, this.pos.getX() + 0.5F + (double) (this.rand.nextFloat() * PARTICLE_WIDTH * 2F) - (double) PARTICLE_WIDTH, this.pos.getY() + (double) (this.rand.nextFloat() * PARTICLE_HEIGHT), this.pos.getZ() + 0.5F + (double) (this.rand.nextFloat() * PARTICLE_WIDTH * 2F) - (double) PARTICLE_WIDTH, EntityPixie.PARTICLE_RGB[this.pixieType][0], EntityPixie.PARTICLE_RGB[this.pixieType][1], EntityPixie.PARTICLE_RGB[this.pixieType][2]);
-		}
-		if (ticksExisted % 24000 * 2 == 0 && !this.hasProduced && this.hasPixie && !this.getWorld().isRemote) {
+		if(this.hasPixie) IceAndFire.PROXY.spawnParticle(
+				"if_pixie",
+				this.world,
+				this.pos.getX() + 0.5F + (double)(this.world.rand.nextFloat() * PARTICLE_WIDTH * 2F) - (double) PARTICLE_WIDTH,
+				this.pos.getY() + (double)(this.world.rand.nextFloat() * PARTICLE_HEIGHT),
+				this.pos.getZ() + 0.5F + (double)(this.world.rand.nextFloat() * PARTICLE_WIDTH * 2F) - (double) PARTICLE_WIDTH,
+				EntityPixie.PARTICLE_RGB[this.pixieType][0],
+				EntityPixie.PARTICLE_RGB[this.pixieType][1],
+				EntityPixie.PARTICLE_RGB[this.pixieType][2]);
+		if(this.hasPixie && !this.hasProduced && !this.getWorld().isRemote && ticksExisted % IceAndFireConfig.ENTITY_SETTINGS.pixieCooldown == 0) {
 			this.hasProduced = true;
 			IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageUpdatePixieJar(pos.toLong(), true));
 		}
 		prevRotationYaw = rotationYaw;
-		if (rand.nextInt(30) == 0) {
-			this.rotationYaw = (rand.nextFloat() * 360F) - 180F;
-		}
-
-		if (ticksExisted % 40 == 0 && this.rand.nextInt(6) == 0) {
-			this.world.playSound(this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5, ModSounds.PIXIE_IDLE, SoundCategory.NEUTRAL, 1, 1, false);
-		}
-
+		if(this.world.rand.nextInt(30) == 0) this.rotationYaw = (this.world.rand.nextFloat() * 360F) - 180F;
+		if(ticksExisted % 40 == 0 && this.world.rand.nextInt(6) == 0) this.world.playSound(
+				this.pos.getX() + 0.5D,
+				this.pos.getY() + 0.5D,
+				this.pos.getZ() + 0.5,
+				ModSounds.PIXIE_IDLE,
+				SoundCategory.NEUTRAL,
+				1,
+				1,
+				false);
 	}
 
 	public void releasePixie() {
-		EntityPixie pixie = new EntityPixie(this.world);
-		pixie.setPositionAndRotation(this.pos.getX() + 0.5F, this.pos.getY() + 1F, this.pos.getZ() + 0.5F, new Random().nextInt(360), 0);
-		pixie.setHeldItem(EnumHand.MAIN_HAND, pixieItems.get(0));
-		pixie.setColor(this.pixieType);
-		if (!world.isRemote) {
-			world.spawnEntity(pixie);
+		if(this.hasPixie) {
+			EntityPixie pixie = new EntityPixie(this.world);
+			pixie.setPositionAndRotation(
+					this.pos.getX() + 0.5F,
+					this.pos.getY() + 1F,
+					this.pos.getZ() + 0.5F,
+					this.world.rand.nextInt(360),
+					0);
+			pixie.setHeldItem(EnumHand.MAIN_HAND, pixieItems.get(0));
+			pixie.setColor(this.pixieType);
+			if(!world.isRemote) world.spawnEntity(pixie);
+			this.hasPixie = false;
+			this.pixieType = 0;
+			pixie.ticksUntilHouseAI = 500;
+			pixie.setTamed(this.tamedPixie);
+			pixie.setOwnerId(this.pixieOwnerUUID);
+			if(!world.isRemote) IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageUpdatePixieHouse(
+					pos.toLong(),
+					false,
+					0));
 		}
-		this.hasPixie = false;
-		this.pixieType = 0;
-		pixie.ticksUntilHouseAI = 500;
-		pixie.setTamed(this.tamedPixie);
-		pixie.setOwnerId(this.pixieOwnerUUID);
-
-		if (!world.isRemote) {
-			IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageUpdatePixieHouse(pos.toLong(), false, 0));
-		}
-	}
-
-	private float updateRotation(float float1, float float2, float float3) {
-		float f = MathHelper.wrapDegrees(float2 - float1);
-
-		if (f > float3) {
-			f = float3;
-		}
-
-		if (f < -float3) {
-			f = -float3;
-		}
-
-		return float1 + f;
 	}
 }

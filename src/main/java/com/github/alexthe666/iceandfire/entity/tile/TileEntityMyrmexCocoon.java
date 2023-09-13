@@ -23,58 +23,57 @@ import java.util.Random;
 
 public class TileEntityMyrmexCocoon extends TileEntityLockableLoot {
 
-
     private NonNullList<ItemStack> chestContents = NonNullList.<ItemStack>withSize(18, ItemStack.EMPTY);
 
+    @Override
     public int getSizeInventory() {
         return 18;
     }
 
+    @Override
     public boolean isEmpty() {
-        for (ItemStack itemstack : this.chestContents) {
-            if (!itemstack.isEmpty()) {
-                return false;
-            }
+        for(ItemStack itemstack : this.chestContents) {
+            if(!itemstack.isEmpty()) return false;
         }
-
         return true;
     }
 
+    @Override
     public String getName() {
         Block block = world.getBlockState(this.pos).getBlock();
         return this.hasCustomName() ? this.customName : block.getTranslationKey() + ".name";
     }
 
+    @Override
     public void readFromNBT(NBTTagCompound compound) {
         super.readFromNBT(compound);
         this.chestContents = NonNullList.<ItemStack>withSize(this.getSizeInventory(), ItemStack.EMPTY);
-
-        if (!this.checkLootAndRead(compound)) {
+        if(!this.checkLootAndRead(compound)) {
             ItemStackHelper.loadAllItems(compound, this.chestContents);
         }
-
-        if (compound.hasKey("CustomName", 8)) {
+        if(compound.hasKey("CustomName", 8)) {
             this.customName = compound.getString("CustomName");
         }
     }
 
+    @Override
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         super.writeToNBT(compound);
-        if (!this.checkLootAndWrite(compound)) {
+        if(!this.checkLootAndWrite(compound)) {
             ItemStackHelper.saveAllItems(compound, this.chestContents);
         }
-
-        if (this.hasCustomName()) {
+        if(this.hasCustomName()) {
             compound.setString("CustomName", this.customName);
         }
-
         return compound;
     }
 
+    @Override
     public int getInventoryStackLimit() {
         return 64;
     }
 
+    @Override
     public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn) {
         this.fillWithLoot(playerIn);
         return new ContainerMyrmexCocoon(playerInventory, this, playerIn);
@@ -82,18 +81,21 @@ public class TileEntityMyrmexCocoon extends TileEntityLockableLoot {
 
     @Override
     public String getGuiID() {
-        return "oldworldblues:storage";
+        return "iceandfire:myrmexCocoon";
     }
 
+    @Override
     protected NonNullList<ItemStack> getItems() {
         return this.chestContents;
     }
 
+    @Override
     public void openInventory(EntityPlayer player) {
         this.fillWithLoot((EntityPlayer) null);
         player.world.playSound(this.pos.getX(), this.pos.getY(), this.pos.getZ(), SoundEvents.ENTITY_SLIME_JUMP, SoundCategory.BLOCKS, 1, 1, false);
     }
 
+    @Override
     public void closeInventory(EntityPlayer player) {
         this.fillWithLoot((EntityPlayer) null);
         player.world.playSound(this.pos.getX(), this.pos.getY(), this.pos.getZ(), SoundEvents.ENTITY_SLIME_SQUISH, SoundCategory.BLOCKS, 1, 1, false);
@@ -117,11 +119,8 @@ public class TileEntityMyrmexCocoon extends TileEntityLockableLoot {
             this.lootTable = null;
             Random random;
 
-            if (this.lootTableSeed == 0L) {
-                random = new Random();
-            } else {
-                random = new Random(this.lootTableSeed);
-            }
+            if(this.lootTableSeed == 0L) random = new Random();
+            else random = new Random(this.lootTableSeed);
 
             LootContext.Builder lootcontext$builder = new LootContext.Builder((WorldServer) this.world);
 
@@ -140,8 +139,8 @@ public class TileEntityMyrmexCocoon extends TileEntityLockableLoot {
     }
 
     public boolean isFull(ItemStack heldStack) {
-        for (ItemStack itemstack : chestContents) {
-            if (itemstack.isEmpty() || heldStack != null && !heldStack.isEmpty() && itemstack.isItemEqual(heldStack) && itemstack.getCount() + heldStack.getCount() < itemstack.getMaxStackSize()) {
+        for(ItemStack itemstack : chestContents) {
+            if(itemstack.isEmpty() || heldStack != null && !heldStack.isEmpty() && itemstack.isItemEqual(heldStack) && itemstack.getCount() + heldStack.getCount() < itemstack.getMaxStackSize()) {
                 return false;
             }
         }

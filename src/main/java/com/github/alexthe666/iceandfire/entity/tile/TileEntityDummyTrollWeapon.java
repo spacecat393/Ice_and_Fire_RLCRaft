@@ -5,4 +5,5 @@ import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityDummyTrollWeapon extends TileEntity{
     public EnumTroll.Weapon type;
+    //Dummy for rendering
 }
