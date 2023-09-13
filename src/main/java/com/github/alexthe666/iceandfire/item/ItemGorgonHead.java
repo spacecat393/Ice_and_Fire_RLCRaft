@@ -60,6 +60,10 @@ public class ItemGorgonHead extends Item implements ICustomRendered {
 	@SuppressWarnings("deprecation")
 	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entity, int timeLeft) {
+		if(worldIn.isRemote) {
+			stack.setItemDamage(0);
+			return;
+		}
 		double dist = 32;
 		Vec3d vec3d = entity.getPositionEyes(1.0F);
 		Vec3d vec3d1 = entity.getLook(1.0F);
@@ -110,7 +114,6 @@ public class ItemGorgonHead extends Item implements ICustomRendered {
 		if (pointedEntity != null) {
 			if (pointedEntity instanceof EntityLiving || pointedEntity instanceof EntityPlayer) {
 				if (pointedEntity instanceof EntityPlayer) {
-					pointedEntity.playSound(ModSounds.GORGON_TURN_STONE, 1, 1);
 					pointedEntity.attackEntityFrom(IceAndFire.gorgon, Integer.MAX_VALUE);
 					EntityStoneStatue statue = new EntityStoneStatue(worldIn);
 					statue.setPositionAndRotation(pointedEntity.posX, pointedEntity.posY, pointedEntity.posZ, pointedEntity.rotationYaw, pointedEntity.rotationPitch);
@@ -141,9 +144,9 @@ public class ItemGorgonHead extends Item implements ICustomRendered {
 				}
 
 				if (pointedEntity instanceof EntityGorgon) {
-					entity.playSound(ModSounds.GORGON_PETRIFY, 1, 1);
+					worldIn.playSound(null, pointedEntity.posX, pointedEntity.posY, pointedEntity.posZ, ModSounds.GORGON_PETRIFY, SoundCategory.HOSTILE, 1, 1);
 				} else {
-					entity.playSound(ModSounds.GORGON_TURN_STONE, 1, 1);
+					worldIn.playSound(null, pointedEntity.posX, pointedEntity.posY, pointedEntity.posZ, ModSounds.GORGON_TURN_STONE, SoundCategory.HOSTILE, 1, 1);
 				}
 				SoundEvent deathSound = null;
 				Method deathSoundMethod = ReflectionHelper.findMethod(EntityLivingBase.class, "getDeathSound", "func_184615_bR", null);
@@ -157,7 +160,7 @@ public class ItemGorgonHead extends Item implements ICustomRendered {
 					e.printStackTrace();
 				}
 				if (deathSound != null) {
-					entity.playSound(deathSound, 1, 1);
+					worldIn.playSound(null, pointedEntity.posX, pointedEntity.posY, pointedEntity.posZ, deathSound, SoundCategory.HOSTILE, 1, 1);
 				}
 				if (!(entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative())) {
 					stack.shrink(1);
