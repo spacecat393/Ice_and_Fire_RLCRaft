@@ -5,7 +5,7 @@ import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.integration.LycanitesCompat;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
-import com.github.alexthe666.iceandfire.entity.util.EntityMutlipartPart;
+import com.github.alexthe666.iceandfire.entity.util.EntityMultipartPart;
 import com.github.alexthe666.iceandfire.message.MessageChainLightningFX;
 import net.minecraft.entity.*;
 import net.minecraft.entity.effect.EntityLightningBolt;
@@ -54,7 +54,7 @@ public class ChainLightningUtils {
 
         List<EntityLivingBase> entityLiving = new ArrayList<>();
         for(Entity ent : world.getEntitiesWithinAABBExcludingEntity(lightningSource.get(), lightningSource.getBoundingBox(range))) {
-            if(ent instanceof EntityMutlipartPart) ent = ((EntityMutlipartPart)ent).getParent();
+            if(ent instanceof EntityMultipartPart) ent = ((EntityMultipartPart)ent).getParent();
             if(ent instanceof EntityLivingBase &&
                     ent.isEntityAlive() &&
                     !entityLiving.contains((EntityLivingBase)ent) &&

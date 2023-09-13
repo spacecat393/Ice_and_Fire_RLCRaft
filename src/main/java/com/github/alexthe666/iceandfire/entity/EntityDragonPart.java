@@ -1,11 +1,9 @@
 package com.github.alexthe666.iceandfire.entity;
 
-import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
-import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
-import com.github.alexthe666.iceandfire.entity.util.EntityMutlipartPart;
+import com.github.alexthe666.iceandfire.entity.util.EntityMultipartPart;
 import net.minecraft.util.DamageSource;
 
-public class EntityDragonPart extends EntityMutlipartPart {
+public class EntityDragonPart extends EntityMultipartPart {
     private EntityDragonBase dragon;
 
     public EntityDragonPart(EntityDragonBase dragon, float radius, float angleYaw, float offsetY, float sizeX, float sizeY, float damageMultiplier) {
