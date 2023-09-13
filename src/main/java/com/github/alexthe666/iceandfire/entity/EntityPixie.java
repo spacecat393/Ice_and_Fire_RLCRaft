@@ -331,6 +331,11 @@ public class EntityPixie extends EntityTameable {
 		return LOOT;
 	}
 
+	@Override
+	protected boolean canDespawn() {
+		return false;
+	}
+
 	class AIMoveControl extends EntityMoveHelper {
 		public AIMoveControl(EntityPixie pixie) {
 			super(pixie);

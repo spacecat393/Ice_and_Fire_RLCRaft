@@ -747,6 +747,11 @@ public abstract class EntityMyrmexBase extends EntityAnimal implements IAnimated
         this.playSound(ModSounds.MYRMEX_WALK, 0.16F * this.getMyrmexPitch() * (this.getRNG().nextFloat() * 0.6F + 0.4F), 1.0F);
     }
 
+    @Override
+    protected boolean canDespawn() {
+        return false;
+    }
+
     protected void playBiteSound() {
         this.playSound(ModSounds.MYRMEX_BITE, 1.0F * this.getMyrmexPitch(), 1.0F);
     }

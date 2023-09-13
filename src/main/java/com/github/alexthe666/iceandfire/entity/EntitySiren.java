@@ -111,6 +111,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
         return 8;
     }
 
+    @Override
     protected boolean canDespawn() {
         return false;
     }

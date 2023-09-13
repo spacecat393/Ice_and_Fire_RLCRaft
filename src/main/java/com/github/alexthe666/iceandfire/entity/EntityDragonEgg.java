@@ -189,4 +189,9 @@ public class EntityDragonEgg extends EntityLiving implements IBlacklistedFromSta
     public boolean isMobDead() {
         return true;
     }
+
+    @Override
+    protected boolean canDespawn() {
+        return false;
+    }
 }

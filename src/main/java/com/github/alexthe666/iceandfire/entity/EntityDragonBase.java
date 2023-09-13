@@ -1135,15 +1135,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     }
 
     @Override
-    public boolean canDespawn() {
+    protected boolean canDespawn() {
         return IceAndFireConfig.DRAGON_SETTINGS.canDragonsDespawn;
-    }
-
-    @Override
-    protected void despawnEntity() {
-        if(IceAndFireConfig.DRAGON_SETTINGS.canDragonsDespawn) {
-            super.despawnEntity();
-        }
     }
 
     public void growDragon(int ageInDays) {

@@ -118,6 +118,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
         this.dataManager.register(FLYING, Boolean.valueOf(false));
     }
 
+    @Override
     protected boolean canDespawn() {
         return false;
     }

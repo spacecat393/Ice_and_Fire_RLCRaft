@@ -176,4 +176,8 @@ public class EntitySnowVillager extends EntityVillager {
 		return 0;
 	}
 
+	@Override
+	protected boolean canDespawn() {
+		return false;
+	}
 }

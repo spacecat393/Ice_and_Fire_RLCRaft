@@ -993,6 +993,11 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
         this.attackDecision = this.getRNG().nextBoolean();
     }
 
+    @Override
+    protected boolean canDespawn() {
+        return false;
+    }
+
     public class AISwimWander extends EntityAIBase {
         BlockPos target;
 

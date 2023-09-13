@@ -135,6 +135,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
 		return super.attackEntityAsMob(entityIn);
 	}
 
+	@Override
 	protected boolean canDespawn() {
 		return false;
 	}

@@ -61,9 +61,13 @@ public class EntityStoneStatue extends EntityLiving implements IBlacklistedFromS
 		this.crackAmount = crackAmount;
 	}
 
-
 	@Override
 	public boolean canBeTurnedToStone() {
+		return false;
+	}
+
+	@Override
+	protected boolean canDespawn() {
 		return false;
 	}
 }

@@ -178,7 +178,7 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
         return Boolean.valueOf(this.dataManager.get(BLINDED).booleanValue());
     }
 
-
+    @Override
     protected boolean canDespawn() {
         return false;
     }

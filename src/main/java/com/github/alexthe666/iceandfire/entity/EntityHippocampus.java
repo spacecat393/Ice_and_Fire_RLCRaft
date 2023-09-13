@@ -822,4 +822,9 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
             }
         }
     }
+
+    @Override
+    protected boolean canDespawn() {
+        return false;
+    }
 }
