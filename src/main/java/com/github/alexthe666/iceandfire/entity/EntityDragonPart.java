@@ -4,7 +4,8 @@ import com.github.alexthe666.iceandfire.entity.util.EntityMultipartPart;
 import net.minecraft.util.DamageSource;
 
 public class EntityDragonPart extends EntityMultipartPart {
-    private EntityDragonBase dragon;
+
+    private final EntityDragonBase dragon;
 
     public EntityDragonPart(EntityDragonBase dragon, float radius, float angleYaw, float offsetY, float sizeX, float sizeY, float damageMultiplier) {
         super(dragon, radius, angleYaw, offsetY, sizeX, sizeY, damageMultiplier);
@@ -14,9 +15,7 @@ public class EntityDragonPart extends EntityMultipartPart {
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float damage) {
-        if (source.getTrueSource() != null && source.getTrueSource() == dragon) {
-            return false;
-        }
+        if(source.getTrueSource() != null && source.getTrueSource() == dragon) return false;
         return super.attackEntityFrom(source, damage);
     }
 

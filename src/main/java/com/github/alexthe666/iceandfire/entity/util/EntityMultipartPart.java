@@ -15,18 +15,17 @@ public class EntityMultipartPart extends PartEntity {
         super(parent, radius, angleYaw, offsetY, sizeX, sizeY, damageMultiplier);
     }
 
+    @Override
     public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
-        if(world.isRemote){
-            IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageMultipartInteract(this.parent.getEntityId(), 0));
-        }
+        if(world.isRemote) IceAndFire.NETWORK_WRAPPER.sendToServer(
+                new MessageMultipartInteract(this.parent.getEntityId(), 0, false));
         return this.parent.processInitialInteract(player, hand);
     }
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float damage) {
-        if(world.isRemote && source.getTrueSource() instanceof EntityPlayer){
-            IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageMultipartInteract(this.parent.getEntityId(), damage * damageMultiplier));
-        }
+        if(world.isRemote && source.getTrueSource() instanceof EntityPlayer) IceAndFire.NETWORK_WRAPPER.sendToServer(
+                new MessageMultipartInteract(this.parent.getEntityId(), damage * damageMultiplier, true));
         return this.parent.attackEntityFrom(source, damage * this.damageMultiplier);
     }
 
