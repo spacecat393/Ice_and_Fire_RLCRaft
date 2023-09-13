@@ -234,8 +234,10 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 					itemstack.shrink(1);
 				}
 				this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1, 1);
-				for (int i = 0; i < 20; i++) {
-					ParticleHelper.spawnParticle(this.world, EnumParticleTypes.REDSTONE, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0);
+				if(this.world.isRemote) {
+					for (int i = 0; i < 20; i++) {
+						ParticleHelper.spawnParticle(this.world, EnumParticleTypes.REDSTONE, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0);
+					}
 				}
 				return true;
 			}
@@ -245,8 +247,10 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 					itemstack.shrink(1);
 				}
 				this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1, 1);
-				for (int i = 0; i < 20; i++) {
-					ParticleHelper.spawnParticle(this.world, EnumParticleTypes.CLOUD, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0);
+				if(this.world.isRemote) {
+					for (int i = 0; i < 20; i++) {
+						ParticleHelper.spawnParticle(this.world, EnumParticleTypes.CLOUD, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0);
+					}
 				}
 				return true;
 			}
@@ -285,16 +289,20 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 					itemstack.shrink(1);
 				}
 				this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1, 1);
-				for (int i = 0; i < 20; i++) {
-					ParticleHelper.spawnParticle(this.world, EnumParticleTypes.ENCHANTMENT_TABLE, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0);
+				if(this.world.isRemote) {
+					for (int i = 0; i < 20; i++) {
+						ParticleHelper.spawnParticle(this.world, EnumParticleTypes.ENCHANTMENT_TABLE, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0);
+					}
 				}
 				return true;
 			}
 			if (itemstack != null && itemstack.getItem() instanceof ItemFood && ((ItemFood) itemstack.getItem()).isWolfsFavoriteMeat() && this.getHealth() < this.getMaxHealth()) {
 				this.heal(5);
 				this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
-				for (int i = 0; i < 3; i++) {
-					ParticleHelper.spawnParticle(this.world, EnumParticleTypes.ITEM_CRACK, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0, Item.getIdFromItem(itemstack.getItem()), 0);
+				if(this.world.isRemote) {
+					for (int i = 0; i < 3; i++) {
+						ParticleHelper.spawnParticle(this.world, EnumParticleTypes.ITEM_CRACK, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0, Item.getIdFromItem(itemstack.getItem()), 0);
+					}
 				}
 				if (!player.isCreative()) {
 					itemstack.shrink(1);

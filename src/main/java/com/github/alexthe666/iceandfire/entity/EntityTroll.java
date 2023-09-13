@@ -295,7 +295,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
                 }
             }
         }
-        if (this.getAnimation() == ANIMATION_STRIKE_VERTICAL && this.getAnimationTick() == 10) {
+        if (this.getAnimation() == ANIMATION_STRIKE_VERTICAL && this.getAnimationTick() == 10 && this.world.isRemote) {
             float weaponX = (float) (posX + 1.9F * Math.cos((renderYawOffset + 90) * Math.PI / 180));
             float weaponZ = (float) (posZ + 1.9F * Math.sin((renderYawOffset + 90) * Math.PI / 180));
             float weaponY = (float) (posY + (0.2F));
@@ -304,7 +304,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
                 double motionX = getRNG().nextGaussian() * 0.07D;
                 double motionY = getRNG().nextGaussian() * 0.07D;
                 double motionZ = getRNG().nextGaussian() * 0.07D;
-                if (state.getMaterial().isSolid() && world.isRemote) {
+                if (state.getMaterial().isSolid()) {
                     ParticleHelper.spawnParticle(this.world, EnumParticleTypes.BLOCK_CRACK, weaponX + (this.getRNG().nextFloat() - 0.5F), weaponY + (this.getRNG().nextFloat() - 0.5F), weaponZ + (this.getRNG().nextFloat() - 0.5F), motionX, motionY, motionZ, Block.getIdFromBlock(state.getBlock()));
                 }
             }

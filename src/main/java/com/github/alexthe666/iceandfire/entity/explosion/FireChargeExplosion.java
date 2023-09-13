@@ -177,6 +177,7 @@ public class FireChargeExplosion extends Explosion {
 	public void doExplosionB(boolean spawnParticles) {
 		this.worldObj.playSound(null, this.explosionX, this.explosionY, this.explosionZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, (1.0F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.2F) * 0.7F);
 
+		//TODO: Change to single packet
 		if (this.explosionSize >= 2.0F && this.isSmoking) {
 			ParticleHelper.spawnParticle(this.worldObj, EnumParticleTypes.EXPLOSION_HUGE, this.explosionX, this.explosionY, this.explosionZ, 1.0D, 0.0D, 0.0D);
 		} else {
@@ -204,6 +205,7 @@ public class FireChargeExplosion extends Explosion {
 					d3 = d3 * d7;
 					d4 = d4 * d7;
 					d5 = d5 * d7;
+					//TODO: Change to single packet
 					if (exploder instanceof EntityFireDragon) {
 						ParticleHelper.spawnParticle(this.worldObj, EnumParticleTypes.EXPLOSION_NORMAL, (d0 + this.explosionX) / 2.0D, (d1 + this.explosionY) / 2.0D, (d2 + this.explosionZ) / 2.0D, d3, d4, d5);
 						ParticleHelper.spawnParticle(this.worldObj, EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5);

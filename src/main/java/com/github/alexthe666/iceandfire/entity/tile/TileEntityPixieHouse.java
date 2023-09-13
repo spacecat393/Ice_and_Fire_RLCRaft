@@ -77,7 +77,7 @@ public class TileEntityPixieHouse extends TileEntity implements ITickable {
 	public void update() {
 		ticksExisted++;
 		if(!world.isRemote && this.hasPixie && this.world.rand.nextInt(100) == 0) releasePixie();
-		if(this.hasPixie) {
+		if(this.hasPixie && this.world.isRemote) {
 			IceAndFire.PROXY.spawnParticle(
 					"if_pixie",
 					this.world,

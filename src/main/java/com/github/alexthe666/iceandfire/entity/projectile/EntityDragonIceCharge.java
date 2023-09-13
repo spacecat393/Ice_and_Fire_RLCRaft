@@ -59,8 +59,10 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
 	}
 
 	public void onUpdate() {
-		for (int i = 0; i < 10; ++i) {
-			IceAndFire.PROXY.spawnParticle("snowflake", world, this.posX + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), this.posY + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), this.posZ + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), 0.0D, 0.0D, 0.0D);
+		if(this.world.isRemote) {
+			for (int i = 0; i < 10; ++i) {
+				IceAndFire.PROXY.spawnParticle("snowflake", world, this.posX + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), this.posY + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), this.posZ + this.rand.nextDouble() * 1 * (this.rand.nextBoolean() ? -1 : 1), 0.0D, 0.0D, 0.0D);
+			}
 		}
 		if (this.world.isRemote || (this.shootingEntity == null || !this.shootingEntity.isDead) && this.world.isBlockLoaded(new BlockPos(this))) {
 			super.onUpdate();
@@ -83,11 +85,11 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
 			float f = this.getMotionFactor();
 
 			if (this.isInWater()) {
-				for (int i = 0; i < 4; ++i) {
-					float f1 = 0.25F;
-					ParticleHelper.spawnParticle(this.world, EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * 0.25D, this.posY - this.motionY * 0.25D, this.posZ - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ);
+				if(this.world.isRemote) {
+					for (int i = 0; i < 4; ++i) {
+						ParticleHelper.spawnParticle(this.world, EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * 0.25D, this.posY - this.motionY * 0.25D, this.posZ - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ);
+					}
 				}
-
 				f = 0.8F;
 			}
 
@@ -97,7 +99,7 @@ public class EntityDragonIceCharge extends EntityFireball implements IDragonProj
 			this.motionX *= f;
 			this.motionY *= f;
 			this.motionZ *= f;
-			ParticleHelper.spawnParticle(this.world, this.getParticleType(), this.posX, this.posY + 0.5D, this.posZ, 0.0D, 0.0D, 0.0D);
+			if(this.world.isRemote) ParticleHelper.spawnParticle(this.world, this.getParticleType(), this.posX, this.posY + 0.5D, this.posZ, 0.0D, 0.0D, 0.0D);
 			this.setPosition(this.posX, this.posY, this.posZ);
 		} else {
 			this.setDead();

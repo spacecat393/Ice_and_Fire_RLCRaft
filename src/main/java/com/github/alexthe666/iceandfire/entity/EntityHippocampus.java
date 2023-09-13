@@ -619,17 +619,21 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
             if (!world.isRemote) {
                 this.heal(5);
                 this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
-                for (int i = 0; i < 3; i++) {
-                    ParticleHelper.spawnParticle(this.world, EnumParticleTypes.ITEM_CRACK, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0, Item.getIdFromItem(itemstack.getItem()), 0);
-                }
                 if (!player.isCreative()) {
                     itemstack.shrink(1);
                 }
             }
+            else {
+                for (int i = 0; i < 3; i++) {
+                    ParticleHelper.spawnParticle(this.world, EnumParticleTypes.ITEM_CRACK, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0, Item.getIdFromItem(itemstack.getItem()), 0);
+                }
+            }
             if (!this.isTamed() && this.getRNG().nextInt(3) == 0) {
                 this.setTamedBy(player);
-                for (int i = 0; i < 6; i++) {
-                    ParticleHelper.spawnParticle(this.world, EnumParticleTypes.HEART, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0);
+                if(this.world.isRemote) {
+                    for (int i = 0; i < 6; i++) {
+                        ParticleHelper.spawnParticle(this.world, EnumParticleTypes.HEART, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0);
+                    }
                 }
             }
             return true;

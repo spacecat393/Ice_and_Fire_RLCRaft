@@ -213,7 +213,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
         super.onUpdate();
         this.setScaleForAge(true);
         onUpdateParts();
-        if (this.isInWater()) {
+        if (this.isInWater() && this.world.isRemote) {
             spawnParticlesAroundEntity(EnumParticleTypes.WATER_BUBBLE, this, (int) this.getSeaSerpentScale());
             for (Entity entity : segments) {
                 spawnParticlesAroundEntity(EnumParticleTypes.WATER_BUBBLE, entity, (int) this.getSeaSerpentScale());

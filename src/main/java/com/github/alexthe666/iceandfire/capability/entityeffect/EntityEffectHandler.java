@@ -27,8 +27,8 @@ public class EntityEffectHandler {
             if(siren != null) {
                 capability.tickTime();
                 if(capability.getTime() > 0 && !siren.isDead && !entity.isDead && siren.isActuallySinging() && EntityEffectCapability.EntityEffectEnum.CHARMED.canBeApplied(entity) && entity.getDistanceSq(siren) < ((EntitySiren.SEARCH_RANGE*2)*EntitySiren.SEARCH_RANGE*2)) {
-                    if(world.rand.nextInt(7) == 0) {
-                        for(int i = 0; i < 4; i++) {
+                    if(world.rand.nextInt(10) == 0) {
+                        for(int i = 0; i < 3; i++) {
                             ParticleHelper.spawnParticle(entity.world,
                                     EnumParticleTypes.HEART,
                                     entity.posX + ((world.rand.nextDouble() - 0.5D) * 3),
@@ -100,7 +100,7 @@ public class EntityEffectHandler {
             //Reset effect if ended or invalid
             capability.reset();
             //Spawn particle and sound if ending
-            for(int i = 0; i < 8; i++) {
+            for(int i = 0; i < 4; i++) {
                 ParticleHelper.spawnParticle(entity.world,
                         EnumParticleTypes.BLOCK_CRACK,
                         entity.posX + ((world.rand.nextDouble() - 0.5D) * entity.width),

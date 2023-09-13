@@ -272,14 +272,15 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
         }
         if (isActuallySinging() && !this.isInWater()) {
             if (this.getRNG().nextInt(3) == 0) {
-                this.renderYawOffset = 0;
                 renderYawOffset = rotationYaw;
-                float radius = -0.9F;
-                float angle = (0.01745329251F * this.renderYawOffset) - 3F;
-                double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
-                double extraY = 1.2F;
-                double extraZ = (double) (radius * MathHelper.cos(angle));
-                IceAndFire.PROXY.spawnParticle("siren_music", this.world, this.posX + extraX + this.rand.nextFloat() - 0.5, this.posY + extraY + this.rand.nextFloat() - 0.5, this.posZ + extraZ + this.rand.nextFloat() - 0.5, 0, 0, 0);
+                if(this.world.isRemote) {
+                    float radius = -0.9F;
+                    float angle = (0.01745329251F * this.renderYawOffset) - 3F;
+                    double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
+                    double extraY = 1.2F;
+                    double extraZ = (double) (radius * MathHelper.cos(angle));
+                    IceAndFire.PROXY.spawnParticle("siren_music", this.world, this.posX + extraX + this.rand.nextFloat() - 0.5, this.posY + extraY + this.rand.nextFloat() - 0.5, this.posZ + extraZ + this.rand.nextFloat() - 0.5, 0, 0, 0);
+                }
             }
 
         }

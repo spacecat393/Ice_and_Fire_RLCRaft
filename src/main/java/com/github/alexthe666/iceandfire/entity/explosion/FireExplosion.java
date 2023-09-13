@@ -192,6 +192,7 @@ public class FireExplosion extends Explosion {
 					d3 = d3 * d7;
 					d4 = d4 * d7;
 					d5 = d5 * d7;
+					//TODO: Change to single packet
 					ParticleHelper.spawnParticle(this.worldObj, EnumParticleTypes.FLAME, d0, d1, d2, d3, d4, d5);
 					ParticleHelper.spawnParticle(this.worldObj, EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5);
 					ParticleHelper.spawnParticle(this.worldObj, EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5);

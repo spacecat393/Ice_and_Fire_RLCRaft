@@ -1495,7 +1495,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         if(this.attackDecision && this.getAttackTarget() != null && this.getDistance(this.getAttackTarget()) > Math.min(this.getEntityBoundingBox().getAverageEdgeLength() * 5, 25) && !this.isChild()){
             this.attackDecision = false;
         }
-        if ((!this.attackDecision || this.getRNG().nextInt(750) == 0) && this.getDragonStage() < 2) {
+        if ((!this.attackDecision || this.getRNG().nextInt(750) == 0) && this.getDragonStage() < 2 && this.world.isRemote) {
             this.attackDecision = this.getRNG().nextBoolean();
             for (int i = 0; i < 5; i++) {
                 Vec3d headPos = getHeadPosition();
