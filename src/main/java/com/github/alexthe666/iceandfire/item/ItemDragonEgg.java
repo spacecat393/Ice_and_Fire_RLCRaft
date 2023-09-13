@@ -59,9 +59,6 @@ public class ItemDragonEgg extends Item {
 
 			if (!player.capabilities.isCreativeMode) {
 				itemstack.shrink(1);
-				if (itemstack.getCount() <= 0) {
-					player.inventory.setInventorySlotContents(player.inventory.currentItem, ItemStack.EMPTY);
-				}
 			}
 			return EnumActionResult.SUCCESS;
 
