@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.*;
+import com.github.alexthe666.iceandfire.enums.EnumDragonType;
 import com.github.alexthe666.iceandfire.structures.*;
 import com.github.alexthe666.iceandfire.world.MyrmexWorldData;
 import com.github.alexthe666.iceandfire.world.village.MapGenPixieVillage;
@@ -93,7 +94,7 @@ public class StructureGenerator implements IWorldGenerator {
 			}
 
 			if ((IceAndFireConfig.WORLDGEN.generateDragonRoosts || IceAndFireConfig.WORLDGEN.generateDragonDens) && isDragonGenAllowedInDim(world.provider.getDimension()) && isDragonGenAllowedInBiome(types, biomeName)) {
-				DragonType dragonType = getDragonGenType(types, biome, biomeName, isCold, isSnowy);
+				EnumDragonType dragonType = getDragonGenType(types, biome, biomeName, isCold, isSnowy);
 				if (dragonType != null) {
 					if (IceAndFireConfig.WORLDGEN.generateDragonRoosts) {
 						Integer chance = IceAndFireConfig.getDragonRoostChance().get(biomeName);
@@ -102,13 +103,13 @@ public class StructureGenerator implements IWorldGenerator {
 							chance = isHills ? IceAndFireConfig.WORLDGEN.generateDragonRoostChance : IceAndFireConfig.WORLDGEN.generateDragonRoostChance * 2;
 						}
 						if (random.nextInt(chance) == 0) {
-							if (dragonType == DragonType.FIRE) {
+							if (dragonType == EnumDragonType.FIRE) {
 								FIRE_DRAGON_ROOST.generate(world, random, height);
 							}
-							else if (dragonType == DragonType.ICE) {
+							else if (dragonType == EnumDragonType.ICE) {
 								ICE_DRAGON_ROOST.generate(world, random, height);
 							}
-							else if (dragonType == DragonType.LIGHTNING) {
+							else if (dragonType == EnumDragonType.LIGHTNING) {
 								LIGHTNING_DRAGON_ROOST.generate(world, random, height);
 							}
 						}
@@ -123,11 +124,11 @@ public class StructureGenerator implements IWorldGenerator {
 								chance = isHills ? IceAndFireConfig.WORLDGEN.generateDragonDenChance : IceAndFireConfig.WORLDGEN.generateDragonDenChance * 2;
 							}
 							if (random.nextInt(chance) == 0) {
-								if (dragonType == DragonType.FIRE) {
+								if (dragonType == EnumDragonType.FIRE) {
 									FIRE_DRAGON_CAVE.generate(world, random, pos);
-								} else if (dragonType == DragonType.ICE) {
+								} else if (dragonType == EnumDragonType.ICE) {
 									ICE_DRAGON_CAVE.generate(world, random, pos);
-								} else if (dragonType == DragonType.LIGHTNING) {
+								} else if (dragonType == EnumDragonType.LIGHTNING) {
 									LIGHTNING_DRAGON_CAVE.generate(world, random, pos);
 								}
 							}
@@ -334,17 +335,17 @@ public class StructureGenerator implements IWorldGenerator {
 	}
 
 	@Nullable
-	private DragonType getDragonGenType(Set<BiomeDictionary.Type> dictSet, Biome biome, String biomeName, boolean isCold, boolean isSnowy) {
+	private EnumDragonType getDragonGenType(Set<BiomeDictionary.Type> dictSet, Biome biome, String biomeName, boolean isCold, boolean isSnowy) {
 		if (IceAndFireConfig.getFireDragonEnabledNames().contains(biomeName)) {
-			return DragonType.FIRE;
+			return EnumDragonType.FIRE;
 		} else if (IceAndFireConfig.getIceDragonEnabledNames().contains(biomeName)) {
-			return DragonType.ICE;
+			return EnumDragonType.ICE;
 		} else if (IceAndFireConfig.getLightningDragonEnabledNames().contains(biomeName) || dictSet.contains(Type.JUNGLE) || dictSet.contains(Type.SAVANNA) || dictSet.contains(Type.MESA)) {
-			return DragonType.LIGHTNING;
+			return EnumDragonType.LIGHTNING;
 		} else if (!biome.getEnableSnow() && biome.getDefaultTemperature() > -0.5 && !isCold && !isSnowy && !dictSet.contains(Type.WET) && !dictSet.contains(Type.OCEAN) && !dictSet.contains(Type.RIVER)) {
-			return DragonType.FIRE;
+			return EnumDragonType.FIRE;
 		} else if (isCold && isSnowy) {
-			return DragonType.ICE;
+			return EnumDragonType.ICE;
 		}
 		return null;
 	}

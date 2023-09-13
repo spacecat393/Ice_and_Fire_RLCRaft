@@ -1,16 +1,15 @@
 package com.github.alexthe666.iceandfire.enums;
 
-import com.github.alexthe666.iceandfire.entity.DragonType;
 import com.google.common.collect.Maps;
 import net.minecraft.util.text.TextFormatting;
 
 import java.util.Map;
 
 public enum EnumDragonEgg {
-    RED(0, TextFormatting.DARK_RED, DragonType.FIRE), GREEN(1, TextFormatting.DARK_GREEN, DragonType.FIRE), BRONZE(2, TextFormatting.GOLD, DragonType.FIRE), GRAY(3, TextFormatting.GRAY, DragonType.FIRE),
-    BLUE(4, TextFormatting.AQUA, DragonType.ICE), WHITE(5, TextFormatting.WHITE, DragonType.ICE), SAPPHIRE(6, TextFormatting.BLUE, DragonType.ICE), SILVER(7, TextFormatting.DARK_GRAY, DragonType.ICE),
-    ELECTRIC(8, TextFormatting.DARK_BLUE, DragonType.LIGHTNING), AMETHYST(9, TextFormatting.LIGHT_PURPLE, DragonType.LIGHTNING), COPPER(10, TextFormatting.GOLD, DragonType.LIGHTNING),
-    BLACK(11, TextFormatting.DARK_GRAY, DragonType.LIGHTNING);
+    RED(0, TextFormatting.DARK_RED, EnumDragonType.FIRE), GREEN(1, TextFormatting.DARK_GREEN, EnumDragonType.FIRE), BRONZE(2, TextFormatting.GOLD, EnumDragonType.FIRE), GRAY(3, TextFormatting.GRAY, EnumDragonType.FIRE),
+    BLUE(4, TextFormatting.AQUA, EnumDragonType.ICE), WHITE(5, TextFormatting.WHITE, EnumDragonType.ICE), SAPPHIRE(6, TextFormatting.BLUE, EnumDragonType.ICE), SILVER(7, TextFormatting.DARK_GRAY, EnumDragonType.ICE),
+    ELECTRIC(8, TextFormatting.DARK_BLUE, EnumDragonType.LIGHTNING), AMETHYST(9, TextFormatting.LIGHT_PURPLE, EnumDragonType.LIGHTNING), COPPER(10, TextFormatting.GOLD, EnumDragonType.LIGHTNING),
+    BLACK(11, TextFormatting.DARK_GRAY, EnumDragonType.LIGHTNING);
 
     private static final Map<Integer, EnumDragonEgg> META_LOOKUP = Maps.newHashMap();
 
@@ -25,9 +24,9 @@ public enum EnumDragonEgg {
 
     public int meta;
     public TextFormatting color;
-    public DragonType dragonType;
+    public EnumDragonType dragonType;
 
-    EnumDragonEgg(int meta, TextFormatting color, DragonType dragonType) {
+    EnumDragonEgg(int meta, TextFormatting color, EnumDragonType dragonType) {
         this.meta = meta;
         this.color = color;
         this.dragonType = dragonType;

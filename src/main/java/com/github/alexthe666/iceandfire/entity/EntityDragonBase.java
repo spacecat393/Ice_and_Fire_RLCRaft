@@ -12,6 +12,7 @@ import com.github.alexthe666.iceandfire.core.ModKeys;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.PathNavigateExperimentalGround;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
+import com.github.alexthe666.iceandfire.enums.EnumDragonType;
 import com.github.alexthe666.iceandfire.item.ItemDragonArmor;
 import com.github.alexthe666.iceandfire.message.MessageDragonArmor;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
@@ -96,7 +97,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     public static Animation ANIMATION_ROAR;
     public static Animation ANIMATION_EPIC_ROAR;
     public static Animation ANIMATION_TAILWHACK;
-    public DragonType dragonType;
+    public EnumDragonType dragonType;
     public double minimumDamage;
     public double maximumDamage;
     public double minimumHealth;
@@ -167,7 +168,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     public EntityDragonBase(World world) {
         super(world);
     }
-    public EntityDragonBase(World world, DragonType type, double minimumDamage, double maximumDamage, double minimumHealth, double maximumHealth, double minimumSpeed, double maximumSpeed) {
+    public EntityDragonBase(World world, EnumDragonType type, double minimumDamage, double maximumDamage, double minimumHealth, double maximumHealth, double minimumSpeed, double maximumSpeed) {
         super(world);
         this.dragonType = type;
         this.minimumDamage = minimumDamage;
@@ -378,11 +379,11 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                 double d2 = this.rand.nextGaussian() * 0.02D;
                 double d0 = this.rand.nextGaussian() * 0.02D;
                 double d1 = this.rand.nextGaussian() * 0.02D;
-                if (dragonType == DragonType.FIRE && world.isRemote) {
+                if (dragonType == EnumDragonType.FIRE && world.isRemote) {
                     this.world.spawnParticle(EnumParticleTypes.FLAME, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1);
-                } else if (dragonType == DragonType.ICE && world.isRemote)  {
+                } else if (dragonType == EnumDragonType.ICE && world.isRemote)  {
                     IceAndFire.PROXY.spawnParticle("snowflake", this.world, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1);
-                } else if (dragonType == DragonType.LIGHTNING && world.isRemote)  {
+                } else if (dragonType == EnumDragonType.LIGHTNING && world.isRemote)  {
                     IceAndFire.PROXY.spawnParticle("spark", this.world, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1);
                 }
             }
@@ -1502,15 +1503,15 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             this.attackDecision = this.getRNG().nextBoolean();
             for (int i = 0; i < 5; i++) {
                 Vec3d headPos = getHeadPosition();
-                if (this.dragonType == DragonType.FIRE && world.isRemote) {
+                if (this.dragonType == EnumDragonType.FIRE && world.isRemote) {
                     this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, headPos.x, headPos.y, headPos.z, 0, 0, 0);
-                } else if (this.dragonType == DragonType.ICE && world.isRemote) {
+                } else if (this.dragonType == EnumDragonType.ICE && world.isRemote) {
                     IceAndFire.PROXY.spawnParticle("dragonice", this.world, headPos.x, headPos.y, headPos.z, 0, 0, 0);
-                } else if (this.dragonType == DragonType.LIGHTNING && world.isRemote) {
+                } else if (this.dragonType == EnumDragonType.LIGHTNING && world.isRemote) {
                     IceAndFire.PROXY.spawnParticle("dragonlightning", this.world, headPos.x, headPos.y, headPos.z, 0, 0, 0);
                 }
             }
-            if (this.dragonType == DragonType.FIRE) {
+            if (this.dragonType == EnumDragonType.FIRE) {
                 this.playSound(SoundEvents.BLOCK_FIRE_EXTINGUISH, 1, 1);
             } else {
                 this.playSound(SoundEvents.ITEM_BOTTLE_FILL_DRAGONBREATH, 1, 1);
@@ -2013,7 +2014,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             RayTraceResult rayTrace = world.rayTraceBlocks(new Vec3d(this.getPosition()), target, false);
             if (rayTrace != null && rayTrace.hitVec != null) {
                 BlockPos pos = new BlockPos(rayTrace.hitVec);
-                if (!world.isAirBlock(pos) || world.getBlockState(pos).getMaterial() == Material.WATER && dragonType != DragonType.FIRE) {
+                if (!world.isAirBlock(pos) || world.getBlockState(pos).getMaterial() == Material.WATER && dragonType != EnumDragonType.FIRE) {
                     return true;
                 }
                 return rayTrace.typeOfHit != RayTraceResult.Type.BLOCK;

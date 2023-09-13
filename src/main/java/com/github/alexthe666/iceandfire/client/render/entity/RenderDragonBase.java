@@ -3,7 +3,7 @@ package com.github.alexthe666.iceandfire.client.render.entity;
 import com.github.alexthe666.iceandfire.ClientProxy;
 import com.github.alexthe666.iceandfire.client.model.util.IceAndFireTabulaModel;
 import com.github.alexthe666.iceandfire.client.texture.ArrayLayeredTexture;
-import com.github.alexthe666.iceandfire.entity.DragonType;
+import com.github.alexthe666.iceandfire.enums.EnumDragonType;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.enums.EnumDragonTextures;
 import com.google.common.collect.Maps;
@@ -281,9 +281,9 @@ public class RenderDragonBase extends RenderLiving<EntityDragonBase> {
 					resourcelocation = new ResourceLocation("iceandfire" + "dragonArmor_" + armorTexture);
 					List<String> tex = new ArrayList<>();
 					for (EntityEquipmentSlot slot : EntityDragonBase.ARMOR_SLOTS) {
-						if (dragon.dragonType == DragonType.ICE) {
+						if (dragon.dragonType == EnumDragonType.ICE) {
 							tex.add(EnumDragonTextures.Armor.getArmorForDragon(dragon, slot).ICETEXTURE.toString());
-						} else if (dragon.dragonType == DragonType.LIGHTNING) {
+						} else if (dragon.dragonType == EnumDragonType.LIGHTNING) {
 							tex.add(EnumDragonTextures.Armor.getArmorForDragon(dragon, slot).LIGHTNINGTEXTURE.toString());
 						} else {
 							tex.add(EnumDragonTextures.Armor.getArmorForDragon(dragon, slot).FIRETEXTURE.toString());
