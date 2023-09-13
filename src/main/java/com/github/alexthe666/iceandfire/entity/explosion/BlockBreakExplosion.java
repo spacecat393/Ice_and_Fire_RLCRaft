@@ -1,5 +1,6 @@
 package com.github.alexthe666.iceandfire.entity.explosion;
 
+import com.github.alexthe666.iceandfire.util.ParticleHelper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -158,8 +159,8 @@ public class BlockBreakExplosion extends Explosion {
                 d3 = d3 * d7;
                 d4 = d4 * d7;
                 d5 = d5 * d7;
-                this.worldObj.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, (d0 + this.explosionX) / 2.0D, (d1 + this.explosionY) / 2.0D, (d2 + this.explosionZ) / 2.0D, d3, d4, d5);
-                this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5);
+                ParticleHelper.spawnParticle(this.worldObj, EnumParticleTypes.EXPLOSION_NORMAL, (d0 + this.explosionX) / 2.0D, (d1 + this.explosionY) / 2.0D, (d2 + this.explosionZ) / 2.0D, d3, d4, d5);
+                ParticleHelper.spawnParticle(this.worldObj, EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5);
             }
             if (state.getMaterial() != Material.AIR) {
                 if (block.canDropFromExplosion(this)) {

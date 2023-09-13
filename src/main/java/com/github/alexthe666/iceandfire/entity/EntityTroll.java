@@ -8,6 +8,7 @@ import com.github.alexthe666.iceandfire.entity.ai.TrollAIFleeSun;
 import com.github.alexthe666.iceandfire.entity.explosion.BlockBreakExplosion;
 import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
+import com.github.alexthe666.iceandfire.util.ParticleHelper;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
@@ -304,7 +305,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
                 double motionY = getRNG().nextGaussian() * 0.07D;
                 double motionZ = getRNG().nextGaussian() * 0.07D;
                 if (state.getMaterial().isSolid() && world.isRemote) {
-                    this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, weaponX + (this.getRNG().nextFloat() - 0.5F), weaponY + (this.getRNG().nextFloat() - 0.5F), weaponZ + (this.getRNG().nextFloat() - 0.5F), motionX, motionY, motionZ, new int[]{Block.getIdFromBlock(state.getBlock())});
+                    ParticleHelper.spawnParticle(this.world, EnumParticleTypes.BLOCK_CRACK, weaponX + (this.getRNG().nextFloat() - 0.5F), weaponY + (this.getRNG().nextFloat() - 0.5F), weaponZ + (this.getRNG().nextFloat() - 0.5F), motionX, motionY, motionZ, Block.getIdFromBlock(state.getBlock()));
                 }
             }
         }

@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
 import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
+import com.github.alexthe666.iceandfire.util.ParticleHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -28,7 +29,8 @@ public class EntityEffectHandler {
                 if(capability.getTime() > 0 && !siren.isDead && !entity.isDead && siren.isActuallySinging() && EntityEffectCapability.EntityEffectEnum.CHARMED.canBeApplied(entity) && entity.getDistanceSq(siren) < ((EntitySiren.SEARCH_RANGE*2)*EntitySiren.SEARCH_RANGE*2)) {
                     if(world.rand.nextInt(7) == 0) {
                         for(int i = 0; i < 4; i++) {
-                            entity.world.spawnParticle(EnumParticleTypes.HEART,
+                            ParticleHelper.spawnParticle(entity.world,
+                                    EnumParticleTypes.HEART,
                                     entity.posX + ((world.rand.nextDouble() - 0.5D) * 3),
                                     entity.posY + ((world.rand.nextDouble() - 0.5D) * 3),
                                     entity.posZ + ((world.rand.nextDouble() - 0.5D) * 3),
@@ -99,7 +101,7 @@ public class EntityEffectHandler {
             capability.reset();
             //Spawn particle and sound if ending
             for(int i = 0; i < 8; i++) {
-                entity.world.spawnParticle(
+                ParticleHelper.spawnParticle(entity.world,
                         EnumParticleTypes.BLOCK_CRACK,
                         entity.posX + ((world.rand.nextDouble() - 0.5D) * entity.width),
                         entity.posY + ((world.rand.nextDouble()) * entity.height),
@@ -134,7 +136,7 @@ public class EntityEffectHandler {
             capability.reset();
             //Spawn particle and sound if ending
             for(int i = 0; i < 4; i++) {
-                entity.world.spawnParticle(
+                ParticleHelper.spawnParticle(entity.world,
                         EnumParticleTypes.SMOKE_NORMAL,
                         entity.posX + ((world.rand.nextDouble() - 0.5D) * entity.width),
                         entity.posY + ((world.rand.nextDouble()) * entity.height),

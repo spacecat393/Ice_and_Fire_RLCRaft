@@ -8,6 +8,7 @@ import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
 import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
 import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
 import com.github.alexthe666.iceandfire.event.EventLiving;
+import com.github.alexthe666.iceandfire.util.ParticleHelper;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
@@ -270,7 +271,7 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
                 IBlockState iblockstate = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX + extraX), MathHelper.floor(this.posY + extraY) - 1, MathHelper.floor(this.posZ + extraZ)));
                 if (iblockstate.getMaterial() != Material.AIR) {
                     if (world.isRemote) {
-                        world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, true, this.posX + extraX, this.posY + extraY, this.posZ + extraZ, motionX, motionY, motionZ, new int[]{Block.getStateId(iblockstate)});
+                        ParticleHelper.spawnParticle(world, EnumParticleTypes.BLOCK_CRACK, true, this.posX + extraX, this.posY + extraY, this.posZ + extraZ, motionX, motionY, motionZ, Block.getStateId(iblockstate));
                     }
                 }
             }

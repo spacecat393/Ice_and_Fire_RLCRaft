@@ -9,6 +9,7 @@ import com.github.alexthe666.iceandfire.entity.explosion.SandExplosion;
 import com.github.alexthe666.iceandfire.entity.util.*;
 import com.github.alexthe666.iceandfire.message.MessageDeathWormHitbox;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
+import com.github.alexthe666.iceandfire.util.ParticleHelper;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.client.model.tools.ChainBuffer;
 import net.ilexiconn.llibrary.server.animation.Animation;
@@ -550,9 +551,9 @@ public class EntityDeathWorm extends EntityTameable implements IBlacklistedFromS
             this.setDeathWormScale(this.getScale());
             if (world.isRemote) {
                 for (int i = 0; i < 10 * this.getScaleForAge(); i++) {
-                    this.world.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getSurface((int) Math.floor(this.posX), (int) Math.floor(this.posY), (int) Math.floor(this.posZ)) + 0.5F, this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, new int[0]);
+                    ParticleHelper.spawnParticle(this.world, EnumParticleTypes.VILLAGER_HAPPY, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getSurface((int) Math.floor(this.posX), (int) Math.floor(this.posY), (int) Math.floor(this.posZ)) + 0.5F, this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D);
                     for (int j = 0; j < segments.length; j++) {
-                        this.world.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, segments[j].posX + (double) (this.rand.nextFloat() * segments[j].width * 2.0F) - (double) segments[j].width, this.getSurface((int) Math.floor(segments[j].posX), (int) Math.floor(segments[j].posY), (int) Math.floor(segments[j].posZ)) + 0.5F, segments[j].posZ + (double) (this.rand.nextFloat() * segments[j].width * 2.0F) - (double) segments[j].width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, new int[0]);
+                        ParticleHelper.spawnParticle(this.world, EnumParticleTypes.VILLAGER_HAPPY, segments[j].posX + (double) (this.rand.nextFloat() * segments[j].width * 2.0F) - (double) segments[j].width, this.getSurface((int) Math.floor(segments[j].posX), (int) Math.floor(segments[j].posY), (int) Math.floor(segments[j].posZ)) + 0.5F, segments[j].posZ + (double) (this.rand.nextFloat() * segments[j].width * 2.0F) - (double) segments[j].width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D);
                     }
                 }
             }
@@ -668,9 +669,9 @@ public class EntityDeathWorm extends EntityTameable implements IBlacklistedFromS
             int blockId = Block.getStateId(state);
             if (state.isOpaqueCube()) {
                 if (world.isRemote) {
-                    this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getSurface((int) Math.floor(this.posX), (int) Math.floor(this.posY), (int) Math.floor(this.posZ)) + 0.5F, this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, new int[]{blockId});
+                    ParticleHelper.spawnParticle(this.world, EnumParticleTypes.BLOCK_CRACK, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getSurface((int) Math.floor(this.posX), (int) Math.floor(this.posY), (int) Math.floor(this.posZ)) + 0.5F, this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, blockId);
                     for (int i = 0; i < segments.length; i++) {
-                        this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, segments[i].prevPosX + (double) (this.rand.nextFloat() * segments[i].width * 2.0F) - (double) segments[i].width, this.getSurface((int) Math.floor(segments[i].prevPosX), (int) Math.floor(segments[i].prevPosY), (int) Math.floor(segments[i].prevPosZ)) + 0.5F, segments[i].prevPosZ + (double) (this.rand.nextFloat() * segments[i].width * 2.0F) - (double) segments[i].width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, new int[]{blockId});
+                        ParticleHelper.spawnParticle(this.world, EnumParticleTypes.BLOCK_CRACK, segments[i].prevPosX + (double) (this.rand.nextFloat() * segments[i].width * 2.0F) - (double) segments[i].width, this.getSurface((int) Math.floor(segments[i].prevPosX), (int) Math.floor(segments[i].prevPosY), (int) Math.floor(segments[i].prevPosZ)) + 0.5F, segments[i].prevPosZ + (double) (this.rand.nextFloat() * segments[i].width * 2.0F) - (double) segments[i].width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, blockId);
                     }
                 }
             }
@@ -695,9 +696,9 @@ public class EntityDeathWorm extends EntityTameable implements IBlacklistedFromS
             this.pushOutOfBlocks(this.posX, (this.getEntityBoundingBox().minY + this.getEntityBoundingBox().maxY) / 2.0D, this.posZ);
             if (isSandBelow()) {
                 if (world.isRemote) {
-                    this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getSurface((int) Math.floor(this.posX), (int) Math.floor(this.posY), (int) Math.floor(this.posZ)) + 0.5F, this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, new int[]{Block.getIdFromBlock(Blocks.SAND)});
+                    ParticleHelper.spawnParticle(this.world, EnumParticleTypes.BLOCK_CRACK, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.getSurface((int) Math.floor(this.posX), (int) Math.floor(this.posY), (int) Math.floor(this.posZ)) + 0.5F, this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, Block.getIdFromBlock(Blocks.SAND));
                     for (int i = 0; i < segments.length; i++) {
-                        this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, segments[i].posX + (double) (this.rand.nextFloat() * segments[i].width * 2.0F) - (double) segments[i].width, this.getSurface((int) Math.floor(segments[i].posX), (int) Math.floor(segments[i].posY), (int) Math.floor(segments[i].posZ)) + 0.5F, segments[i].posZ + (double) (this.rand.nextFloat() * segments[i].width * 2.0F) - (double) segments[i].width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, new int[]{Block.getIdFromBlock(Blocks.SAND)});
+                        ParticleHelper.spawnParticle(this.world, EnumParticleTypes.BLOCK_CRACK, segments[i].posX + (double) (this.rand.nextFloat() * segments[i].width * 2.0F) - (double) segments[i].width, this.getSurface((int) Math.floor(segments[i].posX), (int) Math.floor(segments[i].posY), (int) Math.floor(segments[i].posZ)) + 0.5F, segments[i].posZ + (double) (this.rand.nextFloat() * segments[i].width * 2.0F) - (double) segments[i].width, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, this.rand.nextGaussian() * 0.02D, Block.getIdFromBlock(Blocks.SAND));
                     }
                 }
             }

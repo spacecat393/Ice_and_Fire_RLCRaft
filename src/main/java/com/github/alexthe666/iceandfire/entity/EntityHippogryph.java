@@ -13,6 +13,7 @@ import com.github.alexthe666.iceandfire.entity.util.*;
 import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.message.MessageHippogryphArmor;
+import com.github.alexthe666.iceandfire.util.ParticleHelper;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
@@ -234,7 +235,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 				}
 				this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1, 1);
 				for (int i = 0; i < 20; i++) {
-					this.world.spawnParticle(EnumParticleTypes.REDSTONE, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0, new int[0]);
+					ParticleHelper.spawnParticle(this.world, EnumParticleTypes.REDSTONE, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0);
 				}
 				return true;
 			}
@@ -245,7 +246,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 				}
 				this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1, 1);
 				for (int i = 0; i < 20; i++) {
-					this.world.spawnParticle(EnumParticleTypes.CLOUD, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0, new int[0]);
+					ParticleHelper.spawnParticle(this.world, EnumParticleTypes.CLOUD, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0);
 				}
 				return true;
 			}
@@ -285,7 +286,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 				}
 				this.playSound(SoundEvents.ENTITY_ZOMBIE_INFECT, 1, 1);
 				for (int i = 0; i < 20; i++) {
-					this.world.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0, new int[0]);
+					ParticleHelper.spawnParticle(this.world, EnumParticleTypes.ENCHANTMENT_TABLE, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0);
 				}
 				return true;
 			}
@@ -293,7 +294,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 				this.heal(5);
 				this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
 				for (int i = 0; i < 3; i++) {
-					this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0, new int[]{Item.getIdFromItem(itemstack.getItem())});
+					ParticleHelper.spawnParticle(this.world, EnumParticleTypes.ITEM_CRACK, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0, Item.getIdFromItem(itemstack.getItem()), 0);
 				}
 				if (!player.isCreative()) {
 					itemstack.shrink(1);

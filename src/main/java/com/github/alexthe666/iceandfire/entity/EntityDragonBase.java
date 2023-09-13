@@ -18,6 +18,7 @@ import com.github.alexthe666.iceandfire.enums.EnumDragonType;
 import com.github.alexthe666.iceandfire.item.ItemDragonArmor;
 import com.github.alexthe666.iceandfire.message.MessageDragonArmor;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
+import com.github.alexthe666.iceandfire.util.ParticleHelper;
 import net.ilexiconn.llibrary.client.model.tools.ChainBuffer;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
@@ -374,7 +375,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                 double d0 = this.rand.nextGaussian() * 0.02D;
                 double d1 = this.rand.nextGaussian() * 0.02D;
                 if (world.isRemote) {
-                    this.world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1);
+                    ParticleHelper.spawnParticle(this.world, EnumParticleTypes.EXPLOSION_NORMAL, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1);
                 }
             }
             for (int k = 0; k < 3; ++k) {
@@ -382,7 +383,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                 double d0 = this.rand.nextGaussian() * 0.02D;
                 double d1 = this.rand.nextGaussian() * 0.02D;
                 if (dragonType == EnumDragonType.FIRE && world.isRemote) {
-                    this.world.spawnParticle(EnumParticleTypes.FLAME, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1);
+                    ParticleHelper.spawnParticle(this.world, EnumParticleTypes.FLAME, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1);
                 } else if (dragonType == EnumDragonType.ICE && world.isRemote)  {
                     IceAndFire.PROXY.spawnParticle("snowflake", this.world, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1);
                 } else if (dragonType == EnumDragonType.LIGHTNING && world.isRemote)  {
@@ -1155,7 +1156,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                 float f1 = (float) (getRNG().nextFloat() * (this.getEntityBoundingBox().maxY - this.getEntityBoundingBox().minY) + this.getEntityBoundingBox().minY);
                 float f2 = (float) (getRNG().nextFloat() * (this.getEntityBoundingBox().maxZ - this.getEntityBoundingBox().minZ) + this.getEntityBoundingBox().minZ);
                 if (world.isRemote) {
-                    this.world.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, f, f1, f2, motionX, motionY, motionZ, new int[]{});
+                    ParticleHelper.spawnParticle(this.world, EnumParticleTypes.VILLAGER_HAPPY, f, f1, f2, motionX, motionY, motionZ);
                 }
             }
         }
@@ -1169,7 +1170,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             double motionZ = getRNG().nextGaussian() * 0.07D;
             Vec3d headPos = getHeadPosition();
             if (world.isRemote) {
-                this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, headPos.x, headPos.y, headPos.z, motionX, motionY, motionZ, new int[]{Item.getIdFromItem(item)});
+                ParticleHelper.spawnParticle(this.world, EnumParticleTypes.ITEM_CRACK, headPos.x, headPos.y, headPos.z, motionX, motionY, motionZ, Item.getIdFromItem(item), 0);
             }
         }
     }
@@ -1499,7 +1500,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             for (int i = 0; i < 5; i++) {
                 Vec3d headPos = getHeadPosition();
                 if (this.dragonType == EnumDragonType.FIRE && world.isRemote) {
-                    this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, headPos.x, headPos.y, headPos.z, 0, 0, 0);
+                    ParticleHelper.spawnParticle(this.world, EnumParticleTypes.SMOKE_LARGE, headPos.x, headPos.y, headPos.z, 0, 0, 0);
                 } else if (this.dragonType == EnumDragonType.ICE && world.isRemote) {
                     IceAndFire.PROXY.spawnParticle("dragonice", this.world, headPos.x, headPos.y, headPos.z, 0, 0, 0);
                 } else if (this.dragonType == EnumDragonType.LIGHTNING && world.isRemote) {
@@ -1576,7 +1577,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                 IBlockState iblockstate = this.world.getBlockState(new BlockPos(ground));
                 if (iblockstate.getMaterial() != Material.AIR) {
                     if (world.isRemote) {
-                        world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, true, this.posX + extraX, this.posY + extraY, this.posZ + extraZ, motionX, motionY, motionZ, new int[]{Block.getStateId(iblockstate)});
+                        ParticleHelper.spawnParticle(world, EnumParticleTypes.BLOCK_CRACK, true, this.posX + extraX, this.posY + extraY, this.posZ + extraZ, motionX, motionY, motionZ, Block.getStateId(iblockstate));
                     }
                 }
             }

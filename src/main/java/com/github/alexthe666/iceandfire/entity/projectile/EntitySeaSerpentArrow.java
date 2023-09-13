@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity.projectile;
 
 import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.util.ParticleHelper;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -38,8 +39,8 @@ public class EntitySeaSerpentArrow extends EntityArrow {
             double d3 = 10.0D;
             double xRatio = motionX * height;
             double zRatio = motionZ * height;
-            this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX  + xRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d0 * 10.0D, this.posY + (double) (this.rand.nextFloat() * this.height) - d1 * 10.0D, this.posZ + zRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d2 * 10.0D, d0, d1, d2);
-            this.world.spawnParticle(EnumParticleTypes.WATER_SPLASH, this.posX  + xRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d0 * 10.0D, this.posY + (double) (this.rand.nextFloat() * this.height) - d1 * 10.0D, this.posZ + zRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d2 * 10.0D, d0, d1, d2);
+            ParticleHelper.spawnParticle(this.world, EnumParticleTypes.WATER_BUBBLE, this.posX  + xRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d0 * 10.0D, this.posY + (double) (this.rand.nextFloat() * this.height) - d1 * 10.0D, this.posZ + zRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d2 * 10.0D, d0, d1, d2);
+            ParticleHelper.spawnParticle(this.world, EnumParticleTypes.WATER_SPLASH, this.posX  + xRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d0 * 10.0D, this.posY + (double) (this.rand.nextFloat() * this.height) - d1 * 10.0D, this.posZ + zRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d2 * 10.0D, d0, d1, d2);
 
         }
     }

@@ -10,6 +10,7 @@ import com.github.alexthe666.iceandfire.entity.util.EntityMultipartPart;
 import com.github.alexthe666.iceandfire.entity.util.IAnimalFear;
 import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
 import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
+import com.github.alexthe666.iceandfire.util.ParticleHelper;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
@@ -230,7 +231,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
             double y = entity.posY + 0.5D + (double) (this.rand.nextFloat() * entity.height);
             double z = entity.posZ + (double) (this.rand.nextFloat() * entity.width * 2.0F) - (double) entity.width;
             if (this.world.getBlockState(new BlockPos(x, y, z)).getMaterial() == Material.WATER) {
-                this.world.spawnParticle(type, x, y, z, 0, 0, 0);
+                ParticleHelper.spawnParticle(this.world, type, x, y, z, 0, 0, 0);
             }
         }
     }
@@ -247,7 +248,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
                 double extraY = 0.8F;
                 double extraZ = (double) (radius * MathHelper.cos(angle));
                 if (world.isRemote) {
-                    world.spawnParticle(type, true, this.posX + extraX, this.posY + extraY, this.posZ + extraZ, motionX, motionY, motionZ, new int[]{0});
+                    ParticleHelper.spawnParticle(this.world, type, true, this.posX + extraX, this.posY + extraY, this.posZ + extraZ, motionX, motionY, motionZ);
                 }
             }
         }

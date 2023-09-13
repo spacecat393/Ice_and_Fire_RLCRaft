@@ -7,6 +7,7 @@ import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
 import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
 import com.github.alexthe666.iceandfire.event.EventLiving;
+import com.github.alexthe666.iceandfire.util.ParticleHelper;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
@@ -534,7 +535,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
 
                     while (d4 < d3) {
                         d4 += 1.8D - d5 + this.rand.nextDouble() * (1.7D - d5);
-                        this.world.spawnParticle(EnumParticleTypes.SPELL_MOB, this.posX + d0 * d4, this.posY + d1 * d4 + (double) this.getEyeHeight(), this.posZ + d2 * d4, 0.0D, 0.0D, 0.0D, new int[]{3484199});
+                        ParticleHelper.spawnParticle(this.world, EnumParticleTypes.SPELL_MOB, this.posX + d0 * d4, this.posY + d1 * d4 + (double) this.getEyeHeight(), this.posZ + d2 * d4, 53.0D / 255.0D, 42.0D / 255.0D, 39.0D / 255.0D);
                     }
                 }
             }
@@ -697,7 +698,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
             double d0 = this.rand.nextGaussian() * 0.02D;
             double d1 = this.rand.nextGaussian() * 0.02D;
             double d2 = this.rand.nextGaussian() * 0.02D;
-            this.world.spawnParticle(enumparticletypes, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + 0.5D + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d0, d1, d2);
+            ParticleHelper.spawnParticle(this.world, enumparticletypes, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + 0.5D + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d0, d1, d2);
         }
     }
 }

@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.entity.ai;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.EntityDragonEgg;
+import com.github.alexthe666.iceandfire.util.ParticleHelper;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -125,7 +126,7 @@ public class DragonAIMate extends EntityAIBase {
 				double d3 = random.nextDouble() * (double) this.dragon.width * 2.0D - (double) this.dragon.width;
 				double d4 = 0.5D + random.nextDouble() * (double) this.dragon.height;
 				double d5 = random.nextDouble() * (double) this.dragon.width * 2.0D - (double) this.dragon.width;
-				this.theWorld.spawnParticle(EnumParticleTypes.HEART, this.dragon.posX + d3, this.dragon.posY + d4, this.dragon.posZ + d5, d0, d1, d2, new int[0]);
+				ParticleHelper.spawnParticle(this.theWorld, EnumParticleTypes.HEART, this.dragon.posX + d3, this.dragon.posY + d4, this.dragon.posZ + d5, d0, d1, d2);
 			}
 			BlockPos eggPos = new BlockPos(nestX - 2, nestY, nestZ - 2);
 			BlockPos dirtPos = eggPos.add(1, 0, 1);

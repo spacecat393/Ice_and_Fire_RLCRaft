@@ -1,6 +1,7 @@
 package com.github.alexthe666.iceandfire.entity.explosion;
 
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
+import com.github.alexthe666.iceandfire.util.ParticleHelper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -167,9 +168,9 @@ public class SandExplosion extends Explosion {
                 d3 = d3 * d7;
                 d4 = d4 * d7;
                 d5 = d5 * d7;
-                this.worldObj.spawnParticle(EnumParticleTypes.BLOCK_CRACK, d0, d1, d2, d3, d4, d5, Block.getStateId(state));
-                this.worldObj.spawnParticle(EnumParticleTypes.BLOCK_CRACK, d0, d1, d2, d3, d4, d5, Block.getStateId(state));
-                this.worldObj.spawnParticle(EnumParticleTypes.BLOCK_CRACK, d0, d1, d2, d3, d4, d5, Block.getStateId(state));
+                ParticleHelper.spawnParticle(this.worldObj, EnumParticleTypes.BLOCK_CRACK, d0, d1, d2, d3, d4, d5, Block.getStateId(state));
+                ParticleHelper.spawnParticle(this.worldObj, EnumParticleTypes.BLOCK_CRACK, d0, d1, d2, d3, d4, d5, Block.getStateId(state));
+                ParticleHelper.spawnParticle(this.worldObj, EnumParticleTypes.BLOCK_CRACK, d0, d1, d2, d3, d4, d5, Block.getStateId(state));
             }
             if (!worldObj.isRemote) {
                 EntityFallingBlock entity = new EntityFallingBlock(worldObj, blockpos.getX() + 0.5D, blockpos.getY() + 0.5D, blockpos.getZ() + 0.5D, state);

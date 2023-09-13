@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.entity.projectile;
 
 import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
+import com.github.alexthe666.iceandfire.util.ParticleHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -44,7 +45,7 @@ public class EntityAmphithereArrow extends EntityArrow {
             double d3 = 10.0D;
             double xRatio = motionX * height;
             double zRatio = motionZ * height;
-            this.world.spawnParticle(EnumParticleTypes.CLOUD, this.posX  + xRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d0 * 10.0D, this.posY + (double) (this.rand.nextFloat() * this.height) - d1 * 10.0D, this.posZ + zRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d2 * 10.0D, d0, d1, d2);
+            ParticleHelper.spawnParticle(this.world, EnumParticleTypes.CLOUD, this.posX  + xRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d0 * 10.0D, this.posY + (double) (this.rand.nextFloat() * this.height) - d1 * 10.0D, this.posZ + zRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d2 * 10.0D, d0, d1, d2);
 
         }
     }
@@ -78,7 +79,7 @@ public class EntityAmphithereArrow extends EntityArrow {
                     double d3 = 10.0D;
                     double xRatio = motionX * height;
                     double zRatio = motionZ * height;
-                    this.world.spawnParticle(EnumParticleTypes.CLOUD, this.posX  + xRatio + (double) (this.rand.nextFloat() * this.width * 5.0F) - (double) this.width - d0 * 10.0D, this.posY + (double) (this.rand.nextFloat() * this.height) - d1 * 10.0D + height, this.posZ + zRatio + (double) (this.rand.nextFloat() * this.width * 5.0F) - (double) this.width - d2 * 10.0D, d0, d1, d2);
+                    ParticleHelper.spawnParticle(this.world, EnumParticleTypes.CLOUD, this.posX  + xRatio + (double) (this.rand.nextFloat() * this.width * 5.0F) - (double) this.width - d0 * 10.0D, this.posY + (double) (this.rand.nextFloat() * this.height) - d1 * 10.0D + height, this.posZ + zRatio + (double) (this.rand.nextFloat() * this.width * 5.0F) - (double) this.width - d2 * 10.0D, d0, d1, d2);
                 }
             }
         } else {

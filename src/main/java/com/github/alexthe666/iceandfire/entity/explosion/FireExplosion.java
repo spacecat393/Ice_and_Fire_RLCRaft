@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.projectile.EntityDragonFireCharge;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
+import com.github.alexthe666.iceandfire.util.ParticleHelper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -191,9 +192,9 @@ public class FireExplosion extends Explosion {
 					d3 = d3 * d7;
 					d4 = d4 * d7;
 					d5 = d5 * d7;
-					this.worldObj.spawnParticle(EnumParticleTypes.FLAME, d0, d1, d2, d3, d4, d5);
-					this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5);
-					this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5);
+					ParticleHelper.spawnParticle(this.worldObj, EnumParticleTypes.FLAME, d0, d1, d2, d3, d4, d5);
+					ParticleHelper.spawnParticle(this.worldObj, EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5);
+					ParticleHelper.spawnParticle(this.worldObj, EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5);
 				}
 
 				if (state.getMaterial() != Material.AIR && !state.getBlock().getTranslationKey().contains("grave") && DragonUtils.canDragonBreak(state.getBlock()) && mobGriefing) {

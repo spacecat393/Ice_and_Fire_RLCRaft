@@ -7,6 +7,7 @@ import com.github.alexthe666.iceandfire.entity.explosion.FireChargeExplosion;
 import com.github.alexthe666.iceandfire.entity.explosion.FireExplosion;
 import com.github.alexthe666.iceandfire.entity.util.IDragonProjectile;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
+import com.github.alexthe666.iceandfire.util.ParticleHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.entity.projectile.ProjectileHelper;
@@ -53,7 +54,7 @@ public class EntityDragonFireCharge extends EntityFireball implements IDragonPro
 
 	public void onUpdate() {
 		for (int i = 0; i < 4; ++i) {
-			this.world.spawnParticle(EnumParticleTypes.FLAME, this.posX + ((this.rand.nextDouble() - 0.5D) * width), this.posY + ((this.rand.nextDouble() - 0.5D) * width), this.posZ + ((this.rand.nextDouble() - 0.5D) * width), 0.0D, 0.0D, 0.0D, new int[0]);
+			ParticleHelper.spawnParticle(this.world, EnumParticleTypes.FLAME, this.posX + ((this.rand.nextDouble() - 0.5D) * width), this.posY + ((this.rand.nextDouble() - 0.5D) * width), this.posZ + ((this.rand.nextDouble() - 0.5D) * width), 0.0D, 0.0D, 0.0D);
 		}
 		if (this.isInWater()) {
 			setDead();
@@ -82,7 +83,7 @@ public class EntityDragonFireCharge extends EntityFireball implements IDragonPro
 			if (this.isInWater()) {
 				for (int i = 0; i < 4; ++i) {
 					float f1 = 0.25F;
-					this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * 0.25D, this.posY - this.motionY * 0.25D, this.posZ - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ, new int[0]);
+					ParticleHelper.spawnParticle(this.world, EnumParticleTypes.WATER_BUBBLE, this.posX - this.motionX * 0.25D, this.posY - this.motionY * 0.25D, this.posZ - this.motionZ * 0.25D, this.motionX, this.motionY, this.motionZ);
 				}
 
 				f = 0.8F;
@@ -94,7 +95,7 @@ public class EntityDragonFireCharge extends EntityFireball implements IDragonPro
 			this.motionX *= f;
 			this.motionY *= f;
 			this.motionZ *= f;
-			this.world.spawnParticle(this.getParticleType(), this.posX, this.posY + 0.5D, this.posZ, 0.0D, 0.0D, 0.0D);
+			ParticleHelper.spawnParticle(this.world, this.getParticleType(), this.posX, this.posY + 0.5D, this.posZ, 0.0D, 0.0D, 0.0D);
 			this.setPosition(this.posX, this.posY, this.posZ);
 		} else {
 			this.setDead();

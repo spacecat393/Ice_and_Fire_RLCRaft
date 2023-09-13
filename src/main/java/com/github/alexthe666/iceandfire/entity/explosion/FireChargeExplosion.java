@@ -7,6 +7,7 @@ import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import com.github.alexthe666.iceandfire.entity.EntityLightningDragon;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
+import com.github.alexthe666.iceandfire.util.ParticleHelper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -177,9 +178,9 @@ public class FireChargeExplosion extends Explosion {
 		this.worldObj.playSound(null, this.explosionX, this.explosionY, this.explosionZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, (1.0F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.2F) * 0.7F);
 
 		if (this.explosionSize >= 2.0F && this.isSmoking) {
-			this.worldObj.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, this.explosionX, this.explosionY, this.explosionZ, 1.0D, 0.0D, 0.0D, new int[0]);
+			ParticleHelper.spawnParticle(this.worldObj, EnumParticleTypes.EXPLOSION_HUGE, this.explosionX, this.explosionY, this.explosionZ, 1.0D, 0.0D, 0.0D);
 		} else {
-			this.worldObj.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, this.explosionX, this.explosionY, this.explosionZ, 1.0D, 0.0D, 0.0D, new int[0]);
+			ParticleHelper.spawnParticle(this.worldObj, EnumParticleTypes.EXPLOSION_LARGE, this.explosionX, this.explosionY, this.explosionZ, 1.0D, 0.0D, 0.0D);
 		}
 
 		if (this.isSmoking) {
@@ -204,8 +205,8 @@ public class FireChargeExplosion extends Explosion {
 					d4 = d4 * d7;
 					d5 = d5 * d7;
 					if (exploder instanceof EntityFireDragon) {
-						this.worldObj.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, (d0 + this.explosionX) / 2.0D, (d1 + this.explosionY) / 2.0D, (d2 + this.explosionZ) / 2.0D, d3, d4, d5);
-						this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5);
+						ParticleHelper.spawnParticle(this.worldObj, EnumParticleTypes.EXPLOSION_NORMAL, (d0 + this.explosionX) / 2.0D, (d1 + this.explosionY) / 2.0D, (d2 + this.explosionZ) / 2.0D, d3, d4, d5);
+						ParticleHelper.spawnParticle(this.worldObj, EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5);
 					} else if (exploder instanceof EntityIceDragon) {
 						IceAndFire.PROXY.spawnParticle("dragonice", worldObj, (d0 + this.explosionX) / 2.0D, (d1 + this.explosionY) / 2.0D, (d2 + this.explosionZ) / 2.0D, d3, d4, d5);
 					} else if (exploder instanceof EntityLightningDragon) {

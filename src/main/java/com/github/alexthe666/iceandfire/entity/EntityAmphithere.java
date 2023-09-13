@@ -12,6 +12,7 @@ import com.github.alexthe666.iceandfire.entity.util.IDragonFlute;
 import com.github.alexthe666.iceandfire.entity.util.IFlapable;
 import com.github.alexthe666.iceandfire.entity.util.IPhasesThroughBlock;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
+import com.github.alexthe666.iceandfire.util.ParticleHelper;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
@@ -927,7 +928,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
             double d0 = this.rand.nextGaussian() * 0.02D;
             double d1 = this.rand.nextGaussian() * 0.02D;
             double d2 = this.rand.nextGaussian() * 0.02D;
-            this.world.spawnParticle(enumparticletypes, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + 0.5D + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d0, d1, d2);
+            ParticleHelper.spawnParticle(this.world, enumparticletypes, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + 0.5D + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d0, d1, d2);
         }
     }
 

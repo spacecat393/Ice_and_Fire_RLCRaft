@@ -9,6 +9,7 @@ import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.entity.util.IDropArmor;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.message.MessageHippogryphArmor;
+import com.github.alexthe666.iceandfire.util.ParticleHelper;
 import net.ilexiconn.llibrary.client.model.tools.ChainBuffer;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
@@ -619,7 +620,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
                 this.heal(5);
                 this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
                 for (int i = 0; i < 3; i++) {
-                    this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0, new int[]{Item.getIdFromItem(itemstack.getItem())});
+                    ParticleHelper.spawnParticle(this.world, EnumParticleTypes.ITEM_CRACK, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0, Item.getIdFromItem(itemstack.getItem()), 0);
                 }
                 if (!player.isCreative()) {
                     itemstack.shrink(1);
@@ -628,7 +629,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
             if (!this.isTamed() && this.getRNG().nextInt(3) == 0) {
                 this.setTamedBy(player);
                 for (int i = 0; i < 6; i++) {
-                    this.world.spawnParticle(EnumParticleTypes.HEART, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0, new int[0]);
+                    ParticleHelper.spawnParticle(this.world, EnumParticleTypes.HEART, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0);
                 }
             }
             return true;

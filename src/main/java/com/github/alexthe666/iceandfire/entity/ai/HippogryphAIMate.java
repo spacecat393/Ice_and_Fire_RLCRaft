@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.entity.ai;
 
 import com.github.alexthe666.iceandfire.entity.EntityHippogryph;
 import com.github.alexthe666.iceandfire.item.ItemHippogryphEgg;
+import com.github.alexthe666.iceandfire.util.ParticleHelper;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
@@ -105,7 +106,7 @@ public class HippogryphAIMate extends EntityAIBase {
 			double d3 = random.nextDouble() * (double) this.hippo.width * 2.0D - (double) this.hippo.width;
 			double d4 = 0.5D + random.nextDouble() * (double) this.hippo.height;
 			double d5 = random.nextDouble() * (double) this.hippo.width * 2.0D - (double) this.hippo.width;
-			this.world.spawnParticle(EnumParticleTypes.HEART, this.hippo.posX + d3, this.hippo.posY + d4, this.hippo.posZ + d5, d0, d1, d2, new int[0]);
+			ParticleHelper.spawnParticle(this.world, EnumParticleTypes.HEART, this.hippo.posX + d3, this.hippo.posY + d4, this.hippo.posZ + d5, d0, d1, d2);
 		}
 
 		if (this.world.getGameRules().getBoolean("doMobLoot")) {
