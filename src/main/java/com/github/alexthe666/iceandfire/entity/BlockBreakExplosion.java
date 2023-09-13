@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class BlockBreakExplosion extends Explosion {
+
     private final World worldObj;
     private final double explosionX;
     private final double explosionY;
@@ -179,7 +180,9 @@ public class BlockBreakExplosion extends Explosion {
         return exploder;
     }
 
-    public void func_180342_d() {
+    @Override
+    public void clearAffectedBlockPositions() {
+        super.clearAffectedBlockPositions();
         this.affectedBlockPositions.clear();
     }
 
