@@ -7,6 +7,8 @@ import com.github.alexthe666.iceandfire.entity.EntityLightningDragon;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.ResourceLocation;
 
+import java.time.LocalDate;
+
 public enum EnumDragonTextures {
     VARIANT1("red_", "blue_", "electric_"),
     VARIANT2("green_", "white_", "amethyst_"),
@@ -205,6 +207,20 @@ public enum EnumDragonTextures {
 
     private static ResourceLocation getFireDragonTextures(EntityDragonBase dragon) {
         EnumDragonTextures textures = getDragonEnum(dragon);
+        if (isSpookySeason()) {
+            switch (dragon.getDragonStage()) {
+                case 1:
+                    return textures.FIRESTAGE1SKELETONTEXTURE;
+                case 2:
+                    return textures.FIRESTAGE2SKELETONTEXTURE;
+                case 3:
+                    return textures.FIRESTAGE3SKELETONTEXTURE;
+                case 5:
+                    return textures.FIRESTAGE5SKELETONTEXTURE;
+                default:
+                    return textures.FIRESTAGE4SKELETONTEXTURE;
+            }
+        }
         if (dragon.isModelDead()) {
             if (dragon.getDeathStage() >= (dragon.getAgeInDays() / 5) / 2) {
                 switch (dragon.getDragonStage()) {
@@ -265,6 +281,20 @@ public enum EnumDragonTextures {
 
     private static ResourceLocation getIceDragonTextures(EntityDragonBase dragon) {
         EnumDragonTextures textures = getDragonEnum(dragon);
+        if (isSpookySeason()) {
+            switch (dragon.getDragonStage()) {
+                case 1:
+                    return textures.ICESTAGE1SKELETONTEXTURE;
+                case 2:
+                    return textures.ICESTAGE2SKELETONTEXTURE;
+                case 3:
+                    return textures.ICESTAGE3SKELETONTEXTURE;
+                case 5:
+                    return textures.ICESTAGE5SKELETONTEXTURE;
+                default:
+                    return textures.ICESTAGE4SKELETONTEXTURE;
+            }
+        }
         if (dragon.isModelDead()) {
             if (dragon.getDeathStage() >= (dragon.getAgeInDays() / 5) / 2) {
                 switch (dragon.getDragonStage()) {
@@ -325,6 +355,20 @@ public enum EnumDragonTextures {
 
     private static ResourceLocation getLightningDragonTextures(EntityDragonBase dragon) {
         EnumDragonTextures textures = getDragonEnum(dragon);
+        if (isSpookySeason()) {
+            switch (dragon.getDragonStage()) {
+                case 1:
+                    return textures.LIGHTNINGSTAGE1SKELETONTEXTURE;
+                case 2:
+                    return textures.LIGHTNINGSTAGE2SKELETONTEXTURE;
+                case 3:
+                    return textures.LIGHTNINGSTAGE3SKELETONTEXTURE;
+                case 5:
+                    return textures.LIGHTNINGSTAGE5SKELETONTEXTURE;
+                default:
+                    return textures.LIGHTNINGSTAGE4SKELETONTEXTURE;
+            }
+        }
         if (dragon.isModelDead()) {
             if (dragon.getDeathStage() >= (dragon.getAgeInDays() / 5) / 2) {
                 switch (dragon.getDragonStage()) {
@@ -442,6 +486,16 @@ public enum EnumDragonTextures {
             default:
                 return VARIANT1.LIGHTNINGSTAGE4SKELETONTEXTURE;
         }
+    }
+
+    private static Boolean cacheSpooky = null;
+
+    private static boolean isSpookySeason() {
+        if(cacheSpooky == null) {
+            int curTime = (LocalDate.now().getMonthValue()*100) + LocalDate.now().getDayOfMonth();
+            cacheSpooky = 1028 <= curTime && curTime <= 1102;
+        }
+        return cacheSpooky;
     }
 
     public enum Armor {
