@@ -67,7 +67,7 @@ public class MessageParticleFX extends AbstractMessage<MessageParticleFX> {
 		for (EnumParticle type : types) {
 			buf.writeInt(type.ordinal());
 		}
-		for (MessageParticleFX.Particle particle : particles) {
+		for (Particle particle : particles) {
 			buf.writeDouble(particle.x);
 			buf.writeDouble(particle.y);
 			buf.writeDouble(particle.z);

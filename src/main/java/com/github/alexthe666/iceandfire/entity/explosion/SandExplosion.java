@@ -1,7 +1,8 @@
 package com.github.alexthe666.iceandfire.entity.explosion;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
-import com.github.alexthe666.iceandfire.util.ParticleHelper;
+import com.github.alexthe666.iceandfire.message.MessageParticleVanillaFX;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -23,6 +24,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -148,9 +150,9 @@ public class SandExplosion extends Explosion {
 
     @Override
     public void doExplosionB(boolean spawnParticles) {
+        List<MessageParticleVanillaFX.Particle> particles = new ArrayList<>();
         for (BlockPos blockpos : this.affectedBlockPositions) {
             IBlockState state = this.worldObj.getBlockState(blockpos);
-            Block block = this.worldObj.getBlockState(blockpos).getBlock();
 
             if (spawnParticles && !worldObj.isAirBlock(blockpos)) {
                 double d0 = blockpos.getX() + this.worldObj.rand.nextFloat();
@@ -168,16 +170,13 @@ public class SandExplosion extends Explosion {
                 d3 = d3 * d7;
                 d4 = d4 * d7;
                 d5 = d5 * d7;
-                //TODO: Change to single packet
-                ParticleHelper.spawnParticle(this.worldObj, EnumParticleTypes.BLOCK_CRACK, d0, d1, d2, d3, d4, d5, Block.getStateId(state));
-                ParticleHelper.spawnParticle(this.worldObj, EnumParticleTypes.BLOCK_CRACK, d0, d1, d2, d3, d4, d5, Block.getStateId(state));
-                ParticleHelper.spawnParticle(this.worldObj, EnumParticleTypes.BLOCK_CRACK, d0, d1, d2, d3, d4, d5, Block.getStateId(state));
+
+                particles.add(MessageParticleVanillaFX.createParticle(d0, d1, d2, d3, d4, d5, Block.getStateId(state)));
             }
             if (!worldObj.isRemote) {
                 EntityFallingBlock entity = new EntityFallingBlock(worldObj, blockpos.getX() + 0.5D, blockpos.getY() + 0.5D, blockpos.getZ() + 0.5D, state);
                 worldObj.spawnEntity(entity);
                 double d5 = entity.posX - this.explosionX;
-                double d7 = entity.posY - this.explosionY;
                 double d9 = entity.posZ - this.explosionZ;
                 double d11 = 1.0D;
                 entity.motionX += d5 * d11;
@@ -185,6 +184,13 @@ public class SandExplosion extends Explosion {
                 entity.motionZ += d9 * d11;
 
             }
+        }
+        if (!particles.isEmpty()) {
+            List<EnumParticleTypes> types = new ArrayList<>();
+            types.add(EnumParticleTypes.BLOCK_CRACK);
+            types.add(EnumParticleTypes.BLOCK_CRACK);
+            types.add(EnumParticleTypes.BLOCK_CRACK);
+            IceAndFire.NETWORK_WRAPPER.sendToAllTracking(new MessageParticleVanillaFX(types, false, particles), this.exploder);
         }
     }
 

@@ -17,11 +17,11 @@ public abstract class ParticleHelper {
      * Ex. ITEM_CRACK requires ItemID and Metadata (0 if default)
      */
     public static void spawnParticle(World world, EnumParticleTypes particleType, boolean longDistance, double xCoord, double yCoord, double zCoord, double xSpeed, double ySpeed, double zSpeed, int... parameters) {
-        if(world instanceof WorldServer) {
-            if(parameters.length == particleType.getArgumentCount()) ((WorldServer)world).spawnParticle(particleType, longDistance, xCoord, yCoord, zCoord, 0, xSpeed, ySpeed, zSpeed, 1.0, parameters);
+        if (world instanceof WorldServer) {
+            if (parameters.length == particleType.getArgumentCount()) ((WorldServer) world).spawnParticle(particleType, longDistance, xCoord, yCoord, zCoord, 0, xSpeed, ySpeed, zSpeed, 1.0, parameters);
             else IceAndFire.logger.warn("ParticleHelper received particle: " + particleType.name() + " with incorrect amount of additional parameters: " + parameters.length + " for argument count: " + particleType.getArgumentCount());
         }
-        else if(world.isRemote) {
+        else if (world.isRemote) {
             //Clientside only
             world.spawnParticle(particleType, longDistance, xCoord, yCoord, zCoord, xSpeed, ySpeed, zSpeed, parameters);
         }
