@@ -41,6 +41,7 @@ import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.EntityMobGriefingEvent;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.living.*;
@@ -291,10 +292,15 @@ public class EventLiving {
 							event.getTarget().setDead();
 							if (silkTouch) {
 								ItemStack statuette = new ItemStack(ModItems.stone_statue);
-								statuette.setTagCompound(new NBTTagCompound());
-								statuette.getTagCompound().setBoolean("IAFStoneStatueEntityPlayer", stonePlayer);
-								statuette.getTagCompound().setInteger("IAFStoneStatueEntityID", stonePlayer ? 90 : EntityList.getID(event.getTarget().getClass()));
-								((EntityLiving) event.getTarget()).writeEntityToNBT(statuette.getTagCompound());
+								NBTTagCompound compound = new NBTTagCompound();
+								compound.setBoolean("IAFStoneStatueEntityPlayer", stonePlayer);
+								compound.setInteger("IAFStoneStatueEntityID", stonePlayer ? 90 : EntityList.getID(event.getTarget().getClass()));
+								((EntityLiving)event.getTarget()).writeEntityToNBT(compound);
+								//Attempt to strip storing items from the statue to prevent dupes
+								compound.removeTag("Items");
+								compound.removeTag("ArmorItems");
+								compound.removeTag("HandItems");
+								statuette.setTagCompound(compound);
 								if (!event.getTarget().world.isRemote) {
 									event.getTarget().entityDropItem(statuette, 1);
 								}
@@ -479,5 +485,15 @@ public class EventLiving {
 	public static boolean isAnimaniaFerret(Entity entity){
 		String className = entity.getClass().getName();
 		return className.contains("ferret") || className.contains("polecat");
+	}
+
+	@SubscribeEvent
+	public void onMobGrief(EntityMobGriefingEvent event) {
+		if(event.getEntity() instanceof EntityLiving && !event.getEntity().world.isRemote && ((EntityLiving)event.getEntity()).canPickUpLoot()) {
+			IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability((EntityLivingBase)event.getEntity());
+			if(capability != null && capability.isStoned() || event.getEntity() instanceof EntityStoneStatue) {
+				event.setResult(Event.Result.DENY);
+			}
+		}
 	}
 }
