@@ -176,7 +176,7 @@ public class FireExplosion extends Explosion {
 				IBlockState state = this.worldObj.getBlockState(blockpos);
 				Block block = this.worldObj.getBlockState(blockpos).getBlock();
 
-				if (spawnParticles) {
+				if (spawnParticles && this.worldObj.rand.nextFloat() > 0.95F) {
 					double d0 = blockpos.getX() + this.worldObj.rand.nextFloat();
 					double d1 = blockpos.getY() + this.worldObj.rand.nextFloat();
 					double d2 = blockpos.getZ() + this.worldObj.rand.nextFloat();
@@ -219,7 +219,6 @@ public class FireExplosion extends Explosion {
 			if (!particles.isEmpty()) {
 				List<EnumParticle> types = new ArrayList<>();
 				types.add(EnumParticle.FLAME);
-				types.add(EnumParticle.SMOKE);
 				types.add(EnumParticle.SMOKE);
 				IceAndFire.NETWORK_WRAPPER.sendToAllTracking(new MessageParticleFX(types, particles), this.exploder);
 			}

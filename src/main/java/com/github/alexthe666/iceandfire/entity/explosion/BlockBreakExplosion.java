@@ -149,7 +149,7 @@ public class BlockBreakExplosion extends Explosion {
             IBlockState state = this.worldObj.getBlockState(blockpos);
             Block block = this.worldObj.getBlockState(blockpos).getBlock();
 
-            if (spawnParticles && !worldObj.isAirBlock(blockpos)) {
+            if (spawnParticles && this.worldObj.rand.nextBoolean() && !worldObj.isAirBlock(blockpos)) {
                 double d0 = ((float)blockpos.getX() + this.worldObj.rand.nextFloat());
                 double d1 = ((float)blockpos.getY() + this.worldObj.rand.nextFloat());
                 double d2 = ((float)blockpos.getZ() + this.worldObj.rand.nextFloat());

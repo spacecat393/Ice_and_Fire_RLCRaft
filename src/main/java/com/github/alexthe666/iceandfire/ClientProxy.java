@@ -33,10 +33,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.ParticleExplosion;
-import net.minecraft.client.particle.ParticleFlame;
-import net.minecraft.client.particle.ParticleSmokeNormal;
+import net.minecraft.client.particle.*;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
@@ -401,6 +398,9 @@ public class ClientProxy extends CommonProxy {
 				break;
 			case EXPLOSION:
 				particle = new ParticleExplosion.Factory().createParticle(0, world, x, y, z, motX, motY, motZ);
+				break;
+			case CLOUD:
+				particle = new ParticleCloud.Factory().createParticle(0, world, x, y, z, motX, motY, motZ);
 				break;
 			default:
 				particle = new ParticleSmokeNormal.Factory().createParticle(0, world, x, y, z, motX, motY, motZ);

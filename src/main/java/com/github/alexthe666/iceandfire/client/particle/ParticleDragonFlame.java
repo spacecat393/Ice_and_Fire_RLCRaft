@@ -31,7 +31,7 @@ public class ParticleDragonFlame extends ParticleFlame {
         if (particleAge > 10) {
             this.setExpired();
         }
-        particleScale = 5F
+        particleScale = 5F;
         float f = (float) this.particleTextureIndexX / 16.0F;
         float f1 = f + 0.0624375F;
         float f2 = (float) this.particleTextureIndexY / 16.0F;

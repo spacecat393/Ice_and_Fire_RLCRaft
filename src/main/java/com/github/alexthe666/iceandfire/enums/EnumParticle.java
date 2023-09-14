@@ -12,5 +12,6 @@ public enum EnumParticle {
     SIREN_MUSIC,
     SERPENT_BUBBLE,
     EXPLOSION,
+    CLOUD,
     SMOKE
 }

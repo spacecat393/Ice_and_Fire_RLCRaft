@@ -188,7 +188,7 @@ public class FireChargeExplosion extends Explosion {
 				IBlockState iblockstate = this.worldObj.getBlockState(blockpos);
 				Block block = iblockstate.getBlock();
 
-				if (spawnParticles) {
+				if (spawnParticles && this.worldObj.rand.nextFloat() > 0.9F) {
 					double d0 = (float) blockpos.getX() + this.worldObj.rand.nextFloat();
 					double d1 = (float) blockpos.getY() + this.worldObj.rand.nextFloat();
 					double d2 = (float) blockpos.getZ() + this.worldObj.rand.nextFloat();
@@ -218,12 +218,14 @@ public class FireChargeExplosion extends Explosion {
 			if (!particles.isEmpty()) {
 				List<EnumParticle> types = new ArrayList<>();
 				if (exploder instanceof EntityFireDragon) {
+					types.add(EnumParticle.DRAGON_FIRE);
 					types.add(EnumParticle.EXPLOSION);
-					types.add(EnumParticle.SMOKE);
 				} else if (exploder instanceof EntityIceDragon) {
 					types.add(EnumParticle.DRAGON_ICE);
+					types.add(EnumParticle.CLOUD);
 				} else if (exploder instanceof EntityLightningDragon) {
 					types.add(EnumParticle.SPARK);
+					types.add(EnumParticle.EXPLOSION);
 				}
 				IceAndFire.NETWORK_WRAPPER.sendToAllTracking(new MessageParticleFX(types, particles), this.exploder);
 			}
