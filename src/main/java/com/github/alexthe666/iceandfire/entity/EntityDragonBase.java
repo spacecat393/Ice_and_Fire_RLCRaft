@@ -1032,7 +1032,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
 
                     }
                     IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(this);
-                    if (stack.getItem() == ModItems.dragon_horn && !world.isRemote && (capability == null || !capability.isStoned())) {
+                    if (stack.getItem() == ModItems.dragon_horn && !world.isRemote && hand == EnumHand.MAIN_HAND && (capability == null || !capability.isStoned())) {
                         this.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 3, 1.25F);
 
                         NBTTagCompound tag = new NBTTagCompound();
