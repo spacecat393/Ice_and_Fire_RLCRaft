@@ -82,7 +82,7 @@ public class EntityDragonLightning extends EntityFireball implements IDragonProj
 				if (this.shootingEntity != null && this.shootingEntity instanceof EntityDragonBase && IceAndFireConfig.DRAGON_SETTINGS.dragonGriefing != 2) {
 					LightningExplosion explosion = new LightningExplosion(world, shootingEntity, this.posX, this.posY, this.posZ, ((EntityDragonBase) this.shootingEntity).getDragonStage() * 2.5F, flag);
 					explosion.doExplosionA();
-					explosion.doExplosionB(false);
+					explosion.doExplosionB(true);
 				}
 				this.setDead();
 				return;
