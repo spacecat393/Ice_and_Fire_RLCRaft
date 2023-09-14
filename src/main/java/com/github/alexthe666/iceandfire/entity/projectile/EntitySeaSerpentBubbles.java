@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.entity.projectile;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntitySeaSerpent;
 import com.github.alexthe666.iceandfire.entity.util.IDragonProjectile;
+import com.github.alexthe666.iceandfire.enums.EnumParticle;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.EntityFireball;
@@ -65,7 +66,7 @@ public class EntitySeaSerpentBubbles extends EntityFireball implements IDragonPr
             if (this.isInWater()) {
                 if(this.world.isRemote) {
                     for (int i = 0; i < 6; ++i) {
-                        IceAndFire.PROXY.spawnParticle("serpent_bubble", world, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+                        IceAndFire.PROXY.spawnParticle(EnumParticle.SERPENT_BUBBLE, world, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
                     }
                 }
             } else {

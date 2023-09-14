@@ -17,7 +17,7 @@ import java.util.List;
 
 public class MessageChainLightningFX extends AbstractMessage<MessageChainLightningFX> {
 
-	public List<Integer> entityIds;
+	private List<Integer> entityIds;
 
 	public MessageChainLightningFX(List<Integer> entityIds) {
 		this.entityIds = entityIds;

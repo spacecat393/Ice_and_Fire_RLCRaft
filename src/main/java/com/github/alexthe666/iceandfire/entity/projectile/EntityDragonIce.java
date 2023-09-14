@@ -8,6 +8,7 @@ import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.util.IDragonProjectile;
 import com.github.alexthe666.iceandfire.entity.explosion.IceExplosion;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
+import com.github.alexthe666.iceandfire.enums.EnumParticle;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.util.DamageSource;
@@ -52,7 +53,7 @@ public class EntityDragonIce extends EntityFireball implements IDragonProjectile
 		super.onUpdate();
 		if(this.world.isRemote) {
 			for (int i = 0; i < 6; ++i) {
-				IceAndFire.PROXY.spawnParticle("dragonice", world, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+				IceAndFire.PROXY.spawnParticle(EnumParticle.DRAGON_ICE, world, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
 			}
 		}
 		if (ticksExisted > 160) {

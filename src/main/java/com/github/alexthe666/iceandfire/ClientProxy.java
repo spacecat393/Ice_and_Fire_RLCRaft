@@ -24,10 +24,7 @@ import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.projectile.*;
 import com.github.alexthe666.iceandfire.entity.tile.*;
 import com.github.alexthe666.iceandfire.entity.util.MyrmexHive;
-import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
-import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
-import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
-import com.github.alexthe666.iceandfire.enums.EnumTroll;
+import com.github.alexthe666.iceandfire.enums.*;
 import com.github.alexthe666.iceandfire.event.EventClient;
 import com.github.alexthe666.iceandfire.event.EventNewMenu;
 import com.github.alexthe666.iceandfire.item.ICustomRendered;
@@ -37,6 +34,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleExplosion;
+import net.minecraft.client.particle.ParticleFlame;
+import net.minecraft.client.particle.ParticleSmokeNormal;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
@@ -190,9 +190,8 @@ public class ClientProxy extends CommonProxy {
 					ModelLoader.setCustomModelResourceLocation((Item)obj, 0, new ModelResourceLocation("iceandfire:" + ((Item)obj).getRegistryName().getPath(), "inventory"));
 				} else if (obj instanceof Item[]) {
 					for (Item item : (Item[]) obj) {
-						if(!(item instanceof ICustomRendered)){
+						if (!(item instanceof ICustomRendered)) {
 							ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation("iceandfire:" + item.getRegistryName().getPath(), "inventory"));
-
 						}
 					}
 				}
@@ -367,37 +366,44 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void spawnParticle(String name, World world, double x, double y, double z, double motX, double motY, double motZ, float size) {
-		Particle particle = null;
-		if (name.equals("dragonfire")) {
-			particle = new ParticleDragonFlame(world, x, y, z, motX, motY, motZ, size);
-		}
-		if (name.equals("dragonice")) {
-			particle = new ParticleDragonFrost(world, x, y, z, motX, motY, motZ, size);
-		}
-		if (name.equals("dragonlightning")) {
-			particle = new ParticleDragonSparkBall(world, x, y, z, motX, motY, motZ, size);
-		}
-		if (name.equals("snowflake")) {
-			particle = new ParticleSnowflake(world, x, y, z, motX, motY, motZ);
-		}
-		if (name.equals("spark")) {
-			particle = new ParticleSpark(world, x, y, z, motX, motY, motZ);
-		}
-		if (name.equals("blood")) {
-			particle = new ParticleBlood(world, x, y, z);
-		}
-		if (name.equals("if_pixie")) {
-			particle = new ParticlePixieDust(world, x, y, z, (float) motX, (float) motY, (float) motZ);
-		}
-		if (name.equals("siren_appearance")) {
-			particle = new ParticleSirenAppearance(world, x, y, z);
-		}
-		if (name.equals("siren_music")) {
-			particle = new ParticleSirenMusic(world, x, y, z, motX, motY, motZ);
-		}
-		if (name.equals("serpent_bubble")) {
-			particle = new ParticleSerpentBubble(world, x, y, z, motX, motY, motZ);
+	public void spawnParticle(EnumParticle type, World world, double x, double y, double z, double motX, double motY, double motZ) {
+		Particle particle;
+		switch (type) {
+			case DRAGON_FIRE:
+				particle = new ParticleDragonFlame(world, x, y, z, motX, motY, motZ);
+				break;
+			case DRAGON_ICE:
+				particle = new ParticleDragonFrost(world, x, y, z, motX, motY, motZ);
+				break;
+			case FLAME:
+				particle = new ParticleFlame.Factory().createParticle(0, world, x, y, z, motX, motY, motZ);
+				break;
+			case SNOWFLAKE:
+				particle = new ParticleSnowflake(world, x, y, z, motX, motY, motZ);
+				break;
+			case SPARK:
+				particle = new ParticleSpark(world, x, y, z, motX, motY, motZ);
+				break;
+			case BLOOD:
+				particle = new ParticleBlood(world, x, y, z);
+				break;
+			case PIXIE_DUST:
+				particle = new ParticlePixieDust(world, x, y, z, (float) motX, (float) motY, (float) motZ);
+				break;
+			case SIREN_APPEARANCE:
+				particle = new ParticleSirenAppearance(world, x, y, z);
+				break;
+			case SIREN_MUSIC:
+				particle = new ParticleSirenMusic(world, x, y, z, motX, motY, motZ);
+				break;
+			case SERPENT_BUBBLE:
+				particle = new ParticleSerpentBubble(world, x, y, z, motX, motY, motZ);
+				break;
+			case EXPLOSION:
+				particle = new ParticleExplosion.Factory().createParticle(0, world, x, y, z, motX, motY, motZ);
+				break;
+			default:
+				particle = new ParticleSmokeNormal.Factory().createParticle(0, world, x, y, z, motX, motY, motZ);
 		}
 		if (particle != null) {
 			Minecraft.getMinecraft().effectRenderer.addEffect(particle);

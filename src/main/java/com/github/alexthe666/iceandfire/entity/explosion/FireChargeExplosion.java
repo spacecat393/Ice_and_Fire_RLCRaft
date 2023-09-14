@@ -7,6 +7,8 @@ import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
 import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
 import com.github.alexthe666.iceandfire.entity.EntityLightningDragon;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
+import com.github.alexthe666.iceandfire.enums.EnumParticle;
+import com.github.alexthe666.iceandfire.message.MessageParticleFX;
 import com.github.alexthe666.iceandfire.util.ParticleHelper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -31,10 +33,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 public class FireChargeExplosion extends Explosion {
 	private final boolean isSmoking;
@@ -177,7 +176,6 @@ public class FireChargeExplosion extends Explosion {
 	public void doExplosionB(boolean spawnParticles) {
 		this.worldObj.playSound(null, this.explosionX, this.explosionY, this.explosionZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 4.0F, (1.0F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.2F) * 0.7F);
 
-		//TODO: Change to single packet
 		if (this.explosionSize >= 2.0F && this.isSmoking) {
 			ParticleHelper.spawnParticle(this.worldObj, EnumParticleTypes.EXPLOSION_HUGE, this.explosionX, this.explosionY, this.explosionZ, 1.0D, 0.0D, 0.0D);
 		} else {
@@ -185,6 +183,7 @@ public class FireChargeExplosion extends Explosion {
 		}
 
 		if (this.isSmoking) {
+			List<MessageParticleFX.Particle> particles = new ArrayList<>(this.affectedBlockPositions.size());
 			for (BlockPos blockpos : this.affectedBlockPositions) {
 				IBlockState iblockstate = this.worldObj.getBlockState(blockpos);
 				Block block = iblockstate.getBlock();
@@ -205,24 +204,28 @@ public class FireChargeExplosion extends Explosion {
 					d3 = d3 * d7;
 					d4 = d4 * d7;
 					d5 = d5 * d7;
-					//TODO: Change to single packet
-					if (exploder instanceof EntityFireDragon) {
-						ParticleHelper.spawnParticle(this.worldObj, EnumParticleTypes.EXPLOSION_NORMAL, (d0 + this.explosionX) / 2.0D, (d1 + this.explosionY) / 2.0D, (d2 + this.explosionZ) / 2.0D, d3, d4, d5);
-						ParticleHelper.spawnParticle(this.worldObj, EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5);
-					} else if (exploder instanceof EntityIceDragon) {
-						IceAndFire.PROXY.spawnParticle("dragonice", worldObj, (d0 + this.explosionX) / 2.0D, (d1 + this.explosionY) / 2.0D, (d2 + this.explosionZ) / 2.0D, d3, d4, d5);
-					} else if (exploder instanceof EntityLightningDragon) {
-						IceAndFire.PROXY.spawnParticle("spark", worldObj, (d0 + this.explosionX) / 2.0D, (d1 + this.explosionY) / 2.0D, (d2 + this.explosionZ) / 2.0D, d3, d4, d5);
-					}
+
+					particles.add(MessageParticleFX.createParticle((d0 + this.explosionX) / 2.0D, (d1 + this.explosionY) / 2.0D, (d2 + this.explosionZ) / 2.0D, d3, d4, d5));
 				}
 
 				if (iblockstate.getMaterial() != Material.AIR) {
 					if (block.canDropFromExplosion(this)) {
 						block.dropBlockAsItemWithChance(this.worldObj, blockpos, this.worldObj.getBlockState(blockpos), 1.0F / this.explosionSize, 0);
 					}
-
 					block.onBlockExploded(this.worldObj, blockpos, this);
 				}
+			}
+			if (!particles.isEmpty()) {
+				List<EnumParticle> types = new ArrayList<>();
+				if (exploder instanceof EntityFireDragon) {
+					types.add(EnumParticle.EXPLOSION);
+					types.add(EnumParticle.SMOKE);
+				} else if (exploder instanceof EntityIceDragon) {
+					types.add(EnumParticle.DRAGON_ICE);
+				} else if (exploder instanceof EntityLightningDragon) {
+					types.add(EnumParticle.SPARK);
+				}
+				IceAndFire.NETWORK_WRAPPER.sendToAllTracking(new MessageParticleFX(types, particles), this.exploder);
 			}
 		}
 

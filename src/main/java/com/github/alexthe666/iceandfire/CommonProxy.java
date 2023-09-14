@@ -12,6 +12,7 @@ import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.projectile.*;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
+import com.github.alexthe666.iceandfire.enums.EnumParticle;
 import com.github.alexthe666.iceandfire.enums.EnumSeaSerpent;
 import com.github.alexthe666.iceandfire.enums.EnumTroll;
 import com.github.alexthe666.iceandfire.item.block.ItemBlockMyrmexResin;
@@ -236,14 +237,10 @@ public class CommonProxy {
     public void postRender() {
     }
 
-    public void spawnParticle(String name, World world, double x, double y, double z, double motX, double motY, double motZ) {
-        spawnParticle(name, world, x, y, z, motX, motY, motZ, 1.0F);
+    public void spawnParticle(EnumParticle type, World world, double x, double y, double z, double motX, double motY, double motZ) {
     }
 
     public void spawnLightningEffect(World world, ParticleLightningVector sourceVec, ParticleLightningVector targetVec, boolean isProjectile) {
-    }
-
-    public void spawnParticle(String name, World world, double x, double y, double z, double motX, double motY, double motZ, float size) {
     }
 
     public void openBestiaryGui(ItemStack book) {

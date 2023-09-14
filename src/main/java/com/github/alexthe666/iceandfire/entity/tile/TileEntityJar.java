@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
+import com.github.alexthe666.iceandfire.enums.EnumParticle;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouse;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouseModel;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePixieJar;
@@ -88,7 +89,7 @@ public class TileEntityJar extends TileEntity implements ITickable {
 	public void update() {
 		ticksExisted++;
 		if(this.hasPixie && this.world.isRemote) IceAndFire.PROXY.spawnParticle(
-				"if_pixie",
+				EnumParticle.PIXIE_DUST,
 				this.world,
 				this.pos.getX() + 0.5F + (double)(this.world.rand.nextFloat() * PARTICLE_WIDTH * 2F) - (double) PARTICLE_WIDTH,
 				this.pos.getY() + (double)(this.world.rand.nextFloat() * PARTICLE_HEIGHT),

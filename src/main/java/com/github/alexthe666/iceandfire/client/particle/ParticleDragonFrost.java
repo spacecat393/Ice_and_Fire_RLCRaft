@@ -22,19 +22,17 @@ public class ParticleDragonFrost extends ParticleFlame {
 
     private static final ResourceLocation SNOWFLAKE = new ResourceLocation("iceandfire:textures/particles/snowflake_0.png");
     private static final ResourceLocation SNOWFLAKE_BIG = new ResourceLocation("iceandfire:textures/particles/snowflake_1.png");
-    private float size;
     private final double initialX;
     private final double initialZ;
     private final boolean big;
 
     @SideOnly(Side.CLIENT)
-    public ParticleDragonFrost(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn, float size) {
+    public ParticleDragonFrost(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn) {
         super(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
         this.particleMaxAge = 30;
         this.initialX = xCoordIn;
         this.initialZ = zCoordIn;
         this.setPosition(this.posX, this.posY, this.posZ);
-        this.size = size;
         this.setParticleTextureIndex(rand.nextInt(8));
         this.big = rand.nextBoolean();
     }
@@ -48,7 +46,7 @@ public class ParticleDragonFrost extends ParticleFlame {
         if (particleAge > 10) {
             this.setExpired();
         }
-        particleScale = 5F * size;
+        particleScale = 5F;
 
         float f3 = (float) (this.prevPosX + (this.posX - this.prevPosX) * partialTicks - interpPosX);
         float f4 = (float) (this.prevPosY + (this.posY - this.prevPosY) * partialTicks - interpPosY);
@@ -114,8 +112,8 @@ public class ParticleDragonFrost extends ParticleFlame {
 
         float distX = (float) (this.initialX - this.posX);
         float distZ = (float) (this.initialZ - this.posZ);
-        this.motionX += distX * -0.01F * size * rand.nextFloat();
-        this.motionZ += distZ * -0.01F * size * rand.nextFloat();
+        this.motionX += distX * -0.01F * rand.nextFloat();
+        this.motionZ += distZ * -0.01F * rand.nextFloat();
         this.motionY += 0.015F * rand.nextFloat();
     }
 

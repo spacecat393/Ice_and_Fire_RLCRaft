@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.entity.tile;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.entity.EntityPixie;
+import com.github.alexthe666.iceandfire.enums.EnumParticle;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouse;
 import com.github.alexthe666.iceandfire.message.MessageUpdatePixieHouseModel;
 import net.minecraft.inventory.ItemStackHelper;
@@ -79,7 +80,7 @@ public class TileEntityPixieHouse extends TileEntity implements ITickable {
 		if(!world.isRemote && this.hasPixie && this.world.rand.nextInt(100) == 0) releasePixie();
 		if(this.hasPixie && this.world.isRemote) {
 			IceAndFire.PROXY.spawnParticle(
-					"if_pixie",
+					EnumParticle.PIXIE_DUST,
 					this.world,
 					this.pos.getX() + 0.5F + (double)(this.world.rand.nextFloat() * PARTICLE_WIDTH * 2F) - (double)PARTICLE_WIDTH,
 					this.pos.getY() + (double)(this.world.rand.nextFloat() * PARTICLE_HEIGHT),

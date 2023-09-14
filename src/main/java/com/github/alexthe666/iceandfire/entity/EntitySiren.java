@@ -8,6 +8,7 @@ import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.entity.util.IHearsSiren;
+import com.github.alexthe666.iceandfire.enums.EnumParticle;
 import com.github.alexthe666.iceandfire.event.EventLiving;
 import com.github.alexthe666.iceandfire.message.MessageSirenSong;
 import com.google.common.base.Predicate;
@@ -279,7 +280,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity {
                     double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
                     double extraY = 1.2F;
                     double extraZ = (double) (radius * MathHelper.cos(angle));
-                    IceAndFire.PROXY.spawnParticle("siren_music", this.world, this.posX + extraX + this.rand.nextFloat() - 0.5, this.posY + extraY + this.rand.nextFloat() - 0.5, this.posZ + extraZ + this.rand.nextFloat() - 0.5, 0, 0, 0);
+                    IceAndFire.PROXY.spawnParticle(EnumParticle.SIREN_MUSIC, this.world, this.posX + extraX + this.rand.nextFloat() - 0.5, this.posY + extraY + this.rand.nextFloat() - 0.5, this.posZ + extraZ + this.rand.nextFloat() - 0.5, 0, 0, 0);
                 }
             }
 

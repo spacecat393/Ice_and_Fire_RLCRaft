@@ -1,5 +1,8 @@
 package com.github.alexthe666.iceandfire.entity.explosion;
 
+import com.github.alexthe666.iceandfire.IceAndFire;
+import com.github.alexthe666.iceandfire.enums.EnumParticle;
+import com.github.alexthe666.iceandfire.message.MessageParticleFX;
 import com.github.alexthe666.iceandfire.util.ParticleHelper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -21,6 +24,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -139,6 +143,8 @@ public class BlockBreakExplosion extends Explosion {
 
     @Override
     public void doExplosionB(boolean spawnParticles) {
+        List<MessageParticleFX.Particle> explosionParticles = new ArrayList<>();
+        List<MessageParticleFX.Particle> smokeParticles = new ArrayList<>();
         for (BlockPos blockpos : this.affectedBlockPositions) {
             IBlockState state = this.worldObj.getBlockState(blockpos);
             Block block = this.worldObj.getBlockState(blockpos).getBlock();
@@ -159,9 +165,9 @@ public class BlockBreakExplosion extends Explosion {
                 d3 = d3 * d7;
                 d4 = d4 * d7;
                 d5 = d5 * d7;
-                //TODO: change to single packet
-                ParticleHelper.spawnParticle(this.worldObj, EnumParticleTypes.EXPLOSION_NORMAL, (d0 + this.explosionX) / 2.0D, (d1 + this.explosionY) / 2.0D, (d2 + this.explosionZ) / 2.0D, d3, d4, d5);
-                ParticleHelper.spawnParticle(this.worldObj, EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5);
+
+                explosionParticles.add(MessageParticleFX.createParticle((d0 + this.explosionX) / 2.0D, (d1 + this.explosionY) / 2.0D, (d2 + this.explosionZ) / 2.0D, d3, d4, d5));
+                smokeParticles.add(MessageParticleFX.createParticle(d0, d1, d2, d3, d4, d5));
             }
             if (state.getMaterial() != Material.AIR) {
                 if (block.canDropFromExplosion(this)) {
@@ -169,6 +175,12 @@ public class BlockBreakExplosion extends Explosion {
                 }
                 block.onBlockExploded(this.worldObj, blockpos, this);
             }
+        }
+        if (!explosionParticles.isEmpty()) {
+            IceAndFire.NETWORK_WRAPPER.sendToAllTracking(new MessageParticleFX(EnumParticle.EXPLOSION, explosionParticles), this.exploder);
+        }
+        if (!smokeParticles.isEmpty()) {
+            IceAndFire.NETWORK_WRAPPER.sendToAllTracking(new MessageParticleFX(EnumParticle.SMOKE, smokeParticles), this.exploder);
         }
     }
 

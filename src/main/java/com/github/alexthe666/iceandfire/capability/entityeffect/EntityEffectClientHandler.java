@@ -5,6 +5,7 @@ import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
 import com.github.alexthe666.iceandfire.entity.EntitySiren;
 import com.github.alexthe666.iceandfire.entity.EntityStoneStatue;
+import com.github.alexthe666.iceandfire.enums.EnumParticle;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.entity.EntityLiving;
@@ -40,7 +41,7 @@ public class EntityEffectClientHandler {
                 entity.motionZ += (Math.signum(siren.posZ - entity.posZ) * 0.5D - entity.motionZ) * 0.100000000372529;
             }
             if(entity == Minecraft.getMinecraft().player) {
-                if(world.rand.nextInt(40) == 0) IceAndFire.PROXY.spawnParticle("siren_appearance", world, entity.posX, entity.posY, entity.posZ, 0, 0, 0);
+                if(world.rand.nextInt(40) == 0) IceAndFire.PROXY.spawnParticle(EnumParticle.SIREN_APPEARANCE, world, entity.posX, entity.posY, entity.posZ, 0, 0, 0);
                 if(IceAndFireConfig.CLIENT_SETTINGS.sirenShader && !renderer.isShaderActive()) renderer.loadShader(SIREN_SHADER);
             }
         }

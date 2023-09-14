@@ -15,25 +15,23 @@ import java.util.List;
 
 public class ParticleDragonFlame extends ParticleFlame {
 
-    private final float size;
     private final double initialX;
     private final double initialZ;
 
     @SideOnly(Side.CLIENT)
-    public ParticleDragonFlame(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn, float size) {
+    public ParticleDragonFlame(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn) {
         super(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
         this.particleMaxAge = 30;
         this.initialX = xCoordIn;
         this.initialZ = zCoordIn;
         this.setPosition(this.posX, this.posY, this.posZ);
-        this.size = size;
     }
 
     public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
         if (particleAge > 10) {
             this.setExpired();
         }
-        particleScale = 5F * size;
+        particleScale = 5F
         float f = (float) this.particleTextureIndexX / 16.0F;
         float f1 = f + 0.0624375F;
         float f2 = (float) this.particleTextureIndexY / 16.0F;
@@ -82,8 +80,8 @@ public class ParticleDragonFlame extends ParticleFlame {
         super.onUpdate();
         float distX = (float) (this.initialX - this.posX);
         float distZ = (float) (this.initialZ - this.posZ);
-        this.motionX += distX * -0.01F * size * rand.nextFloat();
-        this.motionZ += distZ * -0.01F * size * rand.nextFloat();
+        this.motionX += distX * -0.01F * rand.nextFloat();
+        this.motionZ += distZ * -0.01F * rand.nextFloat();
         this.motionY += 0.015F * rand.nextFloat();
     }
 

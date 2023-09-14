@@ -15,6 +15,7 @@ import com.github.alexthe666.iceandfire.entity.explosion.BlockBreakExplosion;
 import com.github.alexthe666.iceandfire.entity.util.*;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.github.alexthe666.iceandfire.enums.EnumDragonType;
+import com.github.alexthe666.iceandfire.enums.EnumParticle;
 import com.github.alexthe666.iceandfire.item.ItemDragonArmor;
 import com.github.alexthe666.iceandfire.message.MessageDragonArmor;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
@@ -385,9 +386,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                 if (dragonType == EnumDragonType.FIRE && world.isRemote) {
                     ParticleHelper.spawnParticle(this.world, EnumParticleTypes.FLAME, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1);
                 } else if (dragonType == EnumDragonType.ICE && world.isRemote)  {
-                    IceAndFire.PROXY.spawnParticle("snowflake", this.world, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1);
+                    IceAndFire.PROXY.spawnParticle(EnumParticle.SNOWFLAKE, this.world, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1);
                 } else if (dragonType == EnumDragonType.LIGHTNING && world.isRemote)  {
-                    IceAndFire.PROXY.spawnParticle("spark", this.world, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1);
+                    IceAndFire.PROXY.spawnParticle(EnumParticle.SPARK, this.world, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, d2, d0, d1);
                 }
             }
         }
@@ -1264,7 +1265,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         if (this.getAnimation() == this.ANIMATION_WINGBLAST && (this.getAnimationTick() == 17 || this.getAnimationTick() == 22 || this.getAnimationTick() == 28)) {
             this.spawnGroundEffects();
             if (this.getAttackTarget() != null) {
-                boolean flag = this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()) / 4);
+                this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()) / 4);
                 this.getAttackTarget().knockBack(this.getAttackTarget(), this.getDragonStage() * 0.6F, 1, 1);
                 this.attackDecision = this.getRNG().nextBoolean();
             }
@@ -1495,22 +1496,25 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         if(this.attackDecision && this.getAttackTarget() != null && this.getDistance(this.getAttackTarget()) > Math.min(this.getEntityBoundingBox().getAverageEdgeLength() * 5, 25) && !this.isChild()){
             this.attackDecision = false;
         }
-        if ((!this.attackDecision || this.getRNG().nextInt(750) == 0) && this.getDragonStage() < 2 && this.world.isRemote) {
+        if ((!this.attackDecision || this.getRNG().nextInt(750) == 0) && this.getDragonStage() < 2) {
             this.attackDecision = this.getRNG().nextBoolean();
-            for (int i = 0; i < 5; i++) {
-                Vec3d headPos = getHeadPosition();
-                if (this.dragonType == EnumDragonType.FIRE && world.isRemote) {
-                    ParticleHelper.spawnParticle(this.world, EnumParticleTypes.SMOKE_LARGE, headPos.x, headPos.y, headPos.z, 0, 0, 0);
-                } else if (this.dragonType == EnumDragonType.ICE && world.isRemote) {
-                    IceAndFire.PROXY.spawnParticle("dragonice", this.world, headPos.x, headPos.y, headPos.z, 0, 0, 0);
-                } else if (this.dragonType == EnumDragonType.LIGHTNING && world.isRemote) {
-                    IceAndFire.PROXY.spawnParticle("dragonlightning", this.world, headPos.x, headPos.y, headPos.z, 0, 0, 0);
+
+            if (this.world.isRemote) {
+                for (int i = 0; i < 5; i++) {
+                    Vec3d headPos = getHeadPosition();
+                    if (this.dragonType == EnumDragonType.FIRE && world.isRemote) {
+                        ParticleHelper.spawnParticle(this.world, EnumParticleTypes.SMOKE_LARGE, headPos.x, headPos.y, headPos.z, 0, 0, 0);
+                    } else if (this.dragonType == EnumDragonType.ICE && world.isRemote) {
+                        IceAndFire.PROXY.spawnParticle(EnumParticle.DRAGON_ICE, this.world, headPos.x, headPos.y, headPos.z, 0, 0, 0);
+                    } else if (this.dragonType == EnumDragonType.LIGHTNING && world.isRemote) {
+                        IceAndFire.PROXY.spawnParticle(EnumParticle.SPARK, this.world, headPos.x, headPos.y, headPos.z, 0, 0, 0);
+                    }
                 }
-            }
-            if (this.dragonType == EnumDragonType.FIRE) {
-                this.playSound(SoundEvents.BLOCK_FIRE_EXTINGUISH, 1, 1);
-            } else {
-                this.playSound(SoundEvents.ITEM_BOTTLE_FILL_DRAGONBREATH, 1, 1);
+                if (this.dragonType == EnumDragonType.FIRE) {
+                    this.playSound(SoundEvents.BLOCK_FIRE_EXTINGUISH, 1, 1);
+                } else {
+                    this.playSound(SoundEvents.ITEM_BOTTLE_FILL_DRAGONBREATH, 1, 1);
+                }
             }
         }
         if (this.isBreathingFire()) {

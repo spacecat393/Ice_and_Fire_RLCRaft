@@ -5,8 +5,10 @@ import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.entity.EntityDragonBase;
 import com.github.alexthe666.iceandfire.entity.projectile.EntityDragonLightningCharge;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
+import com.github.alexthe666.iceandfire.enums.EnumParticle;
 import com.github.alexthe666.iceandfire.integration.LycanitesCompat;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
+import com.github.alexthe666.iceandfire.message.MessageParticleFX;
 import com.github.alexthe666.iceandfire.util.ParticleHelper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -28,6 +30,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -183,6 +186,7 @@ public class LightningExplosion extends Explosion {
 	@Override
 	public void doExplosionB(boolean spawnParticles) {
 		if (this.isSmoking) {
+			List<MessageParticleFX.Particle> particles = new ArrayList<>();
 			for (BlockPos blockpos : this.affectedBlockPositions) {
 				IBlockState state = this.worldObj.getBlockState(blockpos);
 				Block block = this.worldObj.getBlockState(blockpos).getBlock();
@@ -203,8 +207,8 @@ public class LightningExplosion extends Explosion {
 					d3 = d3 * d7;
 					d4 = d4 * d7;
 					d5 = d5 * d7;
-					//TODO: Change to single packet
-					ParticleHelper.spawnParticle(this.worldObj, EnumParticleTypes.SMOKE_NORMAL, d0, d1, d2, d3, d4, d5);
+
+					particles.add(MessageParticleFX.createParticle(d0, d1, d2, d3, d4, d5));
 				}
 
 				if (state.getMaterial() != Material.AIR && !state.getBlock().getTranslationKey().contains("grave") && DragonUtils.canDragonBreak(state.getBlock()) && mobGriefing) {
@@ -226,6 +230,12 @@ public class LightningExplosion extends Explosion {
 						worldObj.setBlockState(blockpos, ModBlocks.crackledCobblestone.getDefaultState());
 					}
 				}
+			}
+			if (!particles.isEmpty()) {
+				List<EnumParticle> types = new ArrayList<>();
+				types.add(EnumParticle.SMOKE);
+				types.add(EnumParticle.SMOKE);
+				IceAndFire.NETWORK_WRAPPER.sendToAllTracking(new MessageParticleFX(types, particles), this.exploder);
 			}
 		}
 	}
