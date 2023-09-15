@@ -26,14 +26,15 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 import javax.annotation.Nullable;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
 public class ItemGorgonHead extends Item implements ICustomRendered {
+
+	private static Method METHOD_DEATHSOUND;
 
 	public ItemGorgonHead() {
 		this.setCreativeTab(IceAndFire.TAB);
@@ -149,14 +150,14 @@ public class ItemGorgonHead extends Item implements ICustomRendered {
 					worldIn.playSound(null, pointedEntity.posX, pointedEntity.posY, pointedEntity.posZ, ModSounds.GORGON_TURN_STONE, SoundCategory.HOSTILE, 1, 1);
 				}
 				SoundEvent deathSound = null;
-				Method deathSoundMethod = ReflectionHelper.findMethod(EntityLivingBase.class, "getDeathSound", "func_184615_bR", null);
 				try {
-					deathSound = (SoundEvent) deathSoundMethod.invoke((EntityLivingBase) pointedEntity, null);
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
+					if(METHOD_DEATHSOUND == null) {
+						METHOD_DEATHSOUND = ObfuscationReflectionHelper.findMethod(EntityLivingBase.class, "func_184615_bR", SoundEvent.class);
+						METHOD_DEATHSOUND.setAccessible(true);
+					}
+					deathSound = (SoundEvent)METHOD_DEATHSOUND.invoke(pointedEntity);
+				}
+				catch (Exception e) {
 					e.printStackTrace();
 				}
 				if (deathSound != null) {

@@ -40,7 +40,10 @@ public class RenderModCapes {
 			NetworkPlayerInfo info = null;
 
 			try {
-				if(playerInfoField == null) playerInfoField = ObfuscationReflectionHelper.findField(AbstractClientPlayer.class, "field_175157_a");
+				if(playerInfoField == null) {
+					playerInfoField = ObfuscationReflectionHelper.findField(AbstractClientPlayer.class, "field_175157_a");
+					playerInfoField.setAccessible(true);
+				}
 				info = (NetworkPlayerInfo)playerInfoField.get(event.getEntityPlayer());
 			}
 			catch(IllegalArgumentException | IllegalAccessException var7) {
@@ -51,7 +54,10 @@ public class RenderModCapes {
 				Map<MinecraftProfileTexture.Type, ResourceLocation> textureMap = null;
 
 				try {
-					if(playerTexturesField == null) playerTexturesField = ObfuscationReflectionHelper.findField(NetworkPlayerInfo.class, "field_187107_a");
+					if(playerTexturesField == null) {
+						playerTexturesField = ObfuscationReflectionHelper.findField(NetworkPlayerInfo.class, "field_187107_a");
+						playerTexturesField.setAccessible(true);
+					}
 					textureMap = (Map)playerTexturesField.get(info);
 				}
 				catch(IllegalArgumentException | IllegalAccessException var5) {

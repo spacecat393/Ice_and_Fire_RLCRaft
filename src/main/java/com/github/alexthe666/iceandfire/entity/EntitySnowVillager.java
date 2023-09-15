@@ -18,13 +18,15 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 
 public class EntitySnowVillager extends EntityVillager {
+
+	private static Field FIELD_BABY;
+	private static Field FIELD_PROFESSION;
+	private static Field FIELD_CAREER;
 
 	private String professionName;
 	private net.minecraftforge.fml.common.registry.VillagerRegistry.VillagerProfession prof;
@@ -49,33 +51,33 @@ public class EntitySnowVillager extends EntityVillager {
 		if (professionId > 2) {
 			professionId = 2;
 		}
-		this.dataManager.set(PROFFESSION(), Integer.valueOf(professionId));
+		this.dataManager.set(PROFESSION(), Integer.valueOf(professionId));
 
 	}
 
 	private DataParameter<Boolean> BABY() {
-		Field field = ReflectionHelper.findField(EntityAgeable.class, ObfuscationReflectionHelper.remapFieldNames(EntityAgeable.class.getName(), new String[]{"BABY", "field_184751_bv"}));
 		try {
-			Field modifier = Field.class.getDeclaredField("modifiers");
-			modifier.setAccessible(true);
-			modifier.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-			DataParameter<Boolean> bay = (DataParameter<Boolean>) field.get(this);
-			return bay;
-		} catch (Exception e) {
+			if(FIELD_BABY == null) {
+				FIELD_BABY = ObfuscationReflectionHelper.findField(EntityAgeable.class, "field_184751_bv");
+				FIELD_BABY.setAccessible(true);
+			}
+			return (DataParameter<Boolean>)FIELD_BABY.get(this);
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 
-	private DataParameter<Integer> PROFFESSION() {
-		Field field = ReflectionHelper.findField(EntityVillager.class, ObfuscationReflectionHelper.remapFieldNames(EntityVillager.class.getName(), new String[]{"PROFESSION", "field_184752_bw"}));
+	private DataParameter<Integer> PROFESSION() {
 		try {
-			Field modifier = Field.class.getDeclaredField("modifiers");
-			modifier.setAccessible(true);
-			modifier.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-			DataParameter<Integer> prof = (DataParameter<Integer>) field.get(this);
-			return prof;
-		} catch (Exception e) {
+			if(FIELD_PROFESSION == null) {
+				FIELD_PROFESSION = ObfuscationReflectionHelper.findField(EntityVillager.class, "field_184752_bw");
+				FIELD_PROFESSION.setAccessible(true);
+			}
+			return (DataParameter<Integer>)FIELD_PROFESSION.get(this);
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
@@ -136,8 +138,13 @@ public class EntitySnowVillager extends EntityVillager {
 				this.prof = ModVillagers.INSTANCE.professions.get(intFromProfesion(p));
 			}
 			try {
-				ReflectionHelper.findField(EntityVillager.class, new String[]{"field_175563_bv", "careerId"}).set(this, 1);
-			} catch (IllegalAccessException e) {
+				if(FIELD_CAREER == null) {
+					FIELD_CAREER = ObfuscationReflectionHelper.findField(EntityVillager.class, "field_175563_bv");
+					FIELD_CAREER.setAccessible(true);
+				}
+				FIELD_CAREER.set(this, 1);
+			}
+			catch (IllegalAccessException e) {
 				e.printStackTrace();
 			}
 		}
