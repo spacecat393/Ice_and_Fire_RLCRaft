@@ -215,10 +215,12 @@ public class IceExplosion extends Explosion {
                         worldObj.setBlockState(blockpos, ModBlocks.frozenGrass.getDefaultState());
                     } else if (block instanceof BlockGrass || block instanceof BlockDirt) {
                         worldObj.setBlockState(blockpos, ModBlocks.frozenDirt.getDefaultState());
-                    } else if (block instanceof BlockLeaves || state.getMaterial() == Material.WATER) {
+                    } else if (block instanceof BlockLeaves) {
                         worldObj.setBlockState(blockpos, Blocks.AIR.getDefaultState());
                     } else if (block instanceof BlockGravel) {
                         worldObj.setBlockState(blockpos, ModBlocks.frozenGravel.getDefaultState());
+                    } else if (state.getMaterial() == Material.WATER) {
+						worldObj.setBlockState(blockpos, Blocks.ICE.getDefaultState());
                     } else if (state.getMaterial() == Material.WOOD) {
                         worldObj.setBlockState(blockpos, ModBlocks.frozenSplinters.getDefaultState());
                     } else if (state.getMaterial() == Material.ROCK && (block != ModBlocks.frozenCobblestone && block != Blocks.COBBLESTONE && block != Blocks.MOSSY_COBBLESTONE && block != Blocks.COBBLESTONE_WALL)) {
