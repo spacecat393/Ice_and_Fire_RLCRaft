@@ -54,21 +54,23 @@ public class ChainLightningUtils {
 
         List<EntityLivingBase> entityLiving = new ArrayList<>();
         for(Entity ent : world.getEntitiesWithinAABBExcludingEntity(lightningSource.get(), lightningSource.getBoundingBox(range))) {
-            if(ent instanceof EntityMultipartPart) ent = ((EntityMultipartPart)ent).getParent();
-            if(ent instanceof EntityLivingBase &&
-                    ent.isEntityAlive() &&
-                    !entityLiving.contains((EntityLivingBase)ent) &&
-                    lightningSource.canChainTo(ent, attacker))
+            if (ent instanceof EntityMultipartPart) {
+                ent = ((EntityMultipartPart)ent).getParent();
+            }
+            if (ent instanceof EntityLivingBase
+                    && !entityLiving.contains(ent)
+                    && lightningSource.canChainTo((EntityLivingBase) ent, attacker)) {
                 entityLiving.add((EntityLivingBase)ent);
+            }
         }
         if(entityLiving.isEmpty()) return;
 
         entityLiving.sort(getFindByNearestComparator(lightningSource));
 
         LinkedList<Integer> alreadyTargetedEntities = new LinkedList<>();
-        for(EntityLivingBase nextTarget : entityLiving) {
-            if(hops <= 0 || damage <= 0) break;
-            if(alreadyTargetedEntities.contains(nextTarget.getEntityId())) continue;
+        for (EntityLivingBase nextTarget : entityLiving) {
+            if (hops <= 0 || damage <= 0) break;
+            if (alreadyTargetedEntities.contains(nextTarget.getEntityId())) continue;
 
             attackEntityWithLightningDamage(attacker, nextTarget, damage);
             if (isParalysisEnabled) {
@@ -146,25 +148,22 @@ public class ChainLightningUtils {
             return source;
         }
 
-        private boolean canChainTo(Entity target, EntityLivingBase attacker) {
-            if (!(target instanceof EntityLivingBase)) {
-                return false;
-            }
+        private boolean canChainTo(EntityLivingBase target, EntityLivingBase attacker) {
             if (target instanceof EntityPlayer) {
                 return false;
             }
-            if (!DragonUtils.isAlive((EntityLivingBase) target)) {
+            if (!DragonUtils.isAlive(target)) {
                 return false;
             }
             if (target instanceof IEntityOwnable && ((IEntityOwnable) target).getOwner() != null) {
                 if (target instanceof EntityLiving) {
                     EntityLivingBase attackTarget = ((EntityLiving) target).getAttackTarget();
-                    EntityLivingBase revengeTarget = ((EntityLivingBase) target).getRevengeTarget();
+                    EntityLivingBase revengeTarget = target.getRevengeTarget();
                     if (!attacker.equals(attackTarget) && !attacker.equals(revengeTarget)) {
                         return false;
                     }
                 } else {
-                    EntityLivingBase revengeTarget = ((EntityLivingBase) target).getRevengeTarget();
+                    EntityLivingBase revengeTarget = target.getRevengeTarget();
                     if (!attacker.equals(revengeTarget)) {
                         return false;
                     }
