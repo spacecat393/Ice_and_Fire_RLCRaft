@@ -230,7 +230,9 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
 
     @Nullable
     public EntityLivingBase getTargetedEntity() {
-        boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget() != null && this.getAttackTarget().isPotionActive(MobEffects.BLINDNESS);
+        boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) ||
+                this.getAttackTarget() != null && this.getAttackTarget().isPotionActive(MobEffects.BLINDNESS) ||
+                this.getAttackTarget() != null && EntityGorgon.isBlindfolded(this.getAttackTarget());
         if(blindness){
             return null;
         }
@@ -462,7 +464,9 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
                 forcePreyToLook((EntityLiving) this.getAttackTarget());
             }
         }
-        boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget() != null && this.getAttackTarget().isPotionActive(MobEffects.BLINDNESS);
+        boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) ||
+                this.getAttackTarget() != null && this.getAttackTarget().isPotionActive(MobEffects.BLINDNESS) ||
+                this.getAttackTarget() != null && EntityGorgon.isBlindfolded(this.getAttackTarget());
         if(blindness){
             this.setStaring(false);
         }
