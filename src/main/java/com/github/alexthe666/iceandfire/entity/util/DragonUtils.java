@@ -8,7 +8,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.monster.EntityGolem;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
@@ -261,10 +260,13 @@ public class DragonUtils {
 	}
 
     public static boolean isAlive(EntityLivingBase entity) {
-		if (!entity.isEntityAlive() || !entity.attackable()) {
+		if (!entity.isEntityAlive()) {
 			return false;
 		}
-		return !(entity instanceof IDeadMob) || !((IDeadMob) entity).isMobDead();
+		if (entity instanceof IDeadMob && ((IDeadMob) entity).isMobDead()) {
+			return false;
+		}
+		return entity instanceof EntityLiving || entity.attackable();
 	}
 
 	public static boolean canGrief(boolean weak) {
