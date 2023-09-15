@@ -42,6 +42,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
 	private GorgonAIStareAttack aiStare;
 	private EntityAIAttackMelee aiMelee;
 	public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "gorgon"));
+	private int statueCooldown = 0;
 
 	public EntityGorgon(World worldIn) {
 		super(worldIn);
@@ -196,6 +197,7 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
 
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
+		if(statueCooldown > 0) statueCooldown--;
 		if (this.getAttackTarget() != null) {
 			boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget().isPotionActive(MobEffects.BLINDNESS);
 			this.getLookHelper().setLookPosition(this.getAttackTarget().posX, this.getAttackTarget().posY + (double) this.getAttackTarget().getEyeHeight(), this.getAttackTarget().posZ, (float) this.getHorizontalFaceSpeed(), (float) this.getVerticalFaceSpeed());
@@ -214,19 +216,22 @@ public class EntityGorgon extends EntityMob implements IAnimatedEntity, IVillage
 				if (this.getAnimation() == ANIMATION_SCARE) {
 					if (this.getAnimationTick() > 10) {
 						if (this.getAttackTarget() instanceof EntityPlayer) {
-							EntityStoneStatue statue = new EntityStoneStatue(world);
-							statue.setPositionAndRotation(this.getAttackTarget().posX, this.getAttackTarget().posY, this.getAttackTarget().posZ, this.getAttackTarget().rotationYaw, this.getAttackTarget().rotationPitch);
-							statue.smallArms = true;
 							if (!world.isRemote) {
-								world.spawnEntity(statue);
-								this.getAttackTarget().setDead();
+								this.getAttackTarget().attackEntityFrom(IceAndFire.gorgon, Integer.MAX_VALUE);
+								if (!this.getAttackTarget().isEntityAlive() && statueCooldown <= 0) {
+									EntityStoneStatue statue = new EntityStoneStatue(world);
+									statue.setPositionAndRotation(this.getAttackTarget().posX, this.getAttackTarget().posY, this.getAttackTarget().posZ, this.getAttackTarget().rotationYaw, this.getAttackTarget().rotationPitch);
+									statue.smallArms = true;
+									statue.prevRotationYaw = this.getAttackTarget().rotationYaw;
+									statue.rotationYaw = this.getAttackTarget().rotationYaw;
+									statue.rotationYawHead = this.getAttackTarget().rotationYaw;
+									statue.renderYawOffset = this.getAttackTarget().rotationYaw;
+									statue.prevRenderYawOffset = this.getAttackTarget().rotationYaw;
+									world.spawnEntity(statue);
+									statueCooldown = 40;
+								}
+								this.setAttackTarget(null);
 							}
-							statue.prevRotationYaw = this.getAttackTarget().rotationYaw;
-							statue.rotationYaw = this.getAttackTarget().rotationYaw;
-							statue.rotationYawHead = this.getAttackTarget().rotationYaw;
-							statue.renderYawOffset = this.getAttackTarget().rotationYaw;
-							statue.prevRenderYawOffset = this.getAttackTarget().rotationYaw;
-							this.getAttackTarget().attackEntityFrom(IceAndFire.gorgon, Integer.MAX_VALUE);
 						} else {
 							if (this.getAttackTarget() instanceof EntityLiving && !(this.getAttackTarget() instanceof IBlacklistedFromStatues) || this.getAttackTarget() instanceof IBlacklistedFromStatues && ((IBlacklistedFromStatues) this.getAttackTarget()).canBeTurnedToStone()) {
 								IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(this.getAttackTarget());
