@@ -190,19 +190,6 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
         }
     }
 
-    public void onDeath(DamageSource cause) {
-        super.onDeath(cause);
-        if (hippocampusInventory != null && !this.world.isRemote) {
-            for (int i = 0; i < hippocampusInventory.getSizeInventory(); ++i) {
-                ItemStack itemstack = hippocampusInventory.getStackInSlot(i);
-                if (!itemstack.isEmpty()) {
-                    this.entityDropItem(itemstack, 0.0F);
-                }
-            }
-        }
-    }
-
-
     private void setStateField(int i, boolean newState) {
         byte prevState = dataManager.get(CONTROL_STATE).byteValue();
         if (newState) {

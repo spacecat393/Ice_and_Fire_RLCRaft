@@ -1,9 +1,12 @@
 package com.github.alexthe666.iceandfire.entity.ai;
 
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 
 public class SeaSerpentAIGetInWater extends AquaticAIGetInWater {
 
@@ -23,8 +26,8 @@ public class SeaSerpentAIGetInWater extends AquaticAIGetInWater {
 
     @Nullable
     protected Vec3d findPossibleShelter(int xz, int y) {
-        Random random = this.serpent.getRNG();
-        BlockPos blockpos = new BlockPos(this.serpent.posX, this.serpent.getEntityBoundingBox().minY, this.serpent.posZ);
+        Random random = this.creature.getRNG();
+        BlockPos blockpos = new BlockPos(this.creature.posX, this.creature.getEntityBoundingBox().minY, this.creature.posZ);
 
         for (int i = 0; i < 10; ++i) {
             BlockPos blockpos1 = blockpos.add(random.nextInt(xz * 2) - xz, random.nextInt(y) + 2, random.nextInt(xz * 2) - xz);

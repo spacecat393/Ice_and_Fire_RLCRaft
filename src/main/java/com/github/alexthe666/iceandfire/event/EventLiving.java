@@ -364,7 +364,7 @@ public class EventLiving {
 	@SubscribeEvent
 	public void onEntityInteract(PlayerInteractEvent.EntityInteractSpecific event) {
         if (event.getTarget() instanceof EntityLiving) {
-			IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(event.getTarget());
+			IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability((EntityLivingBase)event.getTarget());
 			if (capability != null && capability.isStoned()) {
 				event.setCanceled(true);
 			}
@@ -374,7 +374,7 @@ public class EventLiving {
 	@SubscribeEvent
 	public void onEntityInteract(PlayerInteractEvent.EntityInteract event) {
         if (event.getTarget() instanceof EntityLiving) {
-			IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(event.getTarget());
+			IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability((EntityLivingBase)event.getTarget());
 			if (capability != null && capability.isStoned()) {
 				event.setCanceled(true);
 			}
