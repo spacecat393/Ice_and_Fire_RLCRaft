@@ -235,7 +235,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
             this.setAnimation(ANIMATION_BITE_RIDER);
         }
         if (!this.world.isRemote && this.getAnimation() == ANIMATION_BITE_RIDER && this.getAnimationTick() == 6 && !this.isTamed()) {
-            passenger.attackEntityFrom(DamageSource.causeMobDamage(this), 1);
+            passenger.attackEntityFrom(DamageSource.causeMobDamage(this), (float)IceAndFireConfig.ENTITY_SETTINGS.amphithereTameDamage);
         }
         float pitch_forward = 0;
         if (this.rotationPitch > 0 && this.isFlying()) {
@@ -1044,7 +1044,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
     class FlyMoveHelper extends EntityMoveHelper {
         public FlyMoveHelper(EntityAmphithere entity) {
             super(entity);
-            this.speed = 1.75F;
+            this.speed = IceAndFireConfig.ENTITY_SETTINGS.amphithereFlightSpeed;
         }
 
         public void onUpdateMoveHelper() {

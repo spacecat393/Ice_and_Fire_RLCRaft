@@ -592,9 +592,14 @@ public class IceAndFireConfig {
 		@Config.RangeInt(min = 1, max = 10000)
 		public int amphithereTameTime = 400;
 
+		@Config.Comment("Amount of damage an Amphithere attacks the player for each bite while atttempting to tame them")
+		@Config.Name("Amphithere Taming Bite Damage")
+		@Config.RangeDouble(min = 1.0D)
+		public double amphithereTameDamage;
+
 		@Config.Comment("How fast Amphitheres fly")
 		@Config.Name("Amphithere Flight Speed")
-		@Config.RangeDouble(min = 0, max = 3.0D)
+		@Config.RangeDouble(min = 1.0D, max = 3.0D)
 		public double amphithereFlightSpeed = 1.75D;
 
 		@Config.Comment("Maximum Amphithere Health")
