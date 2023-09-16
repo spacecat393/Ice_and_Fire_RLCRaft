@@ -354,6 +354,11 @@ public class IceAndFireConfig {
 		@Config.RangeInt(min = 1, max = 10000)
 		public int dragonAttackDamage = 17;
 
+		@Config.Comment("Percentage of damage done when a dragon bites a target that the dragon will heal for")
+		@Config.Name("Dragon Bite Healing Percentage")
+		@Config.RangeDouble(min = 0D, max = 1D)
+		public double dragonBiteHeal = 0.5D;
+
 		@Config.Comment("Maximum dragon flight height, in Y height")
 		@Config.Name("Max Dragon Flight Height")
 		@Config.RangeInt(min = 10, max = 1000)

@@ -174,39 +174,37 @@ public class EntityLightningDragon extends EntityDragonBase {
 		}
 		switch (new Random().nextInt(4)) {
 			case 0:
-				if (this.getAnimation() != this.ANIMATION_BITE) {
-					this.setAnimation(this.ANIMATION_BITE);
+				if (this.getAnimation() != ANIMATION_BITE) {
+					this.setAnimation(ANIMATION_BITE);
 					return false;
 				} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
-					boolean success = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-					if (success) this.heal((float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
+					boolean success = this.doBiteAttack(entityIn);
 					this.attackDecision = this.getRNG().nextBoolean();
 					return success;
 				}
 				break;
 			case 1:
 				if (new Random().nextInt(2) == 0 && isDirectPathBetweenPoints(this, this.getPositionVector(), entityIn.getPositionVector()) && entityIn.width < this.width * 0.5F && this.getControllingPassenger() == null && this.getDragonStage() > 1 && !(entityIn instanceof EntityDragonBase) && !DragonUtils.isAnimaniaMob(entityIn)) {
-					if (this.getAnimation() != this.ANIMATION_SHAKEPREY) {
-						this.setAnimation(this.ANIMATION_SHAKEPREY);
+					if (this.getAnimation() != ANIMATION_SHAKEPREY) {
+						this.setAnimation(ANIMATION_SHAKEPREY);
 						entityIn.startRiding(this);
 						this.attackDecision = this.getRNG().nextBoolean();
 						return true;
 					}
 				} else {
-					if (this.getAnimation() != this.ANIMATION_BITE) {
-						this.setAnimation(this.ANIMATION_BITE);
+					if (this.getAnimation() != ANIMATION_BITE) {
+						this.setAnimation(ANIMATION_BITE);
 						return false;
 					} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
-						boolean success = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-						if (success) this.heal((float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
+						boolean success = this.doBiteAttack(entityIn);
 						this.attackDecision = this.getRNG().nextBoolean();
 						return success;
 					}
 				}
 				break;
 			case 2:
-				if (this.getAnimation() != this.ANIMATION_TAILWHACK) {
-					this.setAnimation(this.ANIMATION_TAILWHACK);
+				if (this.getAnimation() != ANIMATION_TAILWHACK) {
+					this.setAnimation(ANIMATION_TAILWHACK);
 					return false;
 				} else if (this.getAnimationTick() > 27 && this.getAnimationTick() < 30) {
 					boolean success = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
@@ -219,17 +217,16 @@ public class EntityLightningDragon extends EntityDragonBase {
 				break;
 			case 3:
 				if (this.onGround && !this.isHovering() && !this.isFlying()) {
-					if (this.getAnimation() != this.ANIMATION_WINGBLAST) {
-						this.setAnimation(this.ANIMATION_WINGBLAST);
+					if (this.getAnimation() != ANIMATION_WINGBLAST) {
+						this.setAnimation(ANIMATION_WINGBLAST);
 						return true;
 					}
 				} else {
-					if (this.getAnimation() != this.ANIMATION_BITE) {
-						this.setAnimation(this.ANIMATION_BITE);
+					if (this.getAnimation() != ANIMATION_BITE) {
+						this.setAnimation(ANIMATION_BITE);
 						return false;
 					} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
-						boolean success = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-						if (success) this.heal((float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
+						boolean success = this.doBiteAttack(entityIn);
 						this.attackDecision = this.getRNG().nextBoolean();
 						return success;
 					}
@@ -237,12 +234,11 @@ public class EntityLightningDragon extends EntityDragonBase {
 
 				break;
 			default:
-				if (this.getAnimation() != this.ANIMATION_BITE) {
-					this.setAnimation(this.ANIMATION_BITE);
+				if (this.getAnimation() != ANIMATION_BITE) {
+					this.setAnimation(ANIMATION_BITE);
 					return false;
 				} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
-					boolean success = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-					if (success) this.heal((float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
+					boolean success = this.doBiteAttack(entityIn);
 					this.attackDecision = this.getRNG().nextBoolean();
 					return success;
 				}

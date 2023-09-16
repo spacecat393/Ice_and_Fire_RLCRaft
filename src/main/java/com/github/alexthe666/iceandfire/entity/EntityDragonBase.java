@@ -1678,12 +1678,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         this.setAnimation(ANIMATION_SHAKEPREY);
         if (this.getAnimation() == ANIMATION_SHAKEPREY && this.getAnimationTick() > 55 && prey != null && !this.world.isRemote) {
             if (this.getAnimationTick() == 56 && prey instanceof EntityLivingBase) {
-                EntityLivingBase target = (EntityLivingBase) prey;
-                boolean success = target.attackEntityFrom(
-                        DamageSource.causeMobDamage(this),
-                        (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()
-                );
-                if (success) this.heal((float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
+                this.doBiteAttack((EntityLivingBase)prey);
             } else if (this.getAnimationTick() > 60) {
                 prey.dismountRidingEntity();
             }
@@ -1742,6 +1737,21 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         this.attackDecision = true;
         this.setHunger(50);
         return livingdata;
+    }
+
+    public boolean doBiteAttack(Entity entity) {
+        float prevHealth = 0;
+        if(entity instanceof EntityLivingBase) prevHealth = ((EntityLivingBase)entity).getHealth();
+        boolean success = entity.attackEntityFrom(
+                DamageSource.causeMobDamage(this),
+                (float)this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()
+        );
+        if(success && entity instanceof EntityLivingBase) {
+            float changed = (float)IceAndFireConfig.DRAGON_SETTINGS.dragonBiteHeal * Math.max(0.0F, Math.min(40.0F, prevHealth - ((EntityLivingBase)entity).getHealth()));
+            //Don't bother attempting to heal tiny amounts
+            if(changed > 1.0F) this.heal(changed);
+        }
+        return success;
     }
 
     @Override
@@ -1810,14 +1820,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         }
         if (this.strike() && this.getControllingPassenger() != null && this.getControllingPassenger() instanceof EntityPlayer) {
             EntityLivingBase target = DragonUtils.riderLookingAtEntity(this, (EntityPlayer) this.getControllingPassenger(), this.getDragonStage() + (this.getEntityBoundingBox().maxX - this.getEntityBoundingBox().minX));
-            if (this.getAnimation() != this.ANIMATION_BITE) {
-                this.setAnimation(this.ANIMATION_BITE);
+            if (this.getAnimation() != ANIMATION_BITE) {
+                this.setAnimation(ANIMATION_BITE);
             }
             if (target != null && !DragonUtils.hasSameOwner(this, target)) {
-                boolean success = target.attackEntityFrom(
-                        DamageSource.causeMobDamage(this), (float)((int)this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue())
-                );
-                if (success) this.heal((float)((int)this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));            }
+                this.doBiteAttack(target);
+            }
         }
         if (this.getControllingPassenger() != null && this.getControllingPassenger().isSneaking()) {
             this.getControllingPassenger().dismountRidingEntity();
