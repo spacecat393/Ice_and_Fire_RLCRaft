@@ -20,7 +20,6 @@ import com.github.alexthe666.iceandfire.item.block.ItemBlockPodium;
 import com.github.alexthe666.iceandfire.world.BiomeGlacier;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityTracker;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -81,56 +80,46 @@ public class CommonProxy {
 
     @SubscribeEvent
     public static void registerEntities(RegistryEvent.Register<EntityEntry> event) {
-        registerUnspawnable(EntityEntryBuilder.<EntityDragonEgg>create(), event, EntityDragonEgg.class, "dragonegg", 1);
-        registerUnspawnable(EntityEntryBuilder.<EntityDragonArrow>create(), event, EntityDragonArrow.class, "dragonarrow", 2);
-        registerUnspawnable(EntityEntryBuilder.<EntityDragonSkull>create(), event, EntityDragonSkull.class, "dragonskull", 3);
-        registerSpawnable(EntityEntryBuilder.<EntityFireDragon>create(), event, EntityFireDragon.class, "firedragon", 4, 0X340000, 0XA52929, 256, 3);
-        registerSpawnable(EntityEntryBuilder.<EntityIceDragon>create(), event, EntityIceDragon.class, "icedragon", 5, 0XB5DDFB, 0X7EBAF0, 256, 3);
-        registerUnspawnable(EntityEntryBuilder.<EntityDragonFire>create(), event, EntityDragonFire.class, "dragonfire", 6);
-        registerUnspawnable(EntityEntryBuilder.<EntityDragonIce>create(), event, EntityDragonIce.class, "dragonice", 7);
-        registerUnspawnable(EntityEntryBuilder.<EntityDragonLightning>create(), event, EntityDragonLightning.class, "dragonlightning", 8);
-        registerSpawnable(EntityEntryBuilder.<EntityLightningDragon>create(), event, EntityLightningDragon.class, "lightningdragon", 9, 0X422367, 0X725691, 256, 3);
-        registerUnspawnable(EntityEntryBuilder.<EntityDragonFireCharge>create(), event, EntityDragonFireCharge.class, "dragonfirecharge", 10);
-        registerUnspawnable(EntityEntryBuilder.<EntityDragonIceCharge>create(), event, EntityDragonIceCharge.class, "dragonicecharge", 11);
-        registerUnspawnable(EntityEntryBuilder.<EntityDragonLightningCharge>create(), event, EntityDragonLightningCharge.class, "dragonlightningcharge", 12);
-        registerSpawnable(EntityEntryBuilder.<EntitySnowVillager>create(), event, EntitySnowVillager.class, "snowvillager", 13, 0X3C2A23, 0X70B1CF);
-        registerUnspawnable(EntityEntryBuilder.<EntityHippogryphEgg>create(), event, EntityHippogryphEgg.class, "hippogryphegg", 14);
-        registerSpawnable(EntityEntryBuilder.<EntityHippogryph>create(), event, EntityHippogryph.class, "hippogryph", 15, 0XD8D8D8, 0XD1B55D);
-        registerUnspawnable(EntityEntryBuilder.<EntityStoneStatue>create(), event, EntityStoneStatue.class, "stonestatue", 16);
-        registerSpawnable(EntityEntryBuilder.<EntityGorgon>create(), event, EntityGorgon.class, "gorgon", 17, 0XD0D99F, 0X684530);
-        registerSpawnable(EntityEntryBuilder.<EntityPixie>create(), event, EntityPixie.class, "if_pixie", 18, 0XFF7F89, 0XE2CCE2);
-        registerSpawnable(EntityEntryBuilder.<EntityCyclops>create(), event, EntityCyclops.class, "cyclops", 19, 0XB0826E, 0X3A1F0F);
-        registerSpawnable(EntityEntryBuilder.<EntitySiren>create(), event, EntitySiren.class, "siren", 20, 0X8EE6CA, 0XF2DFC8);
-        registerSpawnable(EntityEntryBuilder.<EntityHippocampus>create(), event, EntityHippocampus.class, "hippocampus", 21, 0X4491C7, 0X4FC56B);
-        registerSpawnable(EntityEntryBuilder.<EntityDeathWorm>create(), event, EntityDeathWorm.class, "deathworm", 22, 0XD1CDA3, 0X423A3A);
-        registerUnspawnable(EntityEntryBuilder.<EntityDeathWormEgg>create(), event, EntityDeathWormEgg.class, "deathwormegg", 23);
-        registerSpawnable(EntityEntryBuilder.<EntityCockatrice>create(), event, EntityCockatrice.class, "if_cockatrice", 24, 0X8F5005, 0X4F5A23);
-        registerUnspawnable(EntityEntryBuilder.<EntityCockatriceEgg>create(), event, EntityCockatriceEgg.class, "if_cockatriceegg", 23);
-        registerSpawnable(EntityEntryBuilder.<EntityStymphalianBird>create(), event, EntityStymphalianBird.class, "stymphalianbird", 25, 0X744F37, 0X9E6C4B);
-        registerUnspawnable(EntityEntryBuilder.<EntityStymphalianFeather>create(), event, EntityStymphalianFeather.class, "stymphalianfeather", 26);
-        registerUnspawnable(EntityEntryBuilder.<EntityStymphalianArrow>create(), event, EntityStymphalianArrow.class, "stymphalianarrow", 27);
-        registerSpawnable(EntityEntryBuilder.<EntityTroll>create(), event, EntityTroll.class, "if_troll", 28, 0X3D413D, 0X58433A);
-        registerSpawnable(EntityEntryBuilder.<EntityMyrmexWorker>create(), event,EntityMyrmexWorker.class, "myrmex_worker", 29, 0XA16026, 0X594520);
-        registerSpawnable(EntityEntryBuilder.<EntityMyrmexSoldier>create(), event,EntityMyrmexSoldier.class, "myrmex_soldier", 30, 0XA16026, 0X7D622D);
-        registerSpawnable(EntityEntryBuilder.<EntityMyrmexSentinel>create(), event,EntityMyrmexSentinel.class, "myrmex_sentinel", 31, 0XA16026, 0XA27F3A);
-        registerSpawnable(EntityEntryBuilder.<EntityMyrmexRoyal>create(), event,EntityMyrmexRoyal.class, "myrmex_royal", 32, 0XA16026, 0XC79B48);
-        registerSpawnable(EntityEntryBuilder.<EntityMyrmexQueen>create(), event,EntityMyrmexQueen.class, "myrmex_queen", 33, 0XA16026, 0XECB855);
-        registerUnspawnable(EntityEntryBuilder.<EntityMyrmexEgg>create(), event,EntityMyrmexEgg.class, "myrmex_egg", 34);
-        registerSpawnable(EntityEntryBuilder.<EntityAmphithere>create(), event, EntityAmphithere.class, "amphithere", 35, 0X597535, 0X00AA98);
-        registerUnspawnable(EntityEntryBuilder.<EntityAmphithereArrow>create(), event, EntityAmphithereArrow.class, "amphitherearrow", 36);
-        registerSpawnable(EntityEntryBuilder.<EntitySeaSerpent>create(), event, EntitySeaSerpent.class, "seaserpent", 37, 0X008299, 0XC5E6E7, 256, 3);
-        registerUnspawnable(EntityEntryBuilder.<EntitySeaSerpentBubbles>create(), event, EntitySeaSerpentBubbles.class, "seaserpentbubble", 38);
-        registerUnspawnable(EntityEntryBuilder.<EntitySeaSerpentArrow>create(), event, EntitySeaSerpentArrow.class, "seaserpentarrow", 39);
-    }
-
-    public static void registerSpawnable(EntityEntryBuilder builder, RegistryEvent.Register<EntityEntry> event, Class<? extends Entity> entityClass, String name, int id, int mainColor, int subColor) {
-        id += 900;
-        builder.entity(entityClass);
-        builder.id(new ResourceLocation(IceAndFire.MODID, name), id);
-        builder.name(name);
-        builder.egg(mainColor, subColor);
-        builder.tracker(64, 1, true);
-        event.getRegistry().register(builder.build());
+        registerUnspawnable(EntityEntryBuilder.<EntityDragonEgg>create(), event, EntityDragonEgg.class, "dragonegg", 1, 80, 5);
+        registerUnspawnable(EntityEntryBuilder.<EntityDragonArrow>create(), event, EntityDragonArrow.class, "dragonarrow", 2, 64, 10);
+        registerUnspawnable(EntityEntryBuilder.<EntityDragonSkull>create(), event, EntityDragonSkull.class, "dragonskull", 3, 80, 5);
+        registerSpawnable(EntityEntryBuilder.<EntityFireDragon>create(), event, EntityFireDragon.class, "firedragon", 4, 0X340000, 0XA52929, 160, 3);
+        registerSpawnable(EntityEntryBuilder.<EntityIceDragon>create(), event, EntityIceDragon.class, "icedragon", 5, 0XB5DDFB, 0X7EBAF0, 160, 3);
+        registerUnspawnable(EntityEntryBuilder.<EntityDragonFire>create(), event, EntityDragonFire.class, "dragonfire", 6, 80, 5);
+        registerUnspawnable(EntityEntryBuilder.<EntityDragonIce>create(), event, EntityDragonIce.class, "dragonice", 7, 80, 5);
+        registerUnspawnable(EntityEntryBuilder.<EntityDragonLightning>create(), event, EntityDragonLightning.class, "dragonlightning", 8, 80, 5);
+        registerSpawnable(EntityEntryBuilder.<EntityLightningDragon>create(), event, EntityLightningDragon.class, "lightningdragon", 9, 0X422367, 0X725691, 160, 3);
+        registerUnspawnable(EntityEntryBuilder.<EntityDragonFireCharge>create(), event, EntityDragonFireCharge.class, "dragonfirecharge", 10, 80, 5);
+        registerUnspawnable(EntityEntryBuilder.<EntityDragonIceCharge>create(), event, EntityDragonIceCharge.class, "dragonicecharge", 11, 80, 5);
+        registerUnspawnable(EntityEntryBuilder.<EntityDragonLightningCharge>create(), event, EntityDragonLightningCharge.class, "dragonlightningcharge", 12, 80, 5);
+        registerSpawnable(EntityEntryBuilder.<EntitySnowVillager>create(), event, EntitySnowVillager.class, "snowvillager", 13, 0X3C2A23, 0X70B1CF, 80, 3);
+        registerUnspawnable(EntityEntryBuilder.<EntityHippogryphEgg>create(), event, EntityHippogryphEgg.class, "hippogryphegg", 14, 64, 10);
+        registerSpawnable(EntityEntryBuilder.<EntityHippogryph>create(), event, EntityHippogryph.class, "hippogryph", 15, 0XD8D8D8, 0XD1B55D, 80, 3);
+        registerUnspawnable(EntityEntryBuilder.<EntityStoneStatue>create(), event, EntityStoneStatue.class, "stonestatue", 16, 80, 5);
+        registerSpawnable(EntityEntryBuilder.<EntityGorgon>create(), event, EntityGorgon.class, "gorgon", 17, 0XD0D99F, 0X684530, 80, 3);
+        registerSpawnable(EntityEntryBuilder.<EntityPixie>create(), event, EntityPixie.class, "if_pixie", 18, 0XFF7F89, 0XE2CCE2, 80, 3);
+        registerSpawnable(EntityEntryBuilder.<EntityCyclops>create(), event, EntityCyclops.class, "cyclops", 19, 0XB0826E, 0X3A1F0F, 120, 3);
+        registerSpawnable(EntityEntryBuilder.<EntitySiren>create(), event, EntitySiren.class, "siren", 20, 0X8EE6CA, 0XF2DFC8, 120, 3);
+        registerSpawnable(EntityEntryBuilder.<EntityHippocampus>create(), event, EntityHippocampus.class, "hippocampus", 21, 0X4491C7, 0X4FC56B, 80, 3);
+        registerSpawnable(EntityEntryBuilder.<EntityDeathWorm>create(), event, EntityDeathWorm.class, "deathworm", 22, 0XD1CDA3, 0X423A3A, 80, 3);
+        registerUnspawnable(EntityEntryBuilder.<EntityDeathWormEgg>create(), event, EntityDeathWormEgg.class, "deathwormegg", 23, 64, 10);
+        registerSpawnable(EntityEntryBuilder.<EntityCockatrice>create(), event, EntityCockatrice.class, "if_cockatrice", 24, 0X8F5005, 0X4F5A23, 80, 3);
+        registerUnspawnable(EntityEntryBuilder.<EntityCockatriceEgg>create(), event, EntityCockatriceEgg.class, "if_cockatriceegg", 23, 64, 10);
+        registerSpawnable(EntityEntryBuilder.<EntityStymphalianBird>create(), event, EntityStymphalianBird.class, "stymphalianbird", 25, 0X744F37, 0X9E6C4B, 80, 3);
+        registerUnspawnable(EntityEntryBuilder.<EntityStymphalianFeather>create(), event, EntityStymphalianFeather.class, "stymphalianfeather", 26, 80, 5);
+        registerUnspawnable(EntityEntryBuilder.<EntityStymphalianArrow>create(), event, EntityStymphalianArrow.class, "stymphalianarrow", 27, 64, 10);
+        registerSpawnable(EntityEntryBuilder.<EntityTroll>create(), event, EntityTroll.class, "if_troll", 28, 0X3D413D, 0X58433A, 80, 3);
+        registerSpawnable(EntityEntryBuilder.<EntityMyrmexWorker>create(), event,EntityMyrmexWorker.class, "myrmex_worker", 29, 0XA16026, 0X594520, 80, 3);
+        registerSpawnable(EntityEntryBuilder.<EntityMyrmexSoldier>create(), event,EntityMyrmexSoldier.class, "myrmex_soldier", 30, 0XA16026, 0X7D622D, 80, 3);
+        registerSpawnable(EntityEntryBuilder.<EntityMyrmexSentinel>create(), event,EntityMyrmexSentinel.class, "myrmex_sentinel", 31, 0XA16026, 0XA27F3A, 80, 3);
+        registerSpawnable(EntityEntryBuilder.<EntityMyrmexRoyal>create(), event,EntityMyrmexRoyal.class, "myrmex_royal", 32, 0XA16026, 0XC79B48, 80, 3);
+        registerSpawnable(EntityEntryBuilder.<EntityMyrmexQueen>create(), event,EntityMyrmexQueen.class, "myrmex_queen", 33, 0XA16026, 0XECB855, 80, 3);
+        registerUnspawnable(EntityEntryBuilder.<EntityMyrmexEgg>create(), event,EntityMyrmexEgg.class, "myrmex_egg", 34, 80, 5);
+        registerSpawnable(EntityEntryBuilder.<EntityAmphithere>create(), event, EntityAmphithere.class, "amphithere", 35, 0X597535, 0X00AA98, 80, 3);
+        registerUnspawnable(EntityEntryBuilder.<EntityAmphithereArrow>create(), event, EntityAmphithereArrow.class, "amphitherearrow", 36, 64, 10);
+        registerSpawnable(EntityEntryBuilder.<EntitySeaSerpent>create(), event, EntitySeaSerpent.class, "seaserpent", 37, 0X008299, 0XC5E6E7, 160, 3);
+        registerUnspawnable(EntityEntryBuilder.<EntitySeaSerpentBubbles>create(), event, EntitySeaSerpentBubbles.class, "seaserpentbubble", 38, 80, 5);
+        registerUnspawnable(EntityEntryBuilder.<EntitySeaSerpentArrow>create(), event, EntitySeaSerpentArrow.class, "seaserpentarrow", 39, 64, 10);
     }
 
     public static void registerSpawnable(EntityEntryBuilder builder, RegistryEvent.Register<EntityEntry> event, Class<? extends Entity> entityClass, String name, int id, int mainColor, int subColor, int range, int frequency) {
@@ -143,12 +132,12 @@ public class CommonProxy {
         event.getRegistry().register(builder.build());
     }
 
-    public static void registerUnspawnable(EntityEntryBuilder builder, RegistryEvent.Register<EntityEntry> event, Class<? extends Entity> entityClass, String name, int id) {
+    public static void registerUnspawnable(EntityEntryBuilder builder, RegistryEvent.Register<EntityEntry> event, Class<? extends Entity> entityClass, String name, int id, int range, int frequency) {
         id += 900;
         builder.entity(entityClass);
         builder.id(new ResourceLocation(IceAndFire.MODID, name), id);
         builder.name(name);
-        builder.tracker(64, 1, true);
+        builder.tracker(range, frequency, true);
         event.getRegistry().register(builder.build());
     }
 
