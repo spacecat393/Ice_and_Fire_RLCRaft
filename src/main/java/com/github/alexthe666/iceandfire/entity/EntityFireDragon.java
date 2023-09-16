@@ -138,9 +138,10 @@ public class EntityFireDragon extends EntityDragonBase {
                     this.setAnimation(this.ANIMATION_BITE);
                     return false;
                 } else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
-                    boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+                    boolean success = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+                    if (success) this.heal((float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
                     this.attackDecision = this.getRNG().nextBoolean();
-                    return flag;
+                    return success;
                 }
                 break;
             case 1:
@@ -157,9 +158,10 @@ public class EntityFireDragon extends EntityDragonBase {
                         this.setAnimation(this.ANIMATION_BITE);
                         return false;
                     } else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
-                        boolean flag1 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+                        boolean success = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+                        if (success) this.heal((float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
                         this.attackDecision = this.getRNG().nextBoolean();
-                        return flag1;
+                        return success;
                     }
                 }
                 break;
@@ -168,12 +170,12 @@ public class EntityFireDragon extends EntityDragonBase {
                     this.setAnimation(this.ANIMATION_TAILWHACK);
                     return false;
                 } else if (this.getAnimationTick() > 27 && this.getAnimationTick() < 30) {
-                    boolean flag2 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+                    boolean success = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
                     if (entityIn instanceof EntityLivingBase) {
                         ((EntityLivingBase) entityIn).knockBack(entityIn, this.getDragonStage() * 0.6F, 1, 1);
                     }
                     this.attackDecision = this.getRNG().nextBoolean();
-                    return flag2;
+                    return success;
                 }
                 break;
             case 3:
@@ -187,9 +189,10 @@ public class EntityFireDragon extends EntityDragonBase {
                         this.setAnimation(this.ANIMATION_BITE);
                         return false;
                     } else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
-                        boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+                        boolean success = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+                        if (success) this.heal((float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
                         this.attackDecision = this.getRNG().nextBoolean();
-                        return flag;
+                        return success;
                     }
                 }
 
@@ -199,30 +202,15 @@ public class EntityFireDragon extends EntityDragonBase {
                     this.setAnimation(this.ANIMATION_BITE);
                     return false;
                 } else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
-                    boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+                    boolean success = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+                    if (success) this.heal((float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
                     this.attackDecision = this.getRNG().nextBoolean();
-                    return flag;
+                    return success;
                 }
                 break;
         }
 
         return false;
-    }
-
-    public void moveEntityTowards(Entity entity, double x, double y, double z, float velocity, float inaccuracy) {
-        float f = MathHelper.sqrt(x * x + y * y + z * z);
-        x = x / (double) f;
-        y = y / (double) f;
-        z = z / (double) f;
-        x = x + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
-        y = y + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
-        z = z + this.rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
-        x = x * (double) velocity;
-        y = y * (double) velocity;
-        z = z * (double) velocity;
-        entity.motionX = x;
-        entity.motionY = y;
-        entity.motionZ = z;
     }
 
     @Override

@@ -173,9 +173,10 @@ public class EntityIceDragon extends EntityDragonBase {
 					this.setAnimation(this.ANIMATION_BITE);
 					return false;
 				} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
-					boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+					boolean success = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+					if (success) this.heal((float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
 					this.attackDecision = this.getRNG().nextBoolean();
-					return flag;
+					return success;
 				}
 				break;
 			case 1:
@@ -192,9 +193,10 @@ public class EntityIceDragon extends EntityDragonBase {
 						this.setAnimation(this.ANIMATION_BITE);
 						return false;
 					} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
-						boolean flag1 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+						boolean success = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+						if (success) this.heal((float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
 						this.attackDecision = this.getRNG().nextBoolean();
-						return flag1;
+						return success;
 					}
 				}
 				break;
@@ -222,9 +224,10 @@ public class EntityIceDragon extends EntityDragonBase {
 						this.setAnimation(this.ANIMATION_BITE);
 						return false;
 					} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
-						boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+						boolean success = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+						if (success) this.heal((float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
 						this.attackDecision = this.getRNG().nextBoolean();
-						return flag;
+						return success;
 					}
 				}
 				break;
@@ -233,9 +236,10 @@ public class EntityIceDragon extends EntityDragonBase {
 					this.setAnimation(this.ANIMATION_BITE);
 					return false;
 				} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
-					boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+					boolean success = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+					if (success) this.heal((float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
 					this.attackDecision = this.getRNG().nextBoolean();
-					return flag;
+					return success;
 				}
 				break;
 		}

@@ -178,9 +178,10 @@ public class EntityLightningDragon extends EntityDragonBase {
 					this.setAnimation(this.ANIMATION_BITE);
 					return false;
 				} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
-					boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+					boolean success = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+					if (success) this.heal((float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
 					this.attackDecision = this.getRNG().nextBoolean();
-					return flag;
+					return success;
 				}
 				break;
 			case 1:
@@ -196,9 +197,10 @@ public class EntityLightningDragon extends EntityDragonBase {
 						this.setAnimation(this.ANIMATION_BITE);
 						return false;
 					} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
-						boolean flag1 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+						boolean success = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+						if (success) this.heal((float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
 						this.attackDecision = this.getRNG().nextBoolean();
-						return flag1;
+						return success;
 					}
 				}
 				break;
@@ -207,12 +209,12 @@ public class EntityLightningDragon extends EntityDragonBase {
 					this.setAnimation(this.ANIMATION_TAILWHACK);
 					return false;
 				} else if (this.getAnimationTick() > 27 && this.getAnimationTick() < 30) {
-					boolean flag2 = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+					boolean success = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
 					if (entityIn instanceof EntityLivingBase) {
 						((EntityLivingBase) entityIn).knockBack(entityIn, this.getDragonStage() * 0.6F, 1, 1);
 					}
 					this.attackDecision = this.getRNG().nextBoolean();
-					return flag2;
+					return success;
 				}
 				break;
 			case 3:
@@ -226,9 +228,10 @@ public class EntityLightningDragon extends EntityDragonBase {
 						this.setAnimation(this.ANIMATION_BITE);
 						return false;
 					} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
-						boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+						boolean success = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+						if (success) this.heal((float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
 						this.attackDecision = this.getRNG().nextBoolean();
-						return flag;
+						return success;
 					}
 				}
 
@@ -238,9 +241,10 @@ public class EntityLightningDragon extends EntityDragonBase {
 					this.setAnimation(this.ANIMATION_BITE);
 					return false;
 				} else if (this.getAnimationTick() > 15 && this.getAnimationTick() < 25) {
-					boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+					boolean success = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+					if (success) this.heal((float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
 					this.attackDecision = this.getRNG().nextBoolean();
-					return flag;
+					return success;
 				}
 				break;
 		}
