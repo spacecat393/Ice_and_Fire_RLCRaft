@@ -125,7 +125,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
             itemstack.interactWithEntity(player, this, hand);
             return true;
         }
-        if (itemstack != null && itemstack.getItem() == Items.COOKIE) {
+        if (itemstack.getItem() == Items.COOKIE) {
             if (this.getGrowingAge() == 0 && !isInLove()) {
                 this.setSitting(false);
                 this.setInLove(player);
@@ -136,7 +136,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
             }
             return true;
         }
-        if (itemstack != null && itemstack.getItem() == Items.DYE && itemstack.getItemDamage() == EnumDyeColor.BROWN.getDyeDamage()) {
+        if (itemstack.getItem() == Items.DYE && itemstack.getItemDamage() == EnumDyeColor.BROWN.getDyeDamage()) {
             this.heal(5);
             this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
             if (!player.isCreative()) {
@@ -145,7 +145,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
             return true;
         }
         if (!super.processInteract(player, hand)) {
-            if (itemstack != null && itemstack.getItem() == ModItems.dragon_stick && this.isOwner(player)) {
+            if (itemstack.getItem() == ModItems.dragon_stick && this.isOwner(player)) {
                 if (player.isSneaking()) {
                     BlockPos pos = new BlockPos(this);
                     this.homePos = pos;
@@ -202,11 +202,11 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
 
     private void switchNavigator(boolean onLand) {
         if (onLand) {
-            this.moveHelper = new EntityMoveHelper(this);
+            this.moveHelper = new GroundMoveHelper(this);
             this.navigator = new PathNavigateClimber(this, world);
             this.isLandNavigator = true;
         } else {
-            this.moveHelper = new EntityAmphithere.FlyMoveHelper(this);
+            this.moveHelper = new FlyMoveHelper(this);
             this.navigator = new PathNavigateFlyingCreature(this, world);
             this.isLandNavigator = false;
         }
@@ -269,9 +269,6 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
         if(this.isSitting() && this.getAttackTarget() != null){
             this.setAttackTarget(null);
         }
-        /*if (!world.isRemote) {
-            System.out.println(this.moveHelper.action + "  onGround:" + this.onGround + " attack target: " + this.getAttackTarget());
-        }*/
         boolean flapping = this.isFlapping();
         boolean flying = this.isFlying() && !this.onGround || (!this.onGround && !onLeaves());
         boolean diving = flying && this.motionY <= -0.1F || this.isFallen;
@@ -953,9 +950,16 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
             super(creature, speed, 10);
         }
 
+        @Override
         public boolean shouldExecute() {
             return this.entity.onGround && super.shouldExecute() && ((EntityAmphithere) this.entity).canMove();
         }
+
+        @Override
+        public boolean shouldContinueExecuting() {
+            return this.entity.onGround && super.shouldContinueExecuting() && ((EntityAmphithere) this.entity).canMove();
+        }
+
     }
 
     class AIFlyWander extends EntityAIBase {
@@ -984,10 +988,12 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
             //return raytraceresult == null || raytraceresult.typeOfHit == RayTraceResult.Type.MISS;
         }
 
+        @Override
         public boolean shouldContinueExecuting() {
             return false;
         }
 
+        @Override
         public void updateTask() {
             target = EntityAmphithere.getPositionRelativetoGround(EntityAmphithere.this, EntityAmphithere.this.world, EntityAmphithere.this.posX + EntityAmphithere.this.rand.nextInt(30) - 15, EntityAmphithere.this.posZ + EntityAmphithere.this.rand.nextInt(30) - 15, EntityAmphithere.this.rand);
 
@@ -1008,6 +1014,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
             this.setMutexBits(1);
         }
 
+        @Override
         public boolean shouldExecute() {
             if (EntityAmphithere.this.flightBehavior != FlightBehavior.CIRCLE || !EntityAmphithere.this.canMove()) {
                 return false;
@@ -1026,10 +1033,12 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
             return raytraceresult == null || raytraceresult.typeOfHit == RayTraceResult.Type.MISS;
         }
 
+        @Override
         public boolean shouldContinueExecuting() {
             return EntityAmphithere.this.getAttackTarget() == null && EntityAmphithere.this.flightBehavior == FlightBehavior.CIRCLE;
         }
 
+        @Override
         public void updateTask() {
             if (EntityAmphithere.this.getDistance(target.getX(), target.getY(), target.getZ()) < 5) {
                 target = EntityAmphithere.getPositionInOrbit(EntityAmphithere.this, world, EntityAmphithere.this.orbitPos, EntityAmphithere.this.rand);
@@ -1044,12 +1053,28 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
         }
     }
 
+    class GroundMoveHelper extends EntityMoveHelper {
+        public GroundMoveHelper(EntityAmphithere entity) {
+            super(entity);
+            this.speed = IceAndFireConfig.ENTITY_SETTINGS.amphithereFlightSpeed;
+        }
+
+        @Override
+        public void onUpdateMoveHelper() {
+            if (!EntityAmphithere.this.canMove()) {
+                return;
+            }
+            super.onUpdateMoveHelper();
+        }
+    }
+
     class FlyMoveHelper extends EntityMoveHelper {
         public FlyMoveHelper(EntityAmphithere entity) {
             super(entity);
             this.speed = IceAndFireConfig.ENTITY_SETTINGS.amphithereFlightSpeed;
         }
 
+        @Override
         public void onUpdateMoveHelper() {
             if (!EntityAmphithere.this.canMove()) {
                 return;
@@ -1059,7 +1084,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
                 double d1 = this.posY - EntityAmphithere.this.posY;
                 double d2 = this.posZ - EntityAmphithere.this.posZ;
                 double d3 = d0 * d0 + d1 * d1 + d2 * d2;
-                d3 = (double) MathHelper.sqrt(d3);
+                d3 = MathHelper.sqrt(d3);
                 if (d3 < 6 && EntityAmphithere.this.getAttackTarget() == null) {
                     if (!EntityAmphithere.this.changedFlightBehavior && EntityAmphithere.this.flightBehavior == FlightBehavior.WANDER && EntityAmphithere.this.rand.nextInt(30) == 0) {
                         EntityAmphithere.this.flightBehavior = FlightBehavior.CIRCLE;
@@ -1074,7 +1099,6 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
                     }
                 }
                 if (d3 < 1 && EntityAmphithere.this.getAttackTarget() == null) {
-                    //this.action = EntityMoveHelper.Action.WAIT;
                     EntityAmphithere.this.motionX *= 0.5D;
                     EntityAmphithere.this.motionY *= 0.5D;
                     EntityAmphithere.this.motionZ *= 0.5D;
@@ -1082,17 +1106,15 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
                     EntityAmphithere.this.motionX += d0 / d3 * 0.5D * this.speed;
                     EntityAmphithere.this.motionY += d1 / d3 * 0.5D * this.speed;
                     EntityAmphithere.this.motionZ += d2 / d3 * 0.5D * this.speed;
-                    float f1 = (float) (-(MathHelper.atan2(d1, d3) * (180D / Math.PI)));
-                    this.entity.rotationPitch = f1;
+                    this.entity.rotationPitch = (float) (-(MathHelper.atan2(d1, d3) * (180D / Math.PI)));
                     if (EntityAmphithere.this.getAttackTarget() == null) {
                         EntityAmphithere.this.rotationYaw = -((float) MathHelper.atan2(EntityAmphithere.this.motionX, EntityAmphithere.this.motionZ)) * (180F / (float) Math.PI);
-                        EntityAmphithere.this.renderYawOffset = EntityAmphithere.this.rotationYaw;
                     } else {
                         double d4 = EntityAmphithere.this.getAttackTarget().posX - EntityAmphithere.this.posX;
                         double d5 = EntityAmphithere.this.getAttackTarget().posZ - EntityAmphithere.this.posZ;
                         EntityAmphithere.this.rotationYaw = -((float) MathHelper.atan2(d4, d5)) * (180F / (float) Math.PI);
-                        EntityAmphithere.this.renderYawOffset = EntityAmphithere.this.rotationYaw;
                     }
+                    EntityAmphithere.this.renderYawOffset = EntityAmphithere.this.rotationYaw;
                 }
             }
         }
