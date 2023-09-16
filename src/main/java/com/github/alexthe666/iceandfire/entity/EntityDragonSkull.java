@@ -154,22 +154,6 @@ public class EntityDragonSkull extends EntityAnimal implements IBlacklistedFromS
 		super.writeEntityToNBT(compound);
 	}
 
-	public float getDragonSize() {
-		float step;
-		step = (minSize - maxSize) / (125);
-
-		if (this.getDragonAge() > 125) {
-			return this.minSize + (step * 125);
-		}
-
-		return this.minSize + (step * this.getDragonAge());
-	}
-
-	@Override
-	protected boolean canDespawn() {
-		return false;
-	}
-
 	@Override
 	public boolean canBePushed() {
 		return false;
