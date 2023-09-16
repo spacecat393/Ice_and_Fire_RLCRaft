@@ -1056,7 +1056,6 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
     class GroundMoveHelper extends EntityMoveHelper {
         public GroundMoveHelper(EntityAmphithere entity) {
             super(entity);
-            this.speed = IceAndFireConfig.ENTITY_SETTINGS.amphithereFlightSpeed;
         }
 
         @Override
@@ -1079,6 +1078,14 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
             if (!EntityAmphithere.this.canMove()) {
                 return;
             }
+            if (EntityAmphithere.this.collidedHorizontally) {
+                EntityAmphithere.this.rotationYaw += 180.0F;
+                this.speed = 0.1F;
+                BlockPos target = EntityAmphithere.getPositionRelativetoGround(EntityAmphithere.this, EntityAmphithere.this.world, EntityAmphithere.this.posX + EntityAmphithere.this.rand.nextInt(15) - 7, EntityAmphithere.this.posZ + EntityAmphithere.this.rand.nextInt(15) - 7, EntityAmphithere.this.rand);
+                this.posX = target.getX();
+                this.posY = target.getY();
+                this.posZ = target.getZ();
+            }
             if (this.action == EntityMoveHelper.Action.MOVE_TO) {
                 double d0 = this.posX - EntityAmphithere.this.posX;
                 double d1 = this.posY - EntityAmphithere.this.posY;
@@ -1099,6 +1106,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
                     }
                 }
                 if (d3 < 1 && EntityAmphithere.this.getAttackTarget() == null) {
+                    this.action = EntityMoveHelper.Action.WAIT;
                     EntityAmphithere.this.motionX *= 0.5D;
                     EntityAmphithere.this.motionY *= 0.5D;
                     EntityAmphithere.this.motionZ *= 0.5D;
@@ -1106,15 +1114,17 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
                     EntityAmphithere.this.motionX += d0 / d3 * 0.5D * this.speed;
                     EntityAmphithere.this.motionY += d1 / d3 * 0.5D * this.speed;
                     EntityAmphithere.this.motionZ += d2 / d3 * 0.5D * this.speed;
-                    this.entity.rotationPitch = (float) (-(MathHelper.atan2(d1, d3) * (180D / Math.PI)));
+                    float f1 = (float) (-(MathHelper.atan2(d1, d3) * (180D / Math.PI)));
+                    this.entity.rotationPitch = f1;
                     if (EntityAmphithere.this.getAttackTarget() == null) {
                         EntityAmphithere.this.rotationYaw = -((float) MathHelper.atan2(EntityAmphithere.this.motionX, EntityAmphithere.this.motionZ)) * (180F / (float) Math.PI);
+                        EntityAmphithere.this.renderYawOffset = EntityAmphithere.this.rotationYaw;
                     } else {
                         double d4 = EntityAmphithere.this.getAttackTarget().posX - EntityAmphithere.this.posX;
                         double d5 = EntityAmphithere.this.getAttackTarget().posZ - EntityAmphithere.this.posZ;
                         EntityAmphithere.this.rotationYaw = -((float) MathHelper.atan2(d4, d5)) * (180F / (float) Math.PI);
+                        EntityAmphithere.this.renderYawOffset = EntityAmphithere.this.rotationYaw;
                     }
-                    EntityAmphithere.this.renderYawOffset = EntityAmphithere.this.rotationYaw;
                 }
             }
         }
