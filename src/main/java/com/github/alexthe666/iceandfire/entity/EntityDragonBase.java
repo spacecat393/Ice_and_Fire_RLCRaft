@@ -1676,9 +1676,17 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
 
     private void updatePreyInMouth(Entity prey) {
         this.setAnimation(ANIMATION_SHAKEPREY);
-        if (this.getAnimation() == ANIMATION_SHAKEPREY && this.getAnimationTick() > 55 && prey != null) {
-            prey.attackEntityFrom(DamageSource.causeMobDamage(this), prey instanceof EntityPlayer ? 17F : (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 4);
-            prey.dismountRidingEntity();
+        if (this.getAnimation() == ANIMATION_SHAKEPREY && this.getAnimationTick() > 55 && prey != null && !this.world.isRemote) {
+            if (this.getAnimationTick() == 56 && prey instanceof EntityLivingBase) {
+                EntityLivingBase target = (EntityLivingBase) prey;
+                boolean success = target.attackEntityFrom(
+                        DamageSource.causeMobDamage(this),
+                        (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()
+                );
+                if (success) this.heal((float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
+            } else if (this.getAnimationTick() > 60) {
+                prey.dismountRidingEntity();
+            }
         }
         renderYawOffset = rotationYaw;
         float modTick_0 = this.getAnimationTick() - 25;
@@ -1686,8 +1694,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         float modTick_2 = this.getAnimationTick() > 30 ? 10 : Math.max(0, this.getAnimationTick() - 20);
         float radius = 0.75F * (0.6F * getRenderSize() / 3) * -3;
         float angle = (0.01745329251F * this.renderYawOffset) + 3.15F + (modTick_1 * 2F) * 0.015F;
-        double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
-        double extraZ = (double) (radius * MathHelper.cos(angle));
+        double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
+        double extraZ = radius * MathHelper.cos(angle);
         double extraY = modTick_2 == 0 ? 0 : 0.035F * ((getRenderSize() / 3) + (modTick_2 * 0.5 * (getRenderSize() / 3)));
         prey.setPosition(this.posX + extraX, this.posY + extraY, this.posZ + extraZ);
     }
@@ -1806,8 +1814,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                 this.setAnimation(this.ANIMATION_BITE);
             }
             if (target != null && !DragonUtils.hasSameOwner(this, target)) {
-                target.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
-            }
+                boolean success = target.attackEntityFrom(
+                        DamageSource.causeMobDamage(this), (float)((int)this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue())
+                );
+                if (success) this.heal((float)((int)this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));            }
         }
         if (this.getControllingPassenger() != null && this.getControllingPassenger().isSneaking()) {
             this.getControllingPassenger().dismountRidingEntity();
