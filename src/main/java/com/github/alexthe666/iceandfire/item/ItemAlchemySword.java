@@ -1,21 +1,14 @@
 package com.github.alexthe666.iceandfire.item;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
-import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
-import com.github.alexthe666.iceandfire.api.InFCapabilities;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.core.ModItems;
-import com.github.alexthe666.iceandfire.entity.EntityFireDragon;
-import com.github.alexthe666.iceandfire.entity.EntityIceDragon;
-import com.github.alexthe666.iceandfire.api.ChainLightningUtils;
+import com.github.alexthe666.iceandfire.integration.CompatLoadUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 
-import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -24,10 +17,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemAlchemySword extends ItemSword {
+public class ItemAlchemySword extends ItemSword implements IHitEffect {
+
+	protected final ToolMaterial toolMaterial;
 
 	public ItemAlchemySword(ToolMaterial toolmaterial, String gameName, String name) {
 		super(toolmaterial);
+		this.toolMaterial = toolmaterial;
 		this.setTranslationKey(name);
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setRegistryName(IceAndFire.MODID, gameName);
@@ -35,34 +31,12 @@ public class ItemAlchemySword extends ItemSword {
 
 	@Override
 	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
-		if (this == ModItems.dragonbone_sword_fire) {
-			if (target instanceof EntityIceDragon) {
-				target.attackEntityFrom(DamageSource.IN_FIRE, 13.5F);
-			}
-			target.setFire(5);
-			target.knockBack(target, 1F, attacker.posX - target.posX, attacker.posZ - target.posZ);
-		}
-		if (this == ModItems.dragonbone_sword_ice) {
-			if (target instanceof EntityFireDragon) {
-				target.attackEntityFrom(DamageSource.DROWN, 13.5F);
-			}
-			if(!target.world.isRemote) {
-				IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(target);
-				if(capability != null) capability.setFrozen(200);
-			}
-			//target.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 100, 2));
-			target.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 100, 2));
-			target.knockBack(target, 1F, attacker.posX - target.posX, attacker.posZ - target.posZ);
-		}
-		if (this == ModItems.dragonbone_sword_lightning) {
-			if (target instanceof EntityFireDragon || target instanceof EntityIceDragon) {
-				target.attackEntityFrom(DamageSource.LIGHTNING_BOLT, 6.75F);
-			}
-			ChainLightningUtils.createChainLightningFromTarget(target.world, target, attacker);
-			target.knockBack(target, 1F, attacker.posX - target.posX, attacker.posZ - target.posZ);
-		}
+		if(!CompatLoadUtil.isRLCombatLoaded()) this.doHitEffect(target, attacker);
 		return super.hitEntity(stack, target, attacker);
 	}
+
+	@Override
+	public ToolMaterial getMaterial() { return this.toolMaterial; }
 
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
@@ -81,6 +55,7 @@ public class ItemAlchemySword extends ItemSword {
 	}
 
 	@SideOnly(Side.CLIENT)
+	@Override
 	public boolean hasEffect(ItemStack stack) {
 		return true;
 	}

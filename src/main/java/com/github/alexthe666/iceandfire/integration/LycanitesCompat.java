@@ -4,31 +4,29 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraftforge.fml.common.Loader;
+import net.minecraft.util.ResourceLocation;
 
 public class LycanitesCompat {
 
-    private static final String MOD_ID = "lycanitesmobs";
-    private static final String PARALYSIS = "paralysis";
+    private static final String PARALYSIS = "lycanitesmobs:paralysis";
+    private static Potion PARALYSIS_POTION;
 
     public static boolean isEnabled() {
-        return Loader.isModLoaded(MOD_ID);
+        return CompatLoadUtil.isLycanitesLoaded();
     }
 
     public static void applyParalysis(Entity entity, int duration) {
-        if (!(entity instanceof EntityLivingBase)) {
-            return;
-        }
-        if (isEnabled()) {
+        if (entity instanceof EntityLivingBase && isEnabled()) {
             try {
-                EntityLivingBase livingBase = (EntityLivingBase) entity;
-                String resourceLocation = MOD_ID + ":" + PARALYSIS;
-                Potion effect = getPotionEffect(resourceLocation);
-                if (effect == null) {
+                if (PARALYSIS_POTION == null) {
+                    PARALYSIS_POTION = Potion.getPotionFromResourceLocation(PARALYSIS);
+                }
+                EntityLivingBase livingBase = (EntityLivingBase)entity;
+                if (PARALYSIS_POTION == null) {
                     return;
                 }
-                if (!livingBase.isPotionActive(effect)) {
-                    livingBase.addPotionEffect(new PotionEffect(effect, duration));
+                if (!livingBase.isPotionActive(PARALYSIS_POTION)) {
+                    livingBase.addPotionEffect(new PotionEffect(PARALYSIS_POTION, duration));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -41,23 +39,10 @@ public class LycanitesCompat {
             return false;
         }
         if (isEnabled()) {
-            String resourceLocation = MOD_ID + ":" + PARALYSIS;
-            Potion paralysis = getPotionEffect(resourceLocation);
-            if (paralysis == null) {
-                return false;
-            }
-            return effect.getPotion().getRegistryName().toString().contentEquals(paralysis.getRegistryName().toString());
+            ResourceLocation resource = effect.getPotion().getRegistryName();
+            if (resource == null) return false;
+            return resource.toString().equals(PARALYSIS);
         }
         return false;
     }
-
-    private static Potion getPotionEffect(String resourceLocation) {
-        try {
-            return Potion.getPotionFromResourceLocation(resourceLocation);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 }
-

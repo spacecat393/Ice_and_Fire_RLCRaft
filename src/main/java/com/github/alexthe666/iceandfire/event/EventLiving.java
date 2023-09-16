@@ -10,6 +10,7 @@ import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.ai.EntitySheepAIFollowCyclops;
 import com.github.alexthe666.iceandfire.entity.ai.VillagerAIFearUntamed;
 import com.github.alexthe666.iceandfire.entity.util.*;
+import com.github.alexthe666.iceandfire.integration.CompatLoadUtil;
 import com.github.alexthe666.iceandfire.item.ItemSeaSerpentArmor;
 import com.github.alexthe666.iceandfire.item.ItemTrollArmor;
 import com.github.alexthe666.iceandfire.message.MessagePlayerHitMultipart;
@@ -76,6 +77,7 @@ public class EventLiving {
 
 	@SubscribeEvent
 	public void onPlayerAttackMob(AttackEntityEvent event) {
+		if(CompatLoadUtil.isRLCombatLoaded()) return;
 		if(event.getTarget() instanceof EntityMultipartPart && event.getEntity() instanceof EntityPlayer){
 			event.setCanceled(true);
 			EntityLivingBase parent = ((EntityMultipartPart)event.getTarget()).getParent();

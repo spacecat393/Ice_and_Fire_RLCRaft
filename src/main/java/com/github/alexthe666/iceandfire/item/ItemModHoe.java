@@ -3,13 +3,11 @@ package com.github.alexthe666.iceandfire.item;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.core.ModItems;
-import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
+import com.github.alexthe666.iceandfire.integration.CompatLoadUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -18,7 +16,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemModHoe extends ItemHoe {
+public class ItemModHoe extends ItemHoe implements IHitEffect {
 
 	public ItemModHoe(ToolMaterial toolmaterial, String gameName, String name) {
 		super(toolmaterial);
@@ -27,6 +25,7 @@ public class ItemModHoe extends ItemHoe {
 		this.setRegistryName(IceAndFire.MODID, gameName);
 	}
 
+	@Override
 	public boolean getIsRepairable(ItemStack toRepair, ItemStack repair){
 		ItemStack mat = this.toolMaterial.getRepairItemStack();
 		if (this.toolMaterial == ModItems.silverTools) {
@@ -48,23 +47,15 @@ public class ItemModHoe extends ItemHoe {
 		if (!mat.isEmpty() && net.minecraftforge.oredict.OreDictionary.itemMatches(mat, repair, false)) return true;
 		return super.getIsRepairable(toRepair, repair);
 	}
+
 	@Override
 	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
-		if (this == ModItems.silver_hoe) {
-			if (target.getCreatureAttribute() == EnumCreatureAttribute.UNDEAD) {
-				target.attackEntityFrom(DamageSource.MAGIC, 2);
-			}
-		}
-		if (this.toolMaterial == ModItems.myrmexChitin) {
-			if (target.getCreatureAttribute() != EnumCreatureAttribute.ARTHROPOD) {
-				target.attackEntityFrom(DamageSource.GENERIC, 4);
-			}
-			if (target instanceof EntityDeathWorm) {
-				target.attackEntityFrom(DamageSource.GENERIC, 4);
-			}
-		}
+		if(!CompatLoadUtil.isRLCombatLoaded()) this.doHitEffect(target, attacker);
 		return super.hitEntity(stack, target, attacker);
 	}
+
+	@Override
+	public ToolMaterial getMaterial() { return this.toolMaterial; }
 
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {

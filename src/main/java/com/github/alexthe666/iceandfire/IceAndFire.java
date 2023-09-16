@@ -9,6 +9,8 @@ import com.github.alexthe666.iceandfire.core.ModRecipes;
 import com.github.alexthe666.iceandfire.core.ModVillagers;
 import com.github.alexthe666.iceandfire.event.EventLiving;
 import com.github.alexthe666.iceandfire.event.StructureGenerator;
+import com.github.alexthe666.iceandfire.integration.CompatLoadUtil;
+import com.github.alexthe666.iceandfire.integration.RLCombatCompat;
 import com.github.alexthe666.iceandfire.integration.ThaumcraftCompatBridge;
 import com.github.alexthe666.iceandfire.loot.CustomizeToDragon;
 import com.github.alexthe666.iceandfire.loot.CustomizeToSeaSerpent;
@@ -81,6 +83,7 @@ public class IceAndFire {
         CapabilityManager.INSTANCE.register(IEntityEffectCapability.class, new EntityEffectStorage(), EntityEffectCapability::new);
         MinecraftForge.EVENT_BUS.register(new EventLiving());
         MinecraftForge.EVENT_BUS.register(new CapabilityHandler());
+        if(CompatLoadUtil.isRLCombatLoaded()) MinecraftForge.EVENT_BUS.register(RLCombatCompat.class);
         TAB = new CreativeTab(MODID);
         ModEntities.init();
         MinecraftForge.EVENT_BUS.register(PROXY);

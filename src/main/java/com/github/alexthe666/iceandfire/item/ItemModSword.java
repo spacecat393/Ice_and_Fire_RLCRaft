@@ -3,16 +3,12 @@ package com.github.alexthe666.iceandfire.item;
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.client.StatCollector;
 import com.github.alexthe666.iceandfire.core.ModItems;
-import com.github.alexthe666.iceandfire.entity.EntityDeathWorm;
+import com.github.alexthe666.iceandfire.integration.CompatLoadUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -21,7 +17,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemModSword extends ItemSword {
+public class ItemModSword extends ItemSword implements IHitEffect {
 
 	private final Item.ToolMaterial toolMaterial;
 
@@ -33,6 +29,7 @@ public class ItemModSword extends ItemSword {
 		this.toolMaterial = toolmaterial;
 	}
 
+	@Override
 	public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
 		ItemStack mat = this.toolMaterial.getRepairItemStack();
 		if (this.toolMaterial == ModItems.silverTools) {
@@ -57,24 +54,12 @@ public class ItemModSword extends ItemSword {
 
 	@Override
 	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
-		if (this == ModItems.silver_sword) {
-			if (target.getCreatureAttribute() == EnumCreatureAttribute.UNDEAD) {
-				target.attackEntityFrom(DamageSource.MAGIC, 2);
-			}
-		}
-		if (this.toolMaterial == ModItems.myrmexChitin) {
-			if (target.getCreatureAttribute() != EnumCreatureAttribute.ARTHROPOD) {
-				target.attackEntityFrom(DamageSource.GENERIC, 4);
-			}
-			if (target instanceof EntityDeathWorm) {
-				target.attackEntityFrom(DamageSource.GENERIC, 4);
-			}
-		}
-		if (this == ModItems.myrmex_desert_sword_venom || this == ModItems.myrmex_jungle_sword_venom) {
-			target.addPotionEffect(new PotionEffect(MobEffects.POISON, 200, 2));
-		}
+		if(!CompatLoadUtil.isRLCombatLoaded()) this.doHitEffect(target, attacker);
 		return super.hitEntity(stack, target, attacker);
 	}
+
+	@Override
+	public ToolMaterial getMaterial() { return this.toolMaterial; }
 
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
