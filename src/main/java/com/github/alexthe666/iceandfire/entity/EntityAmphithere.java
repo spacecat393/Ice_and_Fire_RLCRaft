@@ -17,6 +17,7 @@ import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
@@ -966,7 +967,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
         BlockPos target;
 
         public AIFlyWander() {
-            this.setMutexBits(1);
+            this.setMutexBits(0);
         }
 
         public boolean shouldExecute() {
@@ -982,21 +983,28 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
             }
         }
 
-        protected boolean isDirectPathBetweenPoints(BlockPos posVec31, BlockPos posVec32) {
+        protected boolean isDirectPathBetweenPoints(Entity e) {
+            RayTraceResult rayTrace = world.rayTraceBlocks(e.getPositionVector(), new Vec3d(target).add(0.5, 0.5, 0.5), false);
+            if (rayTrace != null && rayTrace.hitVec != null) {
+                BlockPos sidePos = rayTrace.getBlockPos();
+                BlockPos pos = new BlockPos(rayTrace.hitVec);
+                if (world.isAirBlock(pos) || world.isAirBlock(sidePos) || world.getBlockState(pos).getMaterial() == Material.LEAVES || world.getBlockState(sidePos).getMaterial() == Material.LEAVES) {
+                    return true;
+                } else {
+                    return rayTrace.typeOfHit != RayTraceResult.Type.MISS;
+                }
+            }
             return true;
-            //RayTraceResult raytraceresult = EntityAmphithere.this.world.rayTraceBlocks(new Vec3d(posVec31.getX() + 0.5D, posVec31.getY() + 0.5D, posVec31.getZ() + 0.5D), new Vec3d(posVec32.getX() + 0.5D, posVec32.getY() + (double) EntityAmphithere.this.height * 0.5D, posVec32.getZ() + 0.5D), false, true, false);
-            //return raytraceresult == null || raytraceresult.typeOfHit == RayTraceResult.Type.MISS;
         }
 
-        @Override
         public boolean shouldContinueExecuting() {
             return false;
         }
 
-        @Override
         public void updateTask() {
-            target = EntityAmphithere.getPositionRelativetoGround(EntityAmphithere.this, EntityAmphithere.this.world, EntityAmphithere.this.posX + EntityAmphithere.this.rand.nextInt(30) - 15, EntityAmphithere.this.posZ + EntityAmphithere.this.rand.nextInt(30) - 15, EntityAmphithere.this.rand);
-
+            if (!isDirectPathBetweenPoints(EntityAmphithere.this)) {
+                target = EntityAmphithere.getPositionRelativetoGround(EntityAmphithere.this, EntityAmphithere.this.world, EntityAmphithere.this.posX + EntityAmphithere.this.rand.nextInt(30) - 15, EntityAmphithere.this.posZ + EntityAmphithere.this.rand.nextInt(30) - 15, EntityAmphithere.this.rand);
+            }
             if (EntityAmphithere.this.world.isAirBlock(target)) {
                 EntityAmphithere.this.moveHelper.setMoveTo((double) target.getX() + 0.5D, (double) target.getY() + 0.5D, (double) target.getZ() + 0.5D, 0.25D);
                 if (EntityAmphithere.this.getAttackTarget() == null) {
