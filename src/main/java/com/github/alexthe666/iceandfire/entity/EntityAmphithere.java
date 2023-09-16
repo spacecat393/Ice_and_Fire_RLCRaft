@@ -264,6 +264,9 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
+        if(this.isInWater() && this.isJumping){
+            this.motionY += 0.1D;
+        }
         if (this.isInLove()) {
             this.setFlying(false);
         }
@@ -361,7 +364,7 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
         if (this.isFallen && this.flightBehavior != FlightBehavior.NONE) {
             this.flightBehavior = FlightBehavior.NONE;
         }
-        if (this.flightBehavior == FlightBehavior.NONE && this.getControllingPassenger() == null) {
+        if (this.flightBehavior == FlightBehavior.NONE && this.getControllingPassenger() == null && this.isFlying()) {
             this.motionY -= 0.3F;
         }
         if (this.isFlying() && !this.onGround && this.isFallen && this.getControllingPassenger() == null) {
