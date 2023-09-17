@@ -126,8 +126,11 @@ public class ModRecipes {
         ModItems.fireBoneTools.setRepairItem(new ItemStack(ModItems.dragonbone));
         ModItems.iceBoneTools.setRepairItem(new ItemStack(ModItems.dragonbone));
         ModItems.lightningBoneTools.setRepairItem(new ItemStack(ModItems.dragonbone));
-        for(EnumDragonArmor armor : EnumDragonArmor.values()){
+        for (EnumDragonArmor armor : EnumDragonArmor.values()){
             armor.armorMaterial.setRepairItem(new ItemStack(EnumDragonArmor.getScaleItem(armor)));
+        }
+        for (EnumSeaSerpent serpent : EnumSeaSerpent.values()) {
+            serpent.armorMaterial.setRepairItem(new ItemStack(serpent.scale));
         }
         ModItems.sheep.setRepairItem(new ItemStack(Blocks.WOOL));
         ModItems.earplugsArmor.setRepairItem(new ItemStack(Blocks.WOODEN_BUTTON));
