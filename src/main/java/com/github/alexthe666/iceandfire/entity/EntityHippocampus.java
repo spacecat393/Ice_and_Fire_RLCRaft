@@ -122,11 +122,11 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
     @Override
     protected void entityInit() {
         super.entityInit();
-        this.dataManager.register(VARIANT, Integer.valueOf(0));
-        this.dataManager.register(ARMOR, Integer.valueOf(0));
-        this.dataManager.register(SADDLE, Boolean.valueOf(false));
-        this.dataManager.register(CHESTED, Boolean.valueOf(false));
-        this.dataManager.register(CONTROL_STATE, Byte.valueOf((byte) 0));
+        this.dataManager.register(VARIANT, 0);
+        this.dataManager.register(ARMOR, 0);
+        this.dataManager.register(SADDLE, Boolean.FALSE);
+        this.dataManager.register(CHESTED, Boolean.FALSE);
+        this.dataManager.register(CONTROL_STATE, (byte) 0);
     }
 
     public boolean canBeSteered() {
@@ -149,8 +149,8 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
             if (world.isRemote) {
                 ItemStack saddle = animalchest.getStackInSlot(0);
                 ItemStack chest = animalchest.getStackInSlot(1);
-                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 0, saddle != null && saddle.getItem() == Items.SADDLE && !saddle.isEmpty() ? 1 : 0));
-                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 1, chest != null && chest.getItem() == Item.getItemFromBlock(Blocks.CHEST) && !chest.isEmpty() ? 1 : 0));
+                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 0, saddle.getItem() == Items.SADDLE && !saddle.isEmpty() ? 1 : 0));
+                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 1, chest.getItem() == Item.getItemFromBlock(Blocks.CHEST) && !chest.isEmpty() ? 1 : 0));
                 IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 2, this.getIntFromArmor(animalchest.getStackInSlot(2))));
             }
         }
@@ -160,21 +160,20 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
     public Entity getControllingPassenger() {
         for (Entity passenger : this.getPassengers()) {
             if (passenger instanceof EntityPlayer && this.getAttackTarget() != passenger) {
-                EntityPlayer player = (EntityPlayer) passenger;
-                return player;
+                return passenger;
             }
         }
         return null;
     }
 
     public int getIntFromArmor(ItemStack stack) {
-        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == Items.IRON_HORSE_ARMOR) {
+        if (!stack.isEmpty() && stack.getItem() == Items.IRON_HORSE_ARMOR) {
             return 1;
         }
-        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == Items.GOLDEN_HORSE_ARMOR) {
+        if (!stack.isEmpty() && stack.getItem() == Items.GOLDEN_HORSE_ARMOR) {
             return 2;
         }
-        if (!stack.isEmpty() && stack.getItem() != null && stack.getItem() == Items.DIAMOND_HORSE_ARMOR) {
+        if (!stack.isEmpty() && stack.getItem() == Items.DIAMOND_HORSE_ARMOR) {
             return 3;
         }
         return 0;
@@ -191,7 +190,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
     }
 
     private void setStateField(int i, boolean newState) {
-        byte prevState = dataManager.get(CONTROL_STATE).byteValue();
+        byte prevState = dataManager.get(CONTROL_STATE);
         if (newState) {
             dataManager.set(CONTROL_STATE, (byte) (prevState | (1 << i)));
         } else {
@@ -200,7 +199,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
     }
 
     public byte getControlState() {
-        return dataManager.get(CONTROL_STATE).byteValue();
+        return dataManager.get(CONTROL_STATE);
     }
 
     public void setControlState(byte state) {
@@ -299,15 +298,15 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
     }
 
     public boolean up() {
-        return (Byte.valueOf(dataManager.get(CONTROL_STATE).byteValue()) & 1) == 1;
+        return (dataManager.get(CONTROL_STATE) & 1) == 1;
     }
 
     public boolean down() {
-        return (Byte.valueOf(dataManager.get(CONTROL_STATE).byteValue()) >> 1 & 1) == 1;
+        return (dataManager.get(CONTROL_STATE) >> 1 & 1) == 1;
     }
 
     public boolean dismount() {
-        return (Byte.valueOf(dataManager.get(CONTROL_STATE).byteValue()) >> 2 & 1) == 1;
+        return (dataManager.get(CONTROL_STATE) >> 2 & 1) == 1;
     }
 
 
@@ -339,7 +338,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
             }
             compound.setTag("Items", nbttaglist);
         }
-        if (this.getCustomNameTag() != null && !this.getCustomNameTag().isEmpty()) {
+        if (!this.getCustomNameTag().isEmpty()) {
             compound.setString("CustomName", this.getCustomNameTag());
         }
 
@@ -372,8 +371,8 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
                 ItemStack saddle = hippocampusInventory.getStackInSlot(0);
                 ItemStack chest = hippocampusInventory.getStackInSlot(1);
                 if (world.isRemote) {
-                    IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 0, saddle != null && saddle.getItem() == Items.SADDLE && !saddle.isEmpty() ? 1 : 0));
-                    IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 1, chest != null && chest.getItem() == Item.getItemFromBlock(Blocks.CHEST) && !chest.isEmpty() ? 1 : 0));
+                    IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 0, saddle.getItem() == Items.SADDLE && !saddle.isEmpty() ? 1 : 0));
+                    IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 1, chest.getItem() == Item.getItemFromBlock(Blocks.CHEST) && !chest.isEmpty() ? 1 : 0));
                     IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 2, this.getIntFromArmor(hippocampusInventory.getStackInSlot(2))));
                 }
             }
@@ -382,7 +381,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
 
 
     public boolean isSaddled() {
-        return this.dataManager.get(SADDLE).booleanValue();
+        return this.dataManager.get(SADDLE);
     }
 
     public void setSaddled(boolean saddle) {
@@ -390,7 +389,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
     }
 
     public boolean isChested() {
-        return this.dataManager.get(CHESTED).booleanValue();
+        return this.dataManager.get(CHESTED);
     }
 
     public void setChested(boolean chested) {
@@ -400,7 +399,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
 
     public boolean isSitting() {
         if (world.isRemote) {
-            boolean isSitting = (((Byte) this.dataManager.get(TAMED)).byteValue() & 1) != 0;
+            boolean isSitting = ((Byte) this.dataManager.get(TAMED) & 1) != 0;
             this.isSitting = isSitting;
             return isSitting;
         }
@@ -411,16 +410,16 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
         if (!world.isRemote) {
             this.isSitting = sitting;
         }
-        byte b0 = ((Byte) this.dataManager.get(TAMED)).byteValue();
+        byte b0 = (Byte) this.dataManager.get(TAMED);
         if (sitting) {
-            this.dataManager.set(TAMED, Byte.valueOf((byte) (b0 | 1)));
+            this.dataManager.set(TAMED, (byte) (b0 | 1));
         } else {
-            this.dataManager.set(TAMED, Byte.valueOf((byte) (b0 & -2)));
+            this.dataManager.set(TAMED, (byte) (b0 & -2));
         }
     }
 
     public int getArmor() {
-        return this.dataManager.get(ARMOR).intValue();
+        return this.dataManager.get(ARMOR);
     }
 
     public void setArmor(int armorType) {
@@ -440,7 +439,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
     }
 
     public int getVariant() {
-        return this.dataManager.get(VARIANT).intValue();
+        return this.dataManager.get(VARIANT);
     }
 
     public void setVariant(int variant) {
@@ -534,12 +533,12 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
                         f4 += (0.54600006F - f4) * d0 / 3.0F;
                     }
                     //this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
-                    this.motionX *= (double) f4;
+                    this.motionX *= f4;
                     this.motionX *= 0.900000011920929D;
                     this.motionY *= 0.900000011920929D;
-                    this.motionY *= (double) f4;
+                    this.motionY *= f4;
                     this.motionZ *= 0.900000011920929D;
-                    this.motionZ *= (double) f4;
+                    this.motionZ *= f4;
                     motionY += 0.01185D;
                 } else {
                     forward = controller.moveForward * 0.25F;
@@ -625,27 +624,27 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
     }
 
     public boolean processInteract(EntityPlayer player, EnumHand hand) {
-        ItemStack itemstack = player.getHeldItem(hand);
-        if (itemstack != null && itemstack.getItem() == Items.PRISMARINE_CRYSTALS && this.getGrowingAge() == 0 && !isInLove()) {
+        ItemStack stack = player.getHeldItem(hand);
+        if (stack.getItem() == Items.PRISMARINE_CRYSTALS && this.getGrowingAge() == 0 && !isInLove()) {
             this.setSitting(false);
             this.setInLove(player);
             this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
             if (!player.isCreative()) {
-                itemstack.shrink(1);
+                stack.shrink(1);
             }
             return true;
         }
-        if (itemstack != null && itemstack.getItem() == Item.getItemFromBlock(Blocks.SPONGE) && itemstack.getMetadata() == 0) {
+        if (stack.getItem() == Item.getItemFromBlock(Blocks.SPONGE) && stack.getMetadata() == 0) {
             if (!world.isRemote) {
                 this.heal(5);
                 this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
                 if (!player.isCreative()) {
-                    itemstack.shrink(1);
+                    stack.shrink(1);
                 }
             }
             else {
                 for (int i = 0; i < 3; i++) {
-                    ParticleHelper.spawnParticle(this.world, EnumParticleTypes.ITEM_CRACK, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0, Item.getIdFromItem(itemstack.getItem()), 0);
+                    ParticleHelper.spawnParticle(this.world, EnumParticleTypes.ITEM_CRACK, this.posX + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, this.posY + (double) (this.rand.nextFloat() * this.height), this.posZ + (double) (this.rand.nextFloat() * this.width * 2.0F) - (double) this.width, 0, 0, 0, Item.getIdFromItem(stack.getItem()), 0);
                 }
             }
             if (!this.isTamed() && this.getRNG().nextInt(3) == 0) {
@@ -659,20 +658,20 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
             return true;
 
         }
-        if (isOwner(player) && itemstack != null && itemstack.getItem() == Items.PRISMARINE_CRYSTALS && this.getGrowingAge() == 0 && !isInLove()) {
+        if (isOwner(player) && stack.getItem() == Items.PRISMARINE_CRYSTALS && this.getGrowingAge() == 0 && !isInLove()) {
             this.setSitting(false);
             this.setInLove(player);
             this.playSound(SoundEvents.ENTITY_GENERIC_EAT, 1, 1);
             if (!player.isCreative()) {
-                itemstack.shrink(1);
+                stack.shrink(1);
             }
             return true;
         }
-        if (isOwner(player) && itemstack != null && itemstack.getItem() == Items.STICK) {
+        if (isOwner(player) && stack.getItem() == Items.STICK) {
             this.setSitting(!this.isSitting());
             return true;
         }
-        if(isOwner(player) && itemstack.isEmpty()) {
+        if(isOwner(player) && stack.isEmpty()) {
             if (player.isSneaking()) {
                 this.openGUI(player);
                 return true;
@@ -729,8 +728,8 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
     public void refreshInventory() {
         ItemStack saddle = this.hippocampusInventory.getStackInSlot(0);
         ItemStack chest = this.hippocampusInventory.getStackInSlot(1);
-        this.setSaddled(saddle != null && saddle.getItem() == Items.SADDLE && !saddle.isEmpty());
-        this.setChested(chest != null && chest.getItem() == Item.getItemFromBlock(Blocks.CHEST) && !chest.isEmpty());
+        this.setSaddled(saddle.getItem() == Items.SADDLE && !saddle.isEmpty());
+        this.setChested(chest.getItem() == Item.getItemFromBlock(Blocks.CHEST) && !chest.isEmpty());
         this.setArmor(getIntFromArmor(this.hippocampusInventory.getStackInSlot(2)));
         if (this.world.isRemote) {
             IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageHippogryphArmor(this.getEntityId(), 0, saddle != null && saddle.getItem() == Items.SADDLE && !saddle.isEmpty() ? 1 : 0));
@@ -755,7 +754,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
     }
 
     class SwimmingMoveHelper extends EntityMoveHelper {
-        private EntityHippocampus hippo = EntityHippocampus.this;
+        private final EntityHippocampus hippo = EntityHippocampus.this;
 
         public SwimmingMoveHelper() {
             super(EntityHippocampus.this);
@@ -794,13 +793,13 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
 
         public HippocampusInventory(String inventoryTitle, int slotCount, EntityHippocampus hippocampus) {
             super(inventoryTitle, slotCount);
-            this.addInventoryChangeListener(new EntityHippocampus.HippocampusInventoryListener(hippocampus));
+            this.addInventoryChangeListener(new HippocampusInventoryListener(hippocampus));
         }
 
 
     }
 
-    class HippocampusInventoryListener implements IInventoryChangedListener {
+    static class HippocampusInventoryListener implements IInventoryChangedListener {
 
         EntityHippocampus hippocampus;
 
