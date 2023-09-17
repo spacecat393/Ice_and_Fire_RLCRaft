@@ -6,19 +6,46 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.monster.EntityGolem;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.*;
+import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Optional;
 
 public class DragonUtils {
+
+	public static void destroyBlock(World world, BlockPos pos, IBlockState state) {
+		if (!world.isRemote) {
+			return;
+		}
+
+		Block block = state.getBlock();
+		if (block.isAir(state, world, pos)) {
+			return;
+		}
+
+		Integer effectChance = IceAndFireConfig.getDragonGriefingEffectChance().get(block);
+		if (effectChance == null || world.rand.nextInt(100) < effectChance) {
+			world.playEvent(2001, pos, Block.getStateId(state));
+		}
+
+		Integer blockChance = IceAndFireConfig.getDragonGriefingBlockChance().get(block);
+		if (blockChance == null || world.rand.nextInt(100) < blockChance) {
+			block.dropBlockAsItem(world, pos, state, 0);
+		}
+
+		world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
+	}
 
 	public static BlockPos getBlockInView(EntityDragonBase dragon) {
 		float radius = 0.75F * (0.7F * dragon.getRenderSize() / 3) * - 7 - dragon.getRNG().nextInt(dragon.getDragonStage() * 6);

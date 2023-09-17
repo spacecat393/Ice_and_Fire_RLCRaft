@@ -1,5 +1,8 @@
 package com.github.alexthe666.iceandfire;
 
+import com.github.alexthe666.iceandfire.util.IafMathHelper;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.config.Config;
@@ -333,6 +336,14 @@ public class IceAndFireConfig {
 		@Config.Comment("If true tamed dragons will follow griefing rules")
 		@Config.Name("Tamed Dragon Griefing")
 		public boolean tamedDragonGriefing = true;
+
+		@Config.Comment("A list of block drop % chances from dragon griefing")
+		@Config.Name("Dragon Griefing Drop Chance")
+		public Map<String, Integer> dragonGriefingBlockChance;
+
+		@Config.Comment("A list of block effect % chances from dragon griefing")
+		@Config.Name("Dragon Griefing Block Effect Chance")
+		public Map<String, Integer> dragonGriefingEffectChance;
 
 		@Config.Comment("Distance that you can hear dragon flapping, large number is further away")
 		@Config.Name("Dragon Flap Noise Distance")
@@ -708,6 +719,8 @@ public class IceAndFireConfig {
 				lightningDragonEnabledNames = null;
 				dragonRoostChance = null;
 				dragonDenChance = null;
+				dragonGriefingBlockChance = null;
+				dragonGriefingEffectChance = null;
 				ConfigManager.sync(IceAndFire.MODID, Config.Type.INSTANCE);
 			}
 		}
@@ -723,6 +736,8 @@ public class IceAndFireConfig {
 	private static HashSet<String> lightningDragonEnabledNames = null;
 	private static HashMap<String, Integer> dragonRoostChance = null;
 	private static HashMap<String, Integer> dragonDenChance = null;
+	private static HashMap<Block, Integer> dragonGriefingBlockChance = null;
+	private static HashMap<Block, Integer> dragonGriefingEffectChance = null;
 
 	public static HashSet<ResourceLocation> getStoneEntityBlacklist() {
 		if(stoneBlacklist != null) return stoneBlacklist;
@@ -776,6 +791,18 @@ public class IceAndFireConfig {
 		return dragonDenChance;
 	}
 
+	public static HashMap<Block, Integer> getDragonGriefingBlockChance() {
+		if(dragonGriefingBlockChance != null) return dragonGriefingBlockChance;
+		dragonGriefingBlockChance = loadBlockChanceMapping(DRAGON_SETTINGS.dragonGriefingBlockChance);
+		return dragonGriefingBlockChance;
+	}
+
+	public static HashMap<Block, Integer> getDragonGriefingEffectChance() {
+		if(dragonGriefingEffectChance != null) return dragonGriefingEffectChance;
+		dragonGriefingEffectChance = loadBlockChanceMapping(DRAGON_SETTINGS.dragonGriefingEffectChance);
+		return dragonGriefingEffectChance;
+	}
+
 	private static HashMap<String, Integer> mapNameInteger(String[] mappings) {
 		HashMap<String, Integer> map = new HashMap<>();
 		for(String biomeNameMapping : mappings) {
@@ -788,6 +815,20 @@ public class IceAndFireConfig {
 				map.put(split[0], Integer.parseInt(split[1]));
 			} catch (NumberFormatException e) {
 				IceAndFire.logger.error("Failed to parse biome name mapping: " + biomeNameMapping);
+			}
+		}
+		return map;
+	}
+
+	private static HashMap<Block, Integer> loadBlockChanceMapping(Map<String, Integer> mappings) {
+		HashMap<Block, Integer> map = new HashMap<>();
+		for (Map.Entry<String, Integer> entry : mappings.entrySet()) {
+			ResourceLocation resourceLocation = new ResourceLocation(entry.getKey());
+			Block block = Block.REGISTRY.getObject(resourceLocation);
+			if (block != Blocks.AIR) {
+				map.put(block, IafMathHelper.clamp(entry.getValue(), 0, 100));
+			} else {
+				IceAndFire.logger.warn("Could not find block \"" + entry.getKey() + "\", ignoring!");
 			}
 		}
 		return map;

@@ -1555,11 +1555,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                             if (state.getMaterial() != Material.AIR && !(block instanceof BlockBush) && !(block instanceof BlockLiquid) && block != Blocks.BEDROCK && state.getBlockHardness(world, new BlockPos(a, b, c)) < hardness && DragonUtils.canDragonBreak(state.getBlock()) && this.canDestroyBlock(new BlockPos(a, b, c))) {
                                 this.motionX *= 0.6D;
                                 this.motionZ *= 0.6D;
-                                if (block != Blocks.AIR) {
-                                    if (!world.isRemote) {
-                                        world.destroyBlock(new BlockPos(a, b, c), true);
-                                    }
-                                }
+                                DragonUtils.destroyBlock(world, new BlockPos(a, b, c), state);
                             }
                         }
                     }
