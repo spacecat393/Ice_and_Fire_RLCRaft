@@ -390,4 +390,8 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
     public boolean canBeTurnedToStone() {
         return !this.isBlinded();
     }
+
+    public boolean canDismount() {
+        return currentAnimation != ANIMATION_EATPLAYER || animationTick >= 32;
+    }
 }

@@ -328,4 +328,21 @@ public class DragonUtils {
 				return 3;
 		}
 	}
+
+	public static boolean canDismount(Entity entity) {
+		if (entity == null) {
+			return true;
+		}
+		if (entity.isDead || (entity instanceof EntityLivingBase && ((EntityLivingBase) entity).getHealth() <= 0.0f)) {
+			return true;
+		}
+		if (entity instanceof EntityDragonBase) {
+			EntityDragonBase dragon = (EntityDragonBase) entity;
+			return dragon.canDismount();
+		} else if (entity instanceof EntityCyclops) {
+			EntityCyclops cyclops = (EntityCyclops) entity;
+			return cyclops.canDismount();
+		}
+		return true;
+	}
 }

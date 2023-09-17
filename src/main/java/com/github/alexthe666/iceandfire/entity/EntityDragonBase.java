@@ -2347,6 +2347,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         }else{
             super.playSound(soundIn, volume, pitch);
         }
+    }
 
+    public boolean canDismount() {
+        return currentAnimation != ANIMATION_SHAKEPREY || animationTick > 60;
     }
 }
