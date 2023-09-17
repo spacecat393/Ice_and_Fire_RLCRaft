@@ -184,12 +184,18 @@ public class EventLiving {
 	@SubscribeEvent
 	public void onLivingAttacked(LivingAttackEvent event) {
 		EntityLivingBase entity = event.getEntityLiving();
-		if(event.getSource().getTrueSource() != null) {
+		if (entity instanceof EntityDragonBase && event.getAmount() > 0F) {
+			EntityDragonBase dragon = (EntityDragonBase) entity;
+			if (dragon.isSleeping()) {
+				dragon.setSleeping(false);
+			}
+		}
+		if (event.getSource().getTrueSource() != null) {
 			Entity attacker = event.getSource().getTrueSource();
 			if (isAnimaniaChicken(entity) && attacker instanceof EntityLivingBase) {
 				signalChickenAlarm(entity, (EntityLivingBase) attacker);
 			}
-			if(DragonUtils.isVillager(entity) && attacker instanceof EntityLivingBase){
+			if (DragonUtils.isVillager(entity) && attacker instanceof EntityLivingBase){
 				signalAmphithereAlarm(entity, (EntityLivingBase) attacker);
 			}
 		}
