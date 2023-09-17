@@ -25,7 +25,7 @@ import java.util.Optional;
 public class DragonUtils {
 
 	public static void destroyBlock(World world, BlockPos pos, IBlockState state) {
-		if (!world.isRemote) {
+		if (world.isRemote) {
 			return;
 		}
 
