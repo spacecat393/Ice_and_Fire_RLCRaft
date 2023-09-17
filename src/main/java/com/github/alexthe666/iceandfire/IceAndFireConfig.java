@@ -337,6 +337,10 @@ public class IceAndFireConfig {
 		@Config.Name("Tamed Dragon Griefing")
 		public boolean tamedDragonGriefing = true;
 
+		@Config.Comment("If true, sets the drop & effect chances for some blocks, such as dirt or cobblestone")
+		@Config.Name("Dragon Griefing Reduce Lag")
+		public boolean dragonGriefingReduceLag;
+
 		@Config.Comment("A list of block drop % chances from dragon griefing")
 		@Config.Name("Dragon Griefing Drop Chance")
 		public Map<String, Integer> dragonGriefingBlockChance;
@@ -793,13 +797,60 @@ public class IceAndFireConfig {
 
 	public static HashMap<Block, Integer> getDragonGriefingBlockChance() {
 		if(dragonGriefingBlockChance != null) return dragonGriefingBlockChance;
-		dragonGriefingBlockChance = loadBlockChanceMapping(DRAGON_SETTINGS.dragonGriefingBlockChance);
+		Map<String, Integer> dropChance = DRAGON_SETTINGS.dragonGriefingBlockChance;
+		if (DRAGON_SETTINGS.dragonGriefingReduceLag) {
+			dropChance.put("iceandfire:ash", 2);
+			dropChance.put("iceandfire:chared_cobblestone", 2);
+			dropChance.put("iceandfire:chared_stone", 2);
+			dropChance.put("iceandfire:chared_grass", 2);
+			dropChance.put("iceandfire:chared_dirt", 2);
+			dropChance.put("iceandfire:chared_gravel", 2);
+			dropChance.put("iceandfire:chared_grass_path", 2);
+			dropChance.put("minecraft:cobblestone", 3);
+			dropChance.put("minecraft:dirt", 3);
+			dropChance.put("minecraft:grass", 4);
+			dropChance.put("minecraft:sand", 3);
+			dropChance.put("minecraft:stone", 2);
+			dropChance.put("iceandfire:frozen_cobblestone", 2);
+			dropChance.put("iceandfire:frozen_stone", 2);
+			dropChance.put("iceandfire:frozen_grass", 2);
+			dropChance.put("iceandfire:frozen_dirt", 2);
+			dropChance.put("iceandfire:frozen_gravel", 2);
+			dropChance.put("iceandfire:frozen_grass_path", 2);
+			dropChance.put("iceandfire:frozen_splinters", 2);
+			dropChance.put("iceandfire:crackled_cobblestone", 2);
+			dropChance.put("iceandfire:crackled_stone", 2);
+			dropChance.put("iceandfire:crackled_grass", 2);
+			dropChance.put("iceandfire:crackled_dirt", 2);
+			dropChance.put("iceandfire:crackled_gravel", 2);
+			dropChance.put("iceandfire:crackled_grass_path", 2);
+		}
+		dragonGriefingBlockChance = loadBlockChanceMapping(dropChance);
 		return dragonGriefingBlockChance;
 	}
 
 	public static HashMap<Block, Integer> getDragonGriefingEffectChance() {
 		if(dragonGriefingEffectChance != null) return dragonGriefingEffectChance;
-		dragonGriefingEffectChance = loadBlockChanceMapping(DRAGON_SETTINGS.dragonGriefingEffectChance);
+		Map<String, Integer> effectChance = DRAGON_SETTINGS.dragonGriefingEffectChance;
+		if (DRAGON_SETTINGS.dragonGriefingReduceLag) {
+			effectChance.put("iceandfire:ash", 5);
+			effectChance.put("iceandfire:chared_cobblestone", 5);
+			effectChance.put("iceandfire:chared_stone", 5);
+			effectChance.put("iceandfire:chared_dirt", 5);
+			effectChance.put("iceandfire:chared_gravel", 5);
+			effectChance.put("minecraft:dirt", 5);
+			effectChance.put("minecraft:stone", 5);
+			effectChance.put("iceandfire:frozen_cobblestone", 5);
+			effectChance.put("iceandfire:frozen_stone", 5);
+			effectChance.put("iceandfire:frozen_dirt", 5);
+			effectChance.put("iceandfire:frozen_gravel", 5);
+			effectChance.put("iceandfire:frozen_splinters", 5);
+			effectChance.put("iceandfire:crackled_cobblestone", 5);
+			effectChance.put("iceandfire:crackled_stone", 5);
+			effectChance.put("iceandfire:crackled_dirt", 5);
+			effectChance.put("iceandfire:crackled_gravel", 5);
+		}
+		dragonGriefingEffectChance = loadBlockChanceMapping(effectChance);
 		return dragonGriefingEffectChance;
 	}
 
@@ -822,13 +873,13 @@ public class IceAndFireConfig {
 
 	private static HashMap<Block, Integer> loadBlockChanceMapping(Map<String, Integer> mappings) {
 		HashMap<Block, Integer> map = new HashMap<>();
-		for (Map.Entry<String, Integer> entry : mappings.entrySet()) {
-			ResourceLocation resourceLocation = new ResourceLocation(entry.getKey());
+		for (Map.Entry<String, Integer> mapping : mappings.entrySet()) {
+			ResourceLocation resourceLocation = new ResourceLocation(mapping.getKey());
 			Block block = Block.REGISTRY.getObject(resourceLocation);
 			if (block != Blocks.AIR) {
-				map.put(block, IafMathHelper.clamp(entry.getValue(), 0, 100));
+				map.put(block, IafMathHelper.clamp(mapping.getValue(), 0, 100));
 			} else {
-				IceAndFire.logger.warn("Could not find block \"" + entry.getKey() + "\", ignoring!");
+				IceAndFire.logger.warn("Could not find block \"" + mapping.getKey() + "\", ignoring!");
 			}
 		}
 		return map;
