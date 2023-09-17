@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.util.IafMathHelper;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StringUtils;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
@@ -337,17 +338,56 @@ public class IceAndFireConfig {
 		@Config.Name("Tamed Dragon Griefing")
 		public boolean tamedDragonGriefing = true;
 
-		@Config.Comment("If true, sets the drop & effect chances for some blocks, such as dirt or cobblestone")
-		@Config.Name("Dragon Griefing Reduce Lag")
-		public boolean dragonGriefingReduceLag;
-
-		@Config.Comment("A list of block drop % chances from dragon griefing")
+		@Config.Comment("Block to chance list for blocks to drop as items from dragon griefing, in the format name=chance, 0 - 100 chance")
 		@Config.Name("Dragon Griefing Drop Chance")
-		public Map<String, Integer> dragonGriefingBlockChance;
+		public String[] dragonGriefingBlockChance = new String[]{
+				"minecraft:cobblestone=3",
+				"minecraft:dirt=3",
+				"minecraft:grass=4",
+				"minecraft:sand=3",
+				"minecraft:stone=2",
+				"iceandfire:ash=2",
+				"iceandfire:chared_cobblestone=2",
+				"iceandfire:chared_stone=2",
+				"iceandfire:chared_grass=2",
+				"iceandfire:chared_dirt=2",
+				"iceandfire:chared_gravel=2",
+				"iceandfire:chared_grass_path=2",
+				"iceandfire:frozen_cobblestone=2",
+				"iceandfire:frozen_stone=2",
+				"iceandfire:frozen_grass=2",
+				"iceandfire:frozen_dirt=2",
+				"iceandfire:frozen_gravel=2",
+				"iceandfire:frozen_grass_path=2",
+				"iceandfire:frozen_splinters=2",
+				"iceandfire:crackled_cobblestone=2",
+				"iceandfire:crackled_stone=2",
+				"iceandfire:crackled_grass=2",
+				"iceandfire:crackled_dirt=2",
+				"iceandfire:crackled_gravel=2",
+				"iceandfire:crackled_grass_path=2"
+		};
 
-		@Config.Comment("A list of block effect % chances from dragon griefing")
+		@Config.Comment("Block to chance list for break effects to render from dragon griefing, in the format name=chance, 0 - 100 chance")
 		@Config.Name("Dragon Griefing Block Effect Chance")
-		public Map<String, Integer> dragonGriefingEffectChance;
+		public String[] dragonGriefingEffectChance = new String[]{
+				"minecraft:dirt=5",
+				"minecraft:stone=5",
+				"iceandfire:ash=5",
+				"iceandfire:chared_cobblestone=5",
+				"iceandfire:chared_stone=5",
+				"iceandfire:chared_dirt=5",
+				"iceandfire:chared_gravel=5",
+				"iceandfire:frozen_cobblestone=5",
+				"iceandfire:frozen_stone=5",
+				"iceandfire:frozen_dirt=5",
+				"iceandfire:frozen_gravel=5",
+				"iceandfire:frozen_splinters=5",
+				"iceandfire:crackled_cobblestone=5",
+				"iceandfire:crackled_stone=5",
+				"iceandfire:crackled_dirt=5",
+				"iceandfire:crackled_gravel=5"
+		};
 
 		@Config.Comment("Distance that you can hear dragon flapping, large number is further away")
 		@Config.Name("Dragon Flap Noise Distance")
@@ -797,66 +837,20 @@ public class IceAndFireConfig {
 
 	public static HashMap<Block, Integer> getDragonGriefingBlockChance() {
 		if(dragonGriefingBlockChance != null) return dragonGriefingBlockChance;
-		Map<String, Integer> dropChance = DRAGON_SETTINGS.dragonGriefingBlockChance;
-		if (DRAGON_SETTINGS.dragonGriefingReduceLag) {
-			dropChance.put("iceandfire:ash", 2);
-			dropChance.put("iceandfire:chared_cobblestone", 2);
-			dropChance.put("iceandfire:chared_stone", 2);
-			dropChance.put("iceandfire:chared_grass", 2);
-			dropChance.put("iceandfire:chared_dirt", 2);
-			dropChance.put("iceandfire:chared_gravel", 2);
-			dropChance.put("iceandfire:chared_grass_path", 2);
-			dropChance.put("minecraft:cobblestone", 3);
-			dropChance.put("minecraft:dirt", 3);
-			dropChance.put("minecraft:grass", 4);
-			dropChance.put("minecraft:sand", 3);
-			dropChance.put("minecraft:stone", 2);
-			dropChance.put("iceandfire:frozen_cobblestone", 2);
-			dropChance.put("iceandfire:frozen_stone", 2);
-			dropChance.put("iceandfire:frozen_grass", 2);
-			dropChance.put("iceandfire:frozen_dirt", 2);
-			dropChance.put("iceandfire:frozen_gravel", 2);
-			dropChance.put("iceandfire:frozen_grass_path", 2);
-			dropChance.put("iceandfire:frozen_splinters", 2);
-			dropChance.put("iceandfire:crackled_cobblestone", 2);
-			dropChance.put("iceandfire:crackled_stone", 2);
-			dropChance.put("iceandfire:crackled_grass", 2);
-			dropChance.put("iceandfire:crackled_dirt", 2);
-			dropChance.put("iceandfire:crackled_gravel", 2);
-			dropChance.put("iceandfire:crackled_grass_path", 2);
-		}
-		dragonGriefingBlockChance = loadBlockChanceMapping(dropChance);
+		dragonGriefingBlockChance = loadBlockChanceMapping(DRAGON_SETTINGS.dragonGriefingBlockChance);
 		return dragonGriefingBlockChance;
 	}
 
 	public static HashMap<Block, Integer> getDragonGriefingEffectChance() {
 		if(dragonGriefingEffectChance != null) return dragonGriefingEffectChance;
-		Map<String, Integer> effectChance = DRAGON_SETTINGS.dragonGriefingEffectChance;
-		if (DRAGON_SETTINGS.dragonGriefingReduceLag) {
-			effectChance.put("iceandfire:ash", 5);
-			effectChance.put("iceandfire:chared_cobblestone", 5);
-			effectChance.put("iceandfire:chared_stone", 5);
-			effectChance.put("iceandfire:chared_dirt", 5);
-			effectChance.put("iceandfire:chared_gravel", 5);
-			effectChance.put("minecraft:dirt", 5);
-			effectChance.put("minecraft:stone", 5);
-			effectChance.put("iceandfire:frozen_cobblestone", 5);
-			effectChance.put("iceandfire:frozen_stone", 5);
-			effectChance.put("iceandfire:frozen_dirt", 5);
-			effectChance.put("iceandfire:frozen_gravel", 5);
-			effectChance.put("iceandfire:frozen_splinters", 5);
-			effectChance.put("iceandfire:crackled_cobblestone", 5);
-			effectChance.put("iceandfire:crackled_stone", 5);
-			effectChance.put("iceandfire:crackled_dirt", 5);
-			effectChance.put("iceandfire:crackled_gravel", 5);
-		}
-		dragonGriefingEffectChance = loadBlockChanceMapping(effectChance);
+		dragonGriefingEffectChance = loadBlockChanceMapping(DRAGON_SETTINGS.dragonGriefingEffectChance);
 		return dragonGriefingEffectChance;
 	}
 
 	private static HashMap<String, Integer> mapNameInteger(String[] mappings) {
 		HashMap<String, Integer> map = new HashMap<>();
 		for(String biomeNameMapping : mappings) {
+			if(StringUtils.isNullOrEmpty(biomeNameMapping)) continue;
 			String[] split = biomeNameMapping.split("=");
 			if(split.length != 2 || split[0].isEmpty() || split[1].isEmpty()) {
 				IceAndFire.logger.error("Failed to parse biome name mapping: " + biomeNameMapping);
@@ -865,21 +859,30 @@ public class IceAndFireConfig {
 			try {
 				map.put(split[0], Integer.parseInt(split[1]));
 			} catch (NumberFormatException e) {
-				IceAndFire.logger.error("Failed to parse biome name mapping: " + biomeNameMapping);
+				IceAndFire.logger.error("Failed to parse biome name mapping, invalid chance: " + biomeNameMapping);
 			}
 		}
 		return map;
 	}
 
-	private static HashMap<Block, Integer> loadBlockChanceMapping(Map<String, Integer> mappings) {
+	private static HashMap<Block, Integer> loadBlockChanceMapping(String[] mappings) {
 		HashMap<Block, Integer> map = new HashMap<>();
-		for (Map.Entry<String, Integer> mapping : mappings.entrySet()) {
-			ResourceLocation resourceLocation = new ResourceLocation(mapping.getKey());
-			Block block = Block.REGISTRY.getObject(resourceLocation);
-			if (block != Blocks.AIR) {
-				map.put(block, IafMathHelper.clamp(mapping.getValue(), 0, 100));
-			} else {
-				IceAndFire.logger.warn("Could not find block \"" + mapping.getKey() + "\", ignoring!");
+		for(String blockNameMapping : mappings) {
+			if(StringUtils.isNullOrEmpty(blockNameMapping)) continue;
+			String[] split = blockNameMapping.split("=");
+			if(split.length != 2 || split[0].isEmpty() || split[1].isEmpty()) {
+				IceAndFire.logger.error("Failed to parse block name mapping: " + blockNameMapping);
+				continue;
+			}
+			Block block = Block.getBlockFromName(split[0]);
+			if(block == null || block == Blocks.AIR) {
+				IceAndFire.logger.error("Failed to parse block name mapping, invalid block or air: " + blockNameMapping);
+				continue;
+			}
+			try {
+				map.put(block, IafMathHelper.clamp(Integer.parseInt(split[1]), 0, 100));
+			} catch (NumberFormatException e) {
+				IceAndFire.logger.error("Failed to parse block name mapping, invalid chance: " + blockNameMapping);
 			}
 		}
 		return map;
