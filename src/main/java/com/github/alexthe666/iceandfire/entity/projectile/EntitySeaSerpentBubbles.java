@@ -51,7 +51,7 @@ public class EntitySeaSerpentBubbles extends EntityFireball implements IDragonPr
         }
         if (this.world.isRemote || (this.shootingEntity == null || !this.shootingEntity.isDead) && this.world.isBlockLoaded(new BlockPos(this))) {
             autoTarget();
-            super.onUpdate();
+            this.onEntityUpdate();
             RayTraceResult raytraceresult = ProjectileHelper.forwardsRaycast(this, true, false, this.shootingEntity);
             if (raytraceresult != null && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, raytraceresult)) {
                 this.onImpact(raytraceresult);
