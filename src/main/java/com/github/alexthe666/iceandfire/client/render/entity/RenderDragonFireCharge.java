@@ -49,8 +49,8 @@ public class RenderDragonFireCharge extends Render<Entity> {
 
 	private Block getBlock() {
 		switch(this.type) {
-			case ICE: return ModBlocks.lightning_stone;
-			case LIGHTNING: return ModBlocks.dragon_ice;
+			case ICE: return ModBlocks.dragon_ice;
+			case LIGHTNING: return ModBlocks.lightning_stone;
 			default: return Blocks.MAGMA;
 		}
 	}
