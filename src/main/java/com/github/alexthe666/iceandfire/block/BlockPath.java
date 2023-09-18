@@ -16,6 +16,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.logging.log4j.Level;
 
 import java.util.Random;
 
@@ -106,13 +107,34 @@ public class BlockPath extends BlockGrassPath {
 
     @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
-        super.neighborChanged(state, worldIn, pos, blockIn, fromPos);
+        //super.neighborChanged(state, worldIn, pos, blockIn, fromPos);
         this.updateBlockState(worldIn, pos);
     }
 
     private void updateBlockState(World worldIn, BlockPos pos) {
         if (worldIn.getBlockState(pos.up()).getMaterial().isSolid()) {
-            worldIn.setBlockState(pos, this.type.getBaseBlock().getDefaultState());
+            try {
+                worldIn.setBlockState(pos, this.type.getBaseBlock().getDefaultState());
+            }
+            catch (NullPointerException ex) {
+                IceAndFire.logger.log(Level.WARN, "Exception updating BlockPath, " +
+                        "pos: " + (pos == null ?
+                        "null" :
+                        "x:" + pos.getX() + " y:" + pos.getY() + " z:" + pos.getZ()) +
+                        " type: " + (this.type == null ?
+                        "null" :
+                        this.type.toString() +
+                                " baseBlock: " +
+                                (this.type.getBaseBlock() == null ?
+                                        "null" :
+                                        this.type.getBaseBlock().toString() +
+                                                " defaultState: " +
+                                                (this.type.getBaseBlock().getDefaultState() == null ?
+                                                        "null" :
+                                                        this.type.getBaseBlock().getDefaultState().toString())))
+                );
+                throw ex;
+            }
         }
     }
 
