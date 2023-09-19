@@ -20,7 +20,6 @@ public class BlockReturningState extends Block {
         this(materialIn, gameName, name, toolUsed, toolStrength, hardness, resistance, sound, false, returnToState);
     }
 
-    @SuppressWarnings("deprecation")
     public BlockReturningState(Material materialIn, String gameName, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound, boolean slippery, IBlockState returnToState) {
         super(materialIn);
         this.setTranslationKey(name);
@@ -30,7 +29,7 @@ public class BlockReturningState extends Block {
         this.setSoundType(sound);
         this.setCreativeTab(IceAndFire.TAB);
         if (slippery) {
-            this.slipperiness = 0.98F;
+            this.setDefaultSlipperiness(0.98F);
         }
         setRegistryName(IceAndFire.MODID, gameName);
         this.returnState = returnToState;

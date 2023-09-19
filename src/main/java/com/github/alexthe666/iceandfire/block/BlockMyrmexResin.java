@@ -43,9 +43,11 @@ public class BlockMyrmexResin extends Block implements ICustomRendered {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public float getSlipperiness(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable Entity entity) {
-        return entity instanceof EntityMyrmexBase ? this.slipperiness : 0.75F;
+        if (entity instanceof EntityMyrmexBase) {
+            return super.getSlipperiness(state, world, pos, entity);
+        }
+        return 0.75F;
     }
 
     @Override

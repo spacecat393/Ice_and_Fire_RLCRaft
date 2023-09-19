@@ -22,7 +22,6 @@ public class BlockFallingReturningState extends BlockFalling {
 		this(materialIn, gameName, name, toolUsed, toolStrength, hardness, resistance, sound, revertState, false);
 	}
 
-	@SuppressWarnings("deprecation")
 	public BlockFallingReturningState(Material materialIn, String gameName, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound, IBlockState revertState, boolean slippery) {
 		super(materialIn);
 		this.setTranslationKey(name);
@@ -35,7 +34,7 @@ public class BlockFallingReturningState extends BlockFalling {
 		this.setDefaultState(this.blockState.getBaseState().withProperty(REVERTS, Boolean.FALSE));
 		this.setTickRandomly(true);
 		if (slippery) {
-			this.slipperiness = 0.98F;
+			this.setDefaultSlipperiness(0.98F);
 		}
 		this.revertState = revertState;
 	}

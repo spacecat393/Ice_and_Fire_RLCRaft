@@ -14,7 +14,6 @@ public class BlockFallingGeneric extends BlockFalling {
 		this(materialIn, gameName, name, toolUsed, toolStrength, hardness, resistance, sound, false);
 	}
 
-	@SuppressWarnings("deprecation")
 	public BlockFallingGeneric(Material materialIn, String gameName, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound, boolean slippery) {
 		super(materialIn);
 		this.setTranslationKey(name);
@@ -25,7 +24,7 @@ public class BlockFallingGeneric extends BlockFalling {
 		this.setCreativeTab(IceAndFire.TAB);
 		setRegistryName(IceAndFire.MODID, gameName);
 		if (slippery) {
-			this.slipperiness = 0.98F;
+			this.setDefaultSlipperiness(0.98F);
 		}
 	}
 

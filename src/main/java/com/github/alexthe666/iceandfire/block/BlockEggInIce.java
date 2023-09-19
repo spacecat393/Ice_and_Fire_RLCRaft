@@ -34,7 +34,7 @@ public class BlockEggInIce extends BlockContainer {
 	@SuppressWarnings("deprecation")
 	public BlockEggInIce() {
 		super(Material.ICE);
-		this.slipperiness = 0.98F;
+		this.setDefaultSlipperiness(0.98F);
 		this.setHardness(0.5F);
 		this.setLightOpacity(3);
 		this.setSoundType(SoundType.GLASS);

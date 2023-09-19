@@ -29,7 +29,6 @@ public class BlockGeneric extends Block {
 		this(materialIn, gameName, name, toolUsed, toolStrength, hardness, resistance, sound, beacon, slippery, false);
 	}
 
-	@SuppressWarnings("deprecation")
 	public BlockGeneric(Material materialIn, String gameName, String name, String toolUsed, int toolStrength, float hardness, float resistance, SoundType sound, boolean beacon, boolean slippery, boolean transluscent) {
 		super(materialIn);
 		this.setTranslationKey(name);
@@ -41,7 +40,7 @@ public class BlockGeneric extends Block {
 		setRegistryName(IceAndFire.MODID, gameName);
 		this.beacon = beacon;
 		if (slippery) {
-			this.slipperiness = 0.98F;
+			this.setDefaultSlipperiness(0.98F);
 		}
 		this.transluscent = transluscent;
 	}

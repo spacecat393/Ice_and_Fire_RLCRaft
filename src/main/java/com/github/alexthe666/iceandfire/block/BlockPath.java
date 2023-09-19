@@ -64,7 +64,6 @@ public class BlockPath extends BlockGrassPath {
     public static final PropertyBool REVERTS = PropertyBool.create("revert");
     private final Type type;
 
-    @SuppressWarnings("deprecation")
     public BlockPath(Type type) {
         super();
         this.type = type;
@@ -74,7 +73,7 @@ public class BlockPath extends BlockGrassPath {
         this.setSoundType(type == Type.FROZEN ? SoundType.GLASS : SoundType.GROUND);
         this.setCreativeTab(IceAndFire.TAB);
         if (this.type == Type.FROZEN) {
-            this.slipperiness = 0.98F;
+            this.setDefaultSlipperiness(0.98F);
         }
         this.setLightOpacity(0);
         setRegistryName(IceAndFire.MODID, this.type.getRegistrationKey());
