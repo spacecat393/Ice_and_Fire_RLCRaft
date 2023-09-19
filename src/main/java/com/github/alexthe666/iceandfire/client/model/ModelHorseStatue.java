@@ -310,7 +310,6 @@ public class ModelHorseStatue extends ModelBase {
 		float f;
 
 		for (f = f2 - f1; f < -180.0F; f += 360.0F) {
-			;
 		}
 
 		while (f >= 180.0F) {

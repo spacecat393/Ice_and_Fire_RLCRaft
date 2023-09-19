@@ -220,8 +220,8 @@ public class ModelMyrmexWorker extends ModelMyrmexBase {
 
     @Override
     public void renderAdult(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        animate((IAnimatedEntity)entity, f, f1, f2, f3, f4, f5);
-        setRotationAngles(f, f1, f2, f3, f4, f5, (EntityMyrmexWorker) entity);
+        animate((IAnimatedEntity) entity, f, f1, f2, f3, f4, f5);
+        setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         this.Body2.render(f5);
     }
 
@@ -279,13 +279,13 @@ public class ModelMyrmexWorker extends ModelMyrmexBase {
         float speed_idle = 0.05F;
         float degree_walk = 0.3F;
         float degree_idle = 0.25F;
-        if(entity.getPassengers().isEmpty()) {
+        if (entity.getPassengers().isEmpty()) {
             this.faceTarget(f3, f4, 2, NECK);
         }
-        this.chainWave(GASTER, speed_idle, degree_idle * 0.15F, 0, entity.ticksExisted, 1);
-        this.chainWave(NECK, speed_idle, degree_idle * -0.15F, 2, entity.ticksExisted, 1);
-        this.swing(MandibleR, speed_idle, degree_idle * -0.5F, false, 1, 0.2F, entity.ticksExisted, 1);
-        this.swing(MandibleL, speed_idle, degree_idle * -0.5F, true, 1, 0.2F, entity.ticksExisted, 1);
+        this.chainWave(GASTER, speed_idle, degree_idle * 0.15F, 0, f2, 1);
+        this.chainWave(NECK, speed_idle, degree_idle * -0.15F, 2, f2, 1);
+        this.swing(MandibleR, speed_idle, degree_idle * -0.5F, false, 1, 0.2F, f2, 1);
+        this.swing(MandibleL, speed_idle, degree_idle * -0.5F, true, 1, 0.2F, f2, 1);
         this.animateLeg(LEGR1, speed_walk, degree_walk, false, 0, 1, f, f1);
         this.animateLeg(LEGR3, speed_walk, degree_walk, false, 0, 1, f, f1);
         this.animateLeg(LEGR2, speed_walk, degree_walk, true, 0, 1, f, f1);
@@ -295,7 +295,7 @@ public class ModelMyrmexWorker extends ModelMyrmexBase {
         this.animateLeg(LEGL2, speed_walk, degree_walk, true, 1, -1, f, f1);
     }
 
-    private void animateLeg(AdvancedModelRenderer[] models, float speed, float degree, boolean reverse, float offset, float weight, float f, float f1){
+    private void animateLeg(AdvancedModelRenderer[] models, float speed, float degree, boolean reverse, float offset, float weight, float f, float f1) {
         this.flap(models[0], speed, degree * 0.4F, reverse, offset, weight * 0.2F, f, f1);
         this.flap(models[1], speed, degree * 2, reverse, offset, weight * -0.4F, f, f1);
         this.flap(models[1], speed, -degree * 1.2F, reverse, offset, weight * 0.5F, f, f1);
@@ -304,7 +304,7 @@ public class ModelMyrmexWorker extends ModelMyrmexBase {
     }
 
     @Override
-    public ModelRenderer[] getHeadParts(){
+    public ModelRenderer[] getHeadParts() {
         return new ModelRenderer[]{Neck1, HeadBase};
     }
 

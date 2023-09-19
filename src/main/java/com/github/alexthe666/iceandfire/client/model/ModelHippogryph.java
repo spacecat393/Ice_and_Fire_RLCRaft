@@ -5,7 +5,6 @@ import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
 import net.ilexiconn.llibrary.client.model.ModelAnimator;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
-import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
 public class ModelHippogryph extends ModelDragonBase {
@@ -401,7 +400,7 @@ public class ModelHippogryph extends ModelDragonBase {
 			this.Quill_L.setScale(1, 1, 1);
 			this.Quill_R.setScale(1, 1, 1);
 		}
-		setRotationAngles(f, f1, f2, f3, f4, f5, (Entity) entity);
+		setRotationAngles(f, f1, f2, f3, f4, f5, entity);
 		this.Body.render(f5);
 	}
 
@@ -702,20 +701,20 @@ public class ModelHippogryph extends ModelDragonBase {
 		float degree_walk = 0.5F;
 		float degree_idle = 0.5F;
 		float degree_fly = 0.5F + (hippo.getEnumVariant() == EnumHippogryphTypes.DODO ? 1f : 0);
-		this.bob(Body, speed_idle, degree_idle, false, entity.ticksExisted, 1);
-		this.bob(BackLegR1, -speed_idle, degree_idle, false, entity.ticksExisted, 1);
-		this.bob(BackLegR1_1, -speed_idle, degree_idle, false, entity.ticksExisted, 1);
-		this.bob(HindThighR, -speed_idle, degree_idle, false, entity.ticksExisted, 1);
-		this.bob(HindThighL, -speed_idle, degree_idle, false, entity.ticksExisted, 1);
+		this.bob(Body, speed_idle, degree_idle, false, f2, 1);
+		this.bob(BackLegR1, -speed_idle, degree_idle, false, f2, 1);
+		this.bob(BackLegR1_1, -speed_idle, degree_idle, false, f2, 1);
+		this.bob(HindThighR, -speed_idle, degree_idle, false, f2, 1);
+		this.bob(HindThighL, -speed_idle, degree_idle, false, f2, 1);
 		AdvancedModelRenderer[] NECK = new AdvancedModelRenderer[]{Neck, Neck2, Head};
-		this.chainWave(NECK, speed_idle, degree_idle * 0.15F, -2, entity.ticksExisted, 1);
+		this.chainWave(NECK, speed_idle, degree_idle * 0.15F, -2, f2, 1);
 
 		if (hippo.isFlying() || hippo.airBorneCounter > 50 || hippo.isHovering()) {
 			//hippo.roll_buffer.applyChainFlapBuffer(Body);
-			this.flap(WingL, speed_fly, degree_fly, false, 0, 0, entity.ticksExisted, 1);
-			this.flap(WingR, speed_fly, -degree_fly, false, 0, 0, entity.ticksExisted, 1);
-			this.flap(WingL2, speed_fly, degree_fly, false, 0, 0, entity.ticksExisted, 1);
-			this.flap(WingR2, speed_fly, -degree_fly, false, 0, 0, entity.ticksExisted, 1);
+			this.flap(WingL, speed_fly, degree_fly, false, 0, 0, f2, 1);
+			this.flap(WingR, speed_fly, -degree_fly, false, 0, 0, f2, 1);
+			this.flap(WingL2, speed_fly, degree_fly, false, 0, 0, f2, 1);
+			this.flap(WingR2, speed_fly, -degree_fly, false, 0, 0, f2, 1);
 		} else {
 			this.faceTarget(f3, f4, 3, NECK);
 			this.bob(Body, speed_walk, degree_walk, false, f, f1);
