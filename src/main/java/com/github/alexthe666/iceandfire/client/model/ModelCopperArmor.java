@@ -22,6 +22,7 @@ public class ModelCopperArmor extends ModelBiped {
         this.facePlate.setRotationPoint(0.0F, 0.0F, 0.0F);
         this.facePlate.addBox(-4.5F, -8.2F, -4.01F, 9, 10, 1);
         this.robeLowerRight = new ModelRenderer(this, 0, 51);
+        this.robeLowerRight.mirror = true;
         this.robeLowerRight.setRotationPoint(0.0F, -0.2F, 0.0F);
         this.robeLowerRight.addBox(-2.1F, 0.0F, -2.5F, 4, 8, 5);
         this.robeLowerLeft = new ModelRenderer(this, 0, 51);
