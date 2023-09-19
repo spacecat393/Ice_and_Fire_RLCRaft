@@ -23,29 +23,41 @@ import java.util.Random;
 public class BlockPath extends BlockGrassPath {
 
     public enum Type {
-        CHARED("iceandfire.charedGrassPath", "chared_grass_path", ModBlocks.charedDirt),
-        FROZEN("iceandfire.frozenGrassPath", "frozen_grass_path", ModBlocks.frozenDirt),
-        CRACKLED("iceandfire.crackledGrassPath", "crackled_grass_path", ModBlocks.crackledDirt);
+        CHARED,
+        FROZEN,
+        CRACKLED;
 
-        private final String translation;
-        private final String reg;
-        private final Block base;
-        Type(String translation, String reg, Block base) {
-            this.translation = translation;
-            this.reg = reg;
-            this.base = base;
+        public String getRegistrationKey() {
+            switch (this) {
+                case FROZEN:
+                    return "frozen_grass_path";
+                case CRACKLED:
+                    return "crackled_grass_path";
+                default:
+                    return "chared_grass_path";
+            }
         }
 
         public String getTranslationKey() {
-            return this.translation;
-        }
-
-        public String getRegistrationKey() {
-            return this.reg;
+            switch (this) {
+                case FROZEN:
+                    return "iceandfire.frozenGrassPath";
+                case CRACKLED:
+                    return "iceandfire.crackledGrassPath";
+                default:
+                    return "iceandfire.charedGrassPath";
+            }
         }
 
         public Block getBaseBlock() {
-            return this.base;
+            switch (this) {
+                case FROZEN:
+                    return ModBlocks.frozenDirt;
+                case CRACKLED:
+                    return ModBlocks.crackledDirt;
+                default:
+                    return ModBlocks.charedDirt;
+            }
         }
     }
 
@@ -107,35 +119,13 @@ public class BlockPath extends BlockGrassPath {
 
     @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
-        //super.neighborChanged(state, worldIn, pos, blockIn, fromPos);
         this.updateBlockState(worldIn, pos);
     }
 
     private void updateBlockState(World worldIn, BlockPos pos) {
-        if (worldIn.getBlockState(pos.up()).getMaterial().isSolid()) {
-            try {
-                worldIn.setBlockState(pos, this.type.getBaseBlock().getDefaultState());
-            }
-            catch (NullPointerException ex) {
-                IceAndFire.logger.log(Level.WARN, "Exception updating BlockPath, " +
-                        "pos: " + (pos == null ?
-                        "null" :
-                        "x:" + pos.getX() + " y:" + pos.getY() + " z:" + pos.getZ()) +
-                        " type: " + (this.type == null ?
-                        "null" :
-                        this.type.toString() +
-                                " baseBlock: " +
-                                (this.type.getBaseBlock() == null ?
-                                        "null" :
-                                        this.type.getBaseBlock().toString() +
-                                                " defaultState: " +
-                                                (this.type.getBaseBlock().getDefaultState() == null ?
-                                                        "null" :
-                                                        this.type.getBaseBlock().getDefaultState().toString())))
-                );
-                throw ex;
-            }
-        }
+        Block block = this.type.getBaseBlock();
+        IBlockState state = block.getDefaultState();
+        worldIn.setBlockState(pos, state);
     }
 
     @Override
