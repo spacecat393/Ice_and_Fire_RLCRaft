@@ -50,10 +50,10 @@ public enum EnumDragonArmor {
 			EnumDragonArmor.values()[i].chestplate = new ItemScaleArmor(EnumDragonArmor.values()[i].eggType, EnumDragonArmor.values()[i], EnumDragonArmor.values()[i].armorMaterial, 1, EntityEquipmentSlot.CHEST).setTranslationKey("iceandfire.dragonChestplate");
 			EnumDragonArmor.values()[i].leggings = new ItemScaleArmor(EnumDragonArmor.values()[i].eggType, EnumDragonArmor.values()[i], EnumDragonArmor.values()[i].armorMaterial, 2, EntityEquipmentSlot.LEGS).setTranslationKey("iceandfire.dragonLeggings");
 			EnumDragonArmor.values()[i].boots = new ItemScaleArmor(EnumDragonArmor.values()[i].eggType, EnumDragonArmor.values()[i], EnumDragonArmor.values()[i].armorMaterial, 3, EntityEquipmentSlot.FEET).setTranslationKey("iceandfire.dragonBoots");
-			EnumDragonArmor.values()[i].helmet.setRegistryName(EnumDragonArmor.values()[i].name() + "_helmet");
-			EnumDragonArmor.values()[i].chestplate.setRegistryName(EnumDragonArmor.values()[i].name() + "_chestplate");
-			EnumDragonArmor.values()[i].leggings.setRegistryName(EnumDragonArmor.values()[i].name() + "_leggings");
-			EnumDragonArmor.values()[i].boots.setRegistryName(EnumDragonArmor.values()[i].name() + "_boots");
+			EnumDragonArmor.values()[i].helmet.setRegistryName(IceAndFire.MODID, EnumDragonArmor.values()[i].name() + "_helmet");
+			EnumDragonArmor.values()[i].chestplate.setRegistryName(IceAndFire.MODID, EnumDragonArmor.values()[i].name() + "_chestplate");
+			EnumDragonArmor.values()[i].leggings.setRegistryName(IceAndFire.MODID, EnumDragonArmor.values()[i].name() + "_leggings");
+			EnumDragonArmor.values()[i].boots.setRegistryName(IceAndFire.MODID, EnumDragonArmor.values()[i].name() + "_boots");
 		}
 	}
 

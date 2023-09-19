@@ -48,10 +48,10 @@ public enum EnumSeaSerpent {
             color.chestplate = new ItemSeaSerpentArmor(color, color.armorMaterial, 1, EntityEquipmentSlot.CHEST).setTranslationKey("iceandfire.sea_serpent_chestplate");
             color.leggings = new ItemSeaSerpentArmor(color, color.armorMaterial, 2, EntityEquipmentSlot.LEGS).setTranslationKey("iceandfire.sea_serpent_leggings");
             color.boots = new ItemSeaSerpentArmor(color, color.armorMaterial, 3, EntityEquipmentSlot.FEET).setTranslationKey("iceandfire.sea_serpent_boots");
-            color.helmet.setRegistryName("tide_" + color.resourceName + "_helmet");
-            color.chestplate.setRegistryName("tide_" + color.resourceName + "_chestplate");
-            color.leggings.setRegistryName("tide_" + color.resourceName + "_leggings");
-            color.boots.setRegistryName("tide_" + color.resourceName + "_boots");
+            color.helmet.setRegistryName(IceAndFire.MODID, "tide_" + color.resourceName + "_helmet");
+            color.chestplate.setRegistryName(IceAndFire.MODID, "tide_" + color.resourceName + "_chestplate");
+            color.leggings.setRegistryName(IceAndFire.MODID, "tide_" + color.resourceName + "_leggings");
+            color.boots.setRegistryName(IceAndFire.MODID,  "tide_" + color.resourceName + "_boots");
         }
     }
 }

@@ -77,7 +77,7 @@ public class BlockPath extends BlockGrassPath {
             this.slipperiness = 0.98F;
         }
         this.setLightOpacity(0);
-        setRegistryName(this.type.getRegistrationKey());
+        setRegistryName(IceAndFire.MODID, this.type.getRegistrationKey());
         this.setDefaultState(this.blockState.getBaseState().withProperty(REVERTS, Boolean.FALSE));
         this.setTickRandomly(true);
     }

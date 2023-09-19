@@ -39,7 +39,7 @@ public class ItemDragonFlesh extends ItemFood {
 		super(8, 0.8F, true);
 		this.setCreativeTab(IceAndFire.TAB);
 		this.setTranslationKey(getTranslationKey(dragonType));
-		this.setRegistryName(getRegistryName(dragonType));
+		this.setRegistryName(IceAndFire.MODID, getRegistryName(dragonType));
 		this.dragonType = dragonType;
 	}
 
