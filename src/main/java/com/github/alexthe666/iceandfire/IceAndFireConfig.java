@@ -739,7 +739,7 @@ public class IceAndFireConfig {
 
 		@Config.Comment("If true, silver armor will use the updated model and textures")
 		@Config.Name("Redesigned Silver Armor")
-		public boolean silverArmorRedesign = false;
+		public boolean silverArmorRedesign = true;
 
 		@Config.Comment("If true, uses a custom shader when players are charmed by sirens")
 		@Config.Name("Use Siren Shader")

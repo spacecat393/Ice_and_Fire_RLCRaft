@@ -28,6 +28,7 @@ import com.github.alexthe666.iceandfire.enums.*;
 import com.github.alexthe666.iceandfire.event.EventClient;
 import com.github.alexthe666.iceandfire.event.EventNewMenu;
 import com.github.alexthe666.iceandfire.item.ICustomRendered;
+import com.github.alexthe666.iceandfire.item.ItemSilverArmor;
 import net.ilexiconn.llibrary.client.model.tabula.TabulaModelHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -39,6 +40,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.entity.RenderSnowball;
 import net.minecraft.client.resources.IReloadableResourceManager;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -169,6 +171,17 @@ public class ClientProxy extends CommonProxy {
 			ModelLoader.setCustomModelResourceLocation(troll.chestplate, 0, new ModelResourceLocation("iceandfire:"  + troll.name().toLowerCase() + "_troll_leather_chestplate", "inventory"));
 			ModelLoader.setCustomModelResourceLocation(troll.leggings, 0, new ModelResourceLocation("iceandfire:"  + troll.name().toLowerCase() + "_troll_leather_leggings", "inventory"));
 			ModelLoader.setCustomModelResourceLocation(troll.boots, 0, new ModelResourceLocation("iceandfire:"  + troll.name().toLowerCase() + "_troll_leather_boots", "inventory"));
+		}
+		if (IceAndFireConfig.CLIENT_SETTINGS.silverArmorRedesign) {
+			ModelLoader.setCustomModelResourceLocation(ModItems.silver_helmet, 0, new ModelResourceLocation("iceandfire:armor_silver_metal_redesign_helmet", "inventory"));
+			ModelLoader.setCustomModelResourceLocation(ModItems.silver_chestplate, 0, new ModelResourceLocation("iceandfire:armor_silver_metal_redesign_chestplate", "inventory"));
+			ModelLoader.setCustomModelResourceLocation(ModItems.silver_leggings, 0, new ModelResourceLocation("iceandfire:armor_silver_metal_redesign_leggings", "inventory"));
+			ModelLoader.setCustomModelResourceLocation(ModItems.silver_boots, 0, new ModelResourceLocation("iceandfire:armor_silver_metal_redesign_boots", "inventory"));
+		} else {
+			ModelLoader.setCustomModelResourceLocation(ModItems.silver_helmet, 0, new ModelResourceLocation("iceandfire:armor_silver_metal_helmet", "inventory"));
+			ModelLoader.setCustomModelResourceLocation(ModItems.silver_chestplate, 0, new ModelResourceLocation("iceandfire:armor_silver_metal_chestplate", "inventory"));
+			ModelLoader.setCustomModelResourceLocation(ModItems.silver_leggings, 0, new ModelResourceLocation("iceandfire:armor_silver_metal_leggings", "inventory"));
+			ModelLoader.setCustomModelResourceLocation(ModItems.silver_boots, 0, new ModelResourceLocation("iceandfire:armor_silver_metal_boots", "inventory"));
 		}
 		ModelBakery.registerItemVariants(Item.getItemFromBlock(ModBlocks.myrmex_resin), new ResourceLocation("iceandfire:desert_myrmex_resin"), new ResourceLocation("iceandfire:jungle_myrmex_resin"));
 		ModelBakery.registerItemVariants(Item.getItemFromBlock(ModBlocks.myrmex_resin_sticky), new ResourceLocation("iceandfire:desert_myrmex_resin_sticky"), new ResourceLocation("iceandfire:jungle_myrmex_resin_sticky"));
