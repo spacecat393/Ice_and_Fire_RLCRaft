@@ -293,7 +293,13 @@ public class DragonUtils {
 		if (entity instanceof IDeadMob && ((IDeadMob) entity).isMobDead()) {
 			return false;
 		}
-		return entity instanceof EntityLiving || entity.attackable();
+		if (!entity.attackable()) {
+			return false;
+		}
+		if (entity instanceof EntityLiving && ((EntityLiving)entity).isAIDisabled()) {
+			return false;
+		}
+		return entity instanceof EntityLiving || entity instanceof EntityPlayer;
 	}
 
 	public static boolean canGrief(boolean weak) {
