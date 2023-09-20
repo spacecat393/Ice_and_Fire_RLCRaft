@@ -61,7 +61,7 @@ public class ItemGorgonHead extends Item implements ICustomRendered {
 	@SuppressWarnings("deprecation")
 	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entity, int timeLeft) {
-		if(worldIn.isRemote) {
+		if(worldIn.isRemote || stack.getMetadata() != 1) {
 			stack.setItemDamage(0);
 			return;
 		}
