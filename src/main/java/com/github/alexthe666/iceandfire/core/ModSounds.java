@@ -16,8 +16,20 @@ public final class ModSounds {
 	@GameRegistry.ObjectHolder("firedragon_breath")
 	public static final SoundEvent FIREDRAGON_BREATH = createSoundEvent("firedragon_breath");
 
+	@GameRegistry.ObjectHolder("firedragon_breath_short")
+	public static final SoundEvent FIREDRAGON_BREATH_SHORT = createSoundEvent("firedragon_breath_short");
+
 	@GameRegistry.ObjectHolder("icedragon_breath")
 	public static final SoundEvent ICEDRAGON_BREATH = createSoundEvent("icedragon_breath");
+
+	@GameRegistry.ObjectHolder("icedragon_breath_short")
+	public static final SoundEvent ICEDRAGON_BREATH_SHORT = createSoundEvent("icedragon_breath_short");
+
+	@GameRegistry.ObjectHolder("lightningdragon_breath")
+	public static final SoundEvent LIGHTNINGDRAGON_BREATH = createSoundEvent("lightningdragon_breath");
+
+	@GameRegistry.ObjectHolder("lightningdragon_breath_short")
+	public static final SoundEvent LIGHTNINGDRAGON_BREATH_SHORT = createSoundEvent("lightningdragon_breath_short_short");
 
 	@GameRegistry.ObjectHolder("firedragon_child_idle")
 	public static final SoundEvent FIREDRAGON_CHILD_IDLE = createSoundEvent("firedragon_child_idle");
@@ -90,9 +102,6 @@ public final class ModSounds {
 
 	@GameRegistry.ObjectHolder("icedragon_adult_hurt")
 	public static final SoundEvent ICEDRAGON_ADULT_HURT = createSoundEvent("icedragon_adult_hurt");
-
-	@GameRegistry.ObjectHolder("lightningdragon_breath")
-	public static final SoundEvent LIGHTNINGDRAGON_BREATH = createSoundEvent("lightningdragon_breath");
 
 	@GameRegistry.ObjectHolder("lightningdragon_child_idle")
 	public static final SoundEvent LIGHTNINGDRAGON_CHILD_IDLE = createSoundEvent("lightningdragon_child_idle");

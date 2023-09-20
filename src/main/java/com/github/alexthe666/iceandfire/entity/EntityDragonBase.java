@@ -1512,10 +1512,12 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                         IceAndFire.PROXY.spawnParticle(EnumParticle.SPARK, this.world, headPos.x, headPos.y, headPos.z, 0, 0, 0);
                     }
                 }
-                if (this.dragonType == EnumDragonType.FIRE) {
-                    this.playSound(SoundEvents.BLOCK_FIRE_EXTINGUISH, 1, 1);
+                if (this.dragonType == EnumDragonType.ICE) {
+                    this.playSound(ModSounds.ICEDRAGON_BREATH_SHORT, 3, 1);
+                } else if (this.dragonType == EnumDragonType.LIGHTNING) {
+                    this.playSound(ModSounds.LIGHTNINGDRAGON_BREATH_SHORT, 3, 1);
                 } else {
-                    this.playSound(SoundEvents.ITEM_BOTTLE_FILL_DRAGONBREATH, 1, 1);
+                    this.playSound(ModSounds.FIREDRAGON_BREATH_SHORT, 3, 1);
                 }
             }
         }

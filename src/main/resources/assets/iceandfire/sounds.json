@@ -494,10 +494,22 @@
       "iceandfire:firedragon_breath"
     ]
   },
+  "firedragon_breath_short": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:firedragon_breath_short"
+    ]
+  },
   "icedragon_breath": {
     "category": "neutral",
     "sounds": [
       "iceandfire:icedragon_breath"
+    ]
+  },
+  "icedragon_breath_short": {
+    "category": "neutral",
+    "sounds": [
+      "iceandfire:icedragon_breath_short"
     ]
   },
   "lightningdragon_breath": {
@@ -506,10 +518,10 @@
       "iceandfire:lightningdragon_breath"
     ]
   },
-  "lightningdragon_breath_crackle": {
+  "lightningdragon_breath_short": {
     "category": "neutral",
     "sounds": [
-      "iceandfire:lightningdragon_breath_crackle"
+      "iceandfire:lightningdragon_breath_short"
     ]
   },
   "firedragon_child_idle": {
