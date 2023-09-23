@@ -276,6 +276,25 @@ item.banner.icedragon.green=緑のアイスドラゴン柄
 item.banner.icedragon.red=赤のアイスドラゴン柄
 item.banner.icedragon.black=黒のアイスドラゴン柄
 
+ライトニング = lightning
+
+item.banner.lightningdragon.white=白のライトニングラゴン柄
+item.banner.lightningdragon.orange=橙のライトニングラゴン柄
+item.banner.lightningdragon.magenta=赤紫のライトニングラゴン柄
+item.banner.lightningdragon.light_blue=空色のライトニングラゴン柄
+item.banner.lightningdragon.yellow=黄色のライトニングラゴン柄
+item.banner.lightningdragon.lime=黄緑のライトニングラゴン柄
+item.banner.lightningdragon.pink=桃色のライトニングラゴン柄
+item.banner.lightningdragon.gray=灰色のライトニングラゴン柄
+item.banner.lightningdragon.silver=薄灰のライトニングラゴン柄
+item.banner.lightningdragon.cyan=水色のライトニングラゴン柄
+item.banner.lightningdragon.purple=紫のライトニングラゴン柄
+item.banner.lightningdragon.blue=青のライトニングラゴン柄
+item.banner.lightningdragon.brown=茶色のライトニングラゴン柄
+item.banner.lightningdragon.green=緑のライトニングラゴン柄
+item.banner.lightningdragon.red=赤のライトニングラゴン柄
+item.banner.lightningdragon.black=黒のライトニングラゴン柄
+
 entity.firedragon.name=ファイアドラゴン
 entity.icedragon.name=アイスドラゴン
 entity.dragonegg.name=ドラゴンの卵

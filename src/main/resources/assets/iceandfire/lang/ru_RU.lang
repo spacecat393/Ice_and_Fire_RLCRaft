@@ -153,6 +153,23 @@ item.banner.icedragon.green=Зелёный флаг ледяного драко�
 item.banner.icedragon.red=Красный флаг ледяного дракона
 item.banner.icedragon.black=Черный флаг ледяного дракона
 
+item.banner.lightningdragon.white=Белый грозовой дракон
+item.banner.lightningdragon.orange=Оранжевый грозовой дракон
+item.banner.lightningdragon.magenta=Пурпурный грозовой дракон
+item.banner.lightningdragon.light_blue=Светло синий флаг грозовой дракон
+item.banner.lightningdragon.yellow=Желтый флаг грозовой дракон
+item.banner.lightningdragon.lime=Лаймовый флаг грозовой дракон
+item.banner.lightningdragon.pink=Розовый флаг грозовой дракон
+item.banner.lightningdragon.gray=Серый флаг грозовой дракон
+item.banner.lightningdragon.silver=Серебрянный флаг грозовой дракон
+item.banner.lightningdragon.cyan=Морской  флаг грозовой дракон
+item.banner.lightningdragon.purple=Фиолетовый флаг грозовой дракон
+item.banner.lightningdragon.blue=Синий флаг грозовой дракон
+item.banner.lightningdragon.brown=Коричневый флаг грозовой дракон
+item.banner.lightningdragon.green=Зелёный флаг грозовой дракон
+item.banner.lightningdragon.red=Красный флаг грозовой дракон
+item.banner.lightningdragon.black=Черный флаг грозовой дракон
+
 entity.lightningdragon.name=Грозовой дракон
 entity.dragonlightningcharge.name=Снаряд драконьей молнии
 

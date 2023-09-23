@@ -297,6 +297,23 @@ item.banner.icedragon.green=Green Ice Dragon Charge
 item.banner.icedragon.red=Red Ice Dragon Charge
 item.banner.icedragon.black=Black Ice Dragon Charge
 
+item.banner.lightningdragon.white=White Lightning Dragon Charge
+item.banner.lightningdragon.orange=Orange Lightning Dragon Charge
+item.banner.lightningdragon.magenta=Magenta Lightning Dragon Charge
+item.banner.lightningdragon.light_blue=Light Blue Lightning Dragon Charge
+item.banner.lightningdragon.yellow=Yellow Lightning Dragon Charge
+item.banner.lightningdragon.lime=Lime Lightning Dragon Charge
+item.banner.lightningdragon.pink=Pink Lightning Dragon Charge
+item.banner.lightningdragon.gray=Gray Lightning Dragon Charge
+item.banner.lightningdragon.silver=Silver Lightning Dragon Charge
+item.banner.lightningdragon.cyan=Cyan Lightning Dragon Charge
+item.banner.lightningdragon.purple=Purple Lightning Dragon Charge
+item.banner.lightningdragon.blue=Blue Lightning Dragon Charge
+item.banner.lightningdragon.brown=Brown Lightning Dragon Charge
+item.banner.lightningdragon.green=Green Lightning Dragon Charge
+item.banner.lightningdragon.red=Red Lightning Dragon Charge
+item.banner.lightningdragon.black=Black Lightning Dragon Charge
+
 entity.firedragon.name=Fire Dragon
 entity.icedragon.name=Ice Dragon
 entity.dragonegg.name=Dragon Egg

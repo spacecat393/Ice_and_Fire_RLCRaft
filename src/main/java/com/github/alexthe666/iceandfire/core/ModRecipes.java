@@ -111,6 +111,7 @@ public class ModRecipes {
 
         addBanner("firedragon", new ItemStack(ModItems.dragon_skull, 1, 0));
         addBanner("icedragon", new ItemStack(ModItems.dragon_skull, 1, 1));
+        addBanner("lightningdragon", new ItemStack(ModItems.dragon_skull, 1, 2));
         GameRegistry.addSmelting(ModBlocks.copperOre, new ItemStack(ModItems.copperIngot), 1);
         GameRegistry.addSmelting(ModBlocks.silverOre, new ItemStack(ModItems.silverIngot), 1);
         GameRegistry.addSmelting(ModBlocks.amethystOre, new ItemStack(ModItems.amethystGem), 1);

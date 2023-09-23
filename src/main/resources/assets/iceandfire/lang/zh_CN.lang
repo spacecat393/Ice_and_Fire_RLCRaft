@@ -274,6 +274,23 @@ item.banner.icedragon.green=绿色龙霜弹
 item.banner.icedragon.red=红色龙霜弹
 item.banner.icedragon.black=黑色龙霜弹
 
+item.banner.lightningdragon.white=青色電龍徽章
+item.banner.lightningdragon.orange=橙色電龍徽章
+item.banner.lightningdragon.magenta=品红電龍徽章
+item.banner.lightningdragon.light_blue=浅蓝電龍徽章
+item.banner.lightningdragon.yellow=黄色電龍徽章
+item.banner.lightningdragon.lime=黄绿電龍徽章
+item.banner.lightningdragon.pink=粉色電龍徽章
+item.banner.lightningdragon.gray=灰色電龍徽章
+item.banner.lightningdragon.silver=银色電龍徽章
+item.banner.lightningdragon.cyan=青色電龍徽章
+item.banner.lightningdragon.purple=紫色電龍徽章
+item.banner.lightningdragon.blue=蓝色電龍徽章
+item.banner.lightningdragon.brown=棕色電龍徽章
+item.banner.lightningdragon.green=绿色電龍徽章
+item.banner.lightningdragon.red=红色電龍徽章
+item.banner.lightningdragon.black=黑色電龍徽章
+
 entity.firedragon.name=火龙
 entity.icedragon.name=冰龙
 entity.dragonegg.name=龙蛋

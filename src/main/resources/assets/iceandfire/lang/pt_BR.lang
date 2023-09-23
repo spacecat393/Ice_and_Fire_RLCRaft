@@ -295,6 +295,23 @@ item.banner.icedragon.green=Figura de Dragão de Gelo Verde
 item.banner.icedragon.red=Figura de Dragão de Gelo Vermelho
 item.banner.icedragon.black=Figura de Dragão de Gelo Preto
 
+item.banner.lightningdragon.white=Figura de Dragão de Elétrico Branco
+item.banner.lightningdragon.orange=Figura de Dragão de Elétrico Laranja
+item.banner.lightningdragon.magenta=Figura de Dragão de Elétrico Magenta
+item.banner.lightningdragon.light_blue=Figura de Dragão de Elétrico Azul Claro
+item.banner.lightningdragon.yellow=Figura de Dragão de Elétrico Amarelo
+item.banner.lightningdragon.lime=Figura de Dragão de Elétrico Verde Limão
+item.banner.lightningdragon.pink=Figura de Dragão de Elétrico Rosa
+item.banner.lightningdragon.gray=Figura de Dragão de Elétrico Cinza
+item.banner.lightningdragon.silver=Figura de Dragão de Elétrico Cinza Claro
+item.banner.lightningdragon.cyan=Figura de Dragão de Elétrico Ciano
+item.banner.lightningdragon.purple=Figura de Dragão de Elétrico Lilás
+item.banner.lightningdragon.blue=Figura de Dragão de Elétrico Azul
+item.banner.lightningdragon.brown=Figura de Dragão de Elétrico Marrom
+item.banner.lightningdragon.green=Figura de Dragão de Elétrico Verde
+item.banner.lightningdragon.red=Figura de Dragão de Elétrico Vermelho
+item.banner.lightningdragon.black=Figura de Dragão de Elétrico Preto
+
 entity.firedragon.name=Dragão de Fogo
 entity.icedragon.name=Dragão de Gelo
 entity.dragonegg.name=Ovo de Dragão

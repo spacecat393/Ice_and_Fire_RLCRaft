@@ -201,6 +201,23 @@ item.banner.icedragon.green=Figura de Dragón Verde de Hielo
 item.banner.icedragon.red=Figura de Dragón Rojo de Hielo
 item.banner.icedragon.black=Figura de Dragón Negro de Hielo
 
+item.banner.lightningdragon.white=Figura de Dragón Blanco de Eléctrico
+item.banner.lightningdragon.orange=Figura de Dragón Naranjo de Eléctrico
+item.banner.lightningdragon.magenta=Figura de Dragón Magenta de Eléctrico
+item.banner.lightningdragon.light_blue=Figura de Dragón Azul Claro de Eléctrico
+item.banner.lightningdragon.yellow=Figura de Dragón Amarillo de Eléctrico
+item.banner.lightningdragon.lime=Figura de Dragón Verde Claro de Eléctrico
+item.banner.lightningdragon.pink=Figura de Dragón Rosado de Eléctrico
+item.banner.lightningdragon.gray=Figura de Dragón Gris de Eléctrico
+item.banner.lightningdragon.silver=Figura de Dragón Plateado de Eléctrico
+item.banner.lightningdragon.cyan=Figura de Dragón Cyan de Eléctrico
+item.banner.lightningdragon.purple=Figura de Dragón Púrpura de Eléctrico
+item.banner.lightningdragon.blue=Figura de Dragón Azul de Eléctrico
+item.banner.lightningdragon.brown=Figura de Dragón Marrón de Eléctrico
+item.banner.lightningdragon.green=Figura de Dragón Verde de Eléctrico
+item.banner.lightningdragon.red=Figura de Dragón Rojo de Eléctrico
+item.banner.lightningdragon.black=Figura de Dragón Negro de Eléctrico
+
 entity.firedragon.name=Dragón de Fuego
 entity.icedragon.name=Dragón de Hielo
 entity.dragonegg.name=Huevo de Dragón
