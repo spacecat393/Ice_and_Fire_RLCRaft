@@ -536,12 +536,12 @@ public class IceAndFireConfig {
 		@Config.Comment("How long in ticks a siren can use its sing effect on a player without a cooldown")
 		@Config.Name("Siren Max Sing Time")
 		@Config.RangeInt(min = 100, max = 24000)
-		public int sirenMaxSingTime = 12000;
+		public int sirenMaxSingTime = 400;
 
 		@Config.Comment("How long in ticks a siren has to wait after failing to lure in a player before singing")
 		@Config.Name("Siren Time Between Songs")
 		@Config.RangeInt(min = 100, max = 24000)
-		public int sirenTimeBetweenSongs = 2000;
+		public int sirenTimeBetweenSongs = 1200;
 
 		@Config.Comment("How many blocks away can Deathworms spot potential prey")
 		@Config.Name("Deathworm Target Search Range")
@@ -654,8 +654,8 @@ public class IceAndFireConfig {
 
 		@Config.Comment("Amount of damage an Amphithere attacks the player for each bite while atttempting to tame them")
 		@Config.Name("Amphithere Taming Bite Damage")
-		@Config.RangeDouble(min = 1.0D)
-		public double amphithereTameDamage;
+		@Config.RangeDouble(min = 1, max = 10000)
+		public double amphithereTameDamage = 1D;
 
 		@Config.Comment("How fast Amphitheres fly")
 		@Config.Name("Amphithere Flight Speed")
@@ -706,7 +706,7 @@ public class IceAndFireConfig {
 
 		@Config.Comment("If true, chain lightning should transform mobs")
 		@Config.Name("Chain Lightning Transforms Mobs")
-		public boolean chainLightningTransformsMobs = true;
+		public boolean chainLightningTransformsMobs = false;
 
 		@Config.Comment("If true, chain lightning causes paralysis")
 		@Config.Name("Chain Lightning Paralysis")

@@ -2,6 +2,7 @@ package com.github.alexthe666.iceandfire.api;
 
 import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.IceAndFireConfig;
+import com.github.alexthe666.iceandfire.event.EventLiving;
 import com.github.alexthe666.iceandfire.integration.LycanitesCompat;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
@@ -101,26 +102,38 @@ public class ChainLightningUtils {
 
     private static void attackEntityWithLightningDamage(EntityLivingBase attacker, EntityLivingBase target, float damage) {
         if (IceAndFireConfig.MISC_SETTINGS.chainLightningTransformsMobs) {
+            // Pig => Zombie Pigman, Villager => Witch
             if (target instanceof EntityPig || target instanceof EntityVillager) {
-                EntityLightningBolt lightningBolt = new EntityLightningBolt(target.world, target.posX, target.posY, target.posZ, true);
-                target.onStruckByLightning(lightningBolt);
-            } else {
-                target.attackEntityFrom(new EntityDamageSourceIndirect("lightningBolt", attacker, attacker), damage);
-
-                if (target instanceof EntityCreeper) {
-                    EntityCreeper creeper = (EntityCreeper) target;
-                    if (!creeper.getPowered()) {
-                        NBTTagCompound compound = new NBTTagCompound();
-                        creeper.writeEntityToNBT(compound);
-                        compound.setBoolean("powered", true);
-                        creeper.readEntityFromNBT(compound);
-                    }
-                }
+                strikeWithLightningBolt(target);
+                return;
             }
-        } else {
-            target.attackEntityFrom(new EntityDamageSourceIndirect("lightningBolt", attacker, attacker), damage);
+        }
+
+        // Crab => Larger Crab
+        if (EventLiving.isQuarkCrab(target)) {
+            strikeWithLightningBolt(target);
+            return;
+        }
+
+        target.attackEntityFrom(new EntityDamageSourceIndirect("lightningBolt", attacker, attacker), damage);
+
+        // Creeper => Charged Creeper
+        if (target instanceof EntityCreeper) {
+            EntityCreeper creeper = (EntityCreeper) target;
+            if (!creeper.getPowered()) {
+                NBTTagCompound compound = new NBTTagCompound();
+                creeper.writeEntityToNBT(compound);
+                compound.setBoolean("powered", true);
+                creeper.readEntityFromNBT(compound);
+            }
         }
     }
+
+    private static void strikeWithLightningBolt(Entity entity) {
+        EntityLightningBolt lightningBolt = new EntityLightningBolt(entity.world, entity.posX, entity.posY, entity.posZ, true);
+        entity.onStruckByLightning(lightningBolt);
+    }
+
 
     //TODO: Transition to EntityEffectEnum.SHOCKED -- configurable
     private static void applyParalysis(EntityLivingBase target, int paralysisTicks, int paralysisChance) {
