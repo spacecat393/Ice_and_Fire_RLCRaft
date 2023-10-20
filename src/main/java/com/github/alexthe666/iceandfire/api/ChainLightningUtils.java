@@ -38,15 +38,17 @@ public class ChainLightningUtils {
     }
 
     public static void createChainLightningFromTarget(World world, EntityLivingBase target, EntityLivingBase attacker, float damage, int hops, int range) {
-        float damageReductionPerHop = damage / (float)(hops + 1);
-
         boolean isParalysisEnabled = IceAndFireConfig.MISC_SETTINGS.chainLightningParalysis;
-        int paralysisTicks = IceAndFireConfig.MISC_SETTINGS.chainLightningParalysisTicks;
-        int paralysisChance = IceAndFireConfig.MISC_SETTINGS.chainLightningParalysisChance;
+        int[] paralysisTicks = IceAndFireConfig.MISC_SETTINGS.chainLightningParalysisTicks;
+        int[] paralysisChance = IceAndFireConfig.MISC_SETTINGS.chainLightningParalysisChance;
+
+        int hop = 0;
+
+        float damageReductionPerHop = damage / (hops + 1);
 
         attackEntityWithLightningDamage(attacker, target, damage);
         if (isParalysisEnabled) {
-            applyParalysis(target, paralysisTicks, paralysisChance);
+            applyParalysis(world, target, hop, paralysisChance, paralysisTicks);
         }
 
         target.playSound(ModSounds.LIGHTNING_STRIKE, 1, 1);
@@ -54,7 +56,7 @@ public class ChainLightningUtils {
         LightningSource lightningSource = new LightningSource(target);
 
         List<EntityLivingBase> entityLiving = new ArrayList<>();
-        for(Entity ent : world.getEntitiesWithinAABBExcludingEntity(lightningSource.get(), lightningSource.getBoundingBox(range))) {
+        for (Entity ent : world.getEntitiesWithinAABBExcludingEntity(lightningSource.get(), lightningSource.getBoundingBox(range))) {
             if (ent instanceof EntityMultipartPart) {
                 ent = ((EntityMultipartPart)ent).getParent();
             }
@@ -69,19 +71,23 @@ public class ChainLightningUtils {
         entityLiving.sort(getFindByNearestComparator(lightningSource));
 
         LinkedList<Integer> alreadyTargetedEntities = new LinkedList<>();
+        alreadyTargetedEntities.add(target.getEntityId());
+
         for (EntityLivingBase nextTarget : entityLiving) {
-            if (hops <= 0 || damage <= 0) break;
+            hop++;
+
+            if (hop > hops) break;
             if (alreadyTargetedEntities.contains(nextTarget.getEntityId())) continue;
+
+            damage -= damageReductionPerHop;
 
             attackEntityWithLightningDamage(attacker, nextTarget, damage);
             if (isParalysisEnabled) {
-                applyParalysis(nextTarget, paralysisTicks, paralysisChance);
+                applyParalysis(world, target, hop, paralysisChance, paralysisTicks);
             }
+
             alreadyTargetedEntities.add(nextTarget.getEntityId());
             lightningSource.set(nextTarget);
-
-            hops--;
-            damage -= damageReductionPerHop;
         }
 
         if (!alreadyTargetedEntities.isEmpty()) {
@@ -134,12 +140,36 @@ public class ChainLightningUtils {
         entity.onStruckByLightning(lightningBolt);
     }
 
-
-    //TODO: Transition to EntityEffectEnum.SHOCKED -- configurable
-    private static void applyParalysis(EntityLivingBase target, int paralysisTicks, int paralysisChance) {
-        if (paralysisChance <= 1 || target.world.rand.nextInt(paralysisChance) == 0) {
-            LycanitesCompat.applyParalysis(target, paralysisTicks);
+    private static boolean shouldApplyParalysis(World world, int hop, int[] paralysisChance) {
+        if (paralysisChance.length > hop) {
+            int chance = paralysisChance[hop];
+            if (chance == 100) {
+                return true;
+            }
+            if (chance == 0) {
+                return false;
+            }
+            return world.rand.nextInt(100) < chance;
         }
+        return false;
+    }
+
+    private static int getParalysisTicks(int hop, int[] paralysisTicks) {
+        if (paralysisTicks.length > hop) {
+            return paralysisTicks[hop];
+        }
+        return 0;
+    }
+
+    private static void applyParalysis(World world, EntityLivingBase target, int hop, int[] paralysisChance, int[] paralysisTicks) {
+        if (!shouldApplyParalysis(world, hop, paralysisChance)) {
+            return;
+        }
+        int ticks = getParalysisTicks(hop, paralysisTicks);
+        if (ticks <= 0) {
+            return;
+        }
+        LycanitesCompat.applyParalysis(target, ticks);
     }
 
     private static Comparator<Entity> getFindByNearestComparator(LightningSource lightningSource) {

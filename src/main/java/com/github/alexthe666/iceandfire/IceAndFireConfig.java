@@ -712,15 +712,13 @@ public class IceAndFireConfig {
 		@Config.Name("Chain Lightning Paralysis")
 		public boolean chainLightningParalysis = true;
 
-		@Config.Comment("Chance of chain lightning causing paralysis, 1 in N chance")
+		@Config.Comment("Chance of chain lightning causing paralysis on each hop, as a percentage")
 		@Config.Name("Chain Lightning Paralysis Chance")
-		@Config.RangeInt(min = 1, max = 100)
-		public int chainLightningParalysisChance = 4;
+		public int[] chainLightningParalysisChance = new int[] {100, 80, 60, 40, 20};
 
 		@Config.Comment("Length in ticks of paralysis applied by chain lightning")
 		@Config.Name("Chain Lightning Paralysis Ticks")
-		@Config.RangeInt(min = 1, max = 100)
-		public int chainLightningParalysisTicks = 10;
+		public int[] chainLightningParalysisTicks = new int[] {10, 10, 10, 10, 10};
 
 		@Config.Comment("Should a trade be added to Craftsman snow villagers to trade snow for sapphires?")
 		@Config.Name("Snow Villager Allow Craftsman Snow Trade")
