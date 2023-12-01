@@ -43,6 +43,7 @@ public class ItemDragonSkull extends Item implements ICustomRendered {
         if (this.isInCreativeTab(tab)) {
             items.add(new ItemStack(this, 1, 0));
             items.add(new ItemStack(this, 1, 1));
+            items.add(new ItemStack(this, 1, 2));
         }
     }
 
