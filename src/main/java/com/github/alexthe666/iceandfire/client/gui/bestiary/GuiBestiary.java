@@ -291,6 +291,7 @@ public class GuiBestiary extends GuiScreen {
 				break;
 			case LIGHTNINGDRAGON:
 			case LIGHTNINGDRAGONEGG:
+			case HYDRA:
 				drawFromTxt();
 				writeFromTxt();
 				break;
@@ -996,6 +997,7 @@ public class GuiBestiary extends GuiScreen {
 
 	public void writeFromTxt() {
 		String currentLanguage = Minecraft.getMinecraft().getLanguageManager().getCurrentLanguage().getJavaLocale().toString();
+		Minecraft.getMinecraft().getResourcePackRepository().getRepositoryEntries().stream().findFirst().get().getResourcePack();
 		String filePath = "assets/iceandfire/lang/bestiary/" + currentLanguage + "/";
 		String fileName = this.pageType.toString().toLowerCase() + "_" + this.bookPages + ".txt";
 		InputStream fileReader = getClass().getClassLoader().getResourceAsStream(filePath + fileName);

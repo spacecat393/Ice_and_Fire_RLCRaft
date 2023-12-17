@@ -6,6 +6,7 @@ import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
 import com.github.alexthe666.iceandfire.api.InFCapabilities;
 import com.github.alexthe666.iceandfire.core.ModBlocks;
 import com.github.alexthe666.iceandfire.core.ModItems;
+import com.github.alexthe666.iceandfire.core.ModPotions;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.ai.EntitySheepAIFollowCyclops;
 import com.github.alexthe666.iceandfire.entity.ai.VillagerAIFearUntamed;
@@ -82,7 +83,12 @@ public class EventLiving {
 			event.setCanceled(true);
 			EntityLivingBase parent = ((EntityMultipartPart)event.getTarget()).getParent();
 			((EntityPlayer)event.getEntity()).attackTargetEntityWithCurrentItem(parent);
-			IceAndFire.NETWORK_WRAPPER.sendToServer(new MessagePlayerHitMultipart(parent.getEntityId()));
+			int extraData = 0;
+			if(event.getTarget() instanceof EntityHydraHead && parent instanceof EntityHydra){
+				extraData = ((EntityHydraHead)event.getTarget()).headIndex;
+				((EntityHydra) parent).triggerHeadFlags(extraData);
+			}
+			IceAndFire.NETWORK_WRAPPER.sendToServer(new MessagePlayerHitMultipart(parent.getEntityId(), extraData));
 		}
 	}
 
@@ -374,6 +380,10 @@ public class EventLiving {
 				entity.playSound(SoundEvents.ENTITY_CHICKEN_EGG, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
 				entity.dropItem(ModItems.rotten_egg, 1);
 			}
+		}
+
+		if (entity.isInWater() && entity.getActivePotionEffect(ModPotions.acid) != null) {
+			entity.removePotionEffect(ModPotions.acid);
 		}
 	}
 

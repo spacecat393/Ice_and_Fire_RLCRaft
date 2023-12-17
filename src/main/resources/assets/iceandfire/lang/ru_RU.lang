@@ -187,6 +187,8 @@ entity.Villager.craftsman=Ремесленник
 entity.Villager.fisherman=Рыбак
 entity.Villager.shaman=Шаман
 
+iceandfire.effect.acid=Кислота
+
 dragon.red=Красный
 dragon.green=Изумрудный
 dragon.bronze=Бронзовый
@@ -270,6 +272,9 @@ death.attack.dragon_ice.player_2=оказался в замороженной а
 death.attack.dragon_lightning.player_0=был поражен разрядом дракона
 death.attack.dragon_lightning.player_1=был подзаряжен драконом
 death.attack.dragon_lightning.player_2=шокирован драконом
+death.attack.acid.player_0=был растворяется кислотой
+death.attack.acid.player_1=был расплавлен кислотой
+death.attack.acid.player_2=был превратился в суп кислотой
 key.dragon_strike=Драконий Удар
 key.dragon_fireAttack=Драконье Дыхание
 

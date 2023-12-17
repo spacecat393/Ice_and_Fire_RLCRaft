@@ -25,6 +25,7 @@ public class EntityStymphalianArrow extends EntityArrow {
         this.setDamage(3.5F);
     }
 
+    @Override
     public void onUpdate() {
         super.onUpdate();
         float sqrt = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
@@ -33,6 +34,7 @@ public class EntityStymphalianArrow extends EntityArrow {
         }
     }
 
+    @Override
     protected void onHit(RayTraceResult raytraceResultIn) {
         if (raytraceResultIn.entityHit != null && raytraceResultIn.entityHit instanceof EntityPlayer) {
             this.damageShield((EntityPlayer)raytraceResultIn.entityHit, (float)this.getDamage());
@@ -66,6 +68,7 @@ public class EntityStymphalianArrow extends EntityArrow {
         this.setDamage(3.5F);
     }
 
+    @Override
     public boolean hasNoGravity() {
         return true;
     }

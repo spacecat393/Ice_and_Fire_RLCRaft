@@ -1,0 +1,37 @@
+<item><iceandfire:hydra_fang 0 35 4 1.25>
+<item><iceandfire:hydra_heart 0 110 4 1.25>
+
+
+
+The hydra fang is a valuable item that
+can be used to craft special arrows
+which poison their targets.
+<item><iceandfire:hydra_arrow 0 34 40 1.25>
+
+
+
+
+
+
+
+These arrows also have a second
+important property: when they strike
+the target, they leech life from them
+and heal the shooter of the arrow.
+
+
+
+
+
+
+The hydra heart is a rare drop of
+the beast that is widely sought
+after for its regenerative
+properties.
+
+The powerful heart of this
+monster makes the difficult
+battle well worth it, and
+perhaps explains why the
+Hydra's lair contains so
+many bones.

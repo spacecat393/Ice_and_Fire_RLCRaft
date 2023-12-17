@@ -167,6 +167,13 @@ item.iceandfire.lightning_dragon_heart.name=Corazon de dragon eléctrico
 item.iceandfire.lightning_dragon_blood.name=Sangre de dragon eléctrico
 item.iceandfire.dragon_horn_lightning.name=Cuerno de Dragón
 
+item.iceandfire.hydra_fang.name=Colmillo de Hidra
+item.iceandfire.hydra_heart.name=Corazon de Hidra
+item.iceandfire.hydra_heart.desc_0=En tu barra rapida, da Regeneracion que
+item.iceandfire.hydra_heart.desc_1=aumenta segun que tan herido estas
+item.iceandfire.hydra_arrow.name=Flecha de Hidra
+item.iceandfire.hydra_arrow.desc=Envenena y roba la vida del objetivo
+
 item.banner.firedragon.white=Figura de Dragón Blanco de Fuego
 item.banner.firedragon.orange=Figura de Dragón Naranja de Fuego
 item.banner.firedragon.magenta=Figura de Dragón Magenta de Fuego
@@ -259,6 +266,12 @@ entity.deathworm.name=Gusano Muerto
 entity.lightningdragon.name=Dragon eléctrico
 entity.dragonlightningcharge.name=Carga de dragon de eléctrico
 
+entity.if_hydra.name=Hidra
+entity.hydra_breath.name=Aliento de Hidra
+entity.hydra_arrow.name=Flecha de Hidra
+
+iceandfire.effect.acid=Ácido
+
 dragon.red=Rojo
 dragon.green=Esmeralda
 dragon.bronze=Bronce
@@ -314,6 +327,7 @@ bestiary.cyclops=Cíclopes
 bestiary.siren=Sirenas
 bestiary.hippocampus=Hipocampos
 bestiary.deathworm=Gusanos Muertos
+bestiary.hydra=Hidra
 
 lectern.nopages=No se puede agregar nueva información
 silvertools.hurt=+2 de daño contra muertos vivientes
@@ -349,6 +363,9 @@ death.attack.dragon_ice.player_2=fue puesto en animación suspendida por un Drag
 death.attack.dragon_lightning.player_0=fue azotado con un rayo por un dragon
 death.attack.dragon_lightning.player_1=fue energizado por un dragon
 death.attack.dragon_lightning.player_2=fue electrocutado por un dragon
+death.attack.acid.player_0=fue disuelta por un ácido
+death.attack.acid.player_1=fue derretido por un ácido
+death.attack.acid.player_2=fue convirtió en sopa por un ácido
 death.attack.gorgon.player_0=fue convertido en piedra por una Gorgona
 death.attack.gorgon.player_1=fue convertido en gorgonzola por una Gorgona
 death.attack.gorgon.player_2=fue solidificado por una Gorgona

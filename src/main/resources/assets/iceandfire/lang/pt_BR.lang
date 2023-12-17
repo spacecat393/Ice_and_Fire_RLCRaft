@@ -365,6 +365,8 @@ entity.myrmex_egg.name=Ovo de Myrmex
 entity.amphithere.name=Amphithere
 entity.seaserpent.name=Serpente Marinha
 
+iceandfire.effect.acid=Ácido
+
 sea_serpent.blue=Azul
 sea_serpent.bronze=Bronze
 sea_serpent.deepblue=Azul Naval
@@ -527,6 +529,9 @@ death.attack.dragon_ice.player_2=ficou com animação suspensa por um dragão de
 death.attack.dragon_lightning.player_0=foi atingido(a) com um raio por um dragão"
 death.attack.dragon_lightning.player_1=foi energizado(a) por um dragão
 death.attack.dragon_lightning.player_2=ficou chocado(a) por um dragão
+death.attack.acid.player_0=foi dissolvido(a) por um ácido
+death.attack.acid.player_1=foi derretido(a) por um ácido
+death.attack.acid.player_2=foi transformado(a) em sopa por um ácido
 death.attack.gorgon.player_0=foi transformado(a) em pedra por uma górgona
 death.attack.gorgon.player_1=foi transformado(a) em gorgonzola por uma górgona
 death.attack.gorgon.player_2=foi solidifacado(a) por uma górgona

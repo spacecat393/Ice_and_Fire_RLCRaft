@@ -5,10 +5,7 @@ import com.github.alexthe666.iceandfire.block.BlockMyrmexResin;
 import com.github.alexthe666.iceandfire.block.BlockPixieHouse;
 import com.github.alexthe666.iceandfire.block.BlockPodium;
 import com.github.alexthe666.iceandfire.client.particle.lightning.ParticleLightningVector;
-import com.github.alexthe666.iceandfire.core.ModBlocks;
-import com.github.alexthe666.iceandfire.core.ModItems;
-import com.github.alexthe666.iceandfire.core.ModRecipes;
-import com.github.alexthe666.iceandfire.core.ModSounds;
+import com.github.alexthe666.iceandfire.core.*;
 import com.github.alexthe666.iceandfire.entity.*;
 import com.github.alexthe666.iceandfire.entity.projectile.*;
 import com.github.alexthe666.iceandfire.enums.EnumDragonArmor;
@@ -23,6 +20,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -58,6 +56,11 @@ public class CommonProxy {
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @SubscribeEvent
+    public static void registerPotions(RegistryEvent.Register<PotionType> event) {
+        ModPotions.register();
     }
 
     @SubscribeEvent
@@ -120,6 +123,9 @@ public class CommonProxy {
         registerSpawnable(EntityEntryBuilder.<EntitySeaSerpent>create(), event, EntitySeaSerpent.class, "seaserpent", 37, 0X008299, 0XC5E6E7, 160, 3);
         registerUnspawnable(EntityEntryBuilder.<EntitySeaSerpentBubbles>create(), event, EntitySeaSerpentBubbles.class, "seaserpentbubble", 38, 80, 5);
         registerUnspawnable(EntityEntryBuilder.<EntitySeaSerpentArrow>create(), event, EntitySeaSerpentArrow.class, "seaserpentarrow", 39, 64, 10);
+        registerUnspawnable(EntityEntryBuilder.<EntityHydraArrow>create(), event, EntityHydraArrow.class, "hydra_arrow", 40, 64, 10);
+        registerSpawnable(EntityEntryBuilder.<EntityHydra>create(), event, EntityHydra.class, "if_hydra", 41, 0X8B8B78, 0X2E372B, 160, 3);
+        registerUnspawnable(EntityEntryBuilder.<EntityHydraBreath>create(), event, EntityHydraBreath.class, "hydra_breath", 42, 80, 5);
     }
 
     public static void registerSpawnable(EntityEntryBuilder builder, RegistryEvent.Register<EntityEntry> event, Class<? extends Entity> entityClass, String name, int id, int mainColor, int subColor, int range, int frequency) {

@@ -240,6 +240,13 @@ item.iceandfire.lightning_dragon_heart.name=电龙心脏
 item.iceandfire.lightning_dragon_blood.name=电龙心脏
 item.iceandfire.dragon_horn_lightning.name=龙吟号角
 
+item.iceandfire.hydra_fang.name=九头蛇毒牙
+item.iceandfire.hydra_heart.name=九头蛇心脏
+item.iceandfire.hydra_heart.desc_0=在快捷栏中时，依据持有者受伤的严重程度
+item.iceandfire.hydra_heart.desc_1=为持有者附加一定等级的生命恢复状态
+item.iceandfire.hydra_arrow.name=九头蛇毒箭
+item.iceandfire.hydra_arrow.desc=施加中毒并从目标身上吸取生命值
+
 item.banner.firedragon.white=白色龙炎弹
 item.banner.firedragon.orange=橙色龙炎弹
 item.banner.firedragon.magenta=品红龙炎弹
@@ -344,6 +351,12 @@ entity.myrmex_egg.name=恐蚁蛋
 
 entity.lightningdragon.name=电龙
 entity.dragonlightningcharge.name=龙雷弹
+
+entity.if_hydra.name=九头蛇
+entity.hydra_breath.name=九头蛇吐息
+entity.hydra_arrow.name=九头蛇毒箭
+
+iceandfire.effect.acid=酸
 
 dragon.red=赤红
 dragon.green=翡绿
@@ -453,6 +466,7 @@ bestiary.cockatrice=鸡蛇
 bestiary.stymphalianbird=金属恐鸟
 bestiary.troll=巨魔
 bestiary.myrmex=恐蚁
+bestiary.hydra=九头蛇
 
 lectern.nopages=无法添加新的信息.
 silvertools.hurt=+2 对亡灵生物的伤害
@@ -491,6 +505,9 @@ death.attack.dragon_ice.player_2=被龙搞冬眠了
 death.attack.dragon_lightning.player_0=遭受了龙的雷霆一击
 death.attack.dragon_lightning.player_1=承受了龙过分热情的充电
 death.attack.dragon_lightning.player_2=被龙狠狠地电了一下
+death.attack.acid.player_0=被酸溶解
+death.attack.acid.player_1=被酸熔化
+death.attack.acid.player_2=被酸变成汤
 death.attack.gorgon.player_0=被蛇发女妖变成了石头
 death.attack.gorgon.player_1=变成了蛇发女妖的戈尔贡佐拉干酪
 death.attack.gorgon.player_2=被蛇发女妖石化

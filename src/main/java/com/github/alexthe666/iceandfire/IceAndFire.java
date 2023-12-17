@@ -70,6 +70,7 @@ public class IceAndFire {
     @SidedProxy(clientSide = "com.github.alexthe666.iceandfire.ClientProxy", serverSide = "com.github.alexthe666.iceandfire.CommonProxy")
     public static CommonProxy PROXY;
     public static CreativeTabs TAB;
+    public static DamageSource acid;
     public static DamageSource dragon;
     public static DamageSource dragonFire;
     public static DamageSource dragonIce;
@@ -137,6 +138,14 @@ public class IceAndFire {
                 return new TextComponentString(entityLivingBaseIn.getDisplayName().getFormattedText() + " ").appendSibling(new TextComponentTranslation(s1, new Object[]{entityLivingBaseIn.getDisplayName()}));
             }
         };
+        acid = new DamageSource("acid") {
+            @Override
+            public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn) {
+                String s = "death.attack.acid";
+                String s1 = s + ".player_" + new Random().nextInt(2);
+                return new TextComponentString(entityLivingBaseIn.getDisplayName().getFormattedText() + " ").appendSibling(new TextComponentTranslation(s1, new Object[]{entityLivingBaseIn.getDisplayName()}));
+            }
+        }.setDamageBypassesArmor();
         gorgon = new DamageSource("gorgon") {
             @Override
             public ITextComponent getDeathMessage(EntityLivingBase entityLivingBaseIn) {

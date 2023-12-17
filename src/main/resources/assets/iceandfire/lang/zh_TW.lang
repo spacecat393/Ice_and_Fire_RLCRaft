@@ -309,6 +309,8 @@ entity.myrmex_sentinel.name=恐蟻-哨兵
 entity.myrmex_royal.name=恐蟻-皇室
 entity.myrmex_egg.name=恐蟻蛋
 
+iceandfire.effect.acid=酸
+
 dragon.red=赤紅
 dragon.green=翡綠
 dragon.bronze=青銅
@@ -441,6 +443,9 @@ death.attack.dragon_fire.player_2=被龍燒成灰燼
 death.attack.dragon_ice.player_0=被龍凍結
 death.attack.dragon_ice.player_1=被龍凍成了冰棍
 death.attack.dragon_ice.player_2=被龍搞冬眠了
+death.attack.acid.player_0=被酸溶解
+death.attack.acid.player_1=被酸熔化
+death.attack.acid.player_2=被酸變成湯
 death.attack.gorgon.player_0=被蛇髮女妖變成了石頭
 death.attack.gorgon.player_1=變成了蛇髮女妖的戈爾貢佐拉乾酪
 death.attack.gorgon.player_2=被蛇髮女妖石化

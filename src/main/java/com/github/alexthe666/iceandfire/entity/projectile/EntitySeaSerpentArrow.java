@@ -13,6 +13,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -36,17 +37,23 @@ public class EntitySeaSerpentArrow extends EntityArrow {
             double d0 = this.rand.nextGaussian() * 0.02D;
             double d1 = this.rand.nextGaussian() * 0.02D;
             double d2 = this.rand.nextGaussian() * 0.02D;
-            double d3 = 10.0D;
             double xRatio = motionX * height;
             double zRatio = motionZ * height;
             ParticleHelper.spawnParticle(this.world, EnumParticleTypes.WATER_BUBBLE, this.posX  + xRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d0 * 10.0D, this.posY + (double) (this.rand.nextFloat() * this.height) - d1 * 10.0D, this.posZ + zRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d2 * 10.0D, d0, d1, d2);
             ParticleHelper.spawnParticle(this.world, EnumParticleTypes.WATER_SPLASH, this.posX  + xRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d0 * 10.0D, this.posY + (double) (this.rand.nextFloat() * this.height) - d1 * 10.0D, this.posZ + zRatio + (double) (this.rand.nextFloat() * this.width * 1.0F) - (double) this.width - d2 * 10.0D, d0, d1, d2);
-
         }
     }
 
     public boolean isInWater(){
         return false;
+    }
+
+    @Override
+    protected void onHit(RayTraceResult raytraceResultIn) {
+        if (raytraceResultIn.entityHit != null && raytraceResultIn.entityHit instanceof EntityPlayer) {
+            this.damageShield((EntityPlayer)raytraceResultIn.entityHit, (float)this.getDamage());
+        }
+        super.onHit(raytraceResultIn);
     }
 
     protected void damageShield(EntityPlayer player, float damage) {
