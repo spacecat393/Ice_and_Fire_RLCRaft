@@ -3,6 +3,7 @@ package com.github.alexthe666.iceandfire.entity;
 import com.github.alexthe666.iceandfire.IceAndFireConfig;
 import com.github.alexthe666.iceandfire.api.IEntityEffectCapability;
 import com.github.alexthe666.iceandfire.api.InFCapabilities;
+import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.StymphalianBirdAIAirTarget;
 import com.github.alexthe666.iceandfire.entity.ai.StymphalianBirdAIFlee;
@@ -193,10 +194,9 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
     protected void onDeathUpdate() {
         super.onDeathUpdate();
         if (this.deathTime == 20 && !this.world.isRemote && IceAndFireConfig.ENTITY_SETTINGS.stymphalianBirdsOreDictDrops) {
-            NonNullList<ItemStack> bronzeItems = OreDictionary.getOres("ingotBronze");
-            NonNullList<ItemStack> copperItems = OreDictionary.getOres("ingotCopper");
-            if (!bronzeItems.isEmpty()) {
-                for (ItemStack bronzeIngot : bronzeItems) {
+            NonNullList<ItemStack> bronzeIngots = OreDictionary.getOres("ingotBronze");
+            if (!bronzeIngots.isEmpty()) {
+                for (ItemStack bronzeIngot : bronzeIngots) {
                     if (bronzeIngot != ItemStack.EMPTY) {
                         ItemStack stack = bronzeIngot.copy();
                         stack.setCount(1 + this.getRNG().nextInt(3));
@@ -204,16 +204,10 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
                         break;
                     }
                 }
-            }
-            if (!copperItems.isEmpty()) {
-                for (ItemStack copperIngot : copperItems) {
-                    if (copperIngot != ItemStack.EMPTY) {
-                        ItemStack stack = copperIngot.copy();
-                        stack.setCount(1 + this.getRNG().nextInt(3));
-                        dropItemAt(stack, this.posX, this.posY + 0.5F, this.posZ);
-                        break;
-                    }
-                }
+            } else {
+                ItemStack stack = new ItemStack(ModItems.copperIngot);
+                stack.setCount(1 + this.getRNG().nextInt(3));
+                dropItemAt(stack, this.posX, this.posY + 0.5F, this.posZ);
             }
         }
     }

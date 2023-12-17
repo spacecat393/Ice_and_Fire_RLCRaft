@@ -46,6 +46,8 @@ public class ModItems {
 	public static Item amethystGem = new ItemGeneric("amethyst_gem", "iceandfire.amethystGem");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":sapphire_gem")
 	public static Item sapphireGem = new ItemGeneric("sapphire_gem", "iceandfire.sapphireGem");
+	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":bronze_alloy")
+	public static Item bronzeAlloy = new ItemGeneric("bronze_alloy", "iceandfire.bronzeAlloy");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":copper_ingot")
 	public static Item copperIngot = new ItemGeneric("copper_ingot", "iceandfire.copperIngot");
 	@GameRegistry.ObjectHolder(IceAndFire.MODID + ":copper_nugget")

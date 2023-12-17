@@ -131,6 +131,8 @@ public class ModRecipes {
         GameRegistry.addSmelting(ModBlocks.sapphireOre, new ItemStack(ModItems.sapphireGem), 1);
         GameRegistry.addSmelting(ModBlocks.myrmex_desert_resin_block, new ItemStack(ModBlocks.myrmex_desert_resin_glass), 1);
         GameRegistry.addSmelting(ModBlocks.myrmex_jungle_resin_block, new ItemStack(ModBlocks.myrmex_jungle_resin_glass), 1);
+        GameRegistry.addSmelting(ModItems.stymphalian_bird_feather, new ItemStack(ModItems.copperNugget), 1);
+
         ModItems.blindfoldArmor.setRepairItem(new ItemStack(Items.STRING));
         ModItems.copperMetal.setRepairItem(new ItemStack(ModItems.copperIngot));
         ModItems.copperTools.setRepairItem(new ItemStack(ModItems.copperIngot));
@@ -168,23 +170,11 @@ public class ModRecipes {
         return EnumHelper.addEnum(BannerPattern.class, name.toUpperCase(), classes, names);
     }
 
-    public static void postInit() {
-        NonNullList<ItemStack> bronzeItems = OreDictionary.getOres("nuggetBronze");
-        NonNullList<ItemStack> copperItems = OreDictionary.getOres("nuggetCopper");
-        if (!bronzeItems.isEmpty()) {
-            for (ItemStack bronzeIngot : bronzeItems) {
-                if (bronzeIngot != ItemStack.EMPTY) {
-                    GameRegistry.addSmelting(ModItems.stymphalian_bird_feather, bronzeIngot.copy(), 1);
-                    break;
-                }
-            }
-        } else if (!copperItems.isEmpty()) {
-            for (ItemStack copperIngot : copperItems) {
-                if (copperIngot != ItemStack.EMPTY) {
-                    GameRegistry.addSmelting(ModItems.stymphalian_bird_feather, copperIngot.copy(), 1);
-                    break;
-                }
-            }
+    public static void handleOreRegistration(String name, ItemStack stack) {
+        if ("ingotBronze".equals(name)) {
+            GameRegistry.addSmelting(ModItems.bronzeAlloy, stack, 1);
+        } else if ("nuggetBronze".equals(name)) {
+            GameRegistry.addSmelting(ModItems.stymphalian_bird_feather, stack, 1);
         }
     }
 }

@@ -34,6 +34,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.lang.reflect.Field;
 
@@ -233,6 +234,11 @@ public class CommonProxy {
         }
     }
 
+    @SubscribeEvent
+    public static void handleOreRegistration(OreDictionary.OreRegisterEvent event) {
+        ModRecipes.handleOreRegistration(event.getName(), event.getOre());
+    }
+
     public void preRender() {
 
     }
@@ -275,5 +281,4 @@ public class CommonProxy {
 
     public void openMyrmexAddRoomGui(ItemStack staff, BlockPos pos, EnumFacing facing) {
     }
-
 }
