@@ -157,8 +157,8 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
         if(this.getGrowthStage() < 2){
             return false;
         }
-        if (this.getAnimation() != this.ANIMATION_STING && this.getAnimation() != this.ANIMATION_BITE) {
-            this.setAnimation(this.getRNG().nextBoolean() ? this.ANIMATION_STING : this.ANIMATION_BITE);
+        if (this.getAnimation() != ANIMATION_STING && this.getAnimation() != ANIMATION_BITE) {
+            this.setAnimation(this.getRNG().nextBoolean() ? ANIMATION_STING : ANIMATION_BITE);
             if(!this.world.isRemote && this.getRNG().nextInt(3) == 0 && this.getHeldItem(EnumHand.MAIN_HAND) != ItemStack.EMPTY){
                 this.entityDropItem(this.getHeldItem(EnumHand.MAIN_HAND), 0);
                 this.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
@@ -192,6 +192,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
         return new Animation[]{ANIMATION_PUPA_WIGGLE, ANIMATION_BITE, ANIMATION_STING};
     }
 
+    @Override
     public void updatePassenger(Entity passenger) {
         super.updatePassenger(passenger);
         if (this.isPassenger(passenger)) {
@@ -204,6 +205,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
         }
     }
 
+    @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
         IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(this);
         if (amount >= 1.0D && !this.world.isRemote && this.getRNG().nextInt(3) == 0 && this.getHeldItem(EnumHand.MAIN_HAND) != ItemStack.EMPTY && capability != null && !capability.isStoned()) {
@@ -218,6 +220,7 @@ public class EntityMyrmexWorker extends EntityMyrmexBase {
         return super.attackEntityFrom(source, amount);
     }
 
+    @Override
     public VillagerRegistry.VillagerProfession getProfessionForge() {
         return this.isJungle() ? ModVillagers.INSTANCE.jungleMyrmexWorker : ModVillagers.INSTANCE.desertMyrmexWorker;
     }

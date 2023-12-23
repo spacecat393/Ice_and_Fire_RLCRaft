@@ -19,6 +19,7 @@ public class EntityDragonPart extends EntityMultipartPart {
         return super.attackEntityFrom(source, damage);
     }
 
+    @Override
     public void collideWithNearbyEntities() {
     }
 	

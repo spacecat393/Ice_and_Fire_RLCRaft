@@ -36,7 +36,7 @@ public class EntityStymphalianArrow extends EntityArrow {
 
     @Override
     protected void onHit(RayTraceResult raytraceResultIn) {
-        if (raytraceResultIn.entityHit != null && raytraceResultIn.entityHit instanceof EntityPlayer) {
+        if (raytraceResultIn.entityHit instanceof EntityPlayer) {
             this.damageShield((EntityPlayer)raytraceResultIn.entityHit, (float)this.getDamage());
         }
         super.onHit(raytraceResultIn);

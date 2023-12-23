@@ -246,7 +246,7 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
                 float angle = (0.01745329251F * this.renderYawOffset) + i1 * 1F;
                 double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
                 double extraY = 0.8F;
-                double extraZ = (double) (radius * MathHelper.cos(angle));
+                double extraZ = radius * MathHelper.cos(angle);
                 if (world.isRemote) {
                     ParticleHelper.spawnParticle(this.world, type, true, this.posX + extraX, this.posY + extraY, this.posZ + extraZ, motionX, motionY, motionZ);
                 }
@@ -348,9 +348,11 @@ public class EntitySeaSerpent extends EntityAnimal implements IAnimatedEntity, I
         }
     }
 
+    @Override
     public void fall(float distance, float damageMultiplier) {
     }
 
+    @Override
     public void onLivingUpdate() {
         if (!world.isRemote) {
             if (isJumpingOutOfWater() && swimBehavior == SwimBehavior.WANDER && shouldStopJumping()) {

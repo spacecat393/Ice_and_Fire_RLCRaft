@@ -91,18 +91,22 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
         initHippocampusInv();
     }
 
+    @Override
     protected int getExperiencePoints(EntityPlayer player) {
         return 2;
     }
 
+    @Override
     public float getBlockPathWeight(BlockPos pos) {
         return this.world.getBlockState(pos.down()).getMaterial() == Material.WATER ? 10.0F : this.world.getLightBrightness(pos) - 0.5F;
     }
 
+    @Override
     public boolean isNotColliding() {
         return this.world.checkNoEntityCollision(this.getEntityBoundingBox(), this);
     }
 
+    @Override
     public boolean isPushedByWater() {
         return false;
     }
@@ -129,6 +133,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
         this.dataManager.register(CONTROL_STATE, (byte) 0);
     }
 
+    @Override
     public boolean canBeSteered() {
         return true;
     }
@@ -179,6 +184,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
         return 0;
     }
 
+    @Override
     public boolean replaceItemInInventory(int inventorySlot, @Nullable ItemStack itemStackIn) {
         int j = inventorySlot - 500 + 2;
         if (j >= 0 && j < this.hippocampusInventory.getSizeInventory()) {
@@ -224,6 +230,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
         return false;
     }
 
+    @Override
     public void updatePassenger(Entity passenger) {
         super.updatePassenger(passenger);
         if (this.isPassenger(passenger)) {
@@ -305,11 +312,6 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
     public boolean down() {
         return (dataManager.get(CONTROL_STATE) >> 1 & 1) == 1;
     }
-
-    public boolean dismount() {
-        return (dataManager.get(CONTROL_STATE) >> 2 & 1) == 1;
-    }
-
 
     public boolean isBlinking() {
         return this.ticksExisted % 50 > 43;
@@ -400,7 +402,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
 
     public boolean isSitting() {
         if (world.isRemote) {
-            boolean isSitting = ((Byte) this.dataManager.get(TAMED) & 1) != 0;
+            boolean isSitting = (this.dataManager.get(TAMED) & 1) != 0;
             this.isSitting = isSitting;
             return isSitting;
         }
@@ -411,7 +413,7 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
         if (!world.isRemote) {
             this.isSitting = sitting;
         }
-        byte b0 = (Byte) this.dataManager.get(TAMED);
+        byte b0 = this.dataManager.get(TAMED);
         if (sitting) {
             this.dataManager.set(TAMED, (byte) (b0 | 1));
         } else {

@@ -48,6 +48,7 @@ public class EntityHydraBreath extends EntityFireball implements IDragonProjecti
         return true;
     }
 
+    @Override
     public void onUpdate() {
         if (this.ticksExisted > 20) {
             this.setDead();
@@ -88,14 +89,17 @@ public class EntityHydraBreath extends EntityFireball implements IDragonProjecti
         }
     }
 
+    @Override
     public boolean isInWater() {
         return this.isInsideOfMaterial(Material.WATER);
     }
 
+    @Override
     public boolean handleWaterMovement() {
         return true;
     }
 
+    @Override
     protected EnumParticleTypes getParticleType() {
         return EnumParticleTypes.WATER_SPLASH;
     }

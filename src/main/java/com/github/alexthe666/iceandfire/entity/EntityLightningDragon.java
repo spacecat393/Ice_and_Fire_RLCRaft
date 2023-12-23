@@ -342,8 +342,8 @@ public class EntityLightningDragon extends EntityDragonBase {
 
 	public void riderShootFire(Entity controller) {
 		if (this.getRNG().nextInt(5) == 0 && !this.isChild()) {
-			if (this.getAnimation() != this.ANIMATION_FIRECHARGE) {
-				this.setAnimation(this.ANIMATION_FIRECHARGE);
+			if (this.getAnimation() != ANIMATION_FIRECHARGE) {
+				this.setAnimation(ANIMATION_FIRECHARGE);
 			} else if (this.getAnimationTick() == 15) {
 				rotationYaw = renderYawOffset;
 				Vec3d headPos = getHeadPosition();
@@ -412,9 +412,9 @@ public class EntityLightningDragon extends EntityDragonBase {
 			double targetX = waterTarget.getX() + 0.5D - posX;
 			double targetY = waterTarget.getY() + 1D - posY;
 			double targetZ = waterTarget.getZ() + 0.5D - posZ;
-			motionX += (Math.signum(targetX) * 0.5D - motionX) * 0.100000000372529 * ((3 * (this.getAgeInDays() / 125)) + 2);
-			motionY += (Math.signum(targetY) * 0.5D - motionY) * 0.100000000372529 * ((3 * (this.getAgeInDays() / 125)) + 2);
-			motionZ += (Math.signum(targetZ) * 0.5D - motionZ) * 0.100000000372529 * ((3 * (this.getAgeInDays() / 125)) + 2);
+			motionX += (Math.signum(targetX) * 0.5D - motionX) * 0.100000000372529 * ((3 * ((double) this.getAgeInDays() / 125)) + 2);
+			motionY += (Math.signum(targetY) * 0.5D - motionY) * 0.100000000372529 * ((3 * ((double) this.getAgeInDays() / 125)) + 2);
+			motionZ += (Math.signum(targetZ) * 0.5D - motionZ) * 0.100000000372529 * ((3 * ((double) this.getAgeInDays() / 125)) + 2);
 			float angle = (float) (Math.atan2(motionZ, motionX) * 180.0D / Math.PI) - 90.0F;
 			float rotation = MathHelper.wrapDegrees(angle - rotationYaw);
 			moveForward = 0.5F;
@@ -432,8 +432,8 @@ public class EntityLightningDragon extends EntityDragonBase {
 	private void shootLightningAtMob(EntityLivingBase entity) {
 		if (!this.attackDecision) {
 			if (this.getRNG().nextInt(5) == 0) {
-				if (this.getAnimation() != this.ANIMATION_FIRECHARGE) {
-					this.setAnimation(this.ANIMATION_FIRECHARGE);
+				if (this.getAnimation() != ANIMATION_FIRECHARGE) {
+					this.setAnimation(ANIMATION_FIRECHARGE);
 				} else if (this.getAnimationTick() == 15) {
 					rotationYaw = renderYawOffset;
 					Vec3d headPos = getHeadPosition();
@@ -452,7 +452,7 @@ public class EntityLightningDragon extends EntityDragonBase {
 					if (!world.isRemote) {
 						world.spawnEntity(entitylargefireball);
 					}
-					if (entity.isDead || entity == null) {
+					if (entity.isDead) {
 						this.setBreathingFire(false);
 						this.attackDecision = true;
 					}
@@ -492,7 +492,7 @@ public class EntityLightningDragon extends EntityDragonBase {
 
 	public boolean isSwimming() {
 		if (world.isRemote) {
-			boolean swimming = this.dataManager.get(SWIMMING).booleanValue();
+			boolean swimming = this.dataManager.get(SWIMMING);
 			this.isSwimming = swimming;
 			return swimming;
 		}
@@ -561,6 +561,7 @@ public class EntityLightningDragon extends EntityDragonBase {
 		return new Animation[]{IAnimatedEntity.NO_ANIMATION, EntityDragonBase.ANIMATION_EAT, EntityDragonBase.ANIMATION_SPEAK, EntityDragonBase.ANIMATION_BITE, EntityDragonBase.ANIMATION_SHAKEPREY, EntityLightningDragon.ANIMATION_TAILWHACK, EntityLightningDragon.ANIMATION_FIRECHARGE, EntityLightningDragon.ANIMATION_WINGBLAST, EntityLightningDragon.ANIMATION_ROAR};
 	}
 
+	@Override
 	public boolean isBreedingItem(@Nullable ItemStack stack) {
 		return !stack.isEmpty() && stack.getItem() != null && stack.getItem() == ModItems.lightning_stew;
 	}

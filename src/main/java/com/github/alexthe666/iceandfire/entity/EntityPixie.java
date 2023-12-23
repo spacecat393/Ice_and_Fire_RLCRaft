@@ -94,6 +94,7 @@ public class EntityPixie extends EntityTameable {
 		return entity.getPosition();
 	}
 
+	@Override
 	protected int getExperiencePoints(EntityPlayer player) {
 		return 3;
 	}
@@ -105,6 +106,7 @@ public class EntityPixie extends EntityTameable {
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10);
 	}
 
+	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
 		IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(this);
 		if (!this.world.isRemote && this.getRNG().nextInt(3) == 0 && this.getHeldItem(EnumHand.MAIN_HAND) != ItemStack.EMPTY && capability != null && !capability.isStoned()) {
@@ -118,6 +120,7 @@ public class EntityPixie extends EntityTameable {
 		return super.attackEntityFrom(source, amount);
 	}
 
+	@Override
 	public void onDeath(DamageSource cause) {
 		if (!this.world.isRemote && !this.getHeldItem(EnumHand.MAIN_HAND).isEmpty()) {
 			this.entityDropItem(this.getHeldItem(EnumHand.MAIN_HAND), 0);
@@ -135,12 +138,14 @@ public class EntityPixie extends EntityTameable {
 		this.getDataManager().register(COLOR, Integer.valueOf(0));
 	}
 
+	@Override
 	protected void collideWithEntity(Entity entityIn) {
 		if (this.getOwner() != entityIn) {
 			entityIn.applyEntityCollision(this);
 		}
 	}
 
+	@Override
 	protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
 		if (!this.isInWater()) {
 			this.handleWaterMovement();
@@ -157,6 +162,7 @@ public class EntityPixie extends EntityTameable {
 		}
 	}
 
+	@Override
 	public boolean processInteract(EntityPlayer player, EnumHand hand) {
 		boolean flag = player.getHeldItem(hand).getItem() == Items.NAME_TAG || player.getHeldItem(hand).getItem() == Items.LEAD;
 		if (flag) {
@@ -200,9 +206,11 @@ public class EntityPixie extends EntityTameable {
 		}
 	}
 
+	@Override
 	public void fall(float distance, float damageMultiplier) {
 	}
 
+	@Override
 	protected void initEntityAI() {
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		this.tasks.addTask(1, new PixieAIFollowOwner(this, 1.0D, 2.0F, 4.0F));
@@ -241,6 +249,7 @@ public class EntityPixie extends EntityTameable {
 		return this.posY > maxY;
 	}
 
+	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
 		if (!this.isSitting() && !this.isBeyondHeight()) {
@@ -313,21 +322,25 @@ public class EntityPixie extends EntityTameable {
 	}
 
 	@Nullable
+	@Override
 	protected SoundEvent getAmbientSound() {
 		return ModSounds.PIXIE_IDLE;
 	}
 
 	@Nullable
+	@Override
 	protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
 		return ModSounds.PIXIE_HURT;
 	}
 
 	@Nullable
+	@Override
 	protected SoundEvent getDeathSound() {
 		return ModSounds.PIXIE_DIE;
 	}
 
 	@Nullable
+	@Override
 	protected ResourceLocation getLootTable() {
 		return LOOT;
 	}
@@ -343,6 +356,7 @@ public class EntityPixie extends EntityTameable {
 			this.speed = 0.75F;
 		}
 
+		@Override
 		public void onUpdateMoveHelper() {
 			if (EntityPixie.this.slowSpeed) {
 				this.speed = 2F;
@@ -360,7 +374,7 @@ public class EntityPixie extends EntityTameable {
 				double d1 = this.posY - EntityPixie.this.posY;
 				double d2 = this.posZ - EntityPixie.this.posZ;
 				double d3 = d0 * d0 + d1 * d1 + d2 * d2;
-				d3 = (double) MathHelper.sqrt(d3);
+				d3 = MathHelper.sqrt(d3);
 
 				if (d3 < EntityPixie.this.getEntityBoundingBox().getAverageEdgeLength()) {
 					this.action = EntityMoveHelper.Action.WAIT;
@@ -374,13 +388,12 @@ public class EntityPixie extends EntityTameable {
 
 					if (EntityPixie.this.getAttackTarget() == null) {
 						EntityPixie.this.rotationYaw = -((float) MathHelper.atan2(EntityPixie.this.motionX, EntityPixie.this.motionZ)) * (180F / (float) Math.PI);
-						EntityPixie.this.renderYawOffset = EntityPixie.this.rotationYaw;
 					} else {
 						double d4 = EntityPixie.this.getAttackTarget().posX - EntityPixie.this.posX;
 						double d5 = EntityPixie.this.getAttackTarget().posZ - EntityPixie.this.posZ;
 						EntityPixie.this.rotationYaw = -((float) MathHelper.atan2(d4, d5)) * (180F / (float) Math.PI);
-						EntityPixie.this.renderYawOffset = EntityPixie.this.rotationYaw;
 					}
+					EntityPixie.this.renderYawOffset = EntityPixie.this.rotationYaw;
 				}
 			}
 		}
@@ -393,6 +406,7 @@ public class EntityPixie extends EntityTameable {
 			this.setMutexBits(1);
 		}
 
+		@Override
 		public boolean shouldExecute() {
 			target = EntityPixie.getPositionRelativetoGround(EntityPixie.this, EntityPixie.this.world, EntityPixie.this.posX + EntityPixie.this.rand.nextInt(15) - 7, EntityPixie.this.posZ + EntityPixie.this.rand.nextInt(15) - 7, EntityPixie.this.rand);
 			return !EntityPixie.this.isOwnerClose() && !EntityPixie.this.isSitting() && isDirectPathBetweenPoints(EntityPixie.this.getPosition(), target) && !EntityPixie.this.getMoveHelper().isUpdating() && EntityPixie.this.rand.nextInt(4) == 0 && EntityPixie.this.housePos == null;
@@ -403,10 +417,12 @@ public class EntityPixie extends EntityTameable {
 			return raytraceresult == null || raytraceresult.typeOfHit == RayTraceResult.Type.MISS;
 		}
 
+		@Override
 		public boolean shouldContinueExecuting() {
 			return false;
 		}
 
+		@Override
 		public void updateTask() {
 			if (!isDirectPathBetweenPoints(EntityPixie.this.getPosition(), target)) {
 				target = EntityPixie.getPositionRelativetoGround(EntityPixie.this, EntityPixie.this.world, EntityPixie.this.posX + EntityPixie.this.rand.nextInt(15) - 7, EntityPixie.this.posZ + EntityPixie.this.rand.nextInt(15) - 7, EntityPixie.this.rand);
@@ -426,6 +442,7 @@ public class EntityPixie extends EntityTameable {
 			this.setMutexBits(1);
 		}
 
+		@Override
 		public boolean shouldExecute() {
 			if (EntityPixie.this.isOwnerClose() || EntityPixie.this.getMoveHelper().isUpdating() || EntityPixie.this.isSitting() || EntityPixie.this.rand.nextInt(20) != 0 || EntityPixie.this.ticksUntilHouseAI != 0) {
 				return false;
@@ -435,10 +452,12 @@ public class EntityPixie extends EntityTameable {
 			return !blockpos1.toString().equals(EntityPixie.this.getPosition().toString());
 		}
 
+		@Override
 		public boolean shouldContinueExecuting() {
 			return false;
 		}
 
+		@Override
 		public void updateTask() {
 			BlockPos blockpos = EntityPixie.this.getHousePos() == null ? EntityPixie.this.getPosition() : EntityPixie.this.getHousePos();
 

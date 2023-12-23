@@ -270,8 +270,8 @@ public class EntityMyrmexQueen extends EntityMyrmexBase {
         if(this.getGrowthStage() < 2){
             return false;
         }
-        if (this.getAnimation() != this.ANIMATION_STING && this.getAnimation() != this.ANIMATION_BITE) {
-            this.setAnimation(this.getRNG().nextBoolean() ? this.ANIMATION_STING : this.ANIMATION_BITE);
+        if (this.getAnimation() != ANIMATION_STING && this.getAnimation() != ANIMATION_BITE) {
+            this.setAnimation(this.getRNG().nextBoolean() ? ANIMATION_STING : this.ANIMATION_BITE);
             if(!this.world.isRemote && this.getRNG().nextInt(3) == 0 && this.getHeldItem(EnumHand.MAIN_HAND) != ItemStack.EMPTY){
                 this.entityDropItem(this.getHeldItem(EnumHand.MAIN_HAND), 0);
                 this.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);

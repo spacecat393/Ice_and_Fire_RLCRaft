@@ -80,10 +80,12 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
 
     }
 
+    @Override
     protected int getExperiencePoints(EntityPlayer player) {
         return 40;
     }
 
+    @Override
     protected void initEntityAI() {
         this.tasks.addTask(1, new EntityAISwimming(this));
         this.tasks.addTask(2, new EntityAIRestrictSun(this));
@@ -107,12 +109,14 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
         }));
     }
 
+    @Override
     protected void collideWithEntity(Entity entityIn) {
         if (!EventLiving.isAnimaniaSheep(entityIn)) {
             entityIn.applyEntityCollision(this);
         }
     }
 
+    @Override
     public boolean attackEntityAsMob(Entity entityIn) {
         int attackDescision = this.getRNG().nextInt(3);
         if(attackDescision == 0){
@@ -133,6 +137,7 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
         }
     }
 
+    @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.35D);
@@ -220,10 +225,13 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
         }
         super.travel(strafe, forward, vertical);
     }
+
+    @Override
     public boolean canPassengerSteer(){
         return false;
     }
 
+    @Override
     public boolean canBePushed() {
         return false;
     }
@@ -234,41 +242,42 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
     }
 
 
+    @Override
     public void onLivingUpdate(){
         super.onLivingUpdate();
-        if(this.isBlinded() && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) > 6){
+        if (this.isBlinded() && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) > 6) {
             this.setAttackTarget(null);
         }
-        if(this.getAnimation() == ANIMATION_ROAR && this.getAnimationTick() == 5){
+        if (this.getAnimation() == ANIMATION_ROAR && this.getAnimationTick() == 5) {
             this.playSound(ModSounds.CYCLOPS_BLINDED, 1, 1);
         }
-        if(this.getAnimation() == ANIMATION_EATPLAYER && this.getAnimationTick() == 25){
+        if (this.getAnimation() == ANIMATION_EATPLAYER && this.getAnimationTick() == 25) {
             this.playSound(ModSounds.CYCLOPS_BITE, 1, 1);
         }
-        if(this.getAnimation()  == ANIMATION_STOMP && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 12D && this.getAnimationTick() == 14){
+        if (this.getAnimation()  == ANIMATION_STOMP && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 12D && this.getAnimationTick() == 14) {
             this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float)this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
         }
-        if(this.getAnimation()  == ANIMATION_KICK && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 14D && this.getAnimationTick() == 12){
+        if (this.getAnimation()  == ANIMATION_KICK && this.getAttackTarget() != null && this.getDistanceSq(this.getAttackTarget()) < 14D && this.getAnimationTick() == 12) {
             this.getAttackTarget().attackEntityFrom(DamageSource.causeMobDamage(this), (float)this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
             this.getAttackTarget().knockBack(this.getAttackTarget(), 2, 1, 1);
 
         }
-        if(this.getAnimation() != ANIMATION_EATPLAYER && this.getAttackTarget() != null && !this.getPassengers().isEmpty() && this.getPassengers().contains(this.getAttackTarget())){
+        if (this.getAnimation() != ANIMATION_EATPLAYER && this.getAttackTarget() != null && !this.getPassengers().isEmpty() && this.getPassengers().contains(this.getAttackTarget())){
             this.setAnimation(ANIMATION_EATPLAYER);
         }
-        if(this.getAnimation() == NO_ANIMATION && this.getAttackTarget() != null && this.getRNG().nextInt(100) == 0){
+        if (this.getAnimation() == NO_ANIMATION && this.getAttackTarget() != null && this.getRNG().nextInt(100) == 0){
             this.setAnimation(ANIMATION_ROAR);
         }
-        if(this.getAnimation() == ANIMATION_STOMP && this.getAnimationTick() == 14){
+        if (this.getAnimation() == ANIMATION_STOMP && this.getAnimationTick() == 14){
             for (int i1 = 0; i1 < 20; i1++) {
                 double motionX = getRNG().nextGaussian() * 0.07D;
                 double motionY = getRNG().nextGaussian() * 0.07D;
                 double motionZ = getRNG().nextGaussian() * 0.07D;
                 float radius = 0.75F * -2F;
                 float angle = (0.01745329251F * this.renderYawOffset) + i1 * 1F;
-                double extraX = (double) (radius * MathHelper.sin((float) (Math.PI + angle)));
+                double extraX = radius * MathHelper.sin((float) (Math.PI + angle));
                 double extraY = 0.8F;
-                double extraZ = (double) (radius * MathHelper.cos(angle));
+                double extraZ = radius * MathHelper.cos(angle);
 
                 IBlockState iblockstate = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX + extraX), MathHelper.floor(this.posY + extraY) - 1, MathHelper.floor(this.posZ + extraZ)));
                 if (iblockstate.getMaterial() != Material.AIR) {
@@ -367,21 +376,25 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
     }
 
     @Nullable
+    @Override
     protected ResourceLocation getLootTable() {
         return LOOT;
     }
 
     @Nullable
+    @Override
     protected SoundEvent getAmbientSound() {
         return ModSounds.CYCLOPS_IDLE;
     }
 
     @Nullable
+    @Override
     protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
         return ModSounds.CYCLOPS_HURT;
     }
 
     @Nullable
+    @Override
     protected SoundEvent getDeathSound() {
         return ModSounds.CYCLOPS_DIE;
     }

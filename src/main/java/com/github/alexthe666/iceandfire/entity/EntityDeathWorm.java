@@ -441,7 +441,7 @@ public class EntityDeathWorm extends EntityTameable implements IBlacklistedFromS
         BlockPos.PooledMutableBlockPos blockpos$pooledmutableblockpos = BlockPos.PooledMutableBlockPos.retain();
 
         for (int i = 0; i < 8; ++i) {
-            int j = MathHelper.floor(this.posY + (double) (((float) ((i >> 0) % 2) - 0.5F) * 0.1F) + (double) this.getEyeHeight());
+            int j = MathHelper.floor(this.posY + (double) (((float) (i % 2) - 0.5F) * 0.1F) + (double) this.getEyeHeight());
             int k = MathHelper.floor(this.posX + (double) (((float) ((i >> 1) % 2) - 0.5F) * this.width * 0.8F));
             int l = MathHelper.floor(this.posZ + (double) (((float) ((i >> 2) % 2) - 0.5F) * this.width * 0.8F));
 

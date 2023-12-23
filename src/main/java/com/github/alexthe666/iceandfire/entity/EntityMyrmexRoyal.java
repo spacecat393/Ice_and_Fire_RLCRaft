@@ -226,19 +226,16 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
     }
 
     public boolean canMateWith(EntityAnimal otherAnimal) {
-        if (otherAnimal == this || otherAnimal == null) {
+        if (otherAnimal == this) {
             return false;
         } else if (otherAnimal.getClass() != this.getClass()) {
             return false;
         } else {
-            if(otherAnimal instanceof EntityMyrmexBase){
-                if(((EntityMyrmexBase) otherAnimal).getHive() != null && this.getHive() != null){
-                    return !this.getHive().equals(((EntityMyrmexBase)otherAnimal).getHive());
-                }else{
-                    return true;
-                }
+            if (((EntityMyrmexBase) otherAnimal).getHive() != null && this.getHive() != null) {
+                return !this.getHive().equals(((EntityMyrmexBase) otherAnimal).getHive());
+            } else {
+                return true;
             }
-            return false;
         }
     }
 
@@ -340,6 +337,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
         return pos;
     }
 
+    @Override
     protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
         if (!this.isInWater()) {
             this.handleWaterMovement();
@@ -362,6 +360,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
             this.speed = 1.75F;
         }
 
+        @Override
         public void onUpdateMoveHelper() {
             if (this.action == EntityMoveHelper.Action.MOVE_TO) {
                 double d0 = this.posX - EntityMyrmexRoyal.this.posX;
@@ -401,6 +400,7 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
             this.setMutexBits(1);
         }
 
+        @Override
         public boolean shouldExecute() {
             if (EntityMyrmexRoyal.this.isFlying()) {
                 target = EntityMyrmexRoyal.getPositionRelativetoGround(EntityMyrmexRoyal.this, EntityMyrmexRoyal.this.world, EntityMyrmexRoyal.this.posX + EntityMyrmexRoyal.this.rand.nextInt(30) - 15, EntityMyrmexRoyal.this.posZ + EntityMyrmexRoyal.this.rand.nextInt(30) - 15, EntityMyrmexRoyal.this.rand);
@@ -415,10 +415,12 @@ public class EntityMyrmexRoyal extends EntityMyrmexBase {
             return raytraceresult == null || raytraceresult.typeOfHit == RayTraceResult.Type.MISS;
         }
 
+        @Override
         public boolean shouldContinueExecuting() {
             return false;
         }
 
+        @Override
         public void updateTask() {
             if (!isDirectPathBetweenPoints(EntityMyrmexRoyal.this.getPosition(), target)) {
                 target = EntityMyrmexRoyal.getPositionRelativetoGround(EntityMyrmexRoyal.this, EntityMyrmexRoyal.this.world, EntityMyrmexRoyal.this.posX + EntityMyrmexRoyal.this.rand.nextInt(15) - 7, EntityMyrmexRoyal.this.posZ + EntityMyrmexRoyal.this.rand.nextInt(15) - 7, EntityMyrmexRoyal.this.rand);

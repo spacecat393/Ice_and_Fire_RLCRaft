@@ -51,6 +51,7 @@ public class EntityDeathWormEgg extends EntityThrowable {
     /**
      * Called when this EntityThrowable hits a block or entity.
      */
+    @Override
     protected void onImpact(RayTraceResult result) {
         if (result.entityHit != null) {
             result.entityHit.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), 0.0F);

@@ -125,6 +125,7 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
         }
     }
 
+    @Override
     protected void initEntityAI() {
         this.tasks.addTask(0, new EntityAISwimming(this));
         this.tasks.addTask(0, new MyrmexAIFindHidingSpot(this));
@@ -147,15 +148,18 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
         }));
     }
 
+    @Override
     public VillagerRegistry.VillagerProfession getProfessionForge() {
         return this.isJungle() ? ModVillagers.INSTANCE.jungleMyrmexSentinel : ModVillagers.INSTANCE.desertMyrmexSentinel;
     }
 
+    @Override
     protected void entityInit() {
         super.entityInit();
         this.dataManager.register(HIDING, Boolean.valueOf(false));
     }
 
+    @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.35D);
@@ -206,6 +210,7 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
         return false;
     }
 
+    @Override
     public void updatePassenger(Entity passenger) {
         super.updatePassenger(passenger);
         if (this.isPassenger(passenger)) {
@@ -227,6 +232,7 @@ public class EntityMyrmexSentinel extends EntityMyrmexBase {
         }
     }
 
+    @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
         if(amount >= 1.0D && !this.getPassengers().isEmpty() && rand.nextInt(2) == 0) {
             for(Entity entity : this.getPassengers()){

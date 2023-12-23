@@ -344,6 +344,7 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
         this.dataManager.register(SEVERED_HEAD, -1);
     }
 
+    @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
@@ -456,6 +457,7 @@ public class EntityHydra extends EntityMob implements IAnimatedEntity, IMultipar
         }
     }
 
+    @Override
     public boolean isPotionApplicable(PotionEffect potioneffectIn) {
         return potioneffectIn.getPotion() != MobEffects.POISON
                 && potioneffectIn.getPotion() != ModPotions.acid

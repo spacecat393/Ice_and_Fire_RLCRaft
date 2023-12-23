@@ -123,10 +123,12 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
         return LOOT;
     }
 
+    @Override
     public float getBlockPathWeight(BlockPos pos) {
         return world.getBlockState(pos).getMaterial() == Material.WATER ? 10F : super.getBlockPathWeight(pos);
     }
 
+    @Override
     public boolean attackEntityAsMob(Entity entityIn) {
         if (this.getRNG().nextInt(2) == 0) {
             if (this.getAnimation() != ANIMATION_PULL) {
@@ -147,6 +149,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
         return movingobjectposition == null || movingobjectposition.typeOfHit != RayTraceResult.Type.BLOCK;
     }
 
+    @Override
     public float getPathPriority(PathNodeType nodeType) {
         return nodeType == PathNodeType.WATER ? 0F : super.getPathPriority(nodeType);
     }
@@ -296,6 +299,7 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
         return helmet.getItem() == ModItems.earplugs || helmet != ItemStack.EMPTY && helmet.getItem().getTranslationKey().contains("earmuff");
     }
 
+    @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
         if (source.getTrueSource() != null && source.getTrueSource() instanceof EntityLivingBase) {
             this.triggerOtherSirens((EntityLivingBase) source.getTrueSource());
@@ -466,11 +470,13 @@ public class EntitySiren extends EntityMob implements IAnimatedEntity, IVillager
     }
 
     @Nullable
+    @Override
     protected SoundEvent getAmbientSound() {
         return this.isAgressive() ? ModSounds.NAGA_IDLE : ModSounds.MERMAID_IDLE;
     }
 
     @Nullable
+    @Override
     protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
         return this.isAgressive() ? ModSounds.NAGA_HURT : ModSounds.MERMAID_HURT;
     }

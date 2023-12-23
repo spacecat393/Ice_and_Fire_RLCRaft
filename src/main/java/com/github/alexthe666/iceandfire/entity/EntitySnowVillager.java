@@ -105,15 +105,17 @@ public class EntitySnowVillager extends EntityVillager {
 
 	}
 
+	@Override
 	public void onDeath(DamageSource cause) {
-		if (cause.getTrueSource() != null && cause.getTrueSource() instanceof EntityZombie && (this.world.getDifficulty() == EnumDifficulty.NORMAL || this.world.getDifficulty() == EnumDifficulty.HARD)) {
-			return;
+		if (cause.getTrueSource() != null && cause.getTrueSource() instanceof EntityZombie
+				&& (this.world.getDifficulty() == EnumDifficulty.NORMAL || this.world.getDifficulty() == EnumDifficulty.HARD)) {
 		} else {
 			super.onDeath(cause);
 		}
 	}
 
 	@SuppressWarnings("deprecation")
+	@Override
 	public void setProfession(net.minecraftforge.fml.common.registry.VillagerRegistry.VillagerProfession prof) {
 		if (ModVillagers.INSTANCE.professions.containsValue(prof)) {
 			this.setProfession(net.minecraftforge.fml.common.registry.VillagerRegistry.getId(prof));
@@ -151,6 +153,7 @@ public class EntitySnowVillager extends EntityVillager {
 		return this.prof;
 	}
 
+	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
 		this.setProfession(compound.getInteger("Profession"));
@@ -164,6 +167,7 @@ public class EntitySnowVillager extends EntityVillager {
 
 	}
 
+	@Override
 	public IEntityLivingData finalizeMobSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData data, boolean forgeCheck) {
 		this.prof = ModVillagers.INSTANCE.professions.get(this.getRNG().nextInt(3));
 		return data;

@@ -36,6 +36,7 @@ public class EntitySeaSerpentBubbles extends EntityFireball implements IDragonPr
         this.accelerationZ = accelZ / d0 * 0.1D;
     }
 
+    @Override
     protected boolean isFireballFiery() {
         return false;
     }
@@ -45,6 +46,7 @@ public class EntitySeaSerpentBubbles extends EntityFireball implements IDragonPr
         return false;
     }
 
+    @Override
     public void onUpdate() {
         if (this.ticksExisted > 60) {
             this.setDead();
@@ -100,18 +102,20 @@ public class EntitySeaSerpentBubbles extends EntityFireball implements IDragonPr
         }
     }
 
+    @Override
     public boolean isInWater(){
         return this.isInsideOfMaterial(Material.WATER);
     }
 
+    @Override
     public boolean handleWaterMovement() {
         return true;
     }
 
+    @Override
     protected EnumParticleTypes getParticleType(){
         return EnumParticleTypes.WATER_SPLASH;
     }
-
 
     @Override
     protected void onImpact(RayTraceResult result) {

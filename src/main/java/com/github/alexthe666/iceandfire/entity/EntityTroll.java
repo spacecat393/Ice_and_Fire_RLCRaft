@@ -80,6 +80,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
         return this.getRNG().nextInt(IceAndFireConfig.ENTITY_SPAWNING.trollSpawnCheckChance + 1) == 0 && !this.world.canSeeSky(pos) && pos.getY() <= 50 && super.getCanSpawnHere();
     }
 
+    @Override
     protected void initEntityAI() {
         this.tasks.addTask(1, new EntityAISwimming(this));
         this.tasks.addTask(2, new TrollAIFleeSun(this, 1.0D));
@@ -93,6 +94,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
         ((PathNavigateGround) this.getNavigator()).setAvoidSun(true);
     }
 
+    @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.35D);
@@ -103,6 +105,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
 
     }
 
+    @Override
     public boolean attackEntityAsMob(Entity entityIn) {
         if (this.getRNG().nextBoolean()) {
             this.setAnimation(ANIMATION_STRIKE_VERTICAL);
@@ -116,12 +119,12 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
     @Override
     protected void entityInit() {
         super.entityInit();
-        this.dataManager.register(VARIANT, Integer.valueOf(0));
-        this.dataManager.register(WEAPON, Integer.valueOf(0));
+        this.dataManager.register(VARIANT, 0);
+        this.dataManager.register(WEAPON, 0);
     }
 
     private int getVariant() {
-        return this.dataManager.get(VARIANT).intValue();
+        return this.dataManager.get(VARIANT);
     }
 
     private void setVariant(int variant) {
@@ -137,7 +140,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
     }
 
     private int getWeapon() {
-        return this.dataManager.get(WEAPON).intValue();
+        return this.dataManager.get(WEAPON);
     }
 
     private void setWeapon(int variant) {
@@ -198,10 +201,12 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
         return null;
     }
 
+    @Override
     protected int getExperiencePoints(EntityPlayer player) {
         return 15;
     }
 
+    @Override
     protected void onDeathUpdate() {
         super.onDeathUpdate();
         if (this.deathTime == 20 && !this.world.isRemote) {
@@ -264,6 +269,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
 
     }
 
+    @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
         boolean stone = EntityGorgon.isStoneMob(this);
@@ -361,6 +367,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
         AnimationHandler.INSTANCE.updateAnimations(this);
     }
 
+    @Override
     public void playLivingSound() {
         if (this.getAnimation() == this.NO_ANIMATION) {
             this.setAnimation(ANIMATION_SPEAK);
@@ -368,6 +375,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
         super.playLivingSound();
     }
 
+    @Override
     protected void playHurtSound(DamageSource source) {
         if (this.getAnimation() == this.NO_ANIMATION) {
             this.setAnimation(ANIMATION_SPEAK);

@@ -49,6 +49,7 @@ public class ItemDragonBow extends ItemBow implements ICustomRendered {
 		});
 	}
 
+	@Override
 	public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
 		NonNullList<ItemStack> boneItems = OreDictionary.getOres("boneDragon");
 		for (ItemStack bone : boneItems) {
@@ -71,16 +72,17 @@ public class ItemDragonBow extends ItemBow implements ICustomRendered {
 		return f;
 	}
 
+	@Override
 	protected ItemStack findAmmo(EntityPlayer player) {
-		if (this.func_185058_h_(player.getHeldItem(EnumHand.OFF_HAND))) {
+		if (this.isDragonboneArrow(player.getHeldItem(EnumHand.OFF_HAND))) {
 			return player.getHeldItem(EnumHand.OFF_HAND);
-		} else if (this.func_185058_h_(player.getHeldItem(EnumHand.MAIN_HAND))) {
+		} else if (this.isDragonboneArrow(player.getHeldItem(EnumHand.MAIN_HAND))) {
 			return player.getHeldItem(EnumHand.MAIN_HAND);
 		} else {
 			for (int i = 0; i < player.inventory.getSizeInventory(); ++i) {
 				ItemStack itemstack = player.inventory.getStackInSlot(i);
 
-				if (this.func_185058_h_(itemstack)) {
+				if (this.isDragonboneArrow(itemstack)) {
 					return itemstack;
 				}
 			}
@@ -89,7 +91,7 @@ public class ItemDragonBow extends ItemBow implements ICustomRendered {
 		}
 	}
 
-	protected boolean func_185058_h_(ItemStack stack) {
+	protected boolean isDragonboneArrow(ItemStack stack) {
 		return !stack.isEmpty() && stack.getItem() == ModItems.dragonbone_arrow;
 	}
 
@@ -193,16 +195,11 @@ public class ItemDragonBow extends ItemBow implements ICustomRendered {
 			return ret;
 
 		if (!playerIn.capabilities.isCreativeMode && !flag) {
-			return !flag ? new ActionResult<ItemStack>(EnumActionResult.FAIL, itemStackIn) : new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
+			return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemStackIn);
 		} else {
 			playerIn.setActiveHand(hand);
 			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
 		}
-	}
-
-	public EntityArrow makeTippedArrow(World worldIn, ItemStack stack, EntityLivingBase shooter) {
-		EntityDragonArrow entitytippedarrow = new EntityDragonArrow(worldIn, shooter);
-		return entitytippedarrow;
 	}
 
 	@Override

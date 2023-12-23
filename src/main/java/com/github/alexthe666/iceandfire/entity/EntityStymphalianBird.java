@@ -124,10 +124,12 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
         return false;
     }
 
+    @Override
     protected int getExperiencePoints(EntityPlayer player) {
         return 10;
     }
 
+    @Override
     public void onUpdate() {
         super.onUpdate();
         if (!this.world.isRemote && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
@@ -161,7 +163,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
         if (!s.isEmpty()) {
             try {
                 this.setVictorId(UUID.fromString(s));
-            } catch (Throwable var4) {
+            } catch (Throwable ignored) {
             }
         }
         this.setFlying(tag.getBoolean("Flying"));
@@ -181,6 +183,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
         }
     }
 
+    @Override
     public void onDeath(DamageSource cause) {
         if (cause.getTrueSource() != null && cause.getTrueSource() instanceof EntityLivingBase && !world.isRemote) {
             this.setVictorId(cause.getTrueSource().getUniqueID());
@@ -191,6 +194,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
         super.onDeath(cause);
     }
 
+    @Override
     protected void onDeathUpdate() {
         super.onDeathUpdate();
         if (this.deathTime == 20 && !this.world.isRemote && IceAndFireConfig.ENTITY_SETTINGS.stymphalianBirdsOreDictDrops) {
@@ -264,6 +268,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
         return false;
     }
 
+    @Override
     public boolean attackEntityAsMob(Entity entityIn) {
         if (this.getAnimation() == NO_ANIMATION) {
             this.setAnimation(ANIMATION_PECK);
@@ -413,10 +418,6 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
         return movingobjectposition == null || movingobjectposition.typeOfHit != RayTraceResult.Type.BLOCK;
     }
 
-    private boolean isLeaderNotFlying() {
-        return this.flock != null && this.flock.getLeader() != null && !this.flock.getLeader().isFlying();
-    }
-
     public void flyAround() {
         if (airTarget != null && this.isFlying()) {
             if (!isTargetInAir() || flyTicks > 6000 || !this.isFlying()) {
@@ -461,9 +462,11 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
         return speed;
     }
 
+    @Override
     public void fall(float distance, float damageMultiplier) {
     }
 
+    @Override
     public void playLivingSound() {
         if (this.getAnimation() == this.NO_ANIMATION) {
             this.setAnimation(ANIMATION_SPEAK);
@@ -471,6 +474,7 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
         super.playLivingSound();
     }
 
+    @Override
     protected void playHurtSound(DamageSource source) {
         if (this.getAnimation() == this.NO_ANIMATION) {
             this.setAnimation(ANIMATION_SPEAK);
@@ -479,11 +483,13 @@ public class EntityStymphalianBird extends EntityCreature implements IAnimatedEn
     }
 
     @Nullable
+    @Override
     protected SoundEvent getAmbientSound() {
         return ModSounds.STYMPHALIAN_BIRD_IDLE;
     }
 
     @Nullable
+    @Override
     protected SoundEvent getHurtSound(DamageSource source) {
         return ModSounds.STYMPHALIAN_BIRD_HURT;
     }

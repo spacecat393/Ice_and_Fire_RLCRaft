@@ -33,6 +33,7 @@ public class EntityHydraArrow extends EntityArrow {
         this.setDamage(5F);
     }
 
+    @Override
     public void onUpdate() {
         super.onUpdate();
         if (world.isRemote && !this.inGround) {
@@ -68,6 +69,7 @@ public class EntityHydraArrow extends EntityArrow {
         }
     }
 
+    @Override
     protected void arrowHit(EntityLivingBase living) {
         if (living instanceof EntityPlayer) {
             this.damageShield((EntityPlayer) living, (float) this.getDamage());

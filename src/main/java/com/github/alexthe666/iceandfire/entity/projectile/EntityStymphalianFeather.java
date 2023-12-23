@@ -25,6 +25,7 @@ public class EntityStymphalianFeather extends EntityArrow {
         this.setDamage(IceAndFireConfig.ENTITY_SETTINGS.stymphalianBirdFeatherAttackStength);
     }
 
+    @Override
     public void setDead() {
         super.setDead();
         if(IceAndFireConfig.ENTITY_SETTINGS.stymphalianBirdFeatherProjectileItem){
@@ -35,6 +36,7 @@ public class EntityStymphalianFeather extends EntityArrow {
 
     }
 
+    @Override
     public void onUpdate() {
         super.onUpdate();
         if (this.ticksExisted > 100) {
@@ -42,12 +44,11 @@ public class EntityStymphalianFeather extends EntityArrow {
         }
     }
 
+    @Override
     protected void onHit(RayTraceResult raytraceResultIn) {
-        if (this.shootingEntity instanceof EntityStymphalianBird && raytraceResultIn.entityHit != null && raytraceResultIn.entityHit instanceof EntityStymphalianBird) {
-            return;
-        } else {
+        if (!(this.shootingEntity instanceof EntityStymphalianBird && raytraceResultIn.entityHit instanceof EntityStymphalianBird)) {
             super.onHit(raytraceResultIn);
-            if (raytraceResultIn.entityHit != null && raytraceResultIn.entityHit instanceof EntityLivingBase) {
+            if (raytraceResultIn.entityHit instanceof EntityLivingBase) {
                 EntityLivingBase entitylivingbase = (EntityLivingBase) raytraceResultIn.entityHit;
                 entitylivingbase.setArrowCountInEntity(entitylivingbase.getArrowCountInEntity() - 1);
                 ItemStack itemstack1 = entitylivingbase.isHandActive() ? entitylivingbase.getActiveItemStack() : ItemStack.EMPTY;
@@ -55,7 +56,6 @@ public class EntityStymphalianFeather extends EntityArrow {
                     damageShield(entitylivingbase, 1.0F);
                 }
             }
-
         }
     }
 

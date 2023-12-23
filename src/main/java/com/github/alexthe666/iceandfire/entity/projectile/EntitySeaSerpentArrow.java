@@ -31,6 +31,12 @@ public class EntitySeaSerpentArrow extends EntityArrow {
         this.setDamage(3F);
     }
 
+    public EntitySeaSerpentArrow(World worldIn, EntityLivingBase shooter) {
+        super(worldIn, shooter);
+        this.setDamage(3F);
+    }
+
+    @Override
     public void onUpdate() {
         super.onUpdate();
         if(world.isRemote && !this.inGround){
@@ -44,6 +50,7 @@ public class EntitySeaSerpentArrow extends EntityArrow {
         }
     }
 
+    @Override
     public boolean isInWater(){
         return false;
     }
@@ -75,11 +82,6 @@ public class EntitySeaSerpentArrow extends EntityArrow {
                 this.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.8F, 0.8F + this.world.rand.nextFloat() * 0.4F);
             }
         }
-    }
-
-    public EntitySeaSerpentArrow(World worldIn, EntityLivingBase shooter) {
-        super(worldIn, shooter);
-        this.setDamage(3F);
     }
 
     @Override

@@ -47,10 +47,12 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
         this.setSize(0.99F, 0.95F);
     }
 
+    @Override
     protected int getExperiencePoints(EntityPlayer player) {
         return 5;
     }
 
+    @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
         if (this.getAnimation() == ANIMATION_BITE && this.getAttackTarget() != null && this.getAnimationTick() == 6) {
@@ -68,7 +70,7 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
                 this.getAttackTarget().addPotionEffect(new PotionEffect(MobEffects.POISON, 200, 2));
             }
         }
-        if(this.guardingEntity != null){
+        if (this.guardingEntity != null) {
             this.guardingEntity.isBeingGuarded = true;
             this.isEnteringHive = this.guardingEntity.isEnteringHive;
             if(!this.guardingEntity.isEntityAlive()){
@@ -76,9 +78,9 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
                 this.guardingEntity = null;
             }
         }
-
     }
 
+    @Override
     protected void initEntityAI() {
         this.tasks.addTask(0, new EntityAISwimming(this));
         this.tasks.addTask(0, new MyrmexAITradePlayer(this));
@@ -103,10 +105,12 @@ public class EntityMyrmexSoldier extends EntityMyrmexBase {
 
     }
 
+    @Override
     public VillagerRegistry.VillagerProfession getProfessionForge() {
         return this.isJungle() ? ModVillagers.INSTANCE.jungleMyrmexSoldier : ModVillagers.INSTANCE.desertMyrmexSoldier;
     }
 
+    @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.35D);

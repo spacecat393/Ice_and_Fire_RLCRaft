@@ -148,14 +148,17 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 
 	}
 
+	@Override
 	protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos)
 	{
 	}
 
+	@Override
 	public boolean canBeSteered() {
 		return true;
 	}
 
+	@Override
 	public void updatePassenger(Entity passenger) {
 		super.updatePassenger(passenger);
 		if (this.isPassenger(passenger)) {
@@ -656,6 +659,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 		currentAnimation = animation;
 	}
 
+	@Override
 	public void playLivingSound() {
 		if (this.getAnimation() == this.NO_ANIMATION) {
 			this.setAnimation(ANIMATION_SPEAK);
@@ -663,6 +667,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 		super.playLivingSound();
 	}
 
+	@Override
 	protected void playHurtSound(DamageSource source) {
 		if (this.getAnimation() == this.NO_ANIMATION) {
 			this.setAnimation(ANIMATION_SPEAK);
@@ -767,15 +772,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 		return false;
 	}
 
-	public EntityItem createEgg(EntityHippogryph partner) {
-		int i = MathHelper.floor(this.posX);
-		int j = MathHelper.floor(this.posY);
-		int k = MathHelper.floor(this.posZ);
-		ItemStack stack = new ItemStack(ModItems.hippogryph_egg);
-		EntityItem egg = new EntityItem(this.world, i, j, k, stack);
-		return egg;
-	}
-
+	@Override
 	public void fall(float distance, float damageMultiplier) {
 	}
 
@@ -1008,8 +1005,8 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 		if (this.attack() && this.getControllingPassenger() != null && this.getControllingPassenger() instanceof EntityPlayer) {
 
 			EntityLivingBase target = DragonUtils.riderLookingAtEntity(this, (EntityPlayer) this.getControllingPassenger(), 3);
-			if (this.getAnimation() != this.ANIMATION_BITE && this.getAnimation() != this.ANIMATION_SCRATCH) {
-				this.setAnimation(this.getRNG().nextBoolean() ? this.ANIMATION_SCRATCH : this.ANIMATION_BITE);
+			if (this.getAnimation() != ANIMATION_BITE && this.getAnimation() != ANIMATION_SCRATCH) {
+				this.setAnimation(this.getRNG().nextBoolean() ? ANIMATION_SCRATCH : ANIMATION_BITE);
 			}
 			if (target != null) {
 				target.attackEntityFrom(DamageSource.causeMobDamage(this), ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
@@ -1054,9 +1051,7 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 			RayTraceResult rayTrace = world.rayTraceBlocks(new Vec3d(this.getPosition()), target, false);
 			if (rayTrace != null && rayTrace.hitVec != null) {
 				BlockPos pos = new BlockPos(rayTrace.hitVec);
-				if (!world.isAirBlock(pos)) {
-					return true;
-				}
+				return !world.isAirBlock(pos);
 			}
 		}
 		return false;
@@ -1192,5 +1187,4 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 			}
 		}
 	}
-
 }

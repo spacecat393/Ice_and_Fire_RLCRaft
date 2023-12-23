@@ -123,6 +123,7 @@ public class EntityFireDragon extends EntityDragonBase {
         }
     }
 
+    @Override
     public boolean canBeSteered() {
         return true;
     }
@@ -410,7 +411,7 @@ public class EntityFireDragon extends EntityDragonBase {
     }
 
     public boolean isBreedingItem(ItemStack stack) {
-        return !stack.isEmpty() && stack.getItem() != null && stack.getItem() == ModItems.fire_stew;
+        return !stack.isEmpty() && stack.getItem() == ModItems.fire_stew;
     }
 
 

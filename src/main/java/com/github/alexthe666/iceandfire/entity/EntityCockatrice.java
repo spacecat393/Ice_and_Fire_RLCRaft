@@ -588,9 +588,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
     private boolean shouldMelee() {
         boolean blindness = this.isPotionActive(MobEffects.BLINDNESS) || this.getAttackTarget() != null && this.getAttackTarget().isPotionActive(MobEffects.BLINDNESS);
         if (this.getAttackTarget() != null) {
-            if (this.getDistance(this.getAttackTarget()) < 4D || EventLiving.isAnimaniaFerret(this.getAttackTarget()) || blindness || !this.canUseStareOn(this.getAttackTarget())) {
-                return true;
-            }
+            return this.getDistance(this.getAttackTarget()) < 4D || EventLiving.isAnimaniaFerret(this.getAttackTarget()) || blindness || !this.canUseStareOn(this.getAttackTarget());
         }
         return false;
     }
@@ -604,6 +602,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
         super.travel(strafe, forward, vertical);
     }
 
+    @Override
     public void playLivingSound() {
         if (this.getAnimation() == this.NO_ANIMATION) {
             this.setAnimation(ANIMATION_SPEAK);
@@ -611,6 +610,7 @@ public class EntityCockatrice extends EntityTameable implements IAnimatedEntity,
         super.playLivingSound();
     }
 
+    @Override
     protected void playHurtSound(DamageSource source) {
         if (this.getAnimation() == this.NO_ANIMATION) {
             this.setAnimation(ANIMATION_SPEAK);
