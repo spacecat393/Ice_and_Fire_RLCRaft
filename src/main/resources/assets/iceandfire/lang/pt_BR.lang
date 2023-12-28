@@ -262,6 +262,10 @@ item.iceandfire.lightning_dragon_heart.name=Coração de Dragão Elétrico
 item.iceandfire.lightning_dragon_blood.name=Sangue de Dragão Elétrico
 item.iceandfire.dragon_horn_lightning.name=Chifre de Dragão
 
+item.iceandfire.tide_trident.name=Tridente do Guardião da Maré
+item.iceandfire.tide_trident.desc_0=Causa mais dano quando jogado debaixo d’água
+item.iceandfire.tide_trident.desc_1=Atravessa vários inimigos
+
 item.banner.firedragon.white=Figura de Dragão de Fogo Branco
 item.banner.firedragon.orange=Figura de Dragão de Fogo Laranja
 item.banner.firedragon.magenta=Figura de Dragão de Fogo Magenta
@@ -365,6 +369,8 @@ entity.myrmex_royal.name=Myrmex Monarca
 entity.myrmex_egg.name=Ovo de Myrmex 
 entity.amphithere.name=Amphithere
 entity.seaserpent.name=Serpente Marinha
+
+entity.tide_trident.name=Tridente do Protetor da Maré
 
 iceandfire.effect.acid=Ácido
 

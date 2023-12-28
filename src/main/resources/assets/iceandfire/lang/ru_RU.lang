@@ -120,6 +120,10 @@ item.iceandfire.lightning_dragon_heart.name=Сердце Грозового др
 item.iceandfire.lightning_dragon_blood.name=Кровь Грозового дракона
 item.iceandfire.dragon_horn_lightning.name=Рог дракона
 
+item.iceandfire.tide_trident.name=Трезубец Волны
+item.iceandfire.tide_trident.desc_0=Наносит больше урона при броске под воду
+item.iceandfire.tide_trident.desc_1=Пробивает нескольких врагов
+
 item.banner.firedragon.white=Белый флаг огненного дракона
 item.banner.firedragon.orange=Оранжевый флаг огненного дракона
 item.banner.firedragon.magenta=Пурпурный флаг огненного дракона
@@ -171,9 +175,6 @@ item.banner.lightningdragon.green=Зелёный флаг грозовой др�
 item.banner.lightningdragon.red=Красный флаг грозовой дракон
 item.banner.lightningdragon.black=Черный флаг грозовой дракон
 
-entity.lightningdragon.name=Грозовой дракон
-entity.dragonlightningcharge.name=Снаряд драконьей молнии
-
 entity.firedragon.name=Огненный дракон
 entity.icedragon.name=Ледяной дракон
 entity.dragonegg.name=Яйцо дракона
@@ -187,6 +188,11 @@ entity.snowvillager.name=Снежный житель
 entity.Villager.craftsman=Ремесленник
 entity.Villager.fisherman=Рыбак
 entity.Villager.shaman=Шаман
+
+entity.lightningdragon.name=Грозовой дракон
+entity.dragonlightningcharge.name=Снаряд драконьей молнии
+
+entity.tide_trident.name=Трезубец Волны
 
 iceandfire.effect.acid=Кислота
 

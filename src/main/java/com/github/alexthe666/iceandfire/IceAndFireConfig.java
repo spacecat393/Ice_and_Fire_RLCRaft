@@ -764,6 +764,16 @@ public class IceAndFireConfig {
 		@Config.Comment("If true, hydra hearts provide healing while in the player's hotkey bar")
 		@Config.Name("Hydra Heart Passive Healing")
 		public boolean hydraHeartPassiveHealing = true;
+
+		@Config.Comment("Base damage for the Tide Trident")
+		@Config.Name("Tide Trident Base Damage")
+		@Config.RangeDouble(min = 1, max = 1000)
+		public float tideTridentBaseDamage = 13.0f;
+
+		@Config.Comment("Damage multiplier for the Tide Trident - applied when the trident is underwater")
+		@Config.Name("Tide Trident Underwater Damage Multiplier")
+		@Config.RangeDouble(min = 1, max = 1000)
+		public float tideTridentUnderwaterDamageMultiplier = 2.0f;
 	}
 
 	public static class ClientConfig {

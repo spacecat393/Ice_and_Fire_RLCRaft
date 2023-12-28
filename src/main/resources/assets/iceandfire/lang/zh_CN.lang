@@ -248,6 +248,10 @@ item.iceandfire.hydra_heart.desc_1=为持有者附加一定等级的生命恢复
 item.iceandfire.hydra_arrow.name=九头蛇毒箭
 item.iceandfire.hydra_arrow.desc=施加中毒并从目标身上吸取生命值
 
+item.iceandfire.tide_trident.name=海潮三叉戟
+item.iceandfire.tide_trident.desc_0=在水下造成更多伤害
+item.iceandfire.tide_trident.desc_1=扔到水下时会造成更多伤害
+
 item.banner.firedragon.white=白色龙炎弹
 item.banner.firedragon.orange=橙色龙炎弹
 item.banner.firedragon.magenta=品红龙炎弹
@@ -356,6 +360,8 @@ entity.dragonlightningcharge.name=龙雷弹
 entity.if_hydra.name=九头蛇
 entity.hydra_breath.name=九头蛇吐息
 entity.hydra_arrow.name=九头蛇毒箭
+
+entity.tide_trident.name=海潮三叉戟
 
 iceandfire.effect.acid=酸
 

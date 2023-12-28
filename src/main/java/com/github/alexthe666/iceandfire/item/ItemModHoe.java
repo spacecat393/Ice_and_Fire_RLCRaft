@@ -26,7 +26,7 @@ public class ItemModHoe extends ItemHoe implements IHitEffect {
 	}
 
 	@Override
-	public boolean getIsRepairable(ItemStack toRepair, ItemStack repair){
+	public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
 		ItemStack mat = this.toolMaterial.getRepairItemStack();
 		if (this.toolMaterial == ModItems.silverTools) {
 			NonNullList<ItemStack> silverItems = OreDictionary.getOres("ingotSilver");

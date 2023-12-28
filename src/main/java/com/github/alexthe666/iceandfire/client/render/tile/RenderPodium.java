@@ -8,16 +8,16 @@ import com.github.alexthe666.iceandfire.entity.tile.TileEntityPodium;
 import com.github.alexthe666.iceandfire.enums.EnumDragonEgg;
 import com.github.alexthe666.iceandfire.item.ItemDragonEgg;
 import com.github.alexthe666.iceandfire.item.ItemMyrmexEgg;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
-@SideOnly(Side.CLIENT)
-public class RenderPodium extends TileEntitySpecialRenderer<TileEntityPodium> {
-
-    private static final ModelDragonEgg MODEL = new ModelDragonEgg();
+public class RenderPodium extends TileEntitySpecialRenderer {
 
     protected static ResourceLocation getEggTexture(EnumDragonEgg type) {
         switch (type) {
@@ -37,7 +37,10 @@ public class RenderPodium extends TileEntitySpecialRenderer<TileEntityPodium> {
     }
 
     @Override
-    public void render(TileEntityPodium podium, double x, double y, double z, float f, int f1, float alpha) {
+    public void render(TileEntity entity, double x, double y, double z, float f, int f1, float alpha) {
+        ModelDragonEgg model = new ModelDragonEgg();
+        TileEntityPodium podium = (TileEntityPodium) entity;
+
         if (!podium.getStackInSlot(0).isEmpty()) {
             if (podium.getStackInSlot(0).getItem() instanceof ItemDragonEgg) {
                 ItemDragonEgg item = (ItemDragonEgg) podium.getStackInSlot(0).getItem();
@@ -46,20 +49,30 @@ public class RenderPodium extends TileEntitySpecialRenderer<TileEntityPodium> {
                 GL11.glPushMatrix();
                 this.bindTexture(getEggTexture(item.type));
                 GL11.glPushMatrix();
-                MODEL.renderPodium();
+                model.renderPodium();
                 GL11.glPopMatrix();
                 GL11.glPopMatrix();
                 GL11.glPopMatrix();
-            }
-            else if (podium.getStackInSlot(0).getItem() instanceof ItemMyrmexEgg) {
+            } else if (podium.getStackInSlot(0).getItem() instanceof ItemMyrmexEgg) {
                 boolean jungle = podium.getStackInSlot(0).getItem() == ModItems.myrmex_jungle_egg;
                 GL11.glPushMatrix();
                 GL11.glTranslatef((float) x + 0.5F, (float) y + 0.475F, (float) z + 0.5F);
                 GL11.glPushMatrix();
                 this.bindTexture(jungle ? RenderMyrmexEgg.EGG_JUNGLE : RenderMyrmexEgg.EGG_DESERT);
                 GL11.glPushMatrix();
-                MODEL.renderPodium();
+                model.renderPodium();
                 GL11.glPopMatrix();
+                GL11.glPopMatrix();
+                GL11.glPopMatrix();
+            } else {
+                GL11.glPushMatrix();
+                float f2 = ((float) podium.prevTicksExisted + (podium.ticksExisted - podium.prevTicksExisted) * f);
+                float f3 = MathHelper.sin(f2 / 10.0F) * 0.1F + 0.1F;
+                GL11.glTranslatef((float) x + 0.5F, (float) y + 1.55F + f3, (float) z + 0.5F);
+                float f4 = (f2 / 20.0F) * (180F / (float) Math.PI);
+                GlStateManager.rotate(f4, 0.0F, 1.0F, 0.0F);
+                GL11.glPushMatrix();
+                Minecraft.getMinecraft().getItemRenderer().renderItem(Minecraft.getMinecraft().player, podium.getStackInSlot(0), ItemCameraTransforms.TransformType.GROUND);
                 GL11.glPopMatrix();
                 GL11.glPopMatrix();
             }

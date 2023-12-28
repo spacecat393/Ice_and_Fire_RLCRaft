@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 
 public class ItemTrollWeapon extends ItemSword implements ICustomRendered {
 
-    public EnumTroll.Weapon weapon = EnumTroll.Weapon.AXE;
+    public EnumTroll.Weapon weapon;
 
     public ItemTrollWeapon(EnumTroll.Weapon weapon) {
         super(ModItems.trollWeapon);

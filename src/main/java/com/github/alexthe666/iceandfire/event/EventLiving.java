@@ -13,9 +13,11 @@ import com.github.alexthe666.iceandfire.entity.ai.VillagerAIFearUntamed;
 import com.github.alexthe666.iceandfire.entity.util.*;
 import com.github.alexthe666.iceandfire.integration.CompatLoadUtil;
 import com.github.alexthe666.iceandfire.item.ItemSeaSerpentArmor;
+import com.github.alexthe666.iceandfire.item.ItemTideTrident;
 import com.github.alexthe666.iceandfire.item.ItemTrollArmor;
 import com.github.alexthe666.iceandfire.message.MessagePlayerHitMultipart;
 import net.minecraft.block.BlockChest;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
@@ -33,6 +35,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -48,6 +51,7 @@ import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.event.entity.ProjectileImpactEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.GetCollisionBoxesEvent;
@@ -57,18 +61,19 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class EventLiving {
 
 	@SubscribeEvent
-	public void onArrowCollide(ProjectileImpactEvent event){
-		if(event.getEntity() instanceof EntityArrow && ((EntityArrow) event.getEntity()).shootingEntity != null){
-			if(event.getRayTraceResult() != null && event.getRayTraceResult().entityHit != null){
+	public void onArrowCollide(ProjectileImpactEvent event) {
+		if (event.getEntity() instanceof EntityArrow && ((EntityArrow) event.getEntity()).shootingEntity != null) {
+			if(event.getRayTraceResult() != null && event.getRayTraceResult().entityHit != null) {
 				Entity shootingEntity = ((EntityArrow) event.getEntity()).shootingEntity;
 				Entity shotEntity = event.getRayTraceResult().entityHit;
-				if(shootingEntity instanceof EntityLivingBase && shootingEntity.isRidingOrBeingRiddenBy(shotEntity)){
-					if(shotEntity instanceof EntityTameable && ((EntityTameable) shotEntity).isTamed() && shotEntity.isOnSameTeam(shootingEntity)){
+				if (shootingEntity instanceof EntityLivingBase && shootingEntity.isRidingOrBeingRiddenBy(shotEntity)){
+					if (shotEntity instanceof EntityTameable && ((EntityTameable) shotEntity).isTamed() && shotEntity.isOnSameTeam(shootingEntity)) {
 						event.setCanceled(true);
 					}
 				}
@@ -78,13 +83,13 @@ public class EventLiving {
 
 	@SubscribeEvent
 	public void onPlayerAttackMob(AttackEntityEvent event) {
-		if(CompatLoadUtil.isRLCombatLoaded()) return;
-		if(event.getTarget() instanceof EntityMultipartPart && event.getEntity() instanceof EntityPlayer){
+		if (CompatLoadUtil.isRLCombatLoaded()) return;
+		if (event.getTarget() instanceof EntityMultipartPart && event.getEntity() instanceof EntityPlayer) {
 			event.setCanceled(true);
 			EntityLivingBase parent = ((EntityMultipartPart)event.getTarget()).getParent();
-			((EntityPlayer)event.getEntity()).attackTargetEntityWithCurrentItem(parent);
+			((EntityPlayer) event.getEntity()).attackTargetEntityWithCurrentItem(parent);
 			int extraData = 0;
-			if(event.getTarget() instanceof EntityHydraHead && parent instanceof EntityHydra){
+			if (event.getTarget() instanceof EntityHydraHead && parent instanceof EntityHydra) {
 				extraData = ((EntityHydraHead)event.getTarget()).headIndex;
 				((EntityHydra) parent).triggerHeadFlags(extraData);
 			}
@@ -94,12 +99,12 @@ public class EventLiving {
 
 	@SubscribeEvent
 	public void onGatherCollisionBoxes(GetCollisionBoxesEvent event) {
-		if(event.getEntity() != null && event.getEntity() instanceof IPhasesThroughBlock){
+		if (event.getEntity() != null && event.getEntity() instanceof IPhasesThroughBlock) {
 			Iterator<AxisAlignedBB> itr = event.getCollisionBoxesList().iterator();
 			while (itr.hasNext()) {
 				AxisAlignedBB aabb = itr.next();
 				BlockPos pos = new BlockPos(aabb.minX, aabb.minY, aabb.minZ);
-				if(((IPhasesThroughBlock) event.getEntity()).canPhaseThroughBlock(event.getWorld(), pos)){
+				if (((IPhasesThroughBlock) event.getEntity()).canPhaseThroughBlock(event.getWorld(), pos)) {
 					itr.remove();
 				}
 			}
@@ -151,7 +156,7 @@ public class EventLiving {
 			}
 		} else if (event.getEntityBeingMounted() instanceof EntityAmphithere) {
 			EntityAmphithere amphithere = (EntityAmphithere) event.getEntityBeingMounted();
-			if(event.isDismounting() && event.getEntityMounting() instanceof EntityPlayer && !event.getEntityMounting().world.isRemote && amphithere.isOwner((EntityPlayer)event.getEntityMounting())) {
+			if (event.isDismounting() && event.getEntityMounting() instanceof EntityPlayer && !event.getEntityMounting().world.isRemote && amphithere.isOwner((EntityPlayer)event.getEntityMounting())) {
 				EntityPlayer player = (EntityPlayer) event.getEntityMounting();
 				amphithere.setPositionAndRotation(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
 			}
@@ -161,23 +166,22 @@ public class EventLiving {
 	@SubscribeEvent
 	public void onEntityDamage(LivingHurtEvent event) {
 		EntityLivingBase entity = event.getEntityLiving();
-		if(event.getSource().isProjectile()){
+		if (event.getSource().isProjectile()) {
 			float multi = 1;
 			if (entity.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() instanceof ItemTrollArmor) {
-				multi -= 0.1;
+				multi -= 0.1F;
 			}
 			if (entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() instanceof ItemTrollArmor) {
-				multi -= 0.3;
+				multi -= 0.3F;
 			}
 			if (entity.getItemStackFromSlot(EntityEquipmentSlot.LEGS).getItem() instanceof ItemTrollArmor) {
-				multi -= 0.2;
+				multi -= 0.2F;
 			}
 			if (entity.getItemStackFromSlot(EntityEquipmentSlot.FEET).getItem() instanceof ItemTrollArmor) {
-				multi -= 0.1;
+				multi -= 0.1F;
 			}
 			event.setAmount(event.getAmount() * multi);
 		}
-
 	}
 
 	@SubscribeEvent
@@ -228,7 +232,7 @@ public class EventLiving {
 
 	@SubscribeEvent
 	public void onLivingSetTarget(LivingSetAttackTargetEvent event) {
-		if(event.getTarget() != null){
+		if (event.getTarget() != null) {
 			EntityLivingBase attacker = event.getEntityLiving();
 			if (isAnimaniaChicken(event.getTarget())) {
 				signalChickenAlarm(event.getTarget(), attacker);
@@ -365,7 +369,7 @@ public class EventLiving {
 
 		if (entity.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() instanceof ItemSeaSerpentArmor || entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() instanceof ItemSeaSerpentArmor || entity.getItemStackFromSlot(EntityEquipmentSlot.LEGS).getItem() instanceof ItemSeaSerpentArmor || entity.getItemStackFromSlot(EntityEquipmentSlot.FEET).getItem() instanceof ItemSeaSerpentArmor) {
 			entity.addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, 50, 0, false, false));
-			if(entity.isWet()){
+			if (entity.isWet()) {
 				int headMod = entity.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() instanceof ItemSeaSerpentArmor ? 1 : 0;
 				int chestMod = entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() instanceof ItemSeaSerpentArmor ? 1 : 0;
 				int legMod = entity.getItemStackFromSlot(EntityEquipmentSlot.LEGS).getItem() instanceof ItemSeaSerpentArmor ? 1 : 0;
@@ -501,7 +505,7 @@ public class EventLiving {
 		// Fix from RLTweaker for queens changing their type resulting in incorrect trades
 		// There's probably a better spot for this, but this is the easiest
 		if (event.getEntity() instanceof EntityMyrmexQueen && !event.getWorld().isRemote) {
-			((EntityMyrmexQueen)event.getEntity()).refreshIncorrectTrades();
+			((EntityMyrmexQueen) event.getEntity()).refreshIncorrectTrades();
 		}
 	}
 
@@ -530,11 +534,41 @@ public class EventLiving {
 
 	@SubscribeEvent
 	public void onMobGrief(EntityMobGriefingEvent event) {
-		if(event.getEntity() instanceof EntityLiving && !event.getEntity().world.isRemote && ((EntityLiving)event.getEntity()).canPickUpLoot()) {
+		if (event.getEntity() instanceof EntityLiving && !event.getEntity().world.isRemote && ((EntityLiving)event.getEntity()).canPickUpLoot()) {
 			IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability((EntityLivingBase)event.getEntity());
-			if(capability != null && capability.isStoned() || event.getEntity() instanceof EntityStoneStatue) {
+			if (capability != null && capability.isStoned() || event.getEntity() instanceof EntityStoneStatue) {
 				event.setResult(Event.Result.DENY);
 			}
+		}
+	}
+
+	@SubscribeEvent
+	public void onPlayerPickup(EntityItemPickupEvent event) {
+		ItemStack pickedUpStack = event.getItem().getItem();
+		EntityPlayer player = event.getEntityPlayer();
+
+		if (pickedUpStack.getItem() instanceof ItemTideTrident && !ItemTideTrident.isOriginal(pickedUpStack)) {
+			for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
+				ItemStack slotStack = player.inventory.getStackInSlot(i);
+				if (slotStack.getItem() instanceof ItemTideTrident && ItemTideTrident.hasMatchingUUID(slotStack, pickedUpStack)) {
+					boolean empty = ItemTideTrident.isEmpty(slotStack);
+					if (empty) {
+						int itemDamage = slotStack.getItemDamage() + 1;
+						if (itemDamage > slotStack.getMaxDamage()) {
+							player.renderBrokenItemStack(slotStack);
+							slotStack.setCount(0);
+						} else {
+							ItemTideTrident.setEmpty(slotStack, ItemTideTrident.isEmpty(pickedUpStack));
+							slotStack.setItemDamage(itemDamage);
+						}
+						player.onItemPickup(event.getItem(), 1);
+						player.world.playSound(null, event.getItem().posX, event.getItem().posY, event.getItem().posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, (player.world.rand.nextFloat() - player.world.rand.nextFloat()) * 0.7F + 0.0F);
+						pickedUpStack.setCount(0);
+						return;
+					}
+				}
+			}
+			event.setCanceled(true);
 		}
 	}
 }

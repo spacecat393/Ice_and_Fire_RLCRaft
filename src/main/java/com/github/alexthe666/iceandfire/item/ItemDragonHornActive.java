@@ -64,7 +64,7 @@ public class ItemDragonHornActive extends Item {
 	}
 
 	@Override
-	public void onUpdate(ItemStack stack, World world, Entity entity, int f, boolean f1) {
+	public void onUpdate(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
 		if (stack.getTagCompound() == null) {
 			stack.setTagCompound(new NBTTagCompound());
 		}

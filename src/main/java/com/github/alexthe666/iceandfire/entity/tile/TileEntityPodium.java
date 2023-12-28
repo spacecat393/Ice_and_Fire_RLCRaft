@@ -16,15 +16,30 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
 
 public class TileEntityPodium extends TileEntity implements ITickable, ISidedInventory {
-
 	private static final int[] slotsTop = new int[]{0};
-	private NonNullList<ItemStack> stacks = NonNullList.<ItemStack>withSize(1, ItemStack.EMPTY);
+	public int ticksExisted;
+	public int prevTicksExisted;
+	net.minecraftforge.items.IItemHandler handlerUp = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, net.minecraft.util.EnumFacing.UP);
+	net.minecraftforge.items.IItemHandler handlerDown = new net.minecraftforge.items.wrapper.SidedInvWrapper(this, EnumFacing.DOWN);
+	private NonNullList<ItemStack> stacks = NonNullList.withSize(1, ItemStack.EMPTY);
 
 	@Override
 	public void update() {
+		prevTicksExisted = ticksExisted;
+		ticksExisted++;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public net.minecraft.util.math.AxisAlignedBB getRenderBoundingBox() {
+		return new net.minecraft.util.math.AxisAlignedBB(pos, pos.add(1, 3, 1));
 	}
 
 	@Override
@@ -39,27 +54,32 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
 
 	@Override
 	public ItemStack decrStackSize(int index, int count) {
-		if(!this.stacks.get(index).isEmpty()) {
+		if (!this.stacks.get(index).isEmpty()) {
 			ItemStack itemstack;
-			if(this.stacks.get(index).getCount() <= count) {
+
+			if (this.stacks.get(index).getCount() <= count) {
 				itemstack = this.stacks.get(index);
 				this.stacks.set(index, ItemStack.EMPTY);
-			}
-			else {
+				return itemstack;
+			} else {
 				itemstack = this.stacks.get(index).splitStack(count);
-				if(this.stacks.get(index).isEmpty()) {
+
+				if (this.stacks.get(index).isEmpty()) {
 					this.stacks.set(index, ItemStack.EMPTY);
 				}
+
+				return itemstack;
 			}
-			return itemstack;
+		} else {
+			return ItemStack.EMPTY;
 		}
-		else return ItemStack.EMPTY;
 	}
 
 	@Override
 	public void setInventorySlotContents(int index, ItemStack stack) {
 		this.stacks.set(index, stack);
-		if(!stack.isEmpty() && stack.getCount() > this.getInventoryStackLimit()) {
+
+		if (!stack.isEmpty() && stack.getCount() > this.getInventoryStackLimit()) {
 			stack.setCount(this.getInventoryStackLimit());
 		}
 	}
@@ -67,7 +87,7 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
-		this.stacks = NonNullList.<ItemStack>withSize(this.getSizeInventory(), ItemStack.EMPTY);
+		this.stacks = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
 		ItemStackHelper.loadAllItems(compound, this.stacks);
 	}
 
@@ -88,7 +108,7 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
 
 	@Override
 	public boolean canInsertItem(int index, ItemStack stack, EnumFacing direction) {
-		return index != 0 || (stack.getItem() instanceof ItemDragonEgg || stack.getItem() instanceof ItemMyrmexEgg);
+		return true;
 	}
 
 	@Override
@@ -152,7 +172,6 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
 		return new SPacketUpdateTileEntity(pos, 1, tag);
 	}
 
-	@Override
 	public NBTTagCompound getUpdateTag() {
 		return this.writeToNBT(new NBTTagCompound());
 	}
@@ -160,10 +179,11 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
 		readFromNBT(packet.getNbtCompound());
-		if(!world.isRemote) {
+		if (!world.isRemote) {
 			IceAndFire.NETWORK_WRAPPER.sendToAll(new MessageUpdatePodium(pos.toLong(), this.getStackInSlot(0)));
 		}
 	}
+
 	@Override
 	public ItemStack removeStackFromSlot(int index) {
 		return ItemStack.EMPTY;
@@ -171,14 +191,33 @@ public class TileEntityPodium extends TileEntity implements ITickable, ISidedInv
 
 	@Override
 	public ITextComponent getDisplayName() {
-		return new TextComponentTranslation(this.getName());
+		return this.hasCustomName() ? new TextComponentString(this.getName()) : new TextComponentTranslation(this.getName());
 	}
 
 	@Override
 	public boolean isEmpty() {
-		for(int i = 0; i < this.getSizeInventory(); i++) {
-			if(!this.getStackInSlot(i).isEmpty()) return false;
+		for (int i = 0; i < this.getSizeInventory(); i++) {
+			if (!this.getStackInSlot(i).isEmpty()) {
+				return false;
+			}
 		}
 		return true;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	@javax.annotation.Nullable
+	public <T> T getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, @javax.annotation.Nullable net.minecraft.util.EnumFacing facing) {
+		if (facing != null && capability == net.minecraftforge.items.CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+			if (facing == EnumFacing.DOWN)
+				return (T) handlerDown;
+			else
+				return (T) handlerUp;
+		return super.getCapability(capability, facing);
+	}
+
+	@Override
+	public boolean hasCapability(net.minecraftforge.common.capabilities.Capability<?> capability, @Nullable net.minecraft.util.EnumFacing facing) {
+		return getCapability(capability, facing) != null;
 	}
 }
