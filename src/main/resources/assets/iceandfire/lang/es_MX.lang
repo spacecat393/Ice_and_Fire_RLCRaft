@@ -327,6 +327,15 @@ item.banner.lightningdragon.green=Figura verde de Dragon de rayo
 item.banner.lightningdragon.red=Figura roja de Dragon de rayo
 item.banner.lightningdragon.black=Figura negra de Dragon de rayo
 
+item.iceandfire.fire_dragon_blood.jei_desc=Obtenido al interactuar con un cadáver de dragón sosteniendo un frasco vacío.
+item.iceandfire.ice_dragon_blood.jei_desc=Obtenido al interactuar con un cadáver de dragón sosteniendo un frasco vacío.
+item.iceandfire.lightning_dragon_blood.jei_desc=Obtenido al interactuar con un cadáver de dragón sosteniendo un frasco vacío.
+item.iceandfire.dragonegg.jei_desc=Colóquelo en el fuego si es un dragón de fuego, bajo el agua si es un dragón de hielo o bajo la lluvia si es un dragón relámpago y espere mucho tiempo. El dragón se vinculará con el jugador más cercano.
+item.iceandfire.dragon_skull.jei_desc=Puede colocarse en el suelo o en paredes como trofeo.
+item.iceandfire.fire_stew.jei_desc=Se utiliza para reproducir dos dragones, macho y hembra. Después, la hembra creará un nido con un huevo.
+item.iceandfire.frost_stew.jei_desc=Se utiliza para reproducir dos dragones, macho y hembra. Después, la hembra creará un nido con un huevo.
+item.iceandfire.lightning_stew.jei_desc=Se utiliza para reproducir dos dragones, macho y hembra. Después, la hembra creará un nido con un huevo.
+
 entity.firedragon.name=Dragon de fuego
 entity.icedragon.name=Dragon de hielo
 entity.dragonegg.name=Huevo de Dragon

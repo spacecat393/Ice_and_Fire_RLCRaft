@@ -317,6 +317,8 @@ item.banner.lightningdragon.green=Figura de Dragão de Elétrico Verde
 item.banner.lightningdragon.red=Figura de Dragão de Elétrico Vermelho
 item.banner.lightningdragon.black=Figura de Dragão de Elétrico Preto
 
+item.iceandfire.dragonegg.jei_desc=Coloque nas chamas se for um dragão de fogo, debaixo d'água se for um dragão de gelo e na chuva se for de um dragão elétrico.
+
 entity.firedragon.name=Dragão de Fogo
 entity.icedragon.name=Dragão de Gelo
 entity.dragonegg.name=Ovo de Dragão

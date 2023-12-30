@@ -303,6 +303,15 @@ item.banner.lightningdragon.green=绿色電龍徽章
 item.banner.lightningdragon.red=红色電龍徽章
 item.banner.lightningdragon.black=黑色電龍徽章
 
+item.iceandfire.fire_dragon_blood.jei_desc=手持空玻璃瓶右击龙尸即可获得。
+item.iceandfire.ice_dragon_blood.jei_desc=手持空玻璃瓶右击龙尸即可获得。
+item.iceandfire.lightning_dragon_blood.jei_desc=手持空玻璃瓶右击龙尸即可获得。
+item.iceandfire.dragonegg.jei_desc=若为火龙蛋，把它放在火里；若为冰龙蛋，把它放在水下;若为电龙蛋，把它放在雨中。龙蛋孵化需要很长的时间，新生的龙仔会认最近的玩家为主人。
+item.iceandfire.dragon_skull.jei_desc=可以当成奖杯挂在墙上或者摆在地上。
+item.iceandfire.fire_stew.jei_desc=可促使一对异性龙繁殖。母龙会在随后建造一个龙巢并在里面下蛋。
+item.iceandfire.frost_stew.jei_desc=可促使一对异性龙繁殖。母龙会在随后建造一个龙巢并在里面下蛋。
+item.iceandfire.lightning_stew.jei_desc=可促使一对异性龙繁殖。母龙会在随后建造一个龙巢并在里面下蛋。
+
 entity.firedragon.name=火龙
 entity.icedragon.name=冰龙
 entity.dragonegg.name=龙蛋
