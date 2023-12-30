@@ -76,6 +76,11 @@ tile.iceandfire.crackledGravel.name=Grava agrietada
 tile.iceandfire.crackledGrassPath.name=Sendero de pasto agrietado
 tile.iceandfire.lightning_stone.name=Piedra rayo
 
+tile.iceandfire.dragonscale_block.name=Bloque de Escamas de Dragón
+tile.iceandfire.dragon_bone_block.name=Bloque de Huesos de Dragón
+tile.iceandfire.dragon_bone_wall.name=Pared de Hueso de Dragón
+tile.iceandfire.sea_serpent_scale_block.name=Bloque de Escamas de Serpiente Marina
+
 item.iceandfire.bestiary.name=Bestiario
 item.iceandfire.manuscript.name=Manuscrito
 item.iceandfire.sapphireGem.name=Zafiro

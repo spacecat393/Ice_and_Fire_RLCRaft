@@ -1,9 +1,6 @@
 package com.github.alexthe666.iceandfire;
 
-import com.github.alexthe666.iceandfire.block.BlockJar;
-import com.github.alexthe666.iceandfire.block.BlockMyrmexResin;
-import com.github.alexthe666.iceandfire.block.BlockPixieHouse;
-import com.github.alexthe666.iceandfire.block.BlockPodium;
+import com.github.alexthe666.iceandfire.block.*;
 import com.github.alexthe666.iceandfire.client.particle.lightning.ParticleLightningVector;
 import com.github.alexthe666.iceandfire.core.*;
 import com.github.alexthe666.iceandfire.entity.*;
@@ -76,6 +73,10 @@ public class CommonProxy {
                         event.getRegistry().register(block);
                     }
                 }
+            }
+            for (EnumSeaSerpent color : EnumSeaSerpent.values()) {
+                color.scaleBlock = new BlockSeaSerpentScales(color.resourceName, color.color);
+                event.getRegistry().register(color.scaleBlock);
             }
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
@@ -177,6 +178,11 @@ public class CommonProxy {
                         event.getRegistry().register(itemBlock);
                     }
                 }
+            }
+            for (EnumSeaSerpent color : EnumSeaSerpent.values()) {
+                ItemBlock itemBlock = new ItemBlock(color.scaleBlock);
+                itemBlock.setRegistryName(color.scaleBlock.getRegistryName());
+                event.getRegistry().register(itemBlock);
             }
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);

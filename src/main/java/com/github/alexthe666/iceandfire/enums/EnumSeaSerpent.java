@@ -4,6 +4,7 @@ import com.github.alexthe666.iceandfire.IceAndFire;
 import com.github.alexthe666.iceandfire.item.ItemScaleArmor;
 import com.github.alexthe666.iceandfire.item.ItemSeaSerpentArmor;
 import com.github.alexthe666.iceandfire.item.ItemSeaSerpentScales;
+import net.minecraft.block.Block;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -26,6 +27,8 @@ public enum EnumSeaSerpent {
     public ItemArmor.ArmorMaterial armorMaterial;
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":sea_serpent_scale")
     public Item scale;
+    @GameRegistry.ObjectHolder(IceAndFire.MODID + ":sea_serpent_scale_block")
+    public Block scaleBlock;
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":sea_serpent_helmet")
     public Item helmet;
     @GameRegistry.ObjectHolder(IceAndFire.MODID + ":sea_serpent_chestplate")

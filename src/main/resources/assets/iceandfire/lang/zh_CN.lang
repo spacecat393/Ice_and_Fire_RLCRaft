@@ -73,6 +73,11 @@ tile.iceandfire.crackledGravel.name=霆霹砂砾
 tile.iceandfire.crackledGrassPath.name=霆霹草径
 tile.iceandfire.lightning_stone.name=闪电石
 
+tile.iceandfire.dragonscale_block.name=龙鳞块
+tile.iceandfire.dragon_bone_block.name=龙骨块
+tile.iceandfire.dragon_bone_wall.name=龙骨墙
+tile.iceandfire.sea_serpent_scale_block.name=海蟒鳞块
+
 item.iceandfire.bestiary.name=龙之寓言
 item.iceandfire.manuscript.name=手稿
 item.iceandfire.sapphireGem.name=蓝宝石
