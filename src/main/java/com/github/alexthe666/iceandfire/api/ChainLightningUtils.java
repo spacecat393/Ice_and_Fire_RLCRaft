@@ -15,6 +15,7 @@ import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -25,28 +26,33 @@ import java.util.*;
 public class ChainLightningUtils {
 
     public static void createChainLightningFromTarget(World world, EntityLivingBase target, EntityLivingBase attacker) {
-        float damage = IceAndFireConfig.MISC_SETTINGS.chainLightningDamage;
-        int hops = IceAndFireConfig.MISC_SETTINGS.chainLightningHops;
-
-        createChainLightningFromTarget(world, target, attacker, damage, hops);
-    }
-
-    public static void createChainLightningFromTarget(World world, EntityLivingBase target, EntityLivingBase attacker, float damage, int hops) {
+        float[] damage = IceAndFireConfig.MISC_SETTINGS.chainLightningDamagePerHop;
         int range = IceAndFireConfig.MISC_SETTINGS.chainLightningRange;
+        boolean isParalysisEnabled = IceAndFireConfig.MISC_SETTINGS.chainLightningParalysis;
 
-        createChainLightningFromTarget(world, target, attacker, damage, hops, range);
+        createChainLightningFromTarget(world, target, attacker, damage, range, isParalysisEnabled);
     }
 
-    public static void createChainLightningFromTarget(World world, EntityLivingBase target, EntityLivingBase attacker, float damage, int hops, int range) {
-        boolean isParalysisEnabled = IceAndFireConfig.MISC_SETTINGS.chainLightningParalysis;
-        int[] paralysisTicks = IceAndFireConfig.MISC_SETTINGS.chainLightningParalysisTicks;
-        int[] paralysisChance = IceAndFireConfig.MISC_SETTINGS.chainLightningParalysisChance;
+    public static void createChainLightningFromTarget(World world, EntityLivingBase target, EntityLivingBase attacker, float[] damage, int range, boolean isParalysisEnabled) {
+        int[] paralysisTicks = IceAndFireConfig.MISC_SETTINGS.chainLightningParalysisTicksPerHop;
+        int[] paralysisChance = IceAndFireConfig.MISC_SETTINGS.chainLightningParalysisChancePerHop;
 
+        createChainLightningFromTarget(world, target, attacker, damage, range, isParalysisEnabled, paralysisTicks, paralysisChance);
+    }
+
+    public static void createChainLightningFromTarget(
+            World world,
+            EntityLivingBase target,
+            EntityLivingBase attacker,
+            float[] damage,
+            int range,
+            boolean isParalysisEnabled,
+            int[] paralysisTicks,
+            int[] paralysisChance
+    ) {
         int hop = 0;
 
-        float damageReductionPerHop = damage / (hops + 1);
-
-        attackEntityWithLightningDamage(attacker, target, damage);
+        attackEntityWithLightningDamage(attacker, target, hop, damage);
         if (isParalysisEnabled) {
             applyParalysis(world, target, hop, paralysisChance, paralysisTicks);
         }
@@ -58,12 +64,12 @@ public class ChainLightningUtils {
         List<EntityLivingBase> entityLiving = new ArrayList<>();
         for (Entity ent : world.getEntitiesWithinAABBExcludingEntity(lightningSource.get(), lightningSource.getBoundingBox(range))) {
             if (ent instanceof EntityMultipartPart) {
-                ent = ((EntityMultipartPart)ent).getParent();
+                ent = ((EntityMultipartPart) ent).getParent();
             }
             if (ent instanceof EntityLivingBase
                     && !entityLiving.contains(ent)
                     && lightningSource.canChainTo((EntityLivingBase) ent, attacker)) {
-                entityLiving.add((EntityLivingBase)ent);
+                entityLiving.add((EntityLivingBase) ent);
             }
         }
         if(entityLiving.isEmpty()) return;
@@ -76,14 +82,12 @@ public class ChainLightningUtils {
         for (EntityLivingBase nextTarget : entityLiving) {
             hop++;
 
-            if (hop > hops) break;
+            if (hop >= damage.length) break;
             if (alreadyTargetedEntities.contains(nextTarget.getEntityId())) continue;
 
-            damage -= damageReductionPerHop;
-
-            attackEntityWithLightningDamage(attacker, nextTarget, damage);
+            attackEntityWithLightningDamage(attacker, nextTarget, hop, damage);
             if (isParalysisEnabled) {
-                applyParalysis(world, target, hop, paralysisChance, paralysisTicks);
+                applyParalysis(world, nextTarget, hop, paralysisChance, paralysisTicks);
             }
 
             alreadyTargetedEntities.add(nextTarget.getEntityId());
@@ -106,22 +110,19 @@ public class ChainLightningUtils {
         }
     }
 
-    private static void attackEntityWithLightningDamage(EntityLivingBase attacker, EntityLivingBase target, float damage) {
-        if (IceAndFireConfig.MISC_SETTINGS.chainLightningTransformsMobs) {
-            // Pig => Zombie Pigman, Villager => Witch
-            if (target instanceof EntityPig || target instanceof EntityVillager) {
-                strikeWithLightningBolt(target);
-                return;
-            }
-        }
-
+    private static void attackEntityWithLightningDamage(EntityLivingBase attacker, EntityLivingBase target, int hop, float[] damage) {
         // Crab => Larger Crab
         if (EventLiving.isQuarkCrab(target)) {
             strikeWithLightningBolt(target);
             return;
         }
 
-        target.attackEntityFrom(new EntityDamageSourceIndirect("lightningBolt", attacker, attacker), damage);
+        DamageSource damageSource = new EntityDamageSourceIndirect("lightningBolt", attacker, attacker);
+        if (IceAndFireConfig.MISC_SETTINGS.chainLightningBypassesArmor) {
+            damageSource = damageSource.setDamageBypassesArmor();
+        }
+
+        target.attackEntityFrom(damageSource, damage[hop]);
 
         // Creeper => Charged Creeper
         if (target instanceof EntityCreeper) {

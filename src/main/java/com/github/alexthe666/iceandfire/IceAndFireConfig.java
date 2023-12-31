@@ -45,11 +45,11 @@ public class IceAndFireConfig {
 
 		@Config.Comment("All InF Chunk Gen Spawning and Generation will be disabled in listed dimensions")
 		@Config.Name("InF Chunk Gen Dimension Blacklist")
-		public int[] chunkGenBlacklist = new int[]{};
+		public int[] chunkGenBlacklist = new int[] {0};
 
 		@Config.Comment("Changes InF Chunk Gen Dimension Blacklist to a Whitelist")
 		@Config.Name("InF Chunk Gen Dimension Use Whitelist")
-		public boolean chunkGenWhitelist = false;
+		public boolean chunkGenWhitelist = true;
 
 		@Config.Comment("Minimum distance from spawn for dangerous world gen to begin generating (Dragons, Cyclops, etc)")
 		@Config.Name("Dangerous World Gen Minimum Spawn Distance")
@@ -153,11 +153,11 @@ public class IceAndFireConfig {
 
 		@Config.Comment("Dragons and related generation will not spawn in these dimensions")
 		@Config.Name("Dragon Dimension Blacklist")
-		public int[] dragonDimensionBlacklistedDimensions = new int[]{1, -1};
+		public int[] dragonDimensionBlacklistedDimensions = new int[] {0};
 
 		@Config.Comment("If true, treat the Dragon Dimension Blacklist as a Whitelist instead")
 		@Config.Name("Dragon Dimension Use Whitelist")
-		public boolean dragonDimensionWhitelist = false;
+		public boolean dragonDimensionWhitelist = true;
 
 		@Config.Comment("Should InF generate snow villages")
 		@Config.Name("Generate Snow Villages")
@@ -170,11 +170,11 @@ public class IceAndFireConfig {
 
 		@Config.Comment("Snow Villages and related generation will not spawn in these dimensions")
 		@Config.Name("Snow Village Dimension Blacklist")
-		public int[] snowVillageBlacklistedDimensions = new int[]{1, -1};
+		public int[] snowVillageBlacklistedDimensions = new int[] {0};
 
 		@Config.Comment("If true, treat the Snow Village Dimension Blacklist as a Whitelist instead")
 		@Config.Name("Snow Village Dimension Use Whitelist")
-		public boolean snowVillageWhitelist = false;
+		public boolean snowVillageWhitelist = true;
 
 		@Config.Comment("Should InF generate Gorgon Temples and Gorgons")
 		@Config.Name("Generate Gorgon Temple")
@@ -726,24 +726,19 @@ public class IceAndFireConfig {
 
 	public static class MiscConfig {
 
+		@Config.Comment("If true, chain lightning bypasses armor")
+		@Config.Name("Chain Lightning Bypasses Armor")
+		public boolean chainLightningBypassesArmor = true;
+
 		@Config.Comment("Base damage dealth by chain lightning, decreasing proportionally on each hop")
 		@Config.Name("Chain Lightning Base Damage")
 		@Config.RangeDouble(min = 1, max = 1000)
-		public float chainLightningDamage = 5.0f;
-
-		@Config.Comment("Maximum number of targets that will be affected by a given chain lightning attack")
-		@Config.Name("Chain Lightning Hops")
-		@Config.RangeInt(min = 1, max = 10)
-		public int chainLightningHops = 4;
+		public float[] chainLightningDamagePerHop = {5.0f, 4.0f, 3.0f, 2.0f, 1.0f};
 
 		@Config.Comment("Default range for chain lightning, maximum range for each hop")
 		@Config.Name("Chain Lightning Range")
 		@Config.RangeInt(min = 5, max = 20)
 		public int chainLightningRange = 8;
-
-		@Config.Comment("If true, chain lightning should transform mobs")
-		@Config.Name("Chain Lightning Transforms Mobs")
-		public boolean chainLightningTransformsMobs = false;
 
 		@Config.Comment("If true, chain lightning causes paralysis")
 		@Config.Name("Chain Lightning Paralysis")
@@ -751,11 +746,11 @@ public class IceAndFireConfig {
 
 		@Config.Comment("Chance of chain lightning causing paralysis on each hop, as a percentage")
 		@Config.Name("Chain Lightning Paralysis Chance")
-		public int[] chainLightningParalysisChance = new int[] {100, 80, 60, 40, 20};
+		public int[] chainLightningParalysisChancePerHop = new int[] {100, 80, 60, 40, 20};
 
-		@Config.Comment("Length in ticks of paralysis applied by chain lightning")
+		@Config.Comment("Length in ticks of paralysis applied on each hop by chain lightning")
 		@Config.Name("Chain Lightning Paralysis Ticks")
-		public int[] chainLightningParalysisTicks = new int[] {10, 10, 10, 10, 10};
+		public int[] chainLightningParalysisTicksPerHop = new int[] {10, 10, 10, 10, 10};
 
 		@Config.Comment("Should a trade be added to Craftsman snow villagers to trade snow for sapphires?")
 		@Config.Name("Snow Villager Allow Craftsman Snow Trade")
@@ -763,7 +758,7 @@ public class IceAndFireConfig {
 
 		@Config.Comment("If true, hydra hearts provide healing while in the player's hotkey bar")
 		@Config.Name("Hydra Heart Passive Healing")
-		public boolean hydraHeartPassiveHealing = true;
+		public boolean hydraHeartPassiveHealing = false;
 
 		@Config.Comment("Base damage for the Tide Trident")
 		@Config.Name("Tide Trident Base Damage")
