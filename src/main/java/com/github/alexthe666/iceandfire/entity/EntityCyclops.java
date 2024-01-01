@@ -123,7 +123,7 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
             this.setAnimation(ANIMATION_STOMP);
             return true;
         }else if(attackDescision == 1){
-            if(!entityIn.isPassenger(this) && entityIn.width < 1.95F && !(entityIn instanceof EntityDragonBase)){
+            if(!entityIn.isPassenger(this) && entityIn.width < 1.95F && !(entityIn instanceof EntityDragonBase)) {
                 this.setAnimation(ANIMATION_EATPLAYER);
                 entityIn.dismountRidingEntity();
                 entityIn.startRiding(this, true);
@@ -207,7 +207,7 @@ public class EntityCyclops extends EntityMob implements IAnimatedEntity, IBlackl
             double extraZ = (double) (radius * MathHelper.cos(angle));
             double extraY = raiseUp;
             passenger.setPosition(this.posX + extraX, this.posY + extraY, this.posZ + extraZ);
-            if(this.getAnimationTick() == 32){
+            if (this.getAnimationTick() == 32) {
                 passenger.attackEntityFrom(DamageSource.causeMobDamage(this), passenger instanceof EntityPlayer ? (float)IceAndFireConfig.ENTITY_SETTINGS.cyclopsBiteStrength : passenger instanceof EntityLivingBase ? (float) ((EntityLivingBase) passenger).getMaxHealth() * 2F : (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 2F);
                 passenger.dismountRidingEntity();
             }

@@ -7,8 +7,10 @@ import com.github.alexthe666.iceandfire.core.ModKeys;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.*;
 import com.github.alexthe666.iceandfire.entity.util.IDropArmor;
+import com.github.alexthe666.iceandfire.entity.util.ISyncMount;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.message.MessageHippogryphArmor;
+import com.github.alexthe666.iceandfire.message.MessageUpdateRidingState;
 import com.github.alexthe666.iceandfire.util.ParticleHelper;
 import net.ilexiconn.llibrary.client.model.tools.ChainBuffer;
 import net.ilexiconn.llibrary.server.animation.Animation;
@@ -51,7 +53,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class EntityHippocampus extends EntityTameable implements IAnimatedEntity, IDropArmor {
+public class EntityHippocampus extends EntityTameable implements IAnimatedEntity, IDropArmor, ISyncMount {
 
     private int animationTick;
     private Animation currentAnimation;
@@ -680,6 +682,9 @@ public class EntityHippocampus extends EntityTameable implements IAnimatedEntity
                 return true;
             } else if (this.isSaddled() && !this.isChild() && !player.isRiding()) {
                 player.startRiding(this, true);
+                if (world.isRemote) {
+                    IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageUpdateRidingState(this.getEntityId(), true));
+                }
                 return true;
             }
         }

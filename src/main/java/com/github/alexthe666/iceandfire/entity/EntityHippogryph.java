@@ -13,6 +13,7 @@ import com.github.alexthe666.iceandfire.entity.util.*;
 import com.github.alexthe666.iceandfire.enums.EnumHippogryphTypes;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
 import com.github.alexthe666.iceandfire.message.MessageHippogryphArmor;
+import com.github.alexthe666.iceandfire.message.MessageUpdateRidingState;
 import com.github.alexthe666.iceandfire.util.ParticleHelper;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
@@ -55,7 +56,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class EntityHippogryph extends EntityTameable implements IAnimatedEntity, IDragonFlute, IVillagerFear, IAnimalFear, IDropArmor {
+public class EntityHippogryph extends EntityTameable implements IAnimatedEntity, IDragonFlute, IVillagerFear, IAnimalFear, IDropArmor, ISyncMount {
 
 	public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "hippogryph"));
 	private static final int FLIGHT_CHANCE_PER_TICK = 1200;
@@ -318,6 +319,9 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 					return true;
 				} else if (this.isSaddled() && !this.isChild() && !player.isRiding()) {
 					player.startRiding(this, true);
+					if (world.isRemote) {
+						IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageUpdateRidingState(this.getEntityId(), true));
+					}
 					return true;
 				}
 			}
@@ -1013,7 +1017,11 @@ public class EntityHippogryph extends EntityTameable implements IAnimatedEntity,
 			}
 		}
 		if (this.getControllingPassenger() != null && this.getControllingPassenger().isSneaking()) {
+			this.getControllingPassenger().setSneaking(false);
 			this.getControllingPassenger().dismountRidingEntity();
+			if (world.isRemote) {
+				IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageUpdateRidingState(this.getEntityId(), false));
+			}
 		}
 		if (this.isFlying() && !this.isHovering() && this.getControllingPassenger() != null && !this.onGround && Math.max(Math.abs(motionZ), Math.abs(motionX)) < 0.1F) {
 			this.setHovering(true);

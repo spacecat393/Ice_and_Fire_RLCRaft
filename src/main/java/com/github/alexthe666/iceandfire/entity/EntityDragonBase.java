@@ -19,6 +19,7 @@ import com.github.alexthe666.iceandfire.enums.EnumParticle;
 import com.github.alexthe666.iceandfire.item.ItemDragonArmor;
 import com.github.alexthe666.iceandfire.message.MessageDragonArmor;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
+import com.github.alexthe666.iceandfire.message.MessageUpdateRidingState;
 import com.github.alexthe666.iceandfire.util.ParticleHelper;
 import net.ilexiconn.llibrary.client.model.tools.ChainBuffer;
 import net.ilexiconn.llibrary.server.animation.Animation;
@@ -71,7 +72,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-public abstract class EntityDragonBase extends EntityTameable implements IMultipartEntity, IAnimatedEntity, IDragonFlute, IDeadMob, IVillagerFear, IAnimalFear, IDropArmor {
+public abstract class EntityDragonBase extends EntityTameable implements IMultipartEntity, IAnimatedEntity, IDragonFlute, IDeadMob, IVillagerFear, IAnimalFear, IDropArmor, ISyncMount {
 
     public static EntityEquipmentSlot[] ARMOR_SLOTS = { EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET };
     private static final int FLIGHT_CHANCE_PER_TICK = 1500;
@@ -1052,8 +1053,10 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
                             this.startRiding(player, true);
                         }
                         if (this.getDragonStage() > 2 && !player.isRiding()) {
-                            player.setSneaking(false);
                             player.startRiding(this, true);
+                            if (world.isRemote) {
+                                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageUpdateRidingState(this.getEntityId(), true));
+                            }
                             this.setSleeping(false);
                         }
 
@@ -1817,7 +1820,11 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             }
         }
         if (this.getControllingPassenger() != null && this.getControllingPassenger().isSneaking()) {
+            this.getControllingPassenger().setSneaking(false);
             this.getControllingPassenger().dismountRidingEntity();
+            if (world.isRemote) {
+                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageUpdateRidingState(this.getEntityId(), false));
+            }
         }
         if (this.isFlying() && !this.isHovering() && this.getControllingPassenger() != null && !this.onGround && Math.max(Math.abs(motionZ), Math.abs(motionX)) < 0.1F) {
             this.setHovering(true);

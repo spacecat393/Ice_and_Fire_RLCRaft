@@ -7,11 +7,9 @@ import com.github.alexthe666.iceandfire.core.ModItems;
 import com.github.alexthe666.iceandfire.core.ModKeys;
 import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.*;
-import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
-import com.github.alexthe666.iceandfire.entity.util.IDragonFlute;
-import com.github.alexthe666.iceandfire.entity.util.IFlapable;
-import com.github.alexthe666.iceandfire.entity.util.IPhasesThroughBlock;
+import com.github.alexthe666.iceandfire.entity.util.*;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
+import com.github.alexthe666.iceandfire.message.MessageUpdateRidingState;
 import com.github.alexthe666.iceandfire.util.ParticleHelper;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
@@ -46,7 +44,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class EntityAmphithere extends EntityTameable implements IAnimatedEntity, IPhasesThroughBlock, IFlapable, IDragonFlute {
+public class EntityAmphithere extends EntityTameable implements IAnimatedEntity, IPhasesThroughBlock, IFlapable, IDragonFlute, ISyncMount {
 
     private int animationTick;
     private Animation currentAnimation;
@@ -173,7 +171,10 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
                 }
                 return true;
             } else if ((!this.isTamed() || this.isOwner(player)) && !this.isChild()) {
-                player.startRiding(this);
+                player.startRiding(this, true);
+                if (world.isRemote) {
+                    IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageUpdateRidingState(this.getEntityId(), true));
+                }
                 return true;
             }
 
@@ -653,7 +654,11 @@ public class EntityAmphithere extends EntityTameable implements IAnimatedEntity,
             }
         }
         if (this.getRider() != null && this.getRider().isSneaking()) {
+            this.getRider().setSneaking(false);
             this.getRider().dismountRidingEntity();
+            if (world.isRemote) {
+                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageUpdateRidingState(this.getEntityId(), false));
+            }
         }
         if (this.attack() && this.getControllingPassenger() != null && this.getControllingPassenger() instanceof EntityPlayer) {
             EntityLivingBase target = DragonUtils.riderLookingAtEntity(this, (EntityPlayer) this.getControllingPassenger(), 2.5D);

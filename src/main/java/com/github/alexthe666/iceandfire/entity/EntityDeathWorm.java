@@ -9,6 +9,7 @@ import com.github.alexthe666.iceandfire.entity.explosion.SandExplosion;
 import com.github.alexthe666.iceandfire.entity.util.*;
 import com.github.alexthe666.iceandfire.message.MessageDeathWormHitbox;
 import com.github.alexthe666.iceandfire.message.MessageDragonControl;
+import com.github.alexthe666.iceandfire.message.MessageUpdateRidingState;
 import com.github.alexthe666.iceandfire.util.ParticleHelper;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.client.model.tools.ChainBuffer;
@@ -50,7 +51,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-public class EntityDeathWorm extends EntityTameable implements IBlacklistedFromStatues, IMultipartEntity, IAnimatedEntity, IVillagerFear, IAnimalFear, IPhasesThroughBlock {
+public class EntityDeathWorm extends EntityTameable implements IBlacklistedFromStatues, IMultipartEntity, IAnimatedEntity, IVillagerFear, IAnimalFear, IPhasesThroughBlock, ISyncMount {
 
     private int animationTick;
     private boolean willExplode = false;
@@ -384,7 +385,10 @@ public class EntityDeathWorm extends EntityTameable implements IBlacklistedFromS
         ItemStack itemstack = player.getHeldItem(hand);
 
         if (this.getWormAge() > 4 && !player.isRiding() && player.getHeldItemMainhand().getItem() == Items.FISHING_ROD && player.getHeldItemOffhand().getItem() == Items.FISHING_ROD && !this.world.isRemote) {
-            player.startRiding(this);
+            player.startRiding(this, true);
+            if (world.isRemote) {
+                IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageUpdateRidingState(this.getEntityId(), true));
+            }
             return true;
         }
         return super.processInteract(player, hand);
