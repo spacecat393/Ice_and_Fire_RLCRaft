@@ -67,8 +67,8 @@ public class ItemModSword extends ItemSword implements IHitEffect {
 			tooltip.add(TextFormatting.GREEN + StatCollector.translateToLocal("silvertools.hurt"));
 		}
 		if (this == ModItems.myrmex_desert_sword_venom || this == ModItems.myrmex_jungle_sword_venom) {
-			tooltip.add(TextFormatting.DARK_GREEN + StatCollector.translateToLocal("myrmextools.poison"));
 			tooltip.add(TextFormatting.GREEN + StatCollector.translateToLocal("myrmextools.hurt"));
+			tooltip.add(TextFormatting.DARK_GREEN + StatCollector.translateToLocal("myrmextools.poison"));			
 		}
 		if (this == ModItems.myrmex_desert_sword || this == ModItems.myrmex_jungle_sword) {
 			tooltip.add(TextFormatting.GREEN + StatCollector.translateToLocal("myrmextools.hurt"));
