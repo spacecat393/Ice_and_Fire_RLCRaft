@@ -15,5 +15,6 @@ public enum EnumParticle {
     EXPLOSION,
     CLOUD,
     SMOKE,
-    DREAD_TORCH
+    DREAD_TORCH,
+    GHOST_APPEARANCE
 }
