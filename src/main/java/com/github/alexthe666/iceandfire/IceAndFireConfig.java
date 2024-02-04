@@ -338,6 +338,19 @@ public class IceAndFireConfig {
 		@Config.RangeInt(min = 0, max = 10)
 		public int trollSpawnCheckChance = 1;
 
+		@Config.Comment("Troll spawn check maximum height")
+		@Config.Name("Troll Spawn Check Height")
+		@Config.RangeInt(min = 0, max = 255)
+		public int trollSpawnCheckHeight = 50;
+
+		@Config.Comment("Troll spawn check maximum height for a given biome name, in the format name=height (Overrides general Troll Spawn Check Height")
+		@Config.Name("Troll Spawn Check Height For Biome")
+		public String[] trollSpawnCheckHeightForBiome = {""};
+
+		@Config.Comment("Troll spawn type for a given biome name, in the format name=type ('mountain', 'frost', or 'forest')")
+		@Config.Name("Troll Spawn Type For Biome")
+		public String[] trollSpawnTypeForBiome = {""};
+
 		@Config.Comment("Should InF spawn Amphitheres")
 		@Config.Name("Spawn Amphitheres")
 		public boolean spawnAmphitheres = true;
@@ -836,6 +849,8 @@ public class IceAndFireConfig {
 
 	private static HashSet<ResourceLocation> stoneBlacklist = null;
 	private static HashSet<String> myrmexDisabledNames = null;
+	private static HashMap<String, Integer> trollSpawnCheckHeight = null;
+	private static HashMap<String, String> trollSpawnCheckType = null;
 	private static HashSet<BiomeDictionary.Type> myrmexDisabledTypes = null;
 	private static HashSet<String> dragonDisabledNames = null;
 	private static HashSet<BiomeDictionary.Type> dragonDisabledTypes = null;
@@ -867,6 +882,18 @@ public class IceAndFireConfig {
 		for(String string : WORLDGEN.generateMyrmexDisabledBiomeTypes) set.add(BiomeDictionary.Type.getType(string));
 		myrmexDisabledTypes = set;
 		return myrmexDisabledTypes;
+	}
+
+	public static HashMap<String, Integer> getTrollSpawnHeight() {
+		if(trollSpawnCheckHeight != null) return trollSpawnCheckHeight;
+		trollSpawnCheckHeight = mapNameInteger(ENTITY_SPAWNING.trollSpawnCheckHeightForBiome);
+		return trollSpawnCheckHeight;
+	}
+
+	public static HashMap<String, String> getTrollSpawnType() {
+		if(trollSpawnCheckType != null) return trollSpawnCheckType;
+		trollSpawnCheckType = mapNameString(ENTITY_SPAWNING.trollSpawnTypeForBiome);
+		return trollSpawnCheckType;
 	}
 
 	public static HashSet<String> getDragonDisabledNames() {
@@ -937,8 +964,22 @@ public class IceAndFireConfig {
 			try {
 				map.put(split[0], Integer.parseInt(split[1]));
 			} catch (NumberFormatException e) {
-				IceAndFire.logger.error("Failed to parse biome name mapping, invalid chance: " + biomeNameMapping);
+				IceAndFire.logger.error("Failed to parse biome name mapping, invalid integer: " + biomeNameMapping);
 			}
+		}
+		return map;
+	}
+
+	private static HashMap<String, String> mapNameString(String[] mappings) {
+		HashMap<String, String> map = new HashMap<>();
+		for(String biomeNameMapping : mappings) {
+			if(StringUtils.isNullOrEmpty(biomeNameMapping)) continue;
+			String[] split = biomeNameMapping.split("=");
+			if(split.length != 2 || split[0].isEmpty() || split[1].isEmpty()) {
+				IceAndFire.logger.error("Failed to parse biome name mapping: " + biomeNameMapping);
+				continue;
+			}
+			map.put(split[0], split[1]);
 		}
 		return map;
 	}

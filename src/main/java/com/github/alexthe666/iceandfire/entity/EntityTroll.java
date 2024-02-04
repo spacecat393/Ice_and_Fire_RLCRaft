@@ -44,6 +44,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -76,9 +77,22 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
     }
 
 
+    @Override
     public boolean getCanSpawnHere() {
         BlockPos pos = new BlockPos(this);
-        return this.getRNG().nextInt(IceAndFireConfig.ENTITY_SPAWNING.trollSpawnCheckChance + 1) == 0 && !this.world.canSeeSky(pos) && pos.getY() <= 50 && super.getCanSpawnHere();
+        int spawnCheckHeight = IceAndFireConfig.ENTITY_SPAWNING.trollSpawnCheckHeight;
+        if (!IceAndFireConfig.getTrollSpawnHeight().isEmpty()) {
+            Biome biome = this.world.getBiome(pos);
+            String biomeName =  biome.getRegistryName() != null ? biome.getRegistryName().toString() : null;
+            if (biomeName != null && IceAndFireConfig.getTrollSpawnHeight().containsKey(biomeName)) {
+                spawnCheckHeight = IceAndFireConfig.getTrollSpawnHeight().get(biomeName);
+            }
+        }
+        // Troll spawning is disabled if set to zero
+        if (spawnCheckHeight == 0) {
+            return false;
+        }
+        return this.getRNG().nextInt(IceAndFireConfig.ENTITY_SPAWNING.trollSpawnCheckChance + 1) == 0 && !this.world.canSeeSky(pos) && pos.getY() <= spawnCheckHeight && super.getCanSpawnHere();
     }
 
     @Override
@@ -191,7 +205,7 @@ public class EntityTroll extends EntityMob implements IAnimatedEntity, IVillager
 
     @Nullable
     protected ResourceLocation getLootTable() {
-        switch(this.getType()){
+        switch (this.getType()) {
             case MOUNTAIN:
                return MOUNTAIN_LOOT;
             case FROST:
