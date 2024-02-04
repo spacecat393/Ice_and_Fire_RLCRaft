@@ -1203,6 +1203,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
+        this.stepHeight = this.getDragonStage() > 1 ? 1.5F : 1F;
         if (this.isBreathingFire() && burnProgress < 40) {
             burnProgress++;
         } else if (!this.isBreathingFire()) {
@@ -1653,7 +1654,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
 
                 passenger.setPosition(this.posX + extraX, this.posY + extraY, this.posZ + extraZ);
 
-                this.stepHeight = 1;
+                this.stepHeight = this.getDragonStage() > 1 ? 1.5F : 1F;
             }
         }
     }

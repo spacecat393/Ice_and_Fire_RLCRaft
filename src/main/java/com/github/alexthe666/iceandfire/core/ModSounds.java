@@ -29,7 +29,7 @@ public final class ModSounds {
 	public static final SoundEvent LIGHTNINGDRAGON_BREATH = createSoundEvent("lightningdragon_breath");
 
 	@GameRegistry.ObjectHolder("lightningdragon_breath_short")
-	public static final SoundEvent LIGHTNINGDRAGON_BREATH_SHORT = createSoundEvent("lightningdragon_breath_short_short");
+	public static final SoundEvent LIGHTNINGDRAGON_BREATH_SHORT = createSoundEvent("lightningdragon_breath_short");
 
 	@GameRegistry.ObjectHolder("firedragon_child_idle")
 	public static final SoundEvent FIREDRAGON_CHILD_IDLE = createSoundEvent("firedragon_child_idle");
