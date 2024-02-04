@@ -1313,7 +1313,9 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
         if (motionY < -0.5) {
             this.motionY = -0.5;
         }
-        this.updateCheckPlayer();
+        if (!this.isTamed()) {
+            this.updateCheckPlayer();
+        }
         AnimationHandler.INSTANCE.updateAnimations(this);
         this.legSolver.update(this);
         prevFlightCycle = flightCycle;
@@ -2216,8 +2218,8 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
     public void updateCheckPlayer() {
         double checklength = this.getEntityBoundingBox().getAverageEdgeLength() * 3;
         EntityPlayer player = world.getClosestPlayerToEntity(this, checklength);
-        if (!this.isTamed() && this.isSleeping()) {
-            if (player != null && !this.isOwner(player) && !player.capabilities.isCreativeMode) {
+        if (this.isSleeping()) {
+            if (player != null && !this.isOwner(player) && !player.isCreative()) {
                 this.setSleeping(false);
                 this.setSitting(false);
                 this.setAttackTarget(player);

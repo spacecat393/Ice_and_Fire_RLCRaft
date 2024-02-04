@@ -17,37 +17,33 @@ public class DragonAIAirTarget extends EntityAIBase {
 	}
 
 	public boolean shouldExecute() {
-		if (dragon != null) {
-			if (!dragon.isFlying() && !dragon.isHovering() || dragon.onGround) {
-				return false;
-			}
-			if (dragon.isSleeping()) {
-				return false;
-			}
-			if (dragon.isChild()) {
-				return false;
-			}
-			if (dragon.getOwner() != null && dragon.getPassengers().contains(dragon.getOwner())) {
-				return false;
-			}
-			if (dragon.airTarget != null && (dragon.isTargetBlocked(new Vec3d(dragon.airTarget)))) {
-				dragon.airTarget = null;
-			}
+		if (!dragon.isFlying() && !dragon.isHovering() || dragon.onGround) {
+			return false;
+		}
+		if (dragon.isSleeping()) {
+			return false;
+		}
+		if (dragon.isChild()) {
+			return false;
+		}
+		if (dragon.getOwner() != null && dragon.getPassengers().contains(dragon.getOwner())) {
+			return false;
+		}
+		if (dragon.airTarget != null && (dragon.isTargetBlocked(new Vec3d(dragon.airTarget)))) {
+			dragon.airTarget = null;
+		}
 
-			if (dragon.airTarget != null) {
+		if (dragon.airTarget == null) {
+			Vec3d vec = this.findAirTarget();
+
+			if (vec == null) {
 				return false;
 			} else {
-				Vec3d vec = this.findAirTarget();
-
-				if (vec == null) {
-					return false;
-				} else {
-					dragon.airTarget = new BlockPos(vec.x, vec.y, vec.z);
-					return true;
-				}
+				dragon.airTarget = new BlockPos(vec.x, vec.y, vec.z);
+				return true;
 			}
 		}
-		return false;
+		return true;
 	}
 
 	public boolean continueExecuting() {
