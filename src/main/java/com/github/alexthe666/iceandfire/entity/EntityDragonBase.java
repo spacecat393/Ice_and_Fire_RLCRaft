@@ -2048,7 +2048,7 @@ public abstract class EntityDragonBase extends EntityTameable implements IMultip
             RayTraceResult rayTrace = world.rayTraceBlocks(new Vec3d(this.getPosition()), target, false);
             if (rayTrace != null && rayTrace.hitVec != null) {
                 BlockPos pos = new BlockPos(rayTrace.hitVec);
-                if (!world.isAirBlock(pos) || world.getBlockState(pos).getMaterial() == Material.WATER && dragonType != EnumDragonType.FIRE) {
+                if (!world.isAirBlock(pos) || world.getBlockState(pos).getMaterial() == Material.WATER && dragonType == EnumDragonType.ICE) {
                     return true;
                 }
                 return rayTrace.typeOfHit != RayTraceResult.Type.BLOCK;

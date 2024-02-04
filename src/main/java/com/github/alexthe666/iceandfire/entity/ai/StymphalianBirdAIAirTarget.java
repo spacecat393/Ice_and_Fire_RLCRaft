@@ -51,13 +51,13 @@ public class StymphalianBirdAIAirTarget extends EntityAIBase {
     }
 
     public boolean shouldContinueExecuting() {
-        IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(bird);
         if (!bird.isFlying()) {
             return false;
         }
         if (bird.isChild()) {
             return false;
         }
+        IEntityEffectCapability capability = InFCapabilities.getEntityEffectCapability(bird);
         if (capability != null && capability.isStoned()) {
             return false;
         }
