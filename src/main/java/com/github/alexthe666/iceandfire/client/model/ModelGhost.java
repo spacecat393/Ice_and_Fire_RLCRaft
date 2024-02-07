@@ -194,5 +194,6 @@ public class ModelGhost extends ModelDragonBase {
             animator.endKeyframe();
             animator.resetKeyframe(5);
         }
+        animator.update(null);
     }
 }
