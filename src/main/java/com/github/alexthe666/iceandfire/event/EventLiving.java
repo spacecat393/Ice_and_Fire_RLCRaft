@@ -39,6 +39,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.storage.loot.*;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.conditions.RandomChance;
@@ -195,6 +196,26 @@ public class EventLiving {
 			}
 		}
 
+	}
+
+	@SubscribeEvent
+	public void onEntityCheckSpawn(LivingSpawnEvent.CheckSpawn event) {
+		if (event.getEntity() instanceof EntityTroll) {
+			if (!event.isSpawner()) {
+				BlockPos pos = new BlockPos(event.getX(), event.getY(), event.getZ());
+				int spawnCheckHeight = IceAndFireConfig.ENTITY_SPAWNING.trollSpawnCheckHeight;
+				if (!IceAndFireConfig.getTrollSpawnHeight().isEmpty()) {
+					Biome biome = event.getWorld().getBiome(pos);
+					String biomeName =  biome.getRegistryName() != null ? biome.getRegistryName().toString() : null;
+					if (biomeName != null && IceAndFireConfig.getTrollSpawnHeight().containsKey(biomeName)) {
+						spawnCheckHeight = IceAndFireConfig.getTrollSpawnHeight().get(biomeName);
+					}
+				}
+				if (spawnCheckHeight == 0 || pos.getY() <= spawnCheckHeight) {
+					event.setResult(Event.Result.DENY);
+				}
+			}
+		}
 	}
 
 	@SubscribeEvent
