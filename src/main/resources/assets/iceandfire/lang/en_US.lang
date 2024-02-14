@@ -79,6 +79,7 @@ tile.iceandfire.dragonscale_block.name=Block of Dragon Scales
 tile.iceandfire.dragon_bone_block.name=Block of Dragon Bones
 tile.iceandfire.dragon_bone_wall.name=Dragon Bone Wall
 tile.iceandfire.sea_serpent_scale_block.name=Block of Sea Serpent Scales
+tile.iceandfire.ghost_chest.name=Cursed Chest
 
 item.iceandfire.bestiary.name=Bestiary
 item.iceandfire.manuscript.name=Manuscript
@@ -285,6 +286,11 @@ item.iceandfire.dread_shard.name=Dread Shard
 item.iceandfire.dread_sword.name=Dread Thrall's Sword
 item.iceandfire.dread_knight_sword.name=Dread Knight's Sword
 item.iceandfire.custom_banner.jei_desc=Has a unique banner pattern!
+item.iceandfire.ghost_sword.name=Phantasmal Blade
+item.iceandfire.ghost_sword.desc_0=Fires a spinning sword that travels through blocks
+item.iceandfire.ectoplasm.name=Ectoplasm
+item.iceandfire.ghost_ingot.name=Phantasmal Ingot
+item.iceandfire.ghost_ingot.desc_0=§6Rare drop§r
 
 item.banner.firedragon.white=White Fire Dragon Charge
 item.banner.firedragon.orange=Orange Fire Dragon Charge
@@ -416,6 +422,7 @@ entity.myrmex_egg.name=Myrmex Egg
 entity.amphithere.name=Amphithere
 entity.seaserpent.name=Sea Serpent
 entity.ghost.name=Ghost
+entity.ghost_sword.name=Phantasmal Blade
 
 entity.lightningdragon.name=Lightning Dragon
 entity.dragonlightningcharge.name=Dragon Lightning Charge

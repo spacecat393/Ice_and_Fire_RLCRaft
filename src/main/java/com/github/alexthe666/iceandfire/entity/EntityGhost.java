@@ -7,10 +7,7 @@ import com.github.alexthe666.iceandfire.core.ModSounds;
 import com.github.alexthe666.iceandfire.entity.ai.EntityAIRestrictSunFlying;
 import com.github.alexthe666.iceandfire.entity.ai.GhostAICharge;
 import com.github.alexthe666.iceandfire.entity.ai.GhostPathNavigator;
-import com.github.alexthe666.iceandfire.entity.util.DragonUtils;
-import com.github.alexthe666.iceandfire.entity.util.IAnimalFear;
-import com.github.alexthe666.iceandfire.entity.util.IBlacklistedFromStatues;
-import com.github.alexthe666.iceandfire.entity.util.IVillagerFear;
+import com.github.alexthe666.iceandfire.entity.util.*;
 import com.github.alexthe666.iceandfire.enums.EnumParticle;
 import com.google.common.base.Predicate;
 import net.ilexiconn.llibrary.server.animation.Animation;
@@ -42,7 +39,7 @@ import net.minecraft.world.storage.loot.LootTableList;
 import javax.annotation.Nullable;
 
 
-public class EntityGhost extends EntityMob implements IAnimatedEntity, IVillagerFear, IAnimalFear, /* IHumanoid,*/ IBlacklistedFromStatues {
+public class EntityGhost extends EntityMob implements IAnimatedEntity, IVillagerFear, IAnimalFear, IHumanoid, IBlacklistedFromStatues {
 
     public static final ResourceLocation LOOT = LootTableList.register(new ResourceLocation("iceandfire", "ghost"));
     private static final DataParameter<Integer> COLOR = EntityDataManager.createKey(EntityGhost.class, DataSerializers.VARINT);
@@ -87,22 +84,16 @@ public class EntityGhost extends EntityMob implements IAnimatedEntity, IVillager
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
         //HEALTH
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(/* TODO добавить IceAndFireConfig.ghostMaxHealth */ 100);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(IceAndFireConfig.ENTITY_SETTINGS.ghostMaxHealth);
         //FOLLOW_RANGE
         this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(64D);
         //SPEED
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.15D);
         //ATTACK
-        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(/* TODO добавить IceAndFireConfig.ghostMaxHealth */ 1);
+        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(IceAndFireConfig.ENTITY_SETTINGS.ghostMaxHealth);
         //ARMOR
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(1D);
     }
-
-    //todo
-    //@Override
-    //public void updateAttributes() {
-    //    return bakeAttributes();
-    //}
 
     public boolean isPotionApplicable(PotionEffect potioneffectIn) {
         return potioneffectIn.getPotion() != MobEffects.POISON  && potioneffectIn.getPotion() != MobEffects.WITHER && super.isPotionApplicable(potioneffectIn);
@@ -279,7 +270,6 @@ public class EntityGhost extends EntityMob implements IAnimatedEntity, IVillager
 
     @Override
     public void travel(float strafe, float vertical, float forward) {
-        float f4;
         if (this.isDaytimeMode()) {
             super.travel(0, 0, 0);
             return;
@@ -417,35 +407,5 @@ public class EntityGhost extends EntityMob implements IAnimatedEntity, IVillager
                 }
             }
         }
-
-        //origin code
-        /*
-            public void tick() {
-            if (this.action == Action.MOVE_TO) {
-                Vec3d vec3d = new Vec3d(this.getX() - ghost.posX, this.getY() - ghost.posY, this.getZ() - ghost.posZ);
-                double d0 = vec3d.length();
-                double edgeLength = ghost.getEntityBoundingBox().getAverageEdgeLength();
-                if (d0 < edgeLength) {
-                    this.action = Action.WAIT;
-                    ghost.motionX *= 0.5D;
-                    ghost.motionY *= 0.5D;
-                    ghost.motionZ *= 0.5D;
-                } else {
-                    ghost.motionX += vec3d.scale(this.speed * 0.5D * 0.05D / d0).x;
-                    ghost.motionY += vec3d.scale(this.speed * 0.5D * 0.05D / d0).y;
-                    ghost.motionZ += vec3d.scale(this.speed * 0.5D * 0.05D / d0).z;
-                    if (ghost.getAttackTarget() == null) {
-                        Vec3d vec3d1 = new Vec3d(ghost.motionX, ghost.motionY, ghost.motionZ);
-                        ghost.rotationYaw = -((float) MathHelper.atan2(vec3d1.x, vec3d1.z)) * (180F / (float) Math.PI);
-                        ghost.renderYawOffset = ghost.rotationYaw;
-                    } else {
-                        double d4 = ghost.getAttackTarget().posX - ghost.posX;
-                        double d5 = ghost.getAttackTarget().posZ - ghost.posZ;
-                        ghost.rotationYaw = -((float) MathHelper.atan2(d4, d5)) * (180F / (float) Math.PI);
-                        ghost.renderYawOffset = ghost.rotationYaw;
-                    }
-                }
-            }
-        }*/
     }
 }

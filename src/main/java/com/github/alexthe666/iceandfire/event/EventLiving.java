@@ -12,10 +12,12 @@ import com.github.alexthe666.iceandfire.entity.ai.EntitySheepAIFollowCyclops;
 import com.github.alexthe666.iceandfire.entity.ai.VillagerAIFearUntamed;
 import com.github.alexthe666.iceandfire.entity.util.*;
 import com.github.alexthe666.iceandfire.integration.CompatLoadUtil;
+import com.github.alexthe666.iceandfire.item.ItemGhostSword;
 import com.github.alexthe666.iceandfire.item.ItemSeaSerpentArmor;
 import com.github.alexthe666.iceandfire.item.ItemTideTrident;
 import com.github.alexthe666.iceandfire.item.ItemTrollArmor;
 import com.github.alexthe666.iceandfire.message.MessagePlayerHitMultipart;
+import com.github.alexthe666.iceandfire.message.MessageSwingArm;
 import net.minecraft.block.BlockChest;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
@@ -459,6 +461,20 @@ public class EventLiving {
 					}
 				}
 			}
+		}
+	}
+
+	public static void onLeftClick(final EntityPlayer playerEntity, final ItemStack stack) {
+		if (stack.getItem() == ModItems.ghost_sword && !playerEntity.world.isRemote) {
+			ItemGhostSword.spawnGhostSwordEntity(stack, playerEntity);
+		}
+	}
+
+	@SubscribeEvent
+	public void onPlayerLeftClick(PlayerInteractEvent.LeftClickEmpty event) {
+		onLeftClick(event.getEntityPlayer(), event.getItemStack());
+		if (event.getWorld().isRemote) {
+			IceAndFire.NETWORK_WRAPPER.sendToServer(new MessageSwingArm());
 		}
 	}
 
